@@ -1,4 +1,4 @@
-rootProject.name = 'com.oath.cyclops'
+rootProject.name = 'girakkafunc'
 include ':cyclops'
 include ':cyclops-anym'
 include 'cyclops-futurestream'
