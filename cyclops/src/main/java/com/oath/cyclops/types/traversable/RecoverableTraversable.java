@@ -18,12 +18,10 @@ public interface RecoverableTraversable<T> extends Iterable<T> {
      * }
      * </pre>
      *
-     * @param fn
-     *            Function that accepts a Throwable and returns an alternative
-     *            value
+     * @param fn Function that accepts a Throwable and returns an alternative value
      * @return ReactiveSeq that can recover from an Exception
      */
-     RecoverableTraversable<T> recover(final Function<? super Throwable, ? extends T> fn);
+    RecoverableTraversable<T> recover(final Function<? super Throwable, ? extends T> fn);
 
     /**
      * Recover from a particular exception type
@@ -39,11 +37,10 @@ public interface RecoverableTraversable<T> extends Iterable<T> {
      * }
      * </pre>
      *
-     * @param exceptionClass
-     *            Type to recover from
-     * @param fn
-     *            That accepts an error and returns an alternative value
+     * @param exceptionClass Type to recover from
+     * @param fn             That accepts an error and returns an alternative value
      * @return Traversable that can recover from a particular exception
      */
-    <EX extends Throwable> RecoverableTraversable<T> recover(Class<EX> exceptionClass, final Function<? super EX, ? extends T> fn);
+    <EX extends Throwable> RecoverableTraversable<T> recover(Class<EX> exceptionClass,
+                                                             final Function<? super EX, ? extends T> fn);
 }

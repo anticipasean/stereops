@@ -5,24 +5,28 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 
-public class ScanLeftSpliterator<T,U> implements CopyableSpliterator<U> {
+public class ScanLeftSpliterator<T, U> implements CopyableSpliterator<U> {
 
     private final Spliterator<T> source;
-    private U current;
     private final U identity;
     private final BiFunction<? super U, ? super T, ? extends U> function;
     private final long size;
     private final int characteristics;
-    public ScanLeftSpliterator(Spliterator<T> source, U identity,
-            BiFunction<? super U, ? super T, ? extends U> function) {
+    boolean advance = true;
+    private U current;
+
+    public ScanLeftSpliterator(Spliterator<T> source,
+                               U identity,
+                               BiFunction<? super U, ? super T, ? extends U> function) {
         super();
-        this.identity=identity;
+        this.identity = identity;
         this.source = source;
         this.current = identity;
         this.function = function;
 
         size = source.estimateSize();
-        characteristics= source.characteristics() & Spliterator.ORDERED;;
+        characteristics = source.characteristics() & Spliterator.ORDERED;
+        ;
     }
 
     /* (non-Javadoc)
@@ -31,22 +35,23 @@ public class ScanLeftSpliterator<T,U> implements CopyableSpliterator<U> {
     @Override
     public void forEachRemaining(Consumer<? super U> action) {
 
-        source.forEachRemaining(e->{
-            action.accept( current=function.apply(current,e));
+        source.forEachRemaining(e -> {
+            action.accept(current = function.apply(current,
+                                                   e));
 
         });
 
     }
 
-    boolean advance =true;
     @Override
     public boolean tryAdvance(Consumer<? super U> action) {
 
-       return source.tryAdvance(e->{
-           action.accept(current= function.apply(current, e));
+        return source.tryAdvance(e -> {
+            action.accept(current = function.apply(current,
+                                                   e));
 
 
-       });
+        });
 
 
     }
@@ -58,17 +63,19 @@ public class ScanLeftSpliterator<T,U> implements CopyableSpliterator<U> {
 
     @Override
     public long estimateSize() {
-        return  size;
+        return size;
     }
 
     @Override
     public int characteristics() {
-       return characteristics;
+        return characteristics;
     }
 
 
     @Override
     public Spliterator<U> copy() {
-        return new ScanLeftSpliterator<T, U>(CopyableSpliterator.copy(source),identity,function);
+        return new ScanLeftSpliterator<T, U>(CopyableSpliterator.copy(source),
+                                             identity,
+                                             function);
     }
 }

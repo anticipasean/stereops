@@ -1,5 +1,9 @@
 package com.oath.cyclops.internal.stream;
 
+import com.oath.cyclops.util.ExceptionSoftener;
+import com.oath.cyclops.util.stream.scheduling.cron.CronExpression;
+import cyclops.companion.Eithers;
+import cyclops.function.FluentFunctions;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Queue;
@@ -10,20 +14,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.companion.Eithers;
-import cyclops.function.FluentFunctions;
-import com.oath.cyclops.util.stream.scheduling.cron.CronExpression;
-
 public class IteratorHotStream<T> {
 
-    protected final AtomicReferenceArray<Queue<T>> connections = new AtomicReferenceArray<>(
-                                                                                            10);
-    protected final AtomicBoolean open = new AtomicBoolean(
-                                                           true);
+    protected final AtomicReferenceArray<Queue<T>> connections = new AtomicReferenceArray<>(10);
+    protected final AtomicBoolean open = new AtomicBoolean(true);
+    protected final AtomicReference<CompletableFuture<Void>> pause = new AtomicReference<>(CompletableFuture.<Void>completedFuture(null));
     protected volatile int connected = 0;
-    protected final AtomicReference<CompletableFuture<Void>> pause = new AtomicReference<>(
-                                                                                           CompletableFuture.<Void> completedFuture(null));
 
     public boolean isPaused() {
         return pause.get()
@@ -32,103 +28,122 @@ public class IteratorHotStream<T> {
 
     protected void unpause() {
         final CompletableFuture<Void> current = pause.get();
-        if (!current.isDone())
+        if (!current.isDone()) {
             current.complete(null);
+        }
     }
 
     protected void pause() {
         pause.set(new CompletableFuture<Void>());
     }
 
-    protected void scheduleInternal(final Iterator<T> it, final String cron, final ScheduledExecutorService ex) {
+    protected void scheduleInternal(final Iterator<T> it,
+                                    final String cron,
+                                    final ScheduledExecutorService ex) {
         final Date now = new Date();
-        final Date d = ExceptionSoftener.softenSupplier(() -> new CronExpression(
-                                                                                 cron))
+        final Date d = ExceptionSoftener.softenSupplier(() -> new CronExpression(cron))
                                         .get()
                                         .getNextValidTimeAfter(now);
 
         final long delay = d.getTime() - now.getTime();
 
         ex.schedule(() -> {
-            synchronized (it) {
-                if (it.hasNext()) {
-                    try {
-                        final T next = it.next();
-                        final int local = connected;
+                        synchronized(it) {
+                            if (it.hasNext()) {
+                                try {
+                                    final T next = it.next();
+                                    final int local = connected;
 
-                        for (int i = 0; i < local; i++) {
+                                    for (int i = 0; i < local; i++) {
 
-                            Eithers.blocking(connections.get(i))
-                                      .fold(FluentFunctions.ofChecked(in -> {
-                                in.put(next);
-                                return true;
-                            }), q -> q.offer(next));
+                                        Eithers.blocking(connections.get(i))
+                                               .fold(FluentFunctions.ofChecked(in -> {
+                                                         in.put(next);
+                                                         return true;
+                                                     }),
+                                                     q -> q.offer(next));
+                                    }
+
+                                } finally {
+
+                                    scheduleInternal(it,
+                                                     cron,
+                                                     ex);
+
+                                }
+                            } else {
+                                open.set(false);
+                            }
                         }
-
-                    } finally {
-
-                        scheduleInternal(it, cron, ex);
-
-                    }
-                } else {
-                    open.set(false);
-                }
-            }
-        } , delay, TimeUnit.MILLISECONDS);
+                    },
+                    delay,
+                    TimeUnit.MILLISECONDS);
 
     }
 
-    protected IteratorHotStream<T> scheduleFixedDelayInternal(final Iterator<T> it, final long delay, final ScheduledExecutorService ex) {
+    protected IteratorHotStream<T> scheduleFixedDelayInternal(final Iterator<T> it,
+                                                              final long delay,
+                                                              final ScheduledExecutorService ex) {
         ex.scheduleWithFixedDelay(() -> {
-            synchronized (it) {
-                if (it.hasNext()) {
+                                      synchronized(it) {
+                                          if (it.hasNext()) {
 
-                    final T next = it.next();
+                                              final T next = it.next();
 
-                    final int local = connected;
+                                              final int local = connected;
 
-                    for (int i = 0; i < local; i++) {
+                                              for (int i = 0; i < local; i++) {
 
-                        Eithers.blocking(connections.get(i))
-                                  .fold(FluentFunctions.ofChecked(in -> {
-                            in.put(next);
-                            return true;
-                        }), q -> q.offer(next));
+                                                  Eithers.blocking(connections.get(i))
+                                                         .fold(FluentFunctions.ofChecked(in -> {
+                                                                   in.put(next);
+                                                                   return true;
+                                                               }),
+                                                               q -> q.offer(next));
 
-                    }
+                                              }
 
-                } else {
-                    open.set(false);
-                }
-            }
-        } , delay, delay, TimeUnit.MILLISECONDS);
+                                          } else {
+                                              open.set(false);
+                                          }
+                                      }
+                                  },
+                                  delay,
+                                  delay,
+                                  TimeUnit.MILLISECONDS);
         return this;
 
     }
 
-    protected IteratorHotStream<T> scheduleFixedRate(final Iterator<T> it, final long rate, final ScheduledExecutorService ex) {
+    protected IteratorHotStream<T> scheduleFixedRate(final Iterator<T> it,
+                                                     final long rate,
+                                                     final ScheduledExecutorService ex) {
         ex.scheduleAtFixedRate(() -> {
-            synchronized (it) {
-                if (it.hasNext()) {
+                                   synchronized(it) {
+                                       if (it.hasNext()) {
 
-                    final T next = it.next();
+                                           final T next = it.next();
 
-                    final int local = connected;
+                                           final int local = connected;
 
-                    for (int i = 0; i < local; i++) {
+                                           for (int i = 0; i < local; i++) {
 
-                        Eithers.blocking(connections.get(i))
-                                  .fold(FluentFunctions.ofChecked(in -> {
-                            in.put(next);
-                            return true;
-                        }), q -> q.offer(next));
-                    }
+                                               Eithers.blocking(connections.get(i))
+                                                      .fold(FluentFunctions.ofChecked(in -> {
+                                                                in.put(next);
+                                                                return true;
+                                                            }),
+                                                            q -> q.offer(next));
+                                           }
 
-                } else {
-                    open.set(false);
-                }
-            }
-        } , 0, rate, TimeUnit.MILLISECONDS);
+                                       } else {
+                                           open.set(false);
+                                       }
+                                   }
+                               },
+                               0,
+                               rate,
+                               TimeUnit.MILLISECONDS);
         return this;
 
     }

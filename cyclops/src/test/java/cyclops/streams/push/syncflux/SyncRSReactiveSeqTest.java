@@ -3,10 +3,6 @@ package cyclops.streams.push.syncflux;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
 import cyclops.streams.AbstractReactiveSeqTest;
-import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
-
-import java.util.concurrent.ForkJoinPool;
 
 public class SyncRSReactiveSeqTest extends AbstractReactiveSeqTest {
 
@@ -19,9 +15,6 @@ public class SyncRSReactiveSeqTest extends AbstractReactiveSeqTest {
     public ReactiveSeq<Integer> empty() {
         return Spouts.empty();
     }
-
-
-
 
 
 }

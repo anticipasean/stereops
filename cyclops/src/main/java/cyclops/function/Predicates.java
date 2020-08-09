@@ -1,12 +1,15 @@
 package cyclops.function;
 
+import com.oath.cyclops.types.Value;
 import com.oath.cyclops.util.SimpleTimer;
 import cyclops.control.Maybe;
-import cyclops.reactive.ReactiveSeq;
 import cyclops.data.Seq;
-import com.oath.cyclops.types.Value;
-
-import java.util.*;
+import cyclops.reactive.ReactiveSeq;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -15,9 +18,8 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- *
  * Predicates for filtering and Pattern matching
- *
+ * <p>
  * e.g.
  * <pre>
  * {@code
@@ -30,43 +32,71 @@ import java.util.stream.Stream;
  * }
  * </pre>
  *
- *
  * @author johnmcclean
- *
  */
 public class Predicates {
-    public static <T1,T2> BiPredicate<T1,T2> when(BiPredicate<T1,T2> pred){
+
+    /**
+     * wildcard predicate
+     *
+     * <pre>
+     * {@code
+     *  import static cyclops2.function.Predicates.__
+     *
+     *  Eval<String> result = Xors.listOfValues(1,new MyCase(4,5,6))
+     * .matches(c->c.is(when(__,Predicates.has(4,5,6)),transform("rec")),otherwise("n/a"));
+     *
+     * //Eval["rec"]
+     *
+     * }
+     * </pr>
+     */
+    public static final Predicate __ = test -> true;
+
+    public static <T1, T2> BiPredicate<T1, T2> when(BiPredicate<T1, T2> pred) {
         return pred;
     }
-    public static <T1,T2> BiPredicate<T1,T2> true2(){
-        return (a,b)->true;
-    }
-    public static <T1,T2> BiPredicate<T1,T2> and(Predicate<? super T1> p1, Predicate<? super T2> p2){
-        return (a,b)->p1.test(a) && p2.test(b);
-    }
-    public static <T1,T2> BiPredicate<T1,T2> _1(Predicate<? super T1> p1){
-        return (a,b)->p1.test(a);
+
+    public static <T1, T2> BiPredicate<T1, T2> true2() {
+        return (a, b) -> true;
     }
 
-    public static <T1,T2> BiPredicate<T1,T2> first(Predicate<? super T1> p1, Predicate<? super T2> p2){
-        return (a,b)->p1.test(a) && !p2.test(b);
+    public static <T1, T2> BiPredicate<T1, T2> and(Predicate<? super T1> p1,
+                                                   Predicate<? super T2> p2) {
+        return (a, b) -> p1.test(a) && p2.test(b);
     }
-    public static <T1,T2> BiPredicate<T1,T2> second(Predicate<? super T1> p1, Predicate<? super T2> p2){
-        return (a,b)->!p1.test(a) && p2.test(b);
+
+    public static <T1, T2> BiPredicate<T1, T2> _1(Predicate<? super T1> p1) {
+        return (a, b) -> p1.test(a);
     }
-    public static <T1,T2> BiPredicate<T1,T2> _2(Predicate<? super T2> p2){
-        return (a,b)->p2.test(b);
+
+    public static <T1, T2> BiPredicate<T1, T2> first(Predicate<? super T1> p1,
+                                                     Predicate<? super T2> p2) {
+        return (a, b) -> p1.test(a) && !p2.test(b);
     }
-    public static <T1,T2> BiPredicate<T1,T2> or(Predicate<? super T1> p1, Predicate<? super T2> p2){
-        return (a,b)->p1.test(a) || p2.test(b);
+
+    public static <T1, T2> BiPredicate<T1, T2> second(Predicate<? super T1> p1,
+                                                      Predicate<? super T2> p2) {
+        return (a, b) -> !p1.test(a) && p2.test(b);
     }
-    public static <T1,T2> BiPredicate<T1,T2> xor(Predicate<? super T1> p1, Predicate<? super T2> p2){
-        return (a,b)->p1.test(a) ^ p2.test(b);
+
+    public static <T1, T2> BiPredicate<T1, T2> _2(Predicate<? super T2> p2) {
+        return (a, b) -> p2.test(b);
+    }
+
+    public static <T1, T2> BiPredicate<T1, T2> or(Predicate<? super T1> p1,
+                                                  Predicate<? super T2> p2) {
+        return (a, b) -> p1.test(a) || p2.test(b);
+    }
+
+    public static <T1, T2> BiPredicate<T1, T2> xor(Predicate<? super T1> p1,
+                                                   Predicate<? super T2> p2) {
+        return (a, b) -> p1.test(a) ^ p2.test(b);
     }
 
     /**
      * Method for point-free Predicate definition (helps with lambda type inferencing)
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -84,7 +114,6 @@ public class Predicates {
     }
 
     /**
-     *
      * <pre>
      * {@code
      *      import static cyclops2.function.Predicates.optionalPresent;
@@ -114,12 +143,12 @@ public class Predicates {
      *       //Seq[Maybe[1]]
      * }
      * </pre>
-     *  @return A Predicate that checks if it's input is a cyclops2-react Value (which also contains a present value)
+     *
+     * @return A Predicate that checks if it's input is a cyclops2-react Value (which also contains a present value)
      */
     public static <T> Predicate<T> valuePresent() {
         return t -> t instanceof Value ? ((Value) t).toMaybe()
-                                                    .isPresent()
-                : false;
+                                                    .isPresent() : false;
     }
 
     /**
@@ -133,16 +162,15 @@ public class Predicates {
      *       //Seq[List[1]]
      * }
      * </pre>
+     *
      * @return A Predicate that checks if it's input is an Iterable with at least one value
      */
     public static <T> Predicate<T> iterablePresent() {
         return t -> t instanceof Iterable ? ((Iterable) t).iterator()
-                                                          .hasNext()
-                : false;
+                                                          .hasNext() : false;
     }
 
     /**
-     *
      * <pre>
      * {@code
      *      import static cyclops2.function.Predicates.some;
@@ -154,36 +182,33 @@ public class Predicates {
      * }
      * </pre>
      *
-     * @return A predicate that checks for a values presence (i.e. for standard values that they are non-null,
-     *  for Optionals that they are present, for cyclops2-react values that they are present and for Iterables that they are
-     *  non-null).
+     * @return A predicate that checks for a values presence (i.e. for standard values that they are non-null, for Optionals that
+     * they are present, for cyclops2-react values that they are present and for Iterables that they are non-null).
      */
     public static <T> Predicate<T> some() {
-        return Predicates.<T> p(t -> t != null)
-                         .and(not(optionalPresent()))
-                         .and(not(valuePresent()))
-                         .and(not(iterablePresent()));
+        return Predicates.<T>p(t -> t != null).and(not(optionalPresent()))
+                                              .and(not(valuePresent()))
+                                              .and(not(iterablePresent()));
     }
 
     /**
-     * Alias for eq (results in nicer pattern matching dsl).
-     * Returns a Predicate that checks for equality between the supplied value and the predicates input parameter
+     * Alias for eq (results in nicer pattern matching dsl). Returns a Predicate that checks for equality between the supplied
+     * value and the predicates input parameter
      *
      * <pre>
      * {@code
      *
      * import static cyclops2.function.Predicates.some
-
+     *
      *
      * Eval<Integer> result = Xors.future(Future.ofResult(1))
-                                         .matches(c-> c.is( when(some(1)), applyHKT(10)), c->c.is(when(instanceOf(RuntimeException.class)), applyHKT(2)),otherwise(3));
-
-       //Eval[10]
+     * .matches(c-> c.is( when(some(1)), applyHKT(10)), c->c.is(when(instanceOf(RuntimeException.class)), applyHKT(2)),otherwise(3));
+     *
+     * //Eval[10]
      *
      *
      * }
      * </pre>
-     *
      *
      * @param value Value to check for equality
      * @return Predicate that checks for equality with the supplied value
@@ -193,35 +218,20 @@ public class Predicates {
     }
 
     /**
-     * wildcard predicate
-     *
-     * <pre>
-     * {@code
-     *  import static cyclops2.function.Predicates.__
-     *
-     *  Eval<String> result = Xors.listOfValues(1,new MyCase(4,5,6))
-                                .matches(c->c.is(when(__,Predicates.has(4,5,6)),transform("rec")),otherwise("n/a"));
-
-        //Eval["rec"]
-     *
-     * }
-     * </pr>
-     *
-     *
-     */
-    public static final Predicate __ = test -> true;
-
-    /**
-     * @see Predicates#__
      * @return A Wildcard predicate, always returns true
-     *
+     * @see Predicates#__
      */
     public static final <Y> Predicate<Y> any() {
         return __;
-    };
+    }
+
+    ;
+
     public static final <Y> Predicate<Y> none() {
-        return t->false;
-    };
+        return t -> false;
+    }
+
+    ;
 
     /**
      * MatchType against any object that is an instance of supplied type
@@ -230,16 +240,15 @@ public class Predicates {
      * {@code
      *  import static com.oath.cyclops.control.Matchable.whenGuard;
      *  import static com.oath.cyclops.control.Matchable.otherwise;
-        import static com.oath.cyclops.control.Matchable.transform;
+     * import static com.oath.cyclops.control.Matchable.transform;
      *  import static cyclops2.function.Predicates.eq;
      *  import static cyclops2.function.Predicates.any;
      *
      *  Matchable.of(Arrays.asList(1,2,3))
-                    .matches(c->c.is(whenGuard(eq(1),any(Integer.class),eq(4)),transform("2")),otherwise("45"));
+     * .matches(c->c.is(whenGuard(eq(1),any(Integer.class),eq(4)),transform("2")),otherwise("45"));
      *
      * }
      * </pre>
-     *
      *
      * @param c Class type to fold against
      * @return Predicate that mathes against type
@@ -247,14 +256,14 @@ public class Predicates {
     public static final <Y> Predicate<Y> any(final Class<Y> c) {
         return a -> a.getClass()
                      .isAssignableFrom(c);
-    };
+    }
 
-
+    ;
 
 
     /**
      * Check for universal equality (Object#equals)
-     *
+     * <p>
      * Filtering example
      * <pre>
      * {@code
@@ -263,16 +272,16 @@ public class Predicates {
      *
      * }
      * </pre>
-     *
+     * <p>
      * Pattern Matching Example
      *
-     *  <pre>
+     * <pre>
      *  {@code
      *   Eval<String> url = Xors.url(new URL("http://www.aol.com/path?q=hello"))
-                                     .on$12_45()
-                                     .matches(c->c.is(when(eq("http"),in("www.aol.com","aol.com"),any(),not(eq("q=hello!"))), transform("correct")),otherwise("miss"));
-
-        //Eval.now("correct");
+     * .on$12_45()
+     * .matches(c->c.is(when(eq("http"),in("www.aol.com","aol.com"),any(),not(eq("q=hello!"))), transform("correct")),otherwise("miss"));
+     *
+     * //Eval.now("correct");
      *
      *
      *  }
@@ -283,17 +292,17 @@ public class Predicates {
      */
     public static <V> Predicate<V> eq(final V value) {
 
-        return test -> Objects.equals(test, value);
+        return test -> Objects.equals(test,
+                                      value);
     }
+
     public static <T1> Predicate<T1> not(final Predicate<T1> p) {
         return p.negate();
     }
 
 
     /**
-     *  Test for equivalence
-     *  null eqv to absent, embedded value equivalency, non-values converted to values before testing
-     *.
+     * Test for equivalence null eqv to absent, embedded value equivalency, non-values converted to values before testing .
      * <pre>
      * {@code
      *
@@ -316,55 +325,51 @@ public class Predicates {
     public static <V> Predicate<Value<? super V>> eqv(final Value<? super V> value) {
 
         return test -> test == null ? value == null ? true : !value.toMaybe()
-                                                                   .isPresent()
-                : test.toMaybe()
-                      .equals(value.toMaybe());
+                                                                   .isPresent() : test.toMaybe()
+                                                                                      .equals(value.toMaybe());
 
     }
 
     public static <V> Predicate<Iterable<? super V>> eqvIterable(final Iterable<? super V> iterable) {
 
         return test -> test == null ? iterable == null ? true : Seq.fromIterable(iterable)
-                                                                     .isEmpty()
-                : Seq.fromIterable(test)
-                       .equals(Seq.fromIterable(iterable));
+                                                                   .isEmpty() : Seq.fromIterable(test)
+                                                                                   .equals(Seq.fromIterable(iterable));
 
     }
 
     public static <V> Predicate<V> eqv2(final Value<? super V> value) {
 
         return test -> test == null ? value == null ? true : !value.toMaybe()
-                                                                   .isPresent()
-                : Maybe.ofNullable(test)
-                       .equals(value.toMaybe());
+                                                                   .isPresent() : Maybe.ofNullable(test)
+                                                                                       .equals(value.toMaybe());
 
     }
 
 
-    public static <T1> Predicate<T1> and(Predicate<? super T1>... preds)
-    {
-        Predicate<T1> current=  (Predicate<T1>)preds[0];
-        for(int i=1;i<preds.length;i++){
-            current = current.and((Predicate<T1>)preds[i]);
+    public static <T1> Predicate<T1> and(Predicate<? super T1>... preds) {
+        Predicate<T1> current = (Predicate<T1>) preds[0];
+        for (int i = 1; i < preds.length; i++) {
+            current = current.and((Predicate<T1>) preds[i]);
         }
         return current;
     }
-    public static <T1> Predicate<T1> or(Predicate<? super T1>... preds)
-    {
-        Predicate<T1> current =  (Predicate<T1>)preds[0];
-        for(int i=1;i<preds.length;i++){
-            current = current.or((Predicate<T1>)preds[i]);
+
+    public static <T1> Predicate<T1> or(Predicate<? super T1>... preds) {
+        Predicate<T1> current = (Predicate<T1>) preds[0];
+        for (int i = 1; i < preds.length; i++) {
+            current = current.or((Predicate<T1>) preds[i]);
         }
         return current;
     }
 
 
     @SafeVarargs
-    public static <T1> Predicate<T1> in(final T1... values){
+    public static <T1> Predicate<T1> in(final T1... values) {
 
-    return test -> Arrays.asList(values)
-                         .contains(test);
-}
+        return test -> Arrays.asList(values)
+                             .contains(test);
+    }
 
     public static <T1 extends Comparable<T1>> Predicate<? super T1> greaterThan(final T1 v) {
         return test -> test.compareTo(v) > 0;
@@ -381,9 +386,11 @@ public class Predicates {
     public static <T1 extends Comparable<T1>> Predicate<? super T1> lessThanOrEquals(final T1 v) {
         return test -> test.compareTo(v) <= 0;
     }
+
     public static <T1 extends Comparable<T1>> Predicate<? super T1> equal(final T1 v) {
         return test -> test.compareTo(v) == 0;
     }
+
     @Deprecated //collides with Object#equals use equal instead
     public static <T1 extends Comparable<T1>> Predicate<? super T1> equals(final T1 v) {
         return equal(v);
@@ -405,10 +412,10 @@ public class Predicates {
     }
 
     @SafeVarargs
-    public static <T1> Predicate<Collection<? super T1>> hasItems(final T1... items){
-    return test -> ReactiveSeq.of(items)
-                              .map(i -> test.contains(i))
-                              .allMatch(v -> v);
+    public static <T1> Predicate<Collection<? super T1>> hasItems(final T1... items) {
+        return test -> ReactiveSeq.of(items)
+                                  .map(i -> test.contains(i))
+                                  .allMatch(v -> v);
     }
 
     @SafeVarargs
@@ -428,23 +435,23 @@ public class Predicates {
 
     public static <T1> Predicate<? super T1> instanceOf(final Class<?> clazz) {
 
-            return test -> clazz.isAssignableFrom(test.getClass());
-        }
+        return test -> clazz.isAssignableFrom(test.getClass());
+    }
 
     @SafeVarargs
     public static <T1> Predicate<? super T1> allOf(final Predicate<? super T1>... preds) {
-        Predicate<T1> current=  (Predicate<T1>)preds[0];
-        for(int i=1;i<preds.length;i++){
-            current = current.and((Predicate<T1>)preds[i]);
+        Predicate<T1> current = (Predicate<T1>) preds[0];
+        for (int i = 1; i < preds.length; i++) {
+            current = current.and((Predicate<T1>) preds[i]);
         }
         return current;
     }
 
     @SafeVarargs
     public static <T1> Predicate<? super T1> anyOf(final Predicate<? super T1>... preds) {
-        Predicate<T1> current =  (Predicate<T1>)preds[0];
-        for(int i=1;i<preds.length;i++){
-            current = current.or((Predicate<T1>)preds[i]);
+        Predicate<T1> current = (Predicate<T1>) preds[0];
+        for (int i = 1; i < preds.length; i++) {
+            current = current.or((Predicate<T1>) preds[i]);
         }
         return current;
     }
@@ -455,36 +462,44 @@ public class Predicates {
     }
 
     @SafeVarargs
-    public static <T1> Predicate<? super T1> xOf(final int x, final Predicate<? super T1>... preds) {
+    public static <T1> Predicate<? super T1> xOf(final int x,
+                                                 final Predicate<? super T1>... preds) {
         return test -> ReactiveSeq.of(preds)
                                   .map(t -> t.test(test))
-                                  .xMatch(x, r -> r);
+                                  .xMatch(x,
+                                          r -> r);
     }
 
     /**
-     * Samples a dataset by only returning true when the modulus of the event count divided by the rate is 0
-     * e.g.
-     * To select every second member of a Stream, filter with Predicates.sample(2) - for every thid member filter with Predicates.sample(3) and so on.
-     * To take 1% of a Stream use Predicates.sample(100)
+     * Samples a dataset by only returning true when the modulus of the event count divided by the rate is 0 e.g. To select every
+     * second member of a Stream, filter with Predicates.sample(2) - for every thid member filter with Predicates.sample(3) and so
+     * on. To take 1% of a Stream use Predicates.sample(100)
      *
      * @param rate Every x element to include in your sample
-     * @param <T> Data type to sample
+     * @param <T>  Data type to sample
      * @return Sampling Predicate
      */
-    public static <T> Predicate<T> sample(int rate){
+    public static <T> Predicate<T> sample(int rate) {
         return new Sample<T>(rate);
     }
-    public static <T> Predicate<T> sample(long time,TimeUnit unit){
+
+    public static <T> Predicate<T> sample(long time,
+                                          TimeUnit unit) {
         return new TimeSample<T>(unit.toNanos(time));
     }
 
     public static <T> Predicate<T> narrow(Predicate<? super T> p) {
-        return (Predicate<T>)p;
+        return (Predicate<T>) p;
     }
 
-    private static class TimeSample<T> implements Predicate<T>{
+    static <T1> Predicate<T1> inSet(Set<T1> set) {
+        return set::contains;
+    }
+
+    private static class TimeSample<T> implements Predicate<T> {
+
         private final AtomicReference<SimpleTimer> timer = new AtomicReference(null);
-        private final  long nanos;
+        private final long nanos;
 
 
         public TimeSample(long nanos) {
@@ -493,11 +508,12 @@ public class Predicates {
 
         @Override
         public boolean test(T t) {
-            if(timer.get()==null){
+            if (timer.get() == null) {
                 timer.set(new SimpleTimer());
                 return true;
             }
-            if(timer.get().getElapsedNanoseconds() > nanos){
+            if (timer.get()
+                     .getElapsedNanoseconds() > nanos) {
                 timer.set(null);
                 return true;
             }
@@ -506,7 +522,8 @@ public class Predicates {
 
     }
 
-    private static class Sample<T> implements Predicate<T>{
+    private static class Sample<T> implements Predicate<T> {
+
         private final int rate;
 
         private AtomicInteger count = new AtomicInteger(0);
@@ -517,13 +534,9 @@ public class Predicates {
 
         @Override
         public boolean test(T t) {
-            return count.incrementAndGet() % rate ==0;
+            return count.incrementAndGet() % rate == 0;
         }
 
-    }
-
-    static <T1> Predicate<T1> inSet(Set<T1> set) {
-        return set::contains;
     }
 
 

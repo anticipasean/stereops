@@ -1,5 +1,6 @@
 package cyclops.control;
 
+import com.oath.cyclops.hkt.DataWitness.either;
 import com.oath.cyclops.hkt.Higher;
 import com.oath.cyclops.hkt.Higher2;
 import com.oath.cyclops.matching.Sealed2;
@@ -10,42 +11,44 @@ import com.oath.cyclops.types.factory.Unit;
 import com.oath.cyclops.types.foldable.To;
 import com.oath.cyclops.types.functor.BiTransformable;
 import com.oath.cyclops.types.functor.Transformable;
-
-import cyclops.companion.Monoids;
-import cyclops.companion.Reducers;
-import cyclops.data.ImmutableList;
+import com.oath.cyclops.types.reactive.ValueSubscriber;
+import cyclops.companion.Semigroups;
 import cyclops.data.LazySeq;
 import cyclops.data.Vector;
 import cyclops.data.tuple.Tuple2;
-import cyclops.function.*;
-import cyclops.companion.Semigroups;
-
-import com.oath.cyclops.types.reactive.ValueSubscriber;
-import com.oath.cyclops.hkt.DataWitness.either;
-
+import cyclops.function.FluentFunctions;
+import cyclops.function.Function3;
+import cyclops.function.Function4;
+import cyclops.function.Monoid;
+import cyclops.function.Reducer;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import org.reactivestreams.Publisher;
-
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import org.reactivestreams.Publisher;
 
 /**
- *  Either left or right.
- *
+ * Either left or right.
+ * <p>
  * 'Right' (or right type) biased disjunct union.
+ * <p>
+ * No 'projections' are provided, swap() and leftXXXX alternative methods can be used instead.
+ * <p>
+ * Either is used to represent values that can be one of two states (for example a validation result, lazy everything is ok - or
+ * we have an error). It can be used to avoid a common design anti-pattern where an Object has two fields one of which is always
+ * null (or worse, both are defined as Optionals).
  *
- *  No 'projections' are provided, swap() and leftXXXX alternative methods can be used instead.
- *
- *  Either is used to represent values that can be one of two states (for example a validation result, lazy everything is ok - or we have an error).
- *  It can be used to avoid a common design anti-pattern where an Object has two fields one of which is always null (or worse, both are defined as Optionals).
- *
- *  <pre>
+ * <pre>
  *  {@code
  *
  *     public class Member{
@@ -62,150 +65,151 @@ import java.util.stream.Stream;
  *     }
  *  }
  *  </pre>
- *
- *  Either's have two states
- *  Right : Most methods operate naturally on the right type, if it is present. If it is not, nothing happens.
- *  Left : Most methods do nothing to the left type if it is present.
- *              To operate on the Left type first call swap() or use left analogs of the main operators.
- *
- *  Instantiating an Either - Right
- *  <pre>
+ * <p>
+ * Either's have two states Right : Most methods operate naturally on the right type, if it is present. If it is not, nothing
+ * happens. Left : Most methods do nothing to the left type if it is present. To operate on the Left type first call swap() or use
+ * left analogs of the main operators.
+ * <p>
+ * Instantiating an Either - Right
+ * <pre>
  *  {@code
  *      Either.right("hello").map(v->v+" world")
  *    //Either.right["hello world"]
  *  }
  *  </pre>
- *
- *  Instantiating an Either - Left
- *  <pre>
+ * <p>
+ * Instantiating an Either - Left
+ * <pre>
  *  {@code
  *      Either.left("hello").map(v->v+" world")
  *    //Either.seconary["hello"]
  *  }
  *  </pre>
- *
- *  Either can operate (via transform/flatMap) as a Functor / Monad and via combine as an ApplicativeFunctor
- *
- *   Values can be accumulated via
- *  <pre>
+ * <p>
+ * Either can operate (via transform/flatMap) as a Functor / Monad and via combine as an ApplicativeFunctor
+ * <p>
+ * Values can be accumulated via
+ * <pre>
  *  {@code
  *  Either.accumulateLeft(Seq.of(Either.left("failed1"),
-                                                    Either.left("failed2"),
-                                                    Either.right("success")),
-                                                    SemigroupK.stringConcat)
+ * Either.left("failed2"),
+ * Either.right("success")),
+ * SemigroupK.stringConcat)
  *
  *  //failed1failed2
  *
  *   Either<String,String> fail1 = Either.left("failed1");
-     fail1.swap().combine((a,b)->a+b)
-                 .combine(Either.left("failed2").swap())
-                 .combine(Either.<String,String>right("success").swap())
+ * fail1.swap().combine((a,b)->a+b)
+ * .combine(Either.left("failed2").swap())
+ * .combine(Either.<String,String>right("success").swap())
  *
  *  //failed1failed2
  *  }
  *  </pre>
- *
- *
+ * <p>
+ * <p>
  * For Inclusive Ors @see Ior
- *
- * @author johnmcclean
  *
  * @param <LT> Left type
  * @param <RT> Right type
+ * @author johnmcclean
  */
-public interface Either<LT, RT> extends To<Either<LT, RT>>,
-                                         BiTransformable<LT, RT>,
-                                         Sealed2<LT, RT>,Value<RT>,
-                                         OrElseValue<RT,Either<LT, RT>>,
-                                         Unit<RT>, Transformable<RT>, Filters<RT>,
-                                         Serializable,
-                                         Higher2<either, LT, RT> {
+public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, RT>, Sealed2<LT, RT>, Value<RT>,
+                                        OrElseValue<RT, Either<LT, RT>>, Unit<RT>, Transformable<RT>, Filters<RT>, Serializable,
+                                        Higher2<either, LT, RT> {
 
 
-
-
-    public static  <L,T,R> Either<L,R> tailRec(T initial, Function<? super T, ? extends Either<L,? extends Either<T, R>>> fn){
-        Either<L,? extends Either<T, R>> next[] = new Either[1];
+    public static <L, T, R> Either<L, R> tailRec(T initial,
+                                                 Function<? super T, ? extends Either<L, ? extends Either<T, R>>> fn) {
+        Either<L, ? extends Either<T, R>> next[] = new Either[1];
         next[0] = Either.right(Either.left(initial));
         boolean cont = true;
         do {
             cont = next[0].fold(p -> p.fold(s -> {
-                next[0] = narrowK(fn.apply(s));
-                return true;
-            }, pr -> false), () -> false);
+                                                next[0] = narrowK(fn.apply(s));
+                                                return true;
+                                            },
+                                            pr -> false),
+                                () -> false);
         } while (cont);
 
-        return next[0].map(x->x.fold(l->null, r->r));
+        return next[0].map(x -> x.fold(l -> null,
+                                       r -> r));
     }
 
-    public static <L,T> Higher<Higher<either,L>, T> widen(Either<L,T> narrow) {
+    public static <L, T> Higher<Higher<either, L>, T> widen(Either<L, T> narrow) {
         return narrow;
     }
 
-    default int arity(){
-        return 2;
-    }
-
-
-    default Eval<Either<LT, RT>> nestedEval(){
-        return Eval.later(()->this);
-    }
     /**
-     * Static method useful as a method reference for fluent consumption of any value type stored in this Either
-     * (will capture the lowest common type)
+     * Static method useful as a method reference for fluent consumption of any value type stored in this Either (will capture the
+     * lowest common type)
      *
      * <pre>
      * {@code
      *
      *   myEither.to(Either::consumeAny)
-                 .accept(System.out::println);
+     * .accept(System.out::println);
      * }
      * </pre>
      *
      * @param either Either to consume value for
      * @return Consumer we can applyHKT to consume value
      */
-    static <X, LT extends X, M extends X, RT extends X>  Consumer<Consumer<? super X>> consumeAny(Either<LT,RT> either){
-        return in->visitAny(in,either);
+    static <X, LT extends X, M extends X, RT extends X> Consumer<Consumer<? super X>> consumeAny(Either<LT, RT> either) {
+        return in -> visitAny(in,
+                              either);
     }
 
-    static <X, LT extends X, M extends X, RT extends X,R>  Function<Function<? super X, R>,R> applyAny(Either<LT,RT> either){
-        return in->visitAny(either,in);
+    static <X, LT extends X, M extends X, RT extends X, R> Function<Function<? super X, R>, R> applyAny(Either<LT, RT> either) {
+        return in -> visitAny(either,
+                              in);
     }
+
     @Deprecated //use foldAny
-    static <X, PT extends X, ST extends X,R> R visitAny(Either<ST,PT> either, Function<? super X, ? extends R> fn){
-        return foldAny(either,fn);
-    }
-    static <X, PT extends X, ST extends X,R> R foldAny(Either<ST,PT> either, Function<? super X, ? extends R> fn){
-        return either.fold(fn, fn);
+    static <X, PT extends X, ST extends X, R> R visitAny(Either<ST, PT> either,
+                                                         Function<? super X, ? extends R> fn) {
+        return foldAny(either,
+                       fn);
     }
 
-    static <X, LT extends X, RT extends X> X visitAny(Consumer<? super X> c,Either<LT,RT> either){
-        Function<? super X, X> fn = x ->{
+    static <X, PT extends X, ST extends X, R> R foldAny(Either<ST, PT> either,
+                                                        Function<? super X, ? extends R> fn) {
+        return either.fold(fn,
+                           fn);
+    }
+
+    static <X, LT extends X, RT extends X> X visitAny(Consumer<? super X> c,
+                                                      Either<LT, RT> either) {
+        Function<? super X, X> fn = x -> {
             c.accept(x);
             return x;
         };
-        return visitAny(either,fn);
+        return visitAny(either,
+                        fn);
     }
 
-    public static <ST,T> Either<ST,T> narrowK2(final Higher2<either, ST,T> xor) {
-        return (Either<ST,T>)xor;
+    public static <ST, T> Either<ST, T> narrowK2(final Higher2<either, ST, T> xor) {
+        return (Either<ST, T>) xor;
     }
-    public static <ST,T> Either<ST,T> narrowK(final Higher<Higher<either, ST>,T> xor) {
-        return (Either<ST,T>)xor;
+
+    public static <ST, T> Either<ST, T> narrowK(final Higher<Higher<either, ST>, T> xor) {
+        return (Either<ST, T>) xor;
     }
+
     /**
      * Construct a Right Either from the supplied publisher
      * <pre>
      * {@code
      *   ReactiveSeq<Integer> stream =  ReactiveSeq.of(1,2,3);
-
-         Either<Throwable,Integer> future = Either.fromPublisher(stream);
-
-         //Either[1]
+     *
+     * Either<Throwable,Integer> future = Either.fromPublisher(stream);
+     *
+     * //Either[1]
      *
      * }
      * </pre>
+     *
      * @param pub Publisher to construct an Either from
      * @return Either constructed from the supplied Publisher
      */
@@ -220,25 +224,26 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      * <pre>
      * {@code
      *   List<Integer> list =  Arrays.asList(1,2,3);
-
-         Either<Throwable,Integer> future = Either.fromPublisher(stream);
-
-         //Either[1]
+     *
+     * Either<Throwable,Integer> future = Either.fromPublisher(stream);
+     *
+     * //Either[1]
      *
      * }
      * </pre>
+     *
      * @param iterable Iterable to construct an Either from
      * @return Either constructed from the supplied Iterable
      */
     public static <ST, T> Either<ST, T> fromIterable(final Iterable<T> iterable) {
 
         final Iterator<T> it = iterable.iterator();
-        return it.hasNext() ? Either.right(  it.next()) :Either.left(null);
+        return it.hasNext() ? Either.right(it.next()) : Either.left(null);
     }
 
     /**
-     * Create an instance of the left type. Most methods are biased to the right type,
-     * so you will need to use swap() or leftXXXX to manipulate the wrapped value
+     * Create an instance of the left type. Most methods are biased to the right type, so you will need to use swap() or leftXXXX
+     * to manipulate the wrapped value
      *
      * <pre>
      * {@code
@@ -250,18 +255,16 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      * }
      * </pre>
      *
-     *
      * @param value to wrap
      * @return Left instance of Either
      */
     public static <ST, PT> Either<ST, PT> left(final ST value) {
-        return new Left<>(
-                               value);
+        return new Left<>(value);
     }
 
     /**
-     * Create an instance of the right type. Most methods are biased to the right type,
-     * which means, for example, that the transform method operates on the right type but does nothing on left Eithers
+     * Create an instance of the right type. Most methods are biased to the right type, which means, for example, that the
+     * transform method operates on the right type but does nothing on left Eithers
      *
      * <pre>
      * {@code
@@ -272,32 +275,299 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      * }
      * </pre>
      *
-     *
      * @param value To construct an Either from
      * @return Right type instanceof Either
      */
     public static <ST, PT> Either<ST, PT> right(final PT value) {
-        return new Right<>(
-                             value);
+        return new Right<>(value);
     }
 
+    /**
+     * Turn a Collection of Eithers into a single Either with Lists of values. Right and left types are swapped during this
+     * operation.
+     *
+     * <pre>
+     * {@code
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *  Either<Seq<Integer>,Seq<String>> xors =Either.sequenceLeft(Seq.of(just,none,Either.right(1)));
+     * //Either.right(Seq.of("none")))
+     *
+     * }
+     * </pre>
+     *
+     * @param xors Eithers to sequence
+     * @return Either sequenced and swapped
+     */
+    public static <ST, PT> Either<PT, ReactiveSeq<ST>> sequenceLeft(final Iterable<Either<ST, PT>> xors) {
+        return sequence(ReactiveSeq.fromIterable(xors)
+                                   .filter(Either::isLeft)
+                                   .map(i -> i.swap())).map(s -> ReactiveSeq.fromStream(s));
+    }
 
+    public static <L, T> Either<L, Stream<T>> sequence(Stream<? extends Either<L, T>> stream) {
 
+        Either<L, Stream<T>> identity = Either.right(ReactiveSeq.empty());
 
+        BiFunction<Either<L, Stream<T>>, Either<L, T>, Either<L, Stream<T>>> combineToStream = (acc, next) -> acc.zip(next,
+                                                                                                                      (a, b) -> ReactiveSeq.fromStream(a)
+                                                                                                                                           .append(b));
 
+        BinaryOperator<Either<L, Stream<T>>> combineStreams = (a, b) -> a.zip(b,
+                                                                              (z1, z2) -> ReactiveSeq.fromStream(z1)
+                                                                                                     .appendStream(z2));
 
-    default <T2, R1, R2, R3, R> Either<LT,R> forEach4(Function<? super RT, ? extends Either<LT,R1>> value1,
-                                                      BiFunction<? super RT, ? super R1, ? extends Either<LT,R2>> value2,
-                                                      Function3<? super RT, ? super R1, ? super R2, ? extends Either<LT,R3>> value3,
-                                                      Function4<? super RT, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
-        return this.flatMap(in-> {
+        return stream.reduce(identity,
+                             combineToStream,
+                             combineStreams);
+    }
 
-            Either<LT,R1> a = value1.apply(in);
-            return a.flatMap(ina-> {
-                Either<LT,R2> b = value2.apply(in,ina);
-                return b.flatMap(inb-> {
-                    Either<LT,R3> c= value3.apply(in,ina,inb);
-                    return c.map(in2->yieldingFunction.apply(in,ina,inb,in2));
+    public static <L, T, R> Either<L, Stream<R>> traverse(Function<? super T, ? extends R> fn,
+                                                          Stream<Either<L, T>> stream) {
+        return sequence(stream.map(h -> h.map(fn)));
+    }
+
+    public static <L, R> Tuple2<Vector<L>, Vector<R>> partitionEithers(Iterable<Either<L, R>> eithers) {
+
+        return ReactiveSeq.fromIterable(eithers)
+                          .partition(Either::isLeft)
+                          .bimap(l -> l.map(e -> e.fold(left -> left,
+                                                        right -> null))
+                                       .vector(),
+                                 r -> r.map(e -> e.fold(left -> null,
+                                                        right -> right))
+                                       .vector());
+    }
+
+    public static <L, R> Vector<L> lefts(Iterable<Either<L, R>> eithers) {
+        return ReactiveSeq.fromIterable(eithers)
+                          .filter(Either::isLeft)
+                          .map(e -> e.fold(left -> left,
+                                           right -> null))
+                          .vector();
+    }
+
+    public static <L, R> Vector<R> rights(Iterable<Either<L, R>> eithers) {
+        return ReactiveSeq.fromIterable(eithers)
+                          .filter(Either::isRight)
+                          .map(e -> e.fold(left -> null,
+                                           right -> right))
+                          .vector();
+    }
+
+    /**
+     * Accumulate the result of the Left types in the Collection of Eithers provided using the supplied Reducer  {@see
+     * cyclops2.Reducers}.
+     *
+     * <pre>
+     * {@code
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     *  Either<?,PersistentSetX<String>> xors = Either.accumulateLeft(Seq.of(just,none,Either.right(1)),Reducers.<String>toPersistentSetX());
+     * //Either.right(PersistentSetX.of("none"))));
+     * }
+     * </pre>
+     *
+     * @param xors    Collection of Iors to accumulate left values
+     * @param reducer Reducer to accumulate results
+     * @return Either populated with the accumulate left operation
+     */
+    public static <LT, RT, R> Either<RT, R> accumulateLeft(final Iterable<Either<LT, RT>> xors,
+                                                           final Reducer<R, LT> reducer) {
+        return sequenceLeft(xors).map(s -> s.foldMap(reducer));
+    }
+
+    /**
+     * Accumulate the results only from those Eithers which have a Left type present, using the supplied mapping function to
+     * convert the data from each Either before reducing them using the supplied Monoid (a combining BiFunction/BinaryOperator and
+     * identity element that takes two input values of the same type and returns the combined result) {@see cyclops2.Monoids }..
+     *
+     * <pre>
+     * {@code
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     *  Either<?,String> xors = Either.accumulateLeft(Seq.of(just,none,Either.left("1")),i->""+i,Monoids.stringConcat);
+     *
+     * //Either.right("none1")
+     *
+     * }
+     * </pre>
+     *
+     * @param xors    Collection of Iors to accumulate left values
+     * @param mapper  Mapping function to be applied to the result of each Ior
+     * @param reducer Semigroup to combine values from each Ior
+     * @return Either populated with the accumulate Left operation
+     */
+    public static <ST, PT, R> Either<PT, R> accumulateLeft(final Iterable<Either<ST, PT>> xors,
+                                                           final Function<? super ST, R> mapper,
+                                                           final Monoid<R> reducer) {
+        return sequenceLeft(xors).map(s -> s.map(mapper)
+                                            .reduce(reducer));
+    }
+
+    /**
+     * Turn a Collection of Eithers into a single Either with Lists of values.
+     *
+     * <pre>
+     * {@code
+     *
+     * Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     *
+     * Either<Seq<String>,Seq<Integer>> xors =Either.sequenceRight(Seq.of(just,none,Either.right(1)));
+     * //Either.right(Seq.of(10,1)));
+     *
+     * }</pre>
+     *
+     * @param eithers Eithers to sequence
+     * @return Either Sequenced
+     */
+    public static <ST, PT> Either<ST, ReactiveSeq<PT>> sequenceRight(final Iterable<Either<ST, PT>> eithers) {
+        return sequence(ReactiveSeq.fromIterable(eithers)
+                                   .filter(Either::isRight)).map(s -> ReactiveSeq.fromStream(s));
+    }
+
+    /**
+     * Accumulate the result of the Right types in the Collection of Eithers provided using the supplied Reducer  {@see
+     * cyclops2.Reducers}.
+     *
+     * <pre>
+     * {@code
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     *  Either<?,PersistentSetX<Integer>> xors =Either.accumulateRight(Seq.of(just,none,Either.right(1)),Reducers.toPersistentSetX());
+     * //Either.right(PersistentSetX.of(10,1))));
+     * }
+     * </pre>
+     *
+     * @param xors    Collection of Iors to accumulate right values
+     * @param reducer Reducer to accumulate results
+     * @return Either populated with the accumulate right operation
+     */
+    public static <LT, RT, R> Either<LT, R> accumulateRight(final Iterable<Either<LT, RT>> xors,
+                                                            final Reducer<R, RT> reducer) {
+        return sequenceRight(xors).map(s -> s.foldMap(reducer));
+    }
+
+    /**
+     * Accumulate the results only from those Iors which have a Right type present, using the supplied mapping function to convert
+     * the data from each Either before reducing them using the supplied Monoid (a combining BiFunction/BinaryOperator and
+     * identity element that takes two input values of the same type and returns the combined result) {@see cyclops2.Monoids }..
+     *
+     * <pre>
+     * {@code
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     * Either<?,String> iors = Either.accumulateRight(Seq.of(just,none,Either.right(1)),i->""+i,Monoids.stringConcat);
+     * //Either.right("101"));
+     * }
+     * </pre>
+     *
+     * @param xors    Collection of Iors to accumulate right values
+     * @param mapper  Mapping function to be applied to the result of each Ior
+     * @param reducer Reducer to accumulate results
+     * @return Either populated with the accumulate right operation
+     */
+    public static <ST, PT, R> Either<ST, R> accumulateRight(final Iterable<Either<ST, PT>> xors,
+                                                            final Function<? super PT, R> mapper,
+                                                            final Monoid<R> reducer) {
+        return sequenceRight(xors).map(s -> s.map(mapper)
+                                             .reduce(reducer));
+    }
+
+    /**
+     * Accumulate the results only from those Eithers which have a Right type present, using the supplied Monoid (a combining
+     * BiFunction/BinaryOperator and identity element that takes two input values of the same type and returns the combined
+     * result) {@see cyclops2.Monoids }.
+     *
+     * <pre>
+     * {@code
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     *  Either<?,Integer> xors XIor.accumulateRight(Monoids.intSum,Seq.of(just,none,Ior.right(1)));
+     * //Ior.right(11);
+     *
+     * }
+     * </pre>
+     *
+     * @param xors    Collection of Eithers to accumulate right values
+     * @param reducer Reducer to accumulate results
+     * @return Either populated with the accumulate right operation
+     */
+    public static <ST, PT> Either<ST, PT> accumulateRight(final Monoid<PT> reducer,
+                                                          final Iterable<Either<ST, PT>> xors) {
+        return sequenceRight(xors).map(s -> s.reduce(reducer));
+    }
+
+    /**
+     * Accumulate the results only from those Eithers which have a Left type present, using the supplied Monoid (a combining
+     * BiFunction/BinaryOperator and identity element that takes two input values of the same type and returns the combined
+     * result) {@see cyclops2.Monoids }.
+     * <pre>
+     * {@code
+     * Either.accumulateLeft(Seq.of(Either.left("failed1"),
+     * Either.left("failed2"),
+     * Either.right("success")),
+     * SemigroupK.stringConcat)
+     *
+     *
+     * //Eithers.Right[failed1failed2]
+     * }
+     * </pre>
+     * <pre>
+     * {@code
+     *
+     *  Either<String,Integer> just  = Either.right(10);
+     * Either<String,Integer> none = Either.left("none");
+     *
+     * Either<?,Integer> iors = Either.accumulateLeft(Monoids.intSum,Seq.of(Either.both(2, "boo!"),Either.left(1)));
+     * //Either.right(3);  2+1
+     *
+     *
+     * }
+     * </pre>
+     *
+     * @param xors    Collection of Eithers to accumulate left values
+     * @param reducer Semigroup to combine values from each Either
+     * @return Either populated with the accumulate Left operation
+     */
+    public static <ST, PT> Either<PT, ST> accumulateLeft(final Monoid<ST> reducer,
+                                                         final Iterable<Either<ST, PT>> xors) {
+        return sequenceLeft(xors).map(s -> s.reduce(reducer));
+    }
+
+    default int arity() {
+        return 2;
+    }
+
+    default Eval<Either<LT, RT>> nestedEval() {
+        return Eval.later(() -> this);
+    }
+
+    default <T2, R1, R2, R3, R> Either<LT, R> forEach4(Function<? super RT, ? extends Either<LT, R1>> value1,
+                                                       BiFunction<? super RT, ? super R1, ? extends Either<LT, R2>> value2,
+                                                       Function3<? super RT, ? super R1, ? super R2, ? extends Either<LT, R3>> value3,
+                                                       Function4<? super RT, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+        return this.flatMap(in -> {
+
+            Either<LT, R1> a = value1.apply(in);
+            return a.flatMap(ina -> {
+                Either<LT, R2> b = value2.apply(in,
+                                                ina);
+                return b.flatMap(inb -> {
+                    Either<LT, R3> c = value3.apply(in,
+                                                    ina,
+                                                    inb);
+                    return c.map(in2 -> yieldingFunction.apply(in,
+                                                               ina,
+                                                               inb,
+                                                               in2));
                 });
 
             });
@@ -305,37 +575,33 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         });
     }
 
+    default <T2, R1, R2, R> Either<LT, R> forEach3(Function<? super RT, ? extends Either<LT, R1>> value1,
+                                                   BiFunction<? super RT, ? super R1, ? extends Either<LT, R2>> value2,
+                                                   Function3<? super RT, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
+        return this.flatMap(in -> {
 
-
-    default <T2, R1, R2, R> Either<LT,R> forEach3(Function<? super RT, ? extends Either<LT,R1>> value1,
-                                                  BiFunction<? super RT, ? super R1, ? extends Either<LT,R2>> value2,
-                                                  Function3<? super RT, ? super R1, ? super R2, ? extends R> yieldingFunction) {
-
-        return this.flatMap(in-> {
-
-            Either<LT,R1> a = value1.apply(in);
-            return a.flatMap(ina-> {
-                Either<LT,R2> b = value2.apply(in,ina);
-                return b.map(in2->yieldingFunction.apply(in,ina, in2));
+            Either<LT, R1> a = value1.apply(in);
+            return a.flatMap(ina -> {
+                Either<LT, R2> b = value2.apply(in,
+                                                ina);
+                return b.map(in2 -> yieldingFunction.apply(in,
+                                                           ina,
+                                                           in2));
             });
 
         });
     }
 
+    default <R1, R> Either<LT, R> forEach2(Function<? super RT, ? extends Either<LT, R1>> value1,
+                                           BiFunction<? super RT, ? super R1, ? extends R> yieldingFunction) {
 
-
-
-
-    default <R1, R> Either<LT,R> forEach2(Function<? super RT, ? extends Either<LT,R1>> value1,
-                                          BiFunction<? super RT, ? super R1, ? extends R> yieldingFunction) {
-
-        return this.flatMap(in-> {
-            Either<LT,R1> b = value1.apply(in);
-            return b.map(in2->yieldingFunction.apply(in, in2));
+        return this.flatMap(in -> {
+            Either<LT, R1> b = value1.apply(in);
+            return b.map(in2 -> yieldingFunction.apply(in,
+                                                       in2));
         });
     }
-
 
     //cojoin
     /* (non-Javadoc)
@@ -345,8 +611,6 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         return this.map(t -> unit(t));
     }
 
-
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.types.MonadicValue#unit(java.lang.Object)
      */
@@ -355,17 +619,17 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         return Either.right(unit);
     }
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.types.Filters#filter(java.util.function.Predicate)
      */
     @Override
     Option<RT> filter(Predicate<? super RT> test);
 
-    Either<LT, RT> filter(Predicate<? super RT> test, Function<? super RT,? extends LT> rightToLeft);
+    Either<LT, RT> filter(Predicate<? super RT> test,
+                          Function<? super RT, ? extends LT> rightToLeft);
+
     /**
      * If this Either contains the Left type, transform it's value so that it contains the Right type
-     *
      *
      * @param fn Function to transform left type to right
      * @return Either with left type mapped to right
@@ -402,7 +666,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
 
     /**
      * Swap types so operations directly affect the current (pre-swap) Left type
-     *<pre>
+     * <pre>
      *  {@code
      *
      *    Either.left("hello")
@@ -417,12 +681,9 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      *  }
      *  </pre>
      *
-     *
      * @return Swap the right and left types, allowing operations directly on what was the Left type
      */
     Either<RT, LT> swap();
-
-
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.types.foldable.Convertable#isPresent()
@@ -432,255 +693,18 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         return isRight();
     }
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.types.Value#toLazyEither(java.lang.Object)
      */
     @Override
     default <ST2> Either<ST2, RT> toEither(final ST2 left) {
-        return fold(s -> left(left), p -> right(p));
-    }
-    /**
-     *  Turn a Collection of Eithers into a single Either with Lists of values.
-     *  Right and left types are swapped during this operation.
-     *
-     * <pre>
-     * {@code
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-     *  Either<Seq<Integer>,Seq<String>> xors =Either.sequenceLeft(Seq.of(just,none,Either.right(1)));
-        //Either.right(Seq.of("none")))
-     *
-     * }
-     * </pre>
-     *
-     *
-     * @param xors Eithers to sequence
-     * @return Either sequenced and swapped
-     */
-    public static <ST, PT> Either<PT, ReactiveSeq<ST>> sequenceLeft(final Iterable<Either<ST, PT>> xors) {
-        return sequence(ReactiveSeq.fromIterable(xors).filter(Either::isLeft).map(i->i.swap())).map(s->ReactiveSeq.fromStream(s));
-    }
-  public static  <L,T> Either<L,Stream<T>> sequence(Stream<? extends Either<L,T>> stream) {
-
-    Either<L, Stream<T>> identity = Either.right(ReactiveSeq.empty());
-
-    BiFunction<Either<L,Stream<T>>,Either<L,T>,Either<L,Stream<T>>> combineToStream = (acc,next) ->acc.zip(next,(a,b)->ReactiveSeq.fromStream(a).append(b));
-
-    BinaryOperator<Either<L,Stream<T>>> combineStreams = (a,b)-> a.zip(b,(z1,z2)->ReactiveSeq.fromStream(z1).appendStream(z2));
-
-   return stream.reduce(identity,combineToStream,combineStreams);
-  }
-  public static <L,T,R> Either<L,Stream<R>> traverse(Function<? super T,? extends R> fn,Stream<Either<L,T>> stream) {
-    return sequence(stream.map(h->h.map(fn)));
-  }
-
-
-    public static <L, R> Tuple2<Vector<L>, Vector<R>> partitionEithers(Iterable<Either<L, R>> eithers) {
-
-        return ReactiveSeq.fromIterable(eithers)
-                        .partition(Either::isLeft)
-                        .bimap(l -> l.map(e -> e.fold(left -> left, right -> null)).vector(),
-                            r -> r.map(e -> e.fold(left -> null, right -> right)).vector());
-    }
-
-    public static <L, R> Vector<L> lefts(Iterable<Either<L, R>> eithers) {
-        return ReactiveSeq.fromIterable(eithers)
-                            .filter(Either::isLeft)
-                            .map(e -> e.fold(left -> left, right -> null))
-                            .vector();
-    }
-    public static <L, R> Vector<R> rights(Iterable<Either<L, R>> eithers) {
-        return ReactiveSeq.fromIterable(eithers)
-                            .filter(Either::isRight)
-                            .map(e -> e.fold(left -> null, right -> right))
-                            .vector();
+        return fold(s -> left(left),
+                    p -> right(p));
     }
 
     /**
-     * Accumulate the result of the Left types in the Collection of Eithers provided using the supplied Reducer  {@see cyclops2.Reducers}.
-     *
-     * <pre>
-     * {@code
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-
-     *  Either<?,PersistentSetX<String>> xors = Either.accumulateLeft(Seq.of(just,none,Either.right(1)),Reducers.<String>toPersistentSetX());
-      //Either.right(PersistentSetX.of("none"))));
-      * }
-     * </pre>
-     * @param xors Collection of Iors to accumulate left values
-     * @param reducer Reducer to accumulate results
-     * @return Either populated with the accumulate left operation
-     */
-    public static <LT, RT, R> Either<RT, R> accumulateLeft(final Iterable<Either<LT, RT>> xors, final Reducer<R, LT> reducer) {
-        return sequenceLeft(xors).map(s -> s.foldMap(reducer));
-    }
-    /**
-     * Accumulate the results only from those Eithers which have a Left type present, using the supplied mapping function to
-     * convert the data from each Either before reducing them using the supplied Monoid (a combining BiFunction/BinaryOperator and identity element that takes two
-     * input values of the same type and returns the combined result) {@see cyclops2.Monoids }..
-     *
-     * <pre>
-     * {@code
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-
-     *  Either<?,String> xors = Either.accumulateLeft(Seq.of(just,none,Either.left("1")),i->""+i,Monoids.stringConcat);
-
-        //Either.right("none1")
-     *
-     * }
-     * </pre>
-     *
-     *
-     *
-     * @param xors Collection of Iors to accumulate left values
-     * @param mapper Mapping function to be applied to the result of each Ior
-     * @param reducer Semigroup to combine values from each Ior
-     * @return Either populated with the accumulate Left operation
-     */
-    public static <ST, PT, R> Either<PT, R> accumulateLeft(final Iterable<Either<ST, PT>> xors, final Function<? super ST, R> mapper,
-                                                                  final Monoid<R> reducer) {
-        return sequenceLeft(xors).map(s -> s.map(mapper)
-                                                 .reduce(reducer));
-    }
-
-
-    /**
-     *  Turn a Collection of Eithers into a single Either with Lists of values.
-     *
-     * <pre>
-     * {@code
-     *
-     * Either<String,Integer> just  = Either.right(10);
-       Either<String,Integer> none = Either.left("none");
-
-
-     * Either<Seq<String>,Seq<Integer>> xors =Either.sequenceRight(Seq.of(just,none,Either.right(1)));
-       //Either.right(Seq.of(10,1)));
-     *
-     * }</pre>
-     *
-     *
-     *
-     * @param eithers Eithers to sequence
-     * @return Either Sequenced
-     */
-    public static <ST, PT> Either<ST, ReactiveSeq<PT>> sequenceRight(final Iterable<Either<ST, PT>> eithers) {
-        return sequence(ReactiveSeq.fromIterable(eithers).filter(Either::isRight)).map(s->ReactiveSeq.fromStream(s));
-    }
-    /**
-     * Accumulate the result of the Right types in the Collection of Eithers provided using the supplied Reducer  {@see cyclops2.Reducers}.
-
-     * <pre>
-     * {@code
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-
-     *  Either<?,PersistentSetX<Integer>> xors =Either.accumulateRight(Seq.of(just,none,Either.right(1)),Reducers.toPersistentSetX());
-        //Either.right(PersistentSetX.of(10,1))));
-     * }
-     * </pre>
-     * @param xors Collection of Iors to accumulate right values
-     * @param reducer Reducer to accumulate results
-     * @return Either populated with the accumulate right operation
-     */
-    public static <LT, RT, R> Either<LT, R> accumulateRight(final Iterable<Either<LT, RT>> xors, final Reducer<R,RT> reducer) {
-        return sequenceRight(xors).map(s -> s.foldMap(reducer));
-    }
-
-    /**
-     * Accumulate the results only from those Iors which have a Right type present, using the supplied mapping function to
-     * convert the data from each Either before reducing them using the supplied Monoid (a combining BiFunction/BinaryOperator and identity element that takes two
-     * input values of the same type and returns the combined result) {@see cyclops2.Monoids }..
-     *
-     * <pre>
-     * {@code
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-
-     * Either<?,String> iors = Either.accumulateRight(Seq.of(just,none,Either.right(1)),i->""+i,Monoids.stringConcat);
-       //Either.right("101"));
-     * }
-     * </pre>
-     *
-     *
-     * @param xors Collection of Iors to accumulate right values
-     * @param mapper Mapping function to be applied to the result of each Ior
-     * @param reducer Reducer to accumulate results
-     * @return Either populated with the accumulate right operation
-     */
-    public static <ST, PT, R> Either<ST, R> accumulateRight(final Iterable<Either<ST, PT>> xors, final Function<? super PT, R> mapper,
-                                                                   final Monoid<R> reducer) {
-        return sequenceRight(xors).map(s -> s.map(mapper)
-                                               .reduce(reducer));
-    }
-    /**
-     *  Accumulate the results only from those Eithers which have a Right type present, using the supplied Monoid (a combining BiFunction/BinaryOperator and identity element that takes two
-     * input values of the same type and returns the combined result) {@see cyclops2.Monoids }.
-     *
-     * <pre>
-     * {@code
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-     *
-     *  Either<?,Integer> xors XIor.accumulateRight(Monoids.intSum,Seq.of(just,none,Ior.right(1)));
-        //Ior.right(11);
-     *
-     * }
-     * </pre>
-     *
-     *
-     *
-     * @param xors Collection of Eithers to accumulate right values
-     * @param reducer  Reducer to accumulate results
-     * @return  Either populated with the accumulate right operation
-     */
-    public static <ST, PT> Either<ST, PT> accumulateRight(final Monoid<PT> reducer, final Iterable<Either<ST, PT>> xors) {
-        return sequenceRight(xors).map(s -> s.reduce(reducer));
-    }
-
-    /**
-     *
-     * Accumulate the results only from those Eithers which have a Left type present, using the supplied Monoid (a combining BiFunction/BinaryOperator and identity element that takes two
-     * input values of the same type and returns the combined result) {@see cyclops2.Monoids }.
-     * <pre>
-     * {@code
-     * Either.accumulateLeft(Seq.of(Either.left("failed1"),
-    												Either.left("failed2"),
-    												Either.right("success")),
-    												SemigroupK.stringConcat)
-
-
-     * //Eithers.Right[failed1failed2]
-     * }
-     * </pre>
-     * <pre>
-     * {@code
-     *
-     *  Either<String,Integer> just  = Either.right(10);
-        Either<String,Integer> none = Either.left("none");
-
-     * Either<?,Integer> iors = Either.accumulateLeft(Monoids.intSum,Seq.of(Either.both(2, "boo!"),Either.left(1)));
-       //Either.right(3);  2+1
-     *
-     *
-     * }
-     * </pre>
-     *
-     * @param xors Collection of Eithers to accumulate left values
-     * @param reducer  Semigroup to combine values from each Either
-     * @return Either populated with the accumulate Left operation
-     */
-    public static <ST, PT> Either<PT, ST> accumulateLeft(final Monoid<ST> reducer, final Iterable<Either<ST, PT>> xors) {
-        return sequenceLeft(xors).map(s -> s.reduce(reducer));
-    }
-
-    /**
-     * Visitor pattern for this Ior.
-     * Execute the left function if this Either contains an element of the left type
-     * Execute the right function if this Either contains an element of the right type
+     * Visitor pattern for this Ior. Execute the left function if this Either contains an element of the left type Execute the
+     * right function if this Either contains an element of the right type
      *
      *
      * <pre>
@@ -688,28 +712,31 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      *  Either.right(10)
      *     .visit(left->"no", right->"yes")
      *  //Either["yes"]
-
-        Either.left(90)
-           .visit(left->"no", right->"yes")
-        //Either["no"]
-
-
+     *
+     * Either.left(90)
+     * .visit(left->"no", right->"yes")
+     * //Either["no"]
+     *
+     *
      *
      * }
      * </pre>
      *
-     * @param left Function to execute if this is a Left Either
+     * @param left  Function to execute if this is a Left Either
      * @param right Function to execute if this is a Right Ior
      * @return Result of executing the appropriate function
      */
-    <R> R fold(Function<? super LT, ? extends R> left, Function<? super RT, ? extends R> right);
+    <R> R fold(Function<? super LT, ? extends R> left,
+               Function<? super RT, ? extends R> right);
 
 
     @Override
-    default <R1, R2> Either<R1, R2> bimap(Function<? super LT, ? extends R1> left, Function<? super RT, ? extends R2> right) {
-        if (isLeft())
+    default <R1, R2> Either<R1, R2> bimap(Function<? super LT, ? extends R1> left,
+                                          Function<? super RT, ? extends R2> right) {
+        if (isLeft()) {
             return (Either<R1, R2>) swap().map(left)
-                                       .swap();
+                                          .swap();
+        }
         return (Either<R1, R2>) map(right);
     }
 
@@ -717,13 +744,12 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      * @see com.oath.cyclops.types.functor.BiTransformable#bipeek(java.util.function.Consumer, java.util.function.Consumer)
      */
     @Override
-    default Either<LT, RT> bipeek(Consumer<? super LT> c1, Consumer<? super RT> c2) {
+    default Either<LT, RT> bipeek(Consumer<? super LT> c1,
+                                  Consumer<? super RT> c2) {
 
-        return (Either<LT, RT>)BiTransformable.super.bipeek(c1, c2);
+        return (Either<LT, RT>) BiTransformable.super.bipeek(c1,
+                                                             c2);
     }
-
-
-
 
 
     /* (non-Javadoc)
@@ -735,10 +761,13 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      * @return The Left Value if present, otherwise null
      */
     Option<LT> getLeft();
+
     LT leftOrElse(LT alt);
 
     Either<LT, RT> recover(Supplier<? extends RT> value);
+
     Either<LT, RT> recover(RT value);
+
     Either<LT, RT> recoverWith(Supplier<? extends Either<LT, RT>> fn);
 
     /**
@@ -747,21 +776,24 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
     ReactiveSeq<LT> leftToStream();
 
 
-    <RT1> Either<LT, RT1> flatMap(Function<? super RT, ? extends Either<? extends LT,? extends RT1>> mapper);
+    <RT1> Either<LT, RT1> flatMap(Function<? super RT, ? extends Either<? extends LT, ? extends RT1>> mapper);
+
     /**
      * Perform a flatMap operation on the Left type
      *
      * @param mapper Flattening transformation function
-     * @return Either containing the value inside the result of the transformation function as the Left value, if the Left type was present
+     * @return Either containing the value inside the result of the transformation function as the Left value, if the Left type
+     * was present
      */
     <LT1> Either<LT1, RT> flatMapLeft(Function<? super LT, ? extends Either<LT1, RT>> mapper);
+
     /**
      * A flatMap operation that keeps the Left and Right types the same
      *
      * @param fn Transformation function
      * @return Either
      */
-    default Either<LT, RT> flatMapLeftToRight(Function<? super LT, ? extends Either<LT, RT>> fn){
+    default Either<LT, RT> flatMapLeftToRight(Function<? super LT, ? extends Either<LT, RT>> fn) {
         return flatMapLeft(fn);
     }
 
@@ -769,17 +801,24 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
      * @return True if this is a right Either
      */
     public boolean isRight();
+
     /**
      * @return True if this is a left Either
      */
     public boolean isLeft();
 
 
-    default <T2, R> Either<LT, R> zip(final Ior<LT,? extends T2> app, final BiFunction<? super RT, ? super T2, ? extends R> fn){
-        return flatMap(t->app.map(t2->fn.apply(t,t2)).toEither());
+    default <T2, R> Either<LT, R> zip(final Ior<LT, ? extends T2> app,
+                                      final BiFunction<? super RT, ? super T2, ? extends R> fn) {
+        return flatMap(t -> app.map(t2 -> fn.apply(t,
+                                                   t2))
+                               .toEither());
     }
-    default <T2, R> Either<LT, R> zip(final Either<LT,? extends T2> app, final BiFunction<? super RT, ? super T2, ? extends R> fn){
-        return flatMap(t->app.map(t2->fn.apply(t,t2)));
+
+    default <T2, R> Either<LT, R> zip(final Either<LT, ? extends T2> app,
+                                      final BiFunction<? super RT, ? super T2, ? extends R> fn) {
+        return flatMap(t -> app.map(t2 -> fn.apply(t,
+                                                   t2)));
     }
 
 
@@ -788,49 +827,56 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
     }
 
     /**
-     * Accumulate lefts into a LazySeq (extended Persistent List) and Right with the supplied combiner function
-     * Right accumulation only occurs if all phases are right
+     * Accumulate lefts into a LazySeq (extended Persistent List) and Right with the supplied combiner function Right accumulation
+     * only occurs if all phases are right
      *
      * @param app Value to combine with
-     * @param fn Combiner function for right values
+     * @param fn  Combiner function for right values
      * @return Combined Either
      */
-    default <T2, R> Either<LazySeq<LT>, R> combineToLazySeq(final Either<LT, ? extends T2> app, final BiFunction<? super RT, ? super T2, ? extends R> fn) {
-        return lazySeq().combine(app.lazySeq(), Semigroups.lazySeqConcat(), fn);
+    default <T2, R> Either<LazySeq<LT>, R> combineToLazySeq(final Either<LT, ? extends T2> app,
+                                                            final BiFunction<? super RT, ? super T2, ? extends R> fn) {
+        return lazySeq().combine(app.lazySeq(),
+                                 Semigroups.lazySeqConcat(),
+                                 fn);
     }
-    default <T2, R> Either<Vector<LT>, R> combineToVector(final Either<LT, ? extends T2> app, final BiFunction<? super RT, ? super T2, ? extends R> fn) {
-        return mapLeft(Vector::of).combine(app.mapLeft(Vector::of), Semigroups.vectorConcat(), fn);
+
+    default <T2, R> Either<Vector<LT>, R> combineToVector(final Either<LT, ? extends T2> app,
+                                                          final BiFunction<? super RT, ? super T2, ? extends R> fn) {
+        return mapLeft(Vector::of).combine(app.mapLeft(Vector::of),
+                                           Semigroups.vectorConcat(),
+                                           fn);
     }
 
     /**
-     * Accumulate left values with the provided BinaryOperator / Semigroup {@link Semigroups}
-     * Right accumulation only occurs if all phases are right
+     * Accumulate left values with the provided BinaryOperator / Semigroup {@link Semigroups} Right accumulation only occurs if
+     * all phases are right
      *
      * <pre>
      * {@code
      *  Either<String,String> fail1 =  Either.left("failed1");
-        Either<LazySeq<String>,String> result = fail1.list().combine(Either.left("failed2").list(), SemigroupK.collectionConcat(),(a,b)->a+b);
-
-        //Left of [LazySeq.of("failed1","failed2")))]
+     * Either<LazySeq<String>,String> result = fail1.list().combine(Either.left("failed2").list(), SemigroupK.collectionConcat(),(a,b)->a+b);
+     *
+     * //Left of [LazySeq.of("failed1","failed2")))]
      * }
      * </pre>
      *
-     * @param app Value to combine with
+     * @param app       Value to combine with
      * @param semigroup to combine left types
-     * @param fn To combine right types
+     * @param fn        To combine right types
      * @return Combined Either
      */
 
-    default <T2, R> Either<LT, R> combine(final Either<? extends LT, ? extends T2> app, final BinaryOperator<LT> semigroup,
+    default <T2, R> Either<LT, R> combine(final Either<? extends LT, ? extends T2> app,
+                                          final BinaryOperator<LT> semigroup,
                                           final BiFunction<? super RT, ? super T2, ? extends R> fn) {
-        return this.fold(left -> app.fold(s2 -> Either.left(semigroup.apply(s2, left)), p2 -> Either.left(left)),
-                          right -> app.fold(s2 -> Either.left(s2), p2 -> Either.right(fn.apply(right, p2))));
+        return this.fold(left -> app.fold(s2 -> Either.left(semigroup.apply(s2,
+                                                                            left)),
+                                          p2 -> Either.left(left)),
+                         right -> app.fold(s2 -> Either.left(s2),
+                                           p2 -> Either.right(fn.apply(right,
+                                                                       p2))));
     }
-
-
-
-
-
 
 
     /* (non-Javadoc)
@@ -861,34 +907,34 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
     }
 
 
-
     Ior<LT, RT> toIor();
 
     default Trampoline<Either<LT, RT>> toTrampoline() {
-        return Trampoline.more(()->Trampoline.done(this));
+        return Trampoline.more(() -> Trampoline.done(this));
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Right<L, RT> implements Either<L, RT> {
-        private final RT value;
+
         private static final long serialVersionUID = 1L;
+        private final RT value;
 
-      @Override
-      public Either<L, RT> recover(Supplier<? extends RT> value) {
-        return this;
-      }
+        @Override
+        public Either<L, RT> recover(Supplier<? extends RT> value) {
+            return this;
+        }
 
-      @Override
-      public Either<L, RT> recover(RT value) {
-        return this;
-      }
+        @Override
+        public Either<L, RT> recover(RT value) {
+            return this;
+        }
 
-      @Override
-      public Either<L, RT> recoverWith(Supplier<? extends Either<L, RT>> fn) {
-        return this;
-      }
+        @Override
+        public Either<L, RT> recoverWith(Supplier<? extends Either<L, RT>> fn) {
+            return this;
+        }
 
-      @Override
+        @Override
         public Either<L, RT> mapLeftToRight(final Function<? super L, ? extends RT> fn) {
             return this;
         }
@@ -900,8 +946,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
 
         @Override
         public <R> Either<L, R> map(final Function<? super RT, ? extends R> fn) {
-            return new Right<L, R>(
-                                      fn.apply(value));
+            return new Right<L, R>(fn.apply(value));
         }
 
         @Override
@@ -921,14 +966,14 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
         @Override
-        public Either<L, RT> filter(Predicate<? super RT> test, Function<? super RT, ? extends L> rightToLeft) {
-          return test.test(value) ? this : Either.left(rightToLeft.apply(value));
+        public Either<L, RT> filter(Predicate<? super RT> test,
+                                    Function<? super RT, ? extends L> rightToLeft) {
+            return test.test(value) ? this : Either.left(rightToLeft.apply(value));
         }
 
         @Override
         public Either<RT, L> swap() {
-            return new Left<RT, L>(
-                                         value);
+            return new Left<RT, L>(value);
         }
 
         @Override
@@ -953,7 +998,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
         @Override
-        public <RT1> Either<L, RT1> flatMap(Function<? super RT, ? extends Either<? extends L,? extends RT1>> mapper){
+        public <RT1> Either<L, RT1> flatMap(Function<? super RT, ? extends Either<? extends L, ? extends RT1>> mapper) {
             return (Either<L, RT1>) mapper.apply(value);
         }
 
@@ -966,7 +1011,6 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         public Either<L, RT> flatMapLeftToRight(final Function<? super L, ? extends Either<L, RT>> fn) {
             return this;
         }
-
 
 
         @Override
@@ -996,24 +1040,29 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
         @Override
-        public <R> R fold(final Function<? super L, ? extends R> left, final Function<? super RT, ? extends R> right) {
+        public <R> R fold(final Function<? super L, ? extends R> left,
+                          final Function<? super RT, ? extends R> right) {
             return right.apply(value);
         }
 
 
-
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if (obj == null) {
                 return false;
-            if (!(obj instanceof Either))
+            }
+            if (!(obj instanceof Either)) {
                 return false;
+            }
             Either other = (Either) obj;
-            if(!other.isRight())
+            if (!other.isRight()) {
                 return false;
-            return Objects.equals(value,other.orElse(null));
+            }
+            return Objects.equals(value,
+                                  other.orElse(null));
         }
 
 
@@ -1026,32 +1075,34 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
 
-
         @Override
-        public <R> R fold(Function<? super RT, ? extends R> present, Supplier<? extends R> absent) {
+        public <R> R fold(Function<? super RT, ? extends R> present,
+                          Supplier<? extends R> absent) {
             return present.apply(value);
         }
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Left<L, R> implements Either<L, R> {
-        private final L value;
+
         private static final long serialVersionUID = 1L;
+        private final L value;
 
         @Override
         public Either<L, R> recover(Supplier<? extends R> value) {
-          return right(value.get());
+            return right(value.get());
         }
 
         @Override
         public Either<L, R> recover(R value) {
-          return right(value);
+            return right(value);
         }
 
         @Override
         public Either<L, R> recoverWith(Supplier<? extends Either<L, R>> fn) {
-          return fn.get();
+            return fn.get();
         }
+
         @Override
         public boolean isLeft() {
             return true;
@@ -1065,14 +1116,12 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
 
         @Override
         public Either<L, R> mapLeftToRight(final Function<? super L, ? extends R> fn) {
-            return new Right<L, R>(
-                                       fn.apply(value));
+            return new Right<L, R>(fn.apply(value));
         }
 
         @Override
         public <R2> Either<R2, R> mapLeft(final Function<? super L, ? extends R2> fn) {
-            return new Left<R2, R>(
-                                        fn.apply(value));
+            return new Left<R2, R>(fn.apply(value));
         }
 
         @Override
@@ -1096,18 +1145,19 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
         @Override
-        public Either<L, R> filter(Predicate<? super R> test, Function<? super R, ? extends L> rightToLeft) {
-          return this;
-        }
-
-      @Override
-        public Either<R, L> swap() {
-            return new Right<R, L>(
-                                       value);
+        public Either<L, R> filter(Predicate<? super R> test,
+                                   Function<? super R, ? extends L> rightToLeft) {
+            return this;
         }
 
         @Override
-        public Option<R> get() { return Option.none();
+        public Either<R, L> swap() {
+            return new Right<R, L>(value);
+        }
+
+        @Override
+        public Option<R> get() {
+            return Option.none();
         }
 
         @Override
@@ -1128,9 +1178,8 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
 
         @Override
         public <RT1> Either<L, RT1> flatMap(Function<? super R, ? extends Either<? extends L, ? extends RT1>> mapper) {
-            return (Either<L, RT1>)this;
+            return (Either<L, RT1>) this;
         }
-
 
 
         @Override
@@ -1144,8 +1193,6 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
 
-
-
         @Override
         public Maybe<R> toMaybe() {
             return Maybe.nothing();
@@ -1157,7 +1204,6 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         }
 
 
-
         @Override
         public String toString() {
             return mkString();
@@ -1167,7 +1213,6 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
         public String mkString() {
             return "Either.left[" + value + "]";
         }
-
 
 
         @Override
@@ -1192,23 +1237,30 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>,
          */
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (obj == null)
+            }
+            if (obj == null) {
                 return false;
+            }
             Either other = (Either) obj;
-            if(other.isRight())
+            if (other.isRight()) {
                 return false;
-            return Objects.equals(value,other.swap().orElse(null));
+            }
+            return Objects.equals(value,
+                                  other.swap()
+                                       .orElse(null));
         }
 
         @Override
-        public <R2> R2 fold(Function<? super L, ? extends R2> fn1, Function<? super R, ? extends R2> fn2) {
+        public <R2> R2 fold(Function<? super L, ? extends R2> fn1,
+                            Function<? super R, ? extends R2> fn2) {
             return fn1.apply(value);
         }
 
         @Override
-        public <R2> R2 fold(Function<? super R, ? extends R2> present, Supplier<? extends R2> absent) {
+        public <R2> R2 fold(Function<? super R, ? extends R2> present,
+                            Supplier<? extends R2> absent) {
             return absent.get();
         }
     }

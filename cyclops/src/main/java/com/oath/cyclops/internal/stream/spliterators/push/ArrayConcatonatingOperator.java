@@ -2,10 +2,6 @@ package com.oath.cyclops.internal.stream.spliterators.push;
 
 import cyclops.data.BankersQueue;
 import cyclops.data.Seq;
-
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -18,9 +14,9 @@ public class ArrayConcatonatingOperator<IN> implements Operator<IN> {
     private final Seq<Operator<IN>> operators;
 
 
-    public ArrayConcatonatingOperator(Operator<IN>... sources){
-        Seq<Operator<IN>> ops  = Seq.empty();
-        for(Operator<IN> next : sources){
+    public ArrayConcatonatingOperator(Operator<IN>... sources) {
+        Seq<Operator<IN>> ops = Seq.empty();
+        for (Operator<IN> next : sources) {
             ops = ops.append(next);
         }
         this.operators = ops;
@@ -28,19 +24,18 @@ public class ArrayConcatonatingOperator<IN> implements Operator<IN> {
 
     }
 
-    public ArrayConcatonatingOperator(Seq<Operator<IN>> sources){
+    public ArrayConcatonatingOperator(Seq<Operator<IN>> sources) {
         this.operators = sources;
     }
 
 
-
-
     @Override
-    public StreamSubscription subscribe(Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super IN> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         BankersQueue<StreamSubscription> subs = BankersQueue.empty();
         int index[] = {0};
         boolean[] finished = {false};
-
 
         Concat[] ref = {null};
         StreamSubscription sub = new StreamSubscription() {
@@ -53,13 +48,9 @@ public class ArrayConcatonatingOperator<IN> implements Operator<IN> {
                     return;
                 }
 
-
                 super.request(n);
 
                 ref[0].request(n);
-
-
-
 
 
             }
@@ -72,39 +63,47 @@ public class ArrayConcatonatingOperator<IN> implements Operator<IN> {
             }
         };
 
-        Concat c = new Concat(sub,operators,onNext,onError,onComplete);
-        ref[0]=c;
-
-
-
-
-
+        Concat c = new Concat(sub,
+                              operators,
+                              onNext,
+                              onError,
+                              onComplete);
+        ref[0] = c;
 
         return sub;
     }
 
 
-
-
-
     @Override
-    public void subscribeAll(Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super IN> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
 
-        subscribeAll(0,onNext,onError,onCompleteDs);
-
+        subscribeAll(0,
+                     onNext,
+                     onError,
+                     onCompleteDs);
 
 
     }
-    public void subscribeAll(int index,Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
-        if(index>=operators.size()) {
+
+    public void subscribeAll(int index,
+                             Consumer<? super IN> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
+        if (index >= operators.size()) {
             onCompleteDs.run();
             return;
         }
 
-
-        Operator<IN> next = operators.getOrElse(index,null);
-        next.subscribeAll(onNext,onError,()->subscribeAll(index+1,onNext,onError,onCompleteDs));
-
+        Operator<IN> next = operators.getOrElse(index,
+                                                null);
+        next.subscribeAll(onNext,
+                          onError,
+                          () -> subscribeAll(index + 1,
+                                             onNext,
+                                             onError,
+                                             onCompleteDs));
 
 
     }

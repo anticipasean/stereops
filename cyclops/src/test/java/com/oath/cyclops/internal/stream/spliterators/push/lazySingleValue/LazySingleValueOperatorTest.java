@@ -1,6 +1,11 @@
 package com.oath.cyclops.internal.stream.spliterators.push.lazySingleValue;
 
-import com.oath.cyclops.internal.stream.spliterators.push.*;
+import com.oath.cyclops.internal.stream.spliterators.push.AbstractOperatorTest;
+import com.oath.cyclops.internal.stream.spliterators.push.ArrayOfValuesOperator;
+import com.oath.cyclops.internal.stream.spliterators.push.FilterOperator;
+import com.oath.cyclops.internal.stream.spliterators.push.Fixtures;
+import com.oath.cyclops.internal.stream.spliterators.push.LazySingleValueOperator;
+import com.oath.cyclops.internal.stream.spliterators.push.Operator;
 
 /**
  * Created by johnmcclean on 17/01/2017.
@@ -8,23 +13,32 @@ import com.oath.cyclops.internal.stream.spliterators.push.*;
 public class LazySingleValueOperatorTest extends AbstractOperatorTest {
 
 
-    public Operator<Integer> createEmpty(){
-       return new FilterOperator<>(new ArrayOfValuesOperator<>(), i->true);
-    }
-    public Operator<Integer> createOne(){
-        return new LazySingleValueOperator<>(1, i->i);
+    public Operator<Integer> createEmpty() {
+        return new FilterOperator<>(new ArrayOfValuesOperator<>(),
+                                    i -> true);
     }
 
-    public Operator<Integer> createThree(){
-        return  new FilterOperator<>(new ArrayOfValuesOperator<>(1,2,3),i->true);
-    }
-    public Operator<Integer> createTwoAndError(){
-        return  new FilterOperator<>(Fixtures.twoAndErrorSource, i->true);
-    }
-    public Operator<Integer> createThreeErrors(){
-        return  new FilterOperator<>(Fixtures.threeErrorsSource, i->true);
+    public Operator<Integer> createOne() {
+        return new LazySingleValueOperator<>(1,
+                                             i -> i);
     }
 
+    public Operator<Integer> createThree() {
+        return new FilterOperator<>(new ArrayOfValuesOperator<>(1,
+                                                                2,
+                                                                3),
+                                    i -> true);
+    }
+
+    public Operator<Integer> createTwoAndError() {
+        return new FilterOperator<>(Fixtures.twoAndErrorSource,
+                                    i -> true);
+    }
+
+    public Operator<Integer> createThreeErrors() {
+        return new FilterOperator<>(Fixtures.threeErrorsSource,
+                                    i -> true);
+    }
 
 
 }

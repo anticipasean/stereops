@@ -1,6 +1,10 @@
 plugins {
     id 'java'
 }
+
+sourceCompatibility = javaSourceCompatibility
+targetCompatibility = javaTargetCompatibility
+
 jar {
     manifest {
         attributes 'Implementation-Title': 'girakkafunc', 'Implementation-Version': version
@@ -9,8 +13,8 @@ jar {
 
 
 subprojects {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = javaSourceCompatibility
+    targetCompatibility = javaTargetCompatibility
     apply from: '../repositories.gradle', to: repositories
 
 }

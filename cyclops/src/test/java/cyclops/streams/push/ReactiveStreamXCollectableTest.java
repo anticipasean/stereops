@@ -9,7 +9,7 @@ public class ReactiveStreamXCollectableTest extends CollectableTest {
 
     @Override
     public <T> Folds<T> of(T... values) {
-       return Spouts.of(values);
+        return Spouts.of(values);
     }
 
 }

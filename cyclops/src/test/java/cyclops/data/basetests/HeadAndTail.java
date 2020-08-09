@@ -1,34 +1,29 @@
 package cyclops.data.basetests;
 
 
+import cyclops.control.Eval;
+import cyclops.control.Maybe;
+import cyclops.function.Memoize;
+import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import cyclops.control.Eval;
-import cyclops.control.Maybe;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.function.Memoize;
-
 import lombok.AllArgsConstructor;
 
 /**
  * A class that represents a lazily constructed Head and Tail from a non-scalar data type
  *
- * @author johnmcclean
- *
  * @param <T> Data type of elements in this Head and Tail
+ * @author johnmcclean
  */
 @AllArgsConstructor
 public class HeadAndTail<T> {
+
     private final Supplier<T> head;
     private final Supplier<ReactiveSeq<T>> tail;
     private final Supplier<Boolean> isHead;
 
-    public static <T> HeadAndTail<T> headAndTail(Iterable<T> it){
-        return new HeadAndTail<>(it.iterator());
-    }
     /**
      * Construct a HeadAndTail from an Iterator
      *
@@ -37,18 +32,24 @@ public class HeadAndTail<T> {
     public HeadAndTail(final Iterator<T> it) {
         isHead = Memoize.memoizeSupplier(() -> it.hasNext());
         head = Memoize.memoizeSupplier(() -> {
-            if (isHead.get())
+            if (isHead.get()) {
                 return it.next();
+            }
             throw new NoSuchElementException();
         });
         tail = Memoize.memoizeSupplier(() -> {
-            if (isHead.get())
+            if (isHead.get()) {
                 head.get();
-            else
+            } else {
                 return ReactiveSeq.empty();
+            }
             return ReactiveSeq.fromIterator(it);
         });
 
+    }
+
+    public static <T> HeadAndTail<T> headAndTail(Iterable<T> it) {
+        return new HeadAndTail<>(it.iterator());
     }
 
     /**
@@ -86,8 +87,7 @@ public class HeadAndTail<T> {
      */
     public ReactiveSeq<T> headStream() {
         return isHeadPresent() ? ReactiveSeq.of(head)
-            .map(Supplier::get)
-            : ReactiveSeq.empty();
+                                            .map(Supplier::get) : ReactiveSeq.empty();
     }
 
     /**

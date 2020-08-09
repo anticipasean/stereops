@@ -9,40 +9,44 @@ import com.oath.cyclops.types.recoverable.OnEmptySwitch;
 import com.oath.cyclops.types.traversable.IterableX;
 import com.oath.cyclops.types.traversable.Traversable;
 import cyclops.control.Try;
+import cyclops.data.tuple.Tuple2;
+import cyclops.data.tuple.Tuple3;
+import cyclops.data.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.function.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import org.reactivestreams.Publisher;
-
 import java.util.Comparator;
 import java.util.Random;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+import org.reactivestreams.Publisher;
 
-public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,ImmutableSet<T>>,PersistentSet<T>,
-                                        OnEmptyError<T, ImmutableSet<T>>,
-                                         Contains<T>,
-                                         IterableX<T>{
+public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>, ImmutableSet<T>>, PersistentSet<T>,
+                                         OnEmptyError<T, ImmutableSet<T>>, Contains<T>, IterableX<T> {
 
     <R> ImmutableSet<R> unitIterable(Iterable<R> it);
+
     @Override
     default ReactiveSeq<T> stream() {
         return IterableX.super.stream();
     }
 
     @Override
-    default ImmutableSet<T> plus(T e){
+    default ImmutableSet<T> plus(T e) {
         return append(e);
     }
 
     @Override
-    default ImmutableSet<T> plusAll(Iterable<? extends T> list){
+    default ImmutableSet<T> plusAll(Iterable<? extends T> list) {
         ImmutableSet<T> set = this;
-        for(T next : list){
+        for (T next : list) {
             set = set.plus(next);
         }
         return set;
@@ -50,43 +54,49 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
 
     @Override
     default <U> ImmutableSet<U> ofType(Class<? extends U> type) {
-        return (ImmutableSet<U>)IterableX.super.ofType(type);
+        return (ImmutableSet<U>) IterableX.super.ofType(type);
     }
 
     @Override
     default ImmutableSet<T> filterNot(Predicate<? super T> predicate) {
-        return (ImmutableSet<T>)IterableX.super.filterNot(predicate);
+        return (ImmutableSet<T>) IterableX.super.filterNot(predicate);
     }
 
     @Override
     default ImmutableSet<T> notNull() {
-        return (ImmutableSet<T>)IterableX.super.notNull();
+        return (ImmutableSet<T>) IterableX.super.notNull();
     }
 
     @Override
     default ImmutableSet<T> peek(Consumer<? super T> c) {
-        return (ImmutableSet<T>)IterableX.super.peek(c);
+        return (ImmutableSet<T>) IterableX.super.peek(c);
     }
 
 
-
     boolean containsValue(T value);
+
     int size();
+
     ImmutableSet<T> add(T value);
+
     ImmutableSet<T> removeValue(T value);
+
     boolean isEmpty();
 
     <R> ImmutableSet<R> map(Function<? super T, ? extends R> fn);
+
     <R> ImmutableSet<R> flatMap(Function<? super T, ? extends ImmutableSet<? extends R>> fn);
+
     <R> ImmutableSet<R> concatMap(Function<? super T, ? extends Iterable<? extends R>> fn);
 
     @Override
     <R> ImmutableSet<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn);
 
     @Override
-    <R> ImmutableSet<R> mergeMap(int maxConcurecy, Function<? super T, ? extends Publisher<? extends R>> fn);
+    <R> ImmutableSet<R> mergeMap(int maxConcurecy,
+                                 Function<? super T, ? extends Publisher<? extends R>> fn);
 
-  ImmutableSet<T> filter(Predicate<? super T> predicate);
+    ImmutableSet<T> filter(Predicate<? super T> predicate);
 
     default <R1, R2, R3, R> ImmutableSet<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1,
                                                      BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
@@ -97,10 +107,16 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
 
             ReactiveSeq<R1> a = ReactiveSeq.fromIterable(iterable1.apply(in));
             return a.flatMap(ina -> {
-                ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in, ina));
+                ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in,
+                                                                             ina));
                 return b.flatMap(inb -> {
-                    ReactiveSeq<R3> c = ReactiveSeq.fromIterable(iterable3.apply(in, ina, inb));
-                    return c.map(in2 -> yieldingFunction.apply(in, ina, inb, in2));
+                    ReactiveSeq<R3> c = ReactiveSeq.fromIterable(iterable3.apply(in,
+                                                                                 ina,
+                                                                                 inb));
+                    return c.map(in2 -> yieldingFunction.apply(in,
+                                                               ina,
+                                                               inb,
+                                                               in2));
                 });
 
             });
@@ -118,17 +134,27 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
 
             ReactiveSeq<R1> a = ReactiveSeq.fromIterable(iterable1.apply(in));
             return a.flatMap(ina -> {
-                ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in, ina));
+                ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in,
+                                                                             ina));
                 return b.flatMap(inb -> {
-                    ReactiveSeq<R3> c = ReactiveSeq.fromIterable(iterable3.apply(in, ina, inb));
-                    return c.filter(in2 -> filterFunction.apply(in, ina, inb, in2))
-                            .map(in2 -> yieldingFunction.apply(in, ina, inb, in2));
+                    ReactiveSeq<R3> c = ReactiveSeq.fromIterable(iterable3.apply(in,
+                                                                                 ina,
+                                                                                 inb));
+                    return c.filter(in2 -> filterFunction.apply(in,
+                                                                ina,
+                                                                inb,
+                                                                in2))
+                            .map(in2 -> yieldingFunction.apply(in,
+                                                               ina,
+                                                               inb,
+                                                               in2));
                 });
 
             });
 
         });
     }
+
     default <R1, R2, R> ImmutableSet<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1,
                                                  BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
                                                  Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
@@ -137,10 +163,13 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
 
             Iterable<R1> a = iterable1.apply(in);
             return ReactiveSeq.fromIterable(a)
-                    .flatMap(ina -> {
-                        ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in, ina));
-                        return b.map(in2 -> yieldingFunction.apply(in, ina, in2));
-                    });
+                              .flatMap(ina -> {
+                                  ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in,
+                                                                                               ina));
+                                  return b.map(in2 -> yieldingFunction.apply(in,
+                                                                             ina,
+                                                                             in2));
+                              });
 
         });
     }
@@ -155,11 +184,16 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
 
             Iterable<R1> a = iterable1.apply(in);
             return ReactiveSeq.fromIterable(a)
-                    .flatMap(ina -> {
-                        ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in, ina));
-                        return b.filter(in2 -> filterFunction.apply(in, ina, in2))
-                                .map(in2 -> yieldingFunction.apply(in, ina, in2));
-                    });
+                              .flatMap(ina -> {
+                                  ReactiveSeq<R2> b = ReactiveSeq.fromIterable(iterable2.apply(in,
+                                                                                               ina));
+                                  return b.filter(in2 -> filterFunction.apply(in,
+                                                                              ina,
+                                                                              in2))
+                                          .map(in2 -> yieldingFunction.apply(in,
+                                                                             ina,
+                                                                             in2));
+                              });
 
         });
     }
@@ -168,11 +202,12 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     default <R1, R> ImmutableSet<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1,
                                              BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return this.concatMap(in-> {
+        return this.concatMap(in -> {
 
             Iterable<? extends R1> b = iterable1.apply(in);
             return ReactiveSeq.fromIterable(b)
-                    .map(in2->yieldingFunction.apply(in, in2));
+                              .map(in2 -> yieldingFunction.apply(in,
+                                                                 in2));
         });
     }
 
@@ -181,42 +216,46 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
                                              BiFunction<? super T, ? super R1, Boolean> filterFunction,
                                              BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return this.concatMap(in-> {
+        return this.concatMap(in -> {
 
             Iterable<? extends R1> b = iterable1.apply(in);
             return ReactiveSeq.fromIterable(b)
-                    .filter(in2-> filterFunction.apply(in,in2))
-                    .map(in2->yieldingFunction.apply(in, in2));
+                              .filter(in2 -> filterFunction.apply(in,
+                                                                  in2))
+                              .map(in2 -> yieldingFunction.apply(in,
+                                                                 in2));
         });
     }
 
 
     @Override
-    default ImmutableSet<T> onEmpty(T value){
-        if(size()==0){
+    default ImmutableSet<T> onEmpty(T value) {
+        if (size() == 0) {
             return add(value);
         }
         return this;
     }
 
     @Override
-    default ImmutableSet<T> onEmptyGet(Supplier<? extends T> supplier){
+    default ImmutableSet<T> onEmptyGet(Supplier<? extends T> supplier) {
         return onEmpty(supplier.get());
     }
 
     @Override
-    default <X extends Throwable> Try<ImmutableSet<T>, X> onEmptyTry(Supplier<? extends X> supplier){
+    default <X extends Throwable> Try<ImmutableSet<T>, X> onEmptyTry(Supplier<? extends X> supplier) {
         return isEmpty() ? Try.failure(supplier.get()) : Try.success(this);
     }
 
     @Override
-    default ImmutableSet<T> onEmptySwitch(Supplier<? extends ImmutableSet<T>> supplier){
-        if(size()==0)
+    default ImmutableSet<T> onEmptySwitch(Supplier<? extends ImmutableSet<T>> supplier) {
+        if (size() == 0) {
             return supplier.get();
+        }
         return this;
     }
 
     <R> ImmutableSet<R> unitStream(Stream<R> stream);
+
     @Override
     default ImmutableSet<T> removeStream(Stream<? extends T> stream) {
         return unitStream(stream().removeStream(stream));
@@ -246,13 +285,17 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
         return unitStream(stream().retainAll(values));
     }
 
-  @Override
-    default <T2, R> ImmutableSet<R> zip(BiFunction<? super T, ? super T2, ? extends R> fn, Publisher<? extends T2> publisher) {
-        return unitStream(stream().zip(fn, publisher));
+    @Override
+    default <T2, R> ImmutableSet<R> zip(BiFunction<? super T, ? super T2, ? extends R> fn,
+                                        Publisher<? extends T2> publisher) {
+        return unitStream(stream().zip(fn,
+                                       publisher));
     }
 
-    default <U, R> ImmutableSet<R> zipWithStream(Stream<? extends U> other, BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return unitStream(stream().zipWithStream(other,zipper));
+    default <U, R> ImmutableSet<R> zipWithStream(Stream<? extends U> other,
+                                                 BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return unitStream(stream().zipWithStream(other,
+                                                 zipper));
     }
 
     @Override
@@ -266,25 +309,38 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default <S, U, R> ImmutableSet<R> zip3(Iterable<? extends S> second, Iterable<? extends U> third, Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return unitStream(stream().zip3(second,third,fn3));
+    default <S, U, R> ImmutableSet<R> zip3(Iterable<? extends S> second,
+                                           Iterable<? extends U> third,
+                                           Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return unitStream(stream().zip3(second,
+                                        third,
+                                        fn3));
     }
 
     @Override
-    default <T2, T3, T4, R> ImmutableSet<R> zip4(Iterable<? extends T2> second, Iterable<? extends T3> third, Iterable<? extends T4> fourth, Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return unitStream(stream().zip4(second,third,fourth,fn));
+    default <T2, T3, T4, R> ImmutableSet<R> zip4(Iterable<? extends T2> second,
+                                                 Iterable<? extends T3> third,
+                                                 Iterable<? extends T4> fourth,
+                                                 Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return unitStream(stream().zip4(second,
+                                        third,
+                                        fourth,
+                                        fn));
     }
 
 
-
     @Override
-    default ImmutableSet<T> combine(BiPredicate<? super T, ? super T> predicate, BinaryOperator<T> op) {
-        return unitStream(stream().combine(predicate,op));
+    default ImmutableSet<T> combine(BiPredicate<? super T, ? super T> predicate,
+                                    BinaryOperator<T> op) {
+        return unitStream(stream().combine(predicate,
+                                           op));
     }
 
     @Override
-    default ImmutableSet<T> combine(Monoid<T> op, BiPredicate<? super T, ? super T> predicate) {
-        return unitStream(stream().combine(op,predicate));
+    default ImmutableSet<T> combine(Monoid<T> op,
+                                    BiPredicate<? super T, ? super T> predicate) {
+        return unitStream(stream().combine(op,
+                                           predicate));
     }
 
     @Override
@@ -293,8 +349,10 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default ImmutableSet<T> cycle(Monoid<T> m, long times) {
-        return unitStream(stream().cycle(m,times));
+    default ImmutableSet<T> cycle(Monoid<T> m,
+                                  long times) {
+        return unitStream(stream().cycle(m,
+                                         times));
     }
 
     @Override
@@ -308,18 +366,26 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default <U, R> ImmutableSet<R> zip(Iterable<? extends U> other, BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return unitStream(stream().zip(other,zipper));
+    default <U, R> ImmutableSet<R> zip(Iterable<? extends U> other,
+                                       BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return unitStream(stream().zip(other,
+                                       zipper));
     }
 
     @Override
-    default <S, U> ImmutableSet<Tuple3<T, S, U>> zip3(Iterable<? extends S> second, Iterable<? extends U> third) {
-        return unitStream(stream().zip3(second,third));
+    default <S, U> ImmutableSet<Tuple3<T, S, U>> zip3(Iterable<? extends S> second,
+                                                      Iterable<? extends U> third) {
+        return unitStream(stream().zip3(second,
+                                        third));
     }
 
     @Override
-    default <T2, T3, T4> ImmutableSet<Tuple4<T, T2, T3, T4>> zip4(Iterable<? extends T2> second, Iterable<? extends T3> third, Iterable<? extends T4> fourth) {
-        return unitStream(stream().zip4(second,third,fourth));
+    default <T2, T3, T4> ImmutableSet<Tuple4<T, T2, T3, T4>> zip4(Iterable<? extends T2> second,
+                                                                  Iterable<? extends T3> third,
+                                                                  Iterable<? extends T4> fourth) {
+        return unitStream(stream().zip4(second,
+                                        third,
+                                        fourth));
     }
 
     @Override
@@ -333,13 +399,17 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default ImmutableSet<Seq<T>> sliding(int windowSize, int increment) {
-        return unitStream(stream().sliding(windowSize,increment));
+    default ImmutableSet<Seq<T>> sliding(int windowSize,
+                                         int increment) {
+        return unitStream(stream().sliding(windowSize,
+                                           increment));
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> ImmutableSet<C> grouped(int size, Supplier<C> supplier) {
-        return unitStream(stream().grouped(size,supplier));
+    default <C extends PersistentCollection<? super T>> ImmutableSet<C> grouped(int size,
+                                                                                Supplier<C> supplier) {
+        return unitStream(stream().grouped(size,
+                                           supplier));
     }
 
     @Override
@@ -362,13 +432,17 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> ImmutableSet<C> groupedWhile(Predicate<? super T> predicate, Supplier<C> factory) {
-        return unitStream(stream().groupedWhile(predicate,factory));
+    default <C extends PersistentCollection<? super T>> ImmutableSet<C> groupedWhile(Predicate<? super T> predicate,
+                                                                                     Supplier<C> factory) {
+        return unitStream(stream().groupedWhile(predicate,
+                                                factory));
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> ImmutableSet<C> groupedUntil(Predicate<? super T> predicate, Supplier<C> factory) {
-        return unitStream(stream().groupedUntil(predicate,factory));
+    default <C extends PersistentCollection<? super T>> ImmutableSet<C> groupedUntil(Predicate<? super T> predicate,
+                                                                                     Supplier<C> factory) {
+        return unitStream(stream().groupedUntil(predicate,
+                                                factory));
     }
 
     @Override
@@ -388,8 +462,10 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default <U> ImmutableSet<U> scanLeft(U seed, BiFunction<? super U, ? super T, ? extends U> function) {
-        return unitStream(stream().scanLeft(seed,function));
+    default <U> ImmutableSet<U> scanLeft(U seed,
+                                         BiFunction<? super U, ? super T, ? extends U> function) {
+        return unitStream(stream().scanLeft(seed,
+                                            function));
     }
 
     @Override
@@ -398,8 +474,10 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default <U> ImmutableSet<U> scanRight(U identity, BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return unitStream(stream().scanRight(identity,combiner));
+    default <U> ImmutableSet<U> scanRight(U identity,
+                                          BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return unitStream(stream().scanRight(identity,
+                                             combiner));
     }
 
     @Override
@@ -474,8 +552,10 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default ImmutableSet<T> slice(long from, long to) {
-        return unitStream(stream().slice(from,to));
+    default ImmutableSet<T> slice(long from,
+                                  long to) {
+        return unitStream(stream().slice(from,
+                                         to));
     }
 
     @Override
@@ -514,13 +594,17 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
     }
 
     @Override
-    default ImmutableSet<T> deleteBetween(int start, int end) {
-        return unitStream(stream().deleteBetween(start,end));
+    default ImmutableSet<T> deleteBetween(int start,
+                                          int end) {
+        return unitStream(stream().deleteBetween(start,
+                                                 end));
     }
 
     @Override
-    default ImmutableSet<T> insertStreamAt(int pos, Stream<T> stream) {
-        return unitStream(stream().insertStreamAt(pos,stream));
+    default ImmutableSet<T> insertStreamAt(int pos,
+                                           Stream<T> stream) {
+        return unitStream(stream().insertStreamAt(pos,
+                                                  stream));
     }
 
 
@@ -562,25 +646,31 @@ public interface ImmutableSet<T> extends OnEmptySwitch<ImmutableSet<T>,Immutable
 
 
     @Override
-    default ImmutableSet<T> updateAt(int pos, T value) {
-        return unitStream(stream().updateAt(pos,value));
+    default ImmutableSet<T> updateAt(int pos,
+                                     T value) {
+        return unitStream(stream().updateAt(pos,
+                                            value));
     }
 
 
     @Override
-    default ImmutableSet<T> insertAt(int pos, Iterable<? extends T> values) {
+    default ImmutableSet<T> insertAt(int pos,
+                                     Iterable<? extends T> values) {
         return plusAll(values);
     }
 
     @Override
-    default ImmutableSet<T> insertAt(int i, T value) {
+    default ImmutableSet<T> insertAt(int i,
+                                     T value) {
         return plus(value);
     }
-    @Override
-    default ImmutableSet<T> insertAt(int pos, T... values) {
 
-        ImmutableSet<T> res=  this;
-        for(T next : values){
+    @Override
+    default ImmutableSet<T> insertAt(int pos,
+                                     T... values) {
+
+        ImmutableSet<T> res = this;
+        for (T next : values) {
             res = res.plus(next);
         }
         return res;

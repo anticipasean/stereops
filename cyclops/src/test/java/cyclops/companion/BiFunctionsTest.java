@@ -1,25 +1,32 @@
 package cyclops.companion;
 
-import cyclops.function.Semigroup;
-import org.junit.Test;
-
-import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
+import org.junit.Test;
+
 public class BiFunctionsTest {
 
-    static <T> List<T> asList(T... values){
+    static <T> List<T> asList(T... values) {
         List<T> l = new ArrayList<>();
-        for(T next : values){
+        for (T next : values) {
             l.add(next);
         }
         return l;
     }
+
     @Test
     public void testMutableListConcat() {
         List<Integer> list1 = new ArrayList<>();
@@ -32,8 +39,15 @@ public class BiFunctionsTest {
         list2.add(5);
         list2.add(6);
 
-        List<Integer> result = BiFunctions.<Integer>mutableListConcat().apply(list1, list2);
-        assertThat(result,equalTo(asList(1,2,3,4,5,6)));
+        List<Integer> result = BiFunctions.<Integer>mutableListConcat().apply(list1,
+                                                                              list2);
+        assertThat(result,
+                   equalTo(asList(1,
+                                  2,
+                                  3,
+                                  4,
+                                  5,
+                                  6)));
 
     }
 
@@ -49,9 +63,17 @@ public class BiFunctionsTest {
         two.add(5);
         two.add(6);
 
-        Set<Integer> result = BiFunctions.<Integer>mutableSetConcat().apply(one, two);
-        assertThat(result,equalTo(new HashSet<>(asList(1,2,3,4,5,6))));
+        Set<Integer> result = BiFunctions.<Integer>mutableSetConcat().apply(one,
+                                                                            two);
+        assertThat(result,
+                   equalTo(new HashSet<>(asList(1,
+                                                2,
+                                                3,
+                                                4,
+                                                5,
+                                                6))));
     }
+
     @Test
     public void testMutableSortedSetConcat() {
         SortedSet<Integer> one = new TreeSet<>();
@@ -64,8 +86,15 @@ public class BiFunctionsTest {
         two.add(5);
         two.add(6);
 
-        SortedSet<Integer> result = BiFunctions.<Integer>mutableSortedSetConcat().apply(one, two);
-        assertThat(result,equalTo(new TreeSet<>(asList(1,2,3,4,5,6))));
+        SortedSet<Integer> result = BiFunctions.<Integer>mutableSortedSetConcat().apply(one,
+                                                                                        two);
+        assertThat(result,
+                   equalTo(new TreeSet<>(asList(1,
+                                                2,
+                                                3,
+                                                4,
+                                                5,
+                                                6))));
     }
 
     @Test
@@ -80,11 +109,17 @@ public class BiFunctionsTest {
         two.add(5);
         two.add(6);
 
-        Queue<Integer> result = BiFunctions.<Integer>mutableQueueConcat().apply(one, two);
-        assertThat(result.stream().collect(Collectors.toList()),equalTo(asList(1,2,3,4,5,6)));
+        Queue<Integer> result = BiFunctions.<Integer>mutableQueueConcat().apply(one,
+                                                                                two);
+        assertThat(result.stream()
+                         .collect(Collectors.toList()),
+                   equalTo(asList(1,
+                                  2,
+                                  3,
+                                  4,
+                                  5,
+                                  6)));
     }
-
-
 
 
     @Test
@@ -99,24 +134,53 @@ public class BiFunctionsTest {
         two.add(5);
         two.add(6);
 
-        Deque<Integer> result = BiFunctions.<Integer>mutableDequeConcat().apply(one, two);
-        assertThat(result.stream().collect(Collectors.toList()),equalTo(asList(1,2,3,4,5,6)));
+        Deque<Integer> result = BiFunctions.<Integer>mutableDequeConcat().apply(one,
+                                                                                two);
+        assertThat(result.stream()
+                         .collect(Collectors.toList()),
+                   equalTo(asList(1,
+                                  2,
+                                  3,
+                                  4,
+                                  5,
+                                  6)));
     }
-
 
 
     @Test
     public void testCollectionConcatListX2() {
-        assertThat(BiFunctions.collectionConcat().apply(asList(4,5,6), asList(1,3,4)),equalTo(asList(4,5,6,1,3,4)));
+        assertThat(BiFunctions.collectionConcat()
+                              .apply(asList(4,
+                                            5,
+                                            6),
+                                     asList(1,
+                                            3,
+                                            4)),
+                   equalTo(asList(4,
+                                  5,
+                                  6,
+                                  1,
+                                  3,
+                                  4)));
     }
+
     @Test
     public void testCollectionConcatArrayList() {
         List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(4);
-        BinaryOperator<List<Integer>> combiner= BiFunctions.collectionConcat();
-        assertThat(combiner.apply(list, asList(4,5,6)),equalTo(asList(1,2,4,4,5,6)));
+        BinaryOperator<List<Integer>> combiner = BiFunctions.collectionConcat();
+        assertThat(combiner.apply(list,
+                                  asList(4,
+                                         5,
+                                         6)),
+                   equalTo(asList(1,
+                                  2,
+                                  4,
+                                  4,
+                                  5,
+                                  6)));
     }
 
 
@@ -126,7 +190,16 @@ public class BiFunctionsTest {
         list.add(1);
         list.add(2);
         list.add(4);
-        BinaryOperator<List<Integer>> combiner= BiFunctions.mutableCollectionConcat();
-        assertThat(combiner.apply(list, asList(4,5,6)),equalTo(asList(1,2,4,4,5,6)));
+        BinaryOperator<List<Integer>> combiner = BiFunctions.mutableCollectionConcat();
+        assertThat(combiner.apply(list,
+                                  asList(4,
+                                         5,
+                                         6)),
+                   equalTo(asList(1,
+                                  2,
+                                  4,
+                                  4,
+                                  5,
+                                  6)));
     }
 }

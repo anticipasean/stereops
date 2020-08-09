@@ -1,22 +1,20 @@
 package com.oath.cyclops.types.reactive;
 
 import java.util.function.Consumer;
-
 import org.reactivestreams.Subscription;
 
 /**
  * Interface for reactive-streams based terminal operations, requires simple-react to be on the classpath.
  *
- *
- * @author johnmcclean
- *
  * @param <T> Element data in the Stream being processed.
+ * @author johnmcclean
  */
 public interface ReactiveStreamsTerminalOperations<T> {
+
     /**
-     * Perform a forEach operation over the Stream, without closing it, consuming only the specified number of elements from
-     * the Stream, at this time. More elements can be consumed later, by called request on the returned Subscription
-     *
+     * Perform a forEach operation over the Stream, without closing it, consuming only the specified number of elements from the
+     * Stream, at this time. More elements can be consumed later, by called request on the returned Subscription
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -41,17 +39,19 @@ public interface ReactiveStreamsTerminalOperations<T> {
      * }
      * </pre>
      *
-     *
      * @param numberOfElements To consume from the Stream at this time
-     * @param consumer To accept incoming events from the Stream
+     * @param consumer         To accept incoming events from the Stream
      * @return Subscription so that further processing can be continued or cancelled.
      */
-   default <X extends Throwable> Subscription forEachSubscribe(Consumer<? super T> consumer){
-       return forEach(0,consumer);
-   }
+    default <X extends Throwable> Subscription forEachSubscribe(Consumer<? super T> consumer) {
+        return forEach(0,
+                       consumer);
+    }
+
     /**
-     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied consumers, but only consuming
-     * the specified number of elements from the Stream, at this time. More elements can be consumed later, by called request on the returned Subscription
+     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied
+     * consumers, but only consuming the specified number of elements from the Stream, at this time. More elements can be consumed
+     * later, by called request on the returned Subscription
      * <pre>
      * {@code
      *     Subscription next = ReactiveSeq.of(()->1,()->2,()->throw new RuntimeException(),()->4)
@@ -77,21 +77,23 @@ public interface ReactiveStreamsTerminalOperations<T> {
      * }
      * </pre>
      *
-     *
      * @param numberOfElements To consume from the Stream at this time
-     * @param consumer To accept incoming elements from the Stream
-     * @param consumerError To accept incoming processing errors from the Stream
+     * @param consumer         To accept incoming elements from the Stream
+     * @param consumerError    To accept incoming processing errors from the Stream
      * @return Subscription so that further processing can be continued or cancelled.
      */
-     default <X extends Throwable> Subscription forEachSubscribe(Consumer<? super T> consumer,
-                                                                 Consumer<? super Throwable> consumerError){
-         return forEach(0,consumer,consumerError);
-     }
+    default <X extends Throwable> Subscription forEachSubscribe(Consumer<? super T> consumer,
+                                                                Consumer<? super Throwable> consumerError) {
+        return forEach(0,
+                       consumer,
+                       consumerError);
+    }
 
     /**
-     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied consumers, but only consuming
-     * the specified number of elements from the Stream, at this time. More elements can be consumed later, by called request on the returned Subscription,
-     * when the entire Stream has been processed an onComplete event will be recieved.
+     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied
+     * consumers, but only consuming the specified number of elements from the Stream, at this time. More elements can be consumed
+     * later, by called request on the returned Subscription, when the entire Stream has been processed an onComplete event will
+     * be recieved.
      *
      * <pre>
      * {@code
@@ -118,21 +120,26 @@ public interface ReactiveStreamsTerminalOperations<T> {
      *     The take!
      * }
      * </pre>
+     *
      * @param numberOfElements To consume from the Stream at this time
-     * @param consumer To accept incoming elements from the Stream
-     * @param consumerError To accept incoming processing errors from the Stream
-     * @param onComplete To run after an onComplete event
+     * @param consumer         To accept incoming elements from the Stream
+     * @param consumerError    To accept incoming processing errors from the Stream
+     * @param onComplete       To run after an onComplete event
      * @return Subscription so that further processing can be continued or cancelled.
      */
-    default <X extends Throwable> Subscription forEachSubscribe(Consumer<? super T> consumer, Consumer<? super Throwable> consumerError,
-                                                                Runnable onComplete){
-        return forEach(0,consumer,consumerError,onComplete);
+    default <X extends Throwable> Subscription forEachSubscribe(Consumer<? super T> consumer,
+                                                                Consumer<? super Throwable> consumerError,
+                                                                Runnable onComplete) {
+        return forEach(0,
+                       consumer,
+                       consumerError,
+                       onComplete);
     }
 
     /**
-     * Perform a forEach operation over the Stream, without closing it, consuming only the specified number of elements from
-     * the Stream, at this time. More elements can be consumed later, by called request on the returned Subscription
-     *
+     * Perform a forEach operation over the Stream, without closing it, consuming only the specified number of elements from the
+     * Stream, at this time. More elements can be consumed later, by called request on the returned Subscription
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -155,16 +162,17 @@ public interface ReactiveStreamsTerminalOperations<T> {
      * }
      * </pre>
      *
-     *
      * @param numberOfElements To consume from the Stream at this time
-     * @param consumer To accept incoming events from the Stream
+     * @param consumer         To accept incoming events from the Stream
      * @return Subscription so that further processing can be continued or cancelled.
      */
-    <X extends Throwable> Subscription forEach(long numberOfElements, Consumer<? super T> consumer);
+    <X extends Throwable> Subscription forEach(long numberOfElements,
+                                               Consumer<? super T> consumer);
 
     /**
-     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied consumers, but only consuming
-     * the specified number of elements from the Stream, at this time. More elements can be consumed later, by called request on the returned Subscription
+     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied
+     * consumers, but only consuming the specified number of elements from the Stream, at this time. More elements can be consumed
+     * later, by called request on the returned Subscription
      * <pre>
      * {@code
      *     Subscription next = ReactiveSeq.of(()->1,()->2,()->throw new RuntimeException(),()->4)
@@ -189,19 +197,20 @@ public interface ReactiveStreamsTerminalOperations<T> {
      * }
      * </pre>
      *
-     *
      * @param numberOfElements To consume from the Stream at this time
-     * @param consumer To accept incoming elements from the Stream
-     * @param consumerError To accept incoming processing errors from the Stream
+     * @param consumer         To accept incoming elements from the Stream
+     * @param consumerError    To accept incoming processing errors from the Stream
      * @return Subscription so that further processing can be continued or cancelled.
      */
-    <X extends Throwable> Subscription forEach(long numberOfElements, Consumer<? super T> consumer,
+    <X extends Throwable> Subscription forEach(long numberOfElements,
+                                               Consumer<? super T> consumer,
                                                Consumer<? super Throwable> consumerError);
 
     /**
-     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied consumers, but only consuming
-     * the specified number of elements from the Stream, at this time. More elements can be consumed later, by called request on the returned Subscription,
-     * when the entire Stream has been processed an onComplete event will be recieved.
+     * Perform a forEach operation over the Stream  without closing it,  capturing any elements and errors in the supplied
+     * consumers, but only consuming the specified number of elements from the Stream, at this time. More elements can be consumed
+     * later, by called request on the returned Subscription, when the entire Stream has been processed an onComplete event will
+     * be recieved.
      *
      * <pre>
      * {@code
@@ -227,17 +236,20 @@ public interface ReactiveStreamsTerminalOperations<T> {
      *     The take!
      * }
      * </pre>
+     *
      * @param numberOfElements To consume from the Stream at this time
-     * @param consumer To accept incoming elements from the Stream
-     * @param consumerError To accept incoming processing errors from the Stream
-     * @param onComplete To run after an onComplete event
+     * @param consumer         To accept incoming elements from the Stream
+     * @param consumerError    To accept incoming processing errors from the Stream
+     * @param onComplete       To run after an onComplete event
      * @return Subscription so that further processing can be continued or cancelled.
      */
-    <X extends Throwable> Subscription forEach(long numberOfElements, Consumer<? super T> consumer, Consumer<? super Throwable> consumerError,
+    <X extends Throwable> Subscription forEach(long numberOfElements,
+                                               Consumer<? super T> consumer,
+                                               Consumer<? super Throwable> consumerError,
                                                Runnable onComplete);
 
     /**
-     *  Perform a forEach operation over the Stream    capturing any elements and errors in the supplied consumers,
+     * Perform a forEach operation over the Stream    capturing any elements and errors in the supplied consumers,
      * <pre>
      * {@code
      *     Subscription next = ReactiveSeq.of(()->1,()->2,()->throw new RuntimeException(),()->4)
@@ -257,15 +269,16 @@ public interface ReactiveStreamsTerminalOperations<T> {
      *
      * }
      * </pre>
-     * @param consumerElement To accept incoming elements from the Stream
-     * @param consumerError To accept incoming processing errors from the Stream
      *
+     * @param consumerElement To accept incoming elements from the Stream
+     * @param consumerError   To accept incoming processing errors from the Stream
      */
-    <X extends Throwable> void forEach(Consumer<? super T> consumerElement, Consumer<? super Throwable> consumerError);
+    <X extends Throwable> void forEach(Consumer<? super T> consumerElement,
+                                       Consumer<? super Throwable> consumerError);
 
     /**
-     * Perform a forEach operation over the Stream  capturing any elements and errors in the supplied consumers
-     * when the entire Stream has been processed an onComplete event will be recieved.
+     * Perform a forEach operation over the Stream  capturing any elements and errors in the supplied consumers when the entire
+     * Stream has been processed an onComplete event will be recieved.
      *
      * <pre>
      * {@code
@@ -286,11 +299,13 @@ public interface ReactiveStreamsTerminalOperations<T> {
      *
      * }
      * </pre>
-     * @param consumerElement To accept incoming elements from the Stream
-     * @param consumerError To accept incoming processing errors from the Stream
-     * @param onComplete To run after an onComplete event
      *
+     * @param consumerElement To accept incoming elements from the Stream
+     * @param consumerError   To accept incoming processing errors from the Stream
+     * @param onComplete      To run after an onComplete event
      */
-    <X extends Throwable> void forEach(Consumer<? super T> consumerElement, Consumer<? super Throwable> consumerError, Runnable onComplete);
+    <X extends Throwable> void forEach(Consumer<? super T> consumerElement,
+                                       Consumer<? super Throwable> consumerError,
+                                       Runnable onComplete);
 
 }

@@ -3,9 +3,8 @@ package com.oath.cyclops.async.wait;
 /**
  * Repeatedly retry to take or offer element to Queue if full or data unavailable
  *
- * @author johnmcclean
- *
  * @param <T> Data type of elements in the async.Queue
+ * @author johnmcclean
  */
 public class NoWaitRetry<T> implements WaitStrategy<T> {
 

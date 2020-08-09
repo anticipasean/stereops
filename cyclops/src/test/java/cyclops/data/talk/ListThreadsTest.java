@@ -7,25 +7,25 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class ListThreadsTest {
+
     int CORE_USER = 0;
     Executor IO_THREAD_POOL = Executors.newFixedThreadPool(1);
 
-    public List<Integer> future(){
+    public List<Integer> future() {
 
         List<Integer> userIds = findUserIdsActiveThisMonth();
 
-        cyclops.control.Future.of(()->{
-                                        userIds.add(CORE_USER);
-                                        updateActiveUsersThisMonth(userIds);
-                                        return userIds;
-                                        },
-                                     IO_THREAD_POOL);
+        cyclops.control.Future.of(() -> {
+                                      userIds.add(CORE_USER);
+                                      updateActiveUsersThisMonth(userIds);
+                                      return userIds;
+                                  },
+                                  IO_THREAD_POOL);
 
         userIds.addAll(findUserIdsActiveThisYear());
         return userIds;
 
     }
-
 
 
     private Collection<? extends Integer> findUserIdsActiveThisYear() {
@@ -39,6 +39,7 @@ public class ListThreadsTest {
         list.add(20);
         return list;
     }
+
     private void updateActiveUsersThisMonth(List<Integer> list) {
     }
 }

@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = javaSourceCompatibility
+targetCompatibility = javaTargetCompatibility
 
 jar {
     manifest {
@@ -16,7 +16,7 @@ dependencies {
 
     compileClasspath 'org.agrona:Agrona:0.9.1'
     compileClasspath 'org.reactivestreams:reactive-streams:1.0.0'
-    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    implementation "io.kindedj:kindedj:${kindedJVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileClasspath "org.projectlombok:lombok:${lombokVersion}"
     testCompileClasspath group: 'io.projectreactor', name: 'reactor-test', version: '3.2.2.RELEASE'

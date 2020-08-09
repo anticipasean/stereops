@@ -5,22 +5,24 @@ import java.util.function.Consumer;
 /**
  * Created by johnmcclean on 12/01/2017.
  */
-public class SkipLastOneOperator<T,R> extends BaseOperator<T,T> {
+public class SkipLastOneOperator<T, R> extends BaseOperator<T, T> {
 
 
     static final Object UNSET = new Object();
 
-    public SkipLastOneOperator(Operator<T> source){
+    public SkipLastOneOperator(Operator<T> source) {
         super(source);
     }
 
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
 
         Object[] buffer = {UNSET};
         StreamSubscription sub[] = {null};
-        StreamSubscription res = new StreamSubscription(){
+        StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {
                 super.request(n);
@@ -33,45 +35,49 @@ public class SkipLastOneOperator<T,R> extends BaseOperator<T,T> {
                 super.cancel();
             }
         };
-        sub[0] = source.subscribe(e-> {
+        sub[0] = source.subscribe(e -> {
 
-                    try {
-                        if(buffer[0]!=UNSET){
-                            onNext.accept((T)buffer[0]);
-                        }
-                        else {
+                                      try {
+                                          if (buffer[0] != UNSET) {
+                                              onNext.accept((T) buffer[0]);
+                                          } else {
 
-                            sub[0].request(1);
+                                              sub[0].request(1);
 
-                        }
-                        buffer[0]=e;
+                                          }
+                                          buffer[0] = e;
 
-                    } catch (Throwable t) {
+                                      } catch (Throwable t) {
 
-                        onError.accept(t);
-                    }
-                }
-                ,onError,onComplete);
+                                          onError.accept(t);
+                                      }
+                                  },
+                                  onError,
+                                  onComplete);
         return res;
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
         Object[] buffer = {UNSET};
-        source.subscribeAll(e->{
-            try {
-                if (buffer[0] == UNSET) {
+        source.subscribeAll(e -> {
+                                try {
+                                    if (buffer[0] == UNSET) {
 
-                } else {
+                                    } else {
 
-                    onNext.accept((T)buffer[0]);
+                                        onNext.accept((T) buffer[0]);
 
-                }
-                buffer[0]=e;
-            }catch(Throwable t){
-                onError.accept(t);
-            }
-        },onError,onCompleteDs);
+                                    }
+                                    buffer[0] = e;
+                                } catch (Throwable t) {
+                                    onError.accept(t);
+                                }
+                            },
+                            onError,
+                            onCompleteDs);
 
     }
 }

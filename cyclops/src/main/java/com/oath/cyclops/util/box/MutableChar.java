@@ -1,50 +1,44 @@
 package com.oath.cyclops.util.box;
 
+import com.oath.cyclops.types.foldable.To;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.oath.cyclops.types.foldable.To;
-
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Class that represents a Closed Variable
- * In Java 8 because of the effectively final rule references to captured
- * variables can't be changed.
- * e.g.
- *<pre>{@code
+ * Class that represents a Closed Variable In Java 8 because of the effectively final rule references to captured variables can't
+ * be changed. e.g.
+ * <pre>{@code
  * char var = true;
  * Runnable r = () -> var =false;
  * }</pre>
- *
- * Won't compile because var is treated as if it is final.
- * This can be 'worked around' by using a wrapping object or array.
- *
+ * <p>
+ * Won't compile because var is treated as if it is final. This can be 'worked around' by using a wrapping object or array.
+ * <p>
  * e.g.
  * <pre>{@code
  * MutableChar var =  MutableChar.of(true);
  * Runnable r = () -> var.set(false);
  * }</pre>
  *
- * @author johnmcclean
- *
  * @param <T> Type held inside closed var
+ * @author johnmcclean
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MutableChar implements To<MutableChar>,Supplier<Character>, Consumer<Character> {
+public class MutableChar implements To<MutableChar>, Supplier<Character>, Consumer<Character> {
 
     private char var;
 
     /**
      * Create a Mutable variable, which can be mutated inside a Closure
-     *
+     * <p>
      * e.g.
      * <pre>{@code
      *   MutableChar char = MutableChar.of('c');
@@ -59,13 +53,12 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
      * @return New Mutable instance
      */
     public static <T> MutableChar of(final char var) {
-        return new MutableChar(
-                               var);
+        return new MutableChar(var);
     }
 
     /**
      * Construct a MutableChar that gets and sets an external value using the provided Supplier and Consumer
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -73,12 +66,12 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
      * }
      * </pre>
      *
-     *
      * @param s Supplier of an external value
      * @param c Consumer that sets an external value
      * @return MutableChar that gets / sets an external (mutable) value
      */
-    public static MutableChar fromExternal(final Supplier<Character> s, final Consumer<Character> c) {
+    public static MutableChar fromExternal(final Supplier<Character> s,
+                                           final Consumer<Character> c) {
         return new MutableChar() {
             @Override
             public char getAsChar() {
@@ -112,7 +105,6 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the result when getValue is called
      * @return Mutable that lazily applies the provided function when getValue is called to the return value
      */
@@ -141,7 +133,6 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the input when set is called
      * @return Mutable that lazily applies the provided function when set is called to the input value
      */
@@ -166,7 +157,7 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
 
     /**
      * @param var New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public MutableChar set(final char var) {
         this.var = var;
@@ -175,15 +166,11 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
 
     /**
      * @param varFn New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public MutableChar mutate(final CharFunction varFn) {
         return set(varFn.apply(get()));
 
-    }
-
-    public static interface CharFunction {
-        char apply(char var);
     }
 
     @Override
@@ -195,6 +182,11 @@ public class MutableChar implements To<MutableChar>,Supplier<Character>, Consume
     @Override
     public Character get() {
         return getAsChar();
+    }
+
+    public static interface CharFunction {
+
+        char apply(char var);
     }
 
 }

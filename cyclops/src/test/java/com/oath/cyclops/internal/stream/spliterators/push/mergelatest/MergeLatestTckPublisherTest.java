@@ -8,35 +8,40 @@ import org.reactivestreams.tck.TestEnvironment;
 import org.testng.annotations.Test;
 
 @Test
-public class  MergeLatestTckPublisherTest extends PublisherVerification<Long>{
+public class MergeLatestTckPublisherTest extends PublisherVerification<Long> {
 
-	public MergeLatestTckPublisherTest(){
-		  super(new TestEnvironment(300L));
-	}
-
-
-	@Override
-	public Publisher<Long> createPublisher(long elements) {
-		return Spouts.mergeLatest(Spouts.iterate(0l, i->i+1l).limit(elements));
-
-	}
-
-	@Override
-	public Publisher<Long> createFailedPublisher() {
-		return null; //not possible to forEachAsync to failed Stream
-
-	}
-    @Override @Test
-    public void required_spec102_maySignalLessThanRequestedAndTerminateSubscription() throws Throwable {
-	    super.required_spec102_maySignalLessThanRequestedAndTerminateSubscription();
+    public MergeLatestTckPublisherTest() {
+        super(new TestEnvironment(300L));
     }
-	@Test
-	public void required_spec101_subscriptionRequestMustResultInTheCorrectNumberOfProducedElements() throws Throwable {
-		super.required_spec101_subscriptionRequestMustResultInTheCorrectNumberOfProducedElements();
-	}
 
-	@Test
-	public void required_spec302_mustAllowSynchronousRequestCallsFromOnNextAndOnSubscribe() throws Throwable {
-		super.required_spec302_mustAllowSynchronousRequestCallsFromOnNextAndOnSubscribe();
-	}
+
+    @Override
+    public Publisher<Long> createPublisher(long elements) {
+        return Spouts.mergeLatest(Spouts.iterate(0l,
+                                                 i -> i + 1l)
+                                        .limit(elements));
+
+    }
+
+    @Override
+    public Publisher<Long> createFailedPublisher() {
+        return null; //not possible to forEachAsync to failed Stream
+
+    }
+
+    @Override
+    @Test
+    public void required_spec102_maySignalLessThanRequestedAndTerminateSubscription() throws Throwable {
+        super.required_spec102_maySignalLessThanRequestedAndTerminateSubscription();
+    }
+
+    @Test
+    public void required_spec101_subscriptionRequestMustResultInTheCorrectNumberOfProducedElements() throws Throwable {
+        super.required_spec101_subscriptionRequestMustResultInTheCorrectNumberOfProducedElements();
+    }
+
+    @Test
+    public void required_spec302_mustAllowSynchronousRequestCallsFromOnNextAndOnSubscribe() throws Throwable {
+        super.required_spec302_mustAllowSynchronousRequestCallsFromOnNextAndOnSubscribe();
+    }
 }

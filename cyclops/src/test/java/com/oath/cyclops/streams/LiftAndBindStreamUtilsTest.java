@@ -4,6 +4,7 @@ package com.oath.cyclops.streams;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import cyclops.companion.Streams;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -12,56 +13,72 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.junit.Test;
 
-import cyclops.companion.Streams;
-
 public class LiftAndBindStreamUtilsTest {
-	@Test
-	public void testLiftAndBindFile(){
 
+    @Test
+    public void testLiftAndBindFile() {
 
-		List<String> result = Streams.flatMapFile(Stream.of("input.file")
+        List<String> result = Streams.flatMapFile(Stream.of("input.file")
 
-								.map(getClass().getClassLoader()::getResource)
-								.peek(System.out::println)
-								.map(URL::getFile),
-								File::new)
-								.collect(Collectors.toList());
+                                                        .map(getClass().getClassLoader()::getResource)
+                                                        .peek(System.out::println)
+                                                        .map(URL::getFile),
+                                                  File::new)
+                                     .collect(Collectors.toList());
 
-		assertThat(result,equalTo(Arrays.asList("hello","world")));
-	}
-	@Test
-	public void testLiftAndBindURL(){
+        assertThat(result,
+                   equalTo(Arrays.asList("hello",
+                                         "world")));
+    }
 
+    @Test
+    public void testLiftAndBindURL() {
 
-		List<String> result = Streams.flatMapURL(Stream.of("input.file")
+        List<String> result = Streams.flatMapURL(Stream.of("input.file")
 
-								,getClass().getClassLoader()::getResource)
-								.collect(Collectors.toList());
+            ,
+                                                 getClass().getClassLoader()::getResource)
+                                     .collect(Collectors.toList());
 
-		assertThat(result,equalTo(Arrays.asList("hello","world")));
-	}
-	@Test
-	public void testLiftAndBindString(){
+        assertThat(result,
+                   equalTo(Arrays.asList("hello",
+                                         "world")));
+    }
 
+    @Test
+    public void testLiftAndBindString() {
 
-		List<Character> result = Streams.flatMapCharSequence(Stream.of("input.file"), i->"hello world")
-									.collect(Collectors.toList());
+        List<Character> result = Streams.flatMapCharSequence(Stream.of("input.file"),
+                                                             i -> "hello world")
+                                        .collect(Collectors.toList());
 
-		assertThat(result,equalTo(Arrays.asList('h','e','l','l','o',' ','w','o','r','l','d')));
-	}
-	@Test
-	public void testLiftAndBindBufferedReader(){
+        assertThat(result,
+                   equalTo(Arrays.asList('h',
+                                         'e',
+                                         'l',
+                                         'l',
+                                         'o',
+                                         ' ',
+                                         'w',
+                                         'o',
+                                         'r',
+                                         'l',
+                                         'd')));
+    }
 
+    @Test
+    public void testLiftAndBindBufferedReader() {
 
-		List<String> result = Streams.flatMapBufferedReader(Stream.of("input.file")
-								.map(getClass().getClassLoader()::getResourceAsStream)
-								.map(InputStreamReader::new)
-								,in-> new BufferedReader(in))
-								.collect(Collectors.toList());
+        List<String> result = Streams.flatMapBufferedReader(Stream.of("input.file")
+                                                                  .map(getClass().getClassLoader()::getResourceAsStream)
+                                                                  .map(InputStreamReader::new),
+                                                            in -> new BufferedReader(in))
+                                     .collect(Collectors.toList());
 
-		assertThat(result,equalTo(Arrays.asList("hello","world")));
-	}
+        assertThat(result,
+                   equalTo(Arrays.asList("hello",
+                                         "world")));
+    }
 }

@@ -8,24 +8,28 @@ import org.reactivestreams.tck.TestEnvironment;
 import org.testng.annotations.Test;
 
 @Test
-public class CombineTckPublisherTest extends PublisherVerification<Long>{
+public class CombineTckPublisherTest extends PublisherVerification<Long> {
 
-	public CombineTckPublisherTest(){
-		  super(new TestEnvironment(300L));
-	}
+    public CombineTckPublisherTest() {
+        super(new TestEnvironment(300L));
+    }
 
 
-	@Override
-	public Publisher<Long> createPublisher(long elements) {
-		return Spouts.iterate(0l, i->i+1l).combine((a,b)->false,(a,b)->a+b).limit(elements);
+    @Override
+    public Publisher<Long> createPublisher(long elements) {
+        return Spouts.iterate(0l,
+                              i -> i + 1l)
+                     .combine((a, b) -> false,
+                              (a, b) -> a + b)
+                     .limit(elements);
 
-	}
+    }
 
-	@Override
-	public Publisher<Long> createFailedPublisher() {
-		return null; //not possible to forEachAsync to failed Stream
+    @Override
+    public Publisher<Long> createFailedPublisher() {
+        return null; //not possible to forEachAsync to failed Stream
 
-	}
+    }
 
 
 }

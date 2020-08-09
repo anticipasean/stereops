@@ -13,19 +13,24 @@ import java.util.function.Supplier;
  * @author johnmcclean
  */
 public interface IndexedSequenceX<T> extends FluentCollectionX<T> {
-    T getOrElse(int index, T value);
-    T getOrElseGet(int index,Supplier<? extends T> supplier);
+
+    T getOrElse(int index,
+                T value);
+
+    T getOrElseGet(int index,
+                   Supplier<? extends T> supplier);
+
     /* (non-Javadoc)
      * @see FluentCollectionX#plus(java.lang.Object)
      */
     @Override
-    public IndexedSequenceX<T> plus(T e);
+    IndexedSequenceX<T> plus(T e);
 
     /* (non-Javadoc)
      * @see FluentCollectionX#insertAt(java.util.Collection)
      */
     @Override
-    public IndexedSequenceX<T> plusAll(Iterable<? extends T> list);
+    IndexedSequenceX<T> plusAll(Iterable<? extends T> list);
 
     /**
      * Replace the value at the specifed index with the supplied value
@@ -34,21 +39,21 @@ public interface IndexedSequenceX<T> extends FluentCollectionX<T> {
      * @param e Value to use
      * @return FluentSequence with value replaced
      */
-    public IndexedSequenceX<T> insertAt(int i, T e);
-
+    IndexedSequenceX<T> insertAt(int i,
+                                 T e);
 
 
     /* (non-Javadoc)
      * @see FluentCollectionX#removeValue(java.lang.Object)
      */
     @Override
-    public IndexedSequenceX<T> removeValue(T e);
+    IndexedSequenceX<T> removeValue(T e);
 
     /* (non-Javadoc)
      * @see FluentCollectionX#removeAll(java.util.Collection)
      */
     @Override
-    public IndexedSequenceX<T> removeAll(Iterable<? extends T> list);
+    IndexedSequenceX<T> removeAll(Iterable<? extends T> list);
 
     /**
      * Remove the element at the supplied index
@@ -56,8 +61,7 @@ public interface IndexedSequenceX<T> extends FluentCollectionX<T> {
      * @param i Index at which to remvoe element
      * @return FluentSequence with element removed
      */
-    public IndexedSequenceX<T> removeAt(long i);
-
+    IndexedSequenceX<T> removeAt(long i);
 
 
     /* (non-Javadoc)

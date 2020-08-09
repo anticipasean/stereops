@@ -15,8 +15,10 @@ public class IteratePredicateOperator<T> implements Operator<T> {
     private final UnaryOperator<T> fn;
     private final Predicate<? super T> pred;
 
-    public IteratePredicateOperator(T in, UnaryOperator<T> fn,Predicate<? super T> pred){
-        this.in=  in;
+    public IteratePredicateOperator(T in,
+                                    UnaryOperator<T> fn,
+                                    Predicate<? super T> pred) {
+        this.in = in;
         this.fn = fn;
         this.pred = pred;
 
@@ -24,12 +26,14 @@ public class IteratePredicateOperator<T> implements Operator<T> {
 
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         Object[] current = {null};
         Consumer next = onNext;
-        StreamSubscription sub = new StreamSubscription(){
-            LongConsumer work = n-> {
-                if(n==Long.MAX_VALUE){
+        StreamSubscription sub = new StreamSubscription() {
+            LongConsumer work = n -> {
+                if (n == Long.MAX_VALUE) {
                     pushAll();
                     return;
                 }
@@ -38,8 +42,9 @@ public class IteratePredicateOperator<T> implements Operator<T> {
                 do {
 
                     while (delivered < reqs) {
-                        if(!isOpen)
+                        if (!isOpen) {
                             return;
+                        }
                         current[0] = (current[0] != null ? fn.apply((T) current[0]) : in);
                         if (pred.test((T) current[0])) {
                             next.accept(current[0]);
@@ -52,48 +57,51 @@ public class IteratePredicateOperator<T> implements Operator<T> {
                     }
 
                     reqs = requested.get();
-                    if(reqs==delivered) {
-                        reqs = requested.accumulateAndGet(delivered, (a, b) -> a - b);
-                        if(reqs==0) {
-                            if(!isOpen)
+                    if (reqs == delivered) {
+                        reqs = requested.accumulateAndGet(delivered,
+                                                          (a, b) -> a - b);
+                        if (reqs == 0) {
+                            if (!isOpen) {
                                 onComplete.run();
+                            }
                             return;
                         }
-                        delivered=0;
+                        delivered = 0;
                     }
-                }while(true);
-
-
+                } while (true);
 
 
             };
+
             @Override
             public void request(long n) {
-                if(n<=0) {
+                if (n <= 0) {
                     onError.accept(new IllegalArgumentException("3.9 While the Subscription is not cancelled, Subscription.request(long n) MUST throw a java.lang.IllegalArgumentException if the argument is <= 0."));
                     return;
                 }
-                if(!isOpen)
+                if (!isOpen) {
                     return;
-                this.singleActiveRequest(n,work);
+                }
+                this.singleActiveRequest(n,
+                                         work);
 
             }
 
             private void pushAll() {
-                for(;;){
-                    if(!isOpen)
+                for (; ; ) {
+                    if (!isOpen) {
                         break;
+                    }
                     try {
                         current[0] = (current[0] != null ? fn.apply((T) current[0]) : in);
-                        if(pred.test((T)current[0])) {
+                        if (pred.test((T) current[0])) {
                             next.accept(current[0]);
-                        }
-                        else{
+                        } else {
                             cancel();
                             onComplete.run();
                             return;
                         }
-                    }catch(Throwable t){
+                    } catch (Throwable t) {
                         onError.accept(t);
                     }
                 }
@@ -109,18 +117,20 @@ public class IteratePredicateOperator<T> implements Operator<T> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
         T current = null;
-        for(;;){
+        for (; ; ) {
             try {
                 current = (current != null ? fn.apply(current) : in);
-                if(pred.test((T)current))
+                if (pred.test((T) current)) {
                     onNext.accept(current);
-               else {
+                } else {
                     onCompleteDs.run();
                     return;
                 }
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 onError.accept(t);
             }
         }

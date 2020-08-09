@@ -1,6 +1,7 @@
 package cyclops.data.vector;
 
 import cyclops.data.Vector;
+import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -12,8 +13,6 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.concurrent.TimeUnit;
-
 @State(Scope.Benchmark)
 public class VectorFoldLeft {
 
@@ -22,8 +21,12 @@ public class VectorFoldLeft {
 
     @Setup
     public void before() {
-        vector = Vector.range(0, 1000).map(i->""+i);
-        js = io.vavr.collection.Vector.range(0, 1000).map(i->""+i);
+        vector = Vector.range(0,
+                              1000)
+                       .map(i -> "" + i);
+        js = io.vavr.collection.Vector.range(0,
+                                             1000)
+                                      .map(i -> "" + i);
 
     }
 
@@ -31,32 +34,24 @@ public class VectorFoldLeft {
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-        iterations = 10
-    )
-    @Measurement(
-        iterations = 10
-    )
+    @Warmup(iterations = 10)
+    @Measurement(iterations = 10)
     @Fork(1)
     public void cyclopsOps() {
-        vector.foldLeft((a,b)->a+b);
+        vector.foldLeft((a, b) -> a + b);
 
     }
+
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-        iterations = 10
-    )
-    @Measurement(
-        iterations = 10
-    )
+    @Warmup(iterations = 10)
+    @Measurement(iterations = 10)
     @Fork(1)
     public void vavrOps() {
-        js.reduce((a,b)->a+b);
+        js.reduce((a, b) -> a + b);
 
     }
-
 
 
 }

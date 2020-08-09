@@ -3,18 +3,17 @@ package com.oath.cyclops.types.reactive;
 import com.oath.cyclops.internal.stream.spliterators.push.CapturingOperator;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.LockSupport;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.LockSupport;
-
 /**
- * A subscriber for Observable type Streams that avoid the overhead of applying backpressure.
- * For backpressure aware event driven Streams {@link Spouts#reactiveSubscriber}
+ * A subscriber for Observable type Streams that avoid the overhead of applying backpressure. For backpressure aware event driven
+ * Streams {@link Spouts#reactiveSubscriber}
  *
  * <pre>
  *    {@code
@@ -22,9 +21,9 @@ import java.util.concurrent.locks.LockSupport;
  *
  *          //on a seperate thread
  *          for(int i=0;i<100;i++)
-                sub.onNext(i);
-
-            sub.onComplete();
+ * sub.onNext(i);
+ *
+ * sub.onComplete();
  *
  *          //on the main thread
  *
@@ -37,9 +36,8 @@ import java.util.concurrent.locks.LockSupport;
  *    }
  * </pre>
  *
- * @author johnmcclean
- *
  * @param <T> Subscriber type
+ * @author johnmcclean
  */
 @AllArgsConstructor//(access=AccessLevel.PRIVATE)
 @Deprecated
@@ -47,25 +45,25 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
 
 
     volatile boolean isOpen;
-
-    private AtomicReference<CapturingOperator<T>> action=  new AtomicReference<>(null);
+    volatile boolean streamCreated = false;
+    private AtomicReference<CapturingOperator<T>> action = new AtomicReference<>(null);
 
 
     public AsyncSubscriber() {
     }
 
-
-
-    volatile boolean streamCreated=  false;
-    CapturingOperator<T> getAction(Runnable onInit){
-        while(action.get()==null) {
-            action.compareAndSet(null, new CapturingOperator<T>(onInit));
+    CapturingOperator<T> getAction(Runnable onInit) {
+        while (action.get() == null) {
+            action.compareAndSet(null,
+                                 new CapturingOperator<T>(onInit));
         }
         return action.get();
     }
-    CapturingOperator<T> getAction(){
-        while(action.get()==null) {
-            action.compareAndSet(null, new CapturingOperator<T>());
+
+    CapturingOperator<T> getAction() {
+        while (action.get() == null) {
+            action.compareAndSet(null,
+                                 new CapturingOperator<T>());
         }
         return action.get();
     }
@@ -77,9 +75,9 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
      *
      *          //on a seperate thread
      *          for(int i=0;i<100;i++)
-                        sub.onNext(i);
-
-                sub.onComplete();
+     * sub.onNext(i);
+     *
+     * sub.onComplete();
      *
      *          //on the main thread
      *
@@ -94,11 +92,13 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
      *
      * @return A push-based asychronous event driven Observable-style Stream that avoids the overhead of backpressure support
      **/
-    public ReactiveSeq<T> stream(){
+    public ReactiveSeq<T> stream() {
         streamCreated = true;
-        return Spouts.asyncStream(getAction(()->{}));
+        return Spouts.asyncStream(getAction(() -> {
+        }));
     }
-    public ReactiveSeq<T> registerAndstream(Runnable r){
+
+    public ReactiveSeq<T> registerAndstream(Runnable r) {
         streamCreated = true;
 
         return Spouts.asyncStream(getAction(r));
@@ -108,16 +108,14 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
     @Override
     public void onSubscribe(final Subscription s) {
 
-
     }
 
     @Override
     public void onNext(final T t) {
 
-
-            val cons = getAction().getAction();
-            //if (cons != null)
-                cons.accept(t);
+        val cons = getAction().getAction();
+        //if (cons != null)
+        cons.accept(t);
 
 
     }
@@ -126,8 +124,8 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
     public void onError(final Throwable t) {
         Objects.requireNonNull(t);
         val cons = getAction().getError();
-      //  if(cons!=null)
-              cons.accept(t);
+        //  if(cons!=null)
+        cons.accept(t);
 
 
     }
@@ -135,19 +133,19 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
     @Override
     public void onComplete() {
 
-
         val run = getAction().getOnComplete();
 
-       // if(run!=null)
-            run.run();
+        // if(run!=null)
+        run.run();
 
     }
+
     public boolean isInitialized() {
         return getAction().isInitialized();
     }
 
-    public void awaitInitialization(){
-        while(!isInitialized()){
+    public void awaitInitialization() {
+        while (!isInitialized()) {
             LockSupport.parkNanos(0l);
         }
     }

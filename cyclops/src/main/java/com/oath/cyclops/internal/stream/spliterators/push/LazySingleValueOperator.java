@@ -7,13 +7,14 @@ import java.util.function.LongConsumer;
 /**
  * Created by johnmcclean on 12/01/2017.
  */
-public class LazySingleValueOperator<T,R> implements Operator<R> {
+public class LazySingleValueOperator<T, R> implements Operator<R> {
 
 
     final T value;
-    private final Function<? super T,? extends R> fn;
+    private final Function<? super T, ? extends R> fn;
 
-    public LazySingleValueOperator(T value,Function<? super T,? extends R> fn){
+    public LazySingleValueOperator(T value,
+                                   Function<? super T, ? extends R> fn) {
         this.value = value;
         this.fn = fn;
 
@@ -21,9 +22,11 @@ public class LazySingleValueOperator<T,R> implements Operator<R> {
 
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super R> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super R> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         boolean[] sent = {false};
-        StreamSubscription sub = new StreamSubscription(){
+        StreamSubscription sub = new StreamSubscription() {
             LongConsumer work = n -> {
 
                 if (n > 0 && !sent[0] && isActive()) {
@@ -34,9 +37,11 @@ public class LazySingleValueOperator<T,R> implements Operator<R> {
                 }
 
             };
+
             @Override
             public void request(long n) {
-                singleActiveRequest(1, work);
+                singleActiveRequest(1,
+                                    work);
             }
 
             @Override
@@ -48,7 +53,9 @@ public class LazySingleValueOperator<T,R> implements Operator<R> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super R> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super R> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
 
         onNext.accept(fn.apply(value));
         onCompleteDs.run();

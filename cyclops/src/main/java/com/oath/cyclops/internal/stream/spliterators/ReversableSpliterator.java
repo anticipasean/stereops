@@ -1,6 +1,6 @@
 package com.oath.cyclops.internal.stream.spliterators;
 
-public interface ReversableSpliterator<T> extends CopyableSpliterator<T>{
+public interface ReversableSpliterator<T> extends CopyableSpliterator<T> {
 
     boolean isReverse();
 

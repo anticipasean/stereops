@@ -1,5 +1,8 @@
 package cyclops.reactive.collections.mutable;
 
+import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import static cyclops.data.tuple.Tuple.tuple;
+
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.lazy.LazySortedSetX;
@@ -23,108 +26,70 @@ import cyclops.function.Function4;
 import cyclops.function.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
-import org.reactivestreams.Publisher;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
-import static cyclops.data.tuple.Tuple.tuple;
+import org.reactivestreams.Publisher;
 
 /**
- * An eXtended SortedSet type, that offers additional functional style operators such as bimap, filter and more
- * Can operate eagerly, lazily or reactively (async push)
- *
- * @author johnmcclean
+ * An eXtended SortedSet type, that offers additional functional style operators such as bimap, filter and more Can operate
+ * eagerly, lazily or reactively (async push)
  *
  * @param <T> the type of elements held in this SortedSetX
+ * @author johnmcclean
  */
-public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyCollectionX<T>, OnEmptySwitch<T, SortedSet<T>> {
+public interface SortedSetX<T> extends To<SortedSetX<T>>, SortedSet<T>, LazyCollectionX<T>, OnEmptySwitch<T, SortedSet<T>> {
 
 
-    public static <T> SortedSetX<T> defer(Supplier<SortedSetX<T>> s){
-      return of(s)
-              .map(Supplier::get)
-              .concatMap(l->l);
-    }
-    default Tuple2<SortedSetX<T>, SortedSetX<T>> splitAt(int n) {
-        materialize();
-        return Tuple.tuple(take(n), drop(n));
-    }
-    default Tuple2<SortedSetX<T>, SortedSetX<T>> span(Predicate<? super T> pred) {
-        return tuple(takeWhile(pred), dropWhile(pred));
+    static <T> SortedSetX<T> defer(Supplier<SortedSetX<T>> s) {
+        return of(s).map(Supplier::get)
+                    .concatMap(l -> l);
     }
 
-    default Tuple2<SortedSetX<T>,SortedSetX<T>> splitBy(Predicate<? super T> test) {
-        return span(test.negate());
-    }
-    default Tuple2<SortedSetX<T>, SortedSetX<T>> partition(final Predicate<? super T> splitter) {
-
-        return tuple(filter(splitter), filter(splitter.negate()));
-
-    }
-    static <T> CompletableSortedSetX<T> completable(){
+    static <T> CompletableSortedSetX<T> completable() {
         return new CompletableSortedSetX<>();
     }
 
-    static class CompletableSortedSetX<T> implements InvocationHandler {
-        Future<SortedSetX<T>> future = Future.future();
-        public boolean complete(SortedSet<T> result){
-            return future.complete(SortedSetX.fromIterable(result));
-        }
-
-        public SortedSetX<T> asSortedSetX(){
-            SortedSetX f = (SortedSetX) Proxy.newProxyInstance(SortedSetX.class.getClassLoader(),
-                    new Class[] { SortedSetX.class },
-                    this);
-            return f;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            SortedSetX<T> target =  future.fold(l->l, t->{throw ExceptionSoftener.throwSoftenedException(t);});
-            return method.invoke(target,args);
-        }
-    }
-    @Override
-    default Object[] toArray(){
-        return LazyCollectionX.super.toArray();
-    }
-
-    @Override
-    default <T1> T1[] toArray(T1[] a){
-        return LazyCollectionX.super.toArray(a);
-    }
-    SortedSetX<T> lazy();
-    SortedSetX<T> eager();
     static <T> Collector<T, ?, SortedSet<T>> defaultCollector() {
-        return Collectors.toCollection(() -> new TreeSet<T>(
-                                                            (Comparator) Comparator.<Comparable> naturalOrder()));
+        return Collectors.toCollection(() -> new TreeSet<T>((Comparator) Comparator.<Comparable>naturalOrder()));
     }
 
     static <T> Collector<T, ?, SortedSet<T>> immutableCollector() {
-        return Collectors.collectingAndThen(defaultCollector(), (final SortedSet<T> d) -> Collections.unmodifiableSortedSet(d));
+        return Collectors.collectingAndThen(defaultCollector(),
+                                            (final SortedSet<T> d) -> Collections.unmodifiableSortedSet(d));
 
     }
 
     /**
-    * Create a SortedSetX that contains the Integers between skip and take
-    *
-    * @param start
-    *            Number of range to skip from
-    * @param end
-    *            Number for range to take at
-    * @return Range SortedSetX
-    */
-    public static SortedSetX<Integer> range(final int start, final int end) {
-        return ReactiveSeq.range(start, end)
+     * Create a SortedSetX that contains the Integers between skip and take
+     *
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
+     * @return Range SortedSetX
+     */
+    static SortedSetX<Integer> range(final int start,
+                                     final int end) {
+        return ReactiveSeq.range(start,
+                                 end)
                           .to(ReactiveConvertableSequence::converter)
                           .sortedSetX(Evaluation.LAZY);
     }
@@ -132,14 +97,14 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     /**
      * Create a SortedSetX that contains the Longs between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range SortedSetX
      */
-    public static SortedSetX<Long> rangeLong(final long start, final long end) {
-        return ReactiveSeq.rangeLong(start, end)
+    static SortedSetX<Long> rangeLong(final long start,
+                                      final long end) {
+        return ReactiveSeq.rangeLong(start,
+                                     end)
                           .to(ReactiveConvertableSequence::converter)
                           .sortedSetX(Evaluation.LAZY);
     }
@@ -155,12 +120,14 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      *
      * }</pre>
      *
-     * @param seed Initial value
+     * @param seed     Initial value
      * @param unfolder Iteratively applied function, terminated by an zero Optional
      * @return SortedSetX generated by unfolder function
      */
-    static <U, T> SortedSetX<T> unfold(final U seed, final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
-        return ReactiveSeq.unfold(seed, unfolder)
+    static <U, T> SortedSetX<T> unfold(final U seed,
+                                       final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
+        return ReactiveSeq.unfold(seed,
+                                  unfolder)
                           .to(ReactiveConvertableSequence::converter)
                           .sortedSetX(Evaluation.LAZY);
     }
@@ -169,10 +136,11 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      * Generate a SortedSetX from the provided Supplier up to the provided limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param s Supplier to generate SortedSetX elements
+     * @param s     Supplier to generate SortedSetX elements
      * @return SortedSetX generated from the provided Supplier
      */
-    public static <T> SortedSetX<T> generate(final long limit, final Supplier<T> s) {
+    static <T> SortedSetX<T> generate(final long limit,
+                                      final Supplier<T> s) {
 
         return ReactiveSeq.generate(s)
                           .limit(limit)
@@ -184,54 +152,50 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      * Create a SortedSetX by iterative application of a function to an initial element up to the supplied limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param seed Initial element
-     * @param f Iteratively applied to each element to generate the next element
+     * @param seed  Initial element
+     * @param f     Iteratively applied to each element to generate the next element
      * @return SortedSetX generated by iterative application
      */
-    public static <T> SortedSetX<T> iterate(final long limit, final T seed, final UnaryOperator<T> f) {
-        return ReactiveSeq.iterate(seed, f)
+    static <T> SortedSetX<T> iterate(final long limit,
+                                     final T seed,
+                                     final UnaryOperator<T> f) {
+        return ReactiveSeq.iterate(seed,
+                                   f)
                           .limit(limit)
                           .to(ReactiveConvertableSequence::converter)
                           .sortedSetX(Evaluation.LAZY);
 
     }
 
-    public static <T> SortedSetX<T> empty() {
+    static <T> SortedSetX<T> empty() {
         return fromIterable((SortedSet<T>) defaultCollector().supplier()
                                                              .get());
     }
 
-    public static <T> SortedSetX<T> of(final T... values) {
+    static <T> SortedSetX<T> of(final T... values) {
         return new LazySortedSetX<T>(null,
-                ReactiveSeq.of(values),
-                defaultCollector(),Evaluation.LAZY);
+                                     ReactiveSeq.of(values),
+                                     defaultCollector(),
+                                     Evaluation.LAZY);
     }
 
-    public static <T> SortedSetX<T> singleton(final T value) {
+    static <T> SortedSetX<T> singleton(final T value) {
         return of(value);
     }
-
-    @Override
-    default SortedSetX<T> materialize() {
-        return (SortedSetX<T>)LazyCollectionX.super.materialize();
-    }
-
-
 
     /**
      * Construct a SortedSetX from an Publisher
      *
-     * @param publisher
-     *            to construct SortedSetX from
+     * @param publisher to construct SortedSetX from
      * @return SortedSetX
      */
-    public static <T> SortedSetX<T> fromPublisher(final Publisher<? extends T> publisher) {
-        return Spouts.from((Publisher<T>) publisher)
-                          .to(ReactiveConvertableSequence::converter)
-                          .sortedSetX(Evaluation.LAZY);
+    static <T> SortedSetX<T> fromPublisher(final Publisher<? extends T> publisher) {
+        return Spouts.from(publisher)
+                     .to(ReactiveConvertableSequence::converter)
+                     .sortedSetX(Evaluation.LAZY);
     }
+
     /**
-     *
      * <pre>
      * {@code
      *  import static cyclops.stream.ReactiveSeq.range;
@@ -240,39 +204,135 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      *
      * }
      * </pre>
+     *
      * @param stream To create SortedSetX from
-     * @param <T> SortedSetX generated from Stream
+     * @param <T>    SortedSetX generated from Stream
      * @return
      */
-    public static <T> SortedSetX<T> sortedSetX(ReactiveSeq<T> stream){
+    static <T> SortedSetX<T> sortedSetX(ReactiveSeq<T> stream) {
         return new LazySortedSetX<T>(null,
-                stream,
-                defaultCollector(),Evaluation.LAZY);
+                                     stream,
+                                     defaultCollector(),
+                                     Evaluation.LAZY);
     }
 
-    public static <T> SortedSetX<T> fromIterable(final Iterable<T> it) {
-        if (it instanceof SortedSetX)
+    static <T> SortedSetX<T> fromIterable(final Iterable<T> it) {
+        if (it instanceof SortedSetX) {
             return (SortedSetX<T>) it;
-        if (it instanceof SortedSet)
-            return new LazySortedSetX<T>(
-                                         (SortedSet) it, defaultCollector(),Evaluation.LAZY);
-        return new LazySortedSetX<T>(null,
-                                       ReactiveSeq.fromIterable(it),
-                                     defaultCollector(),Evaluation.LAZY);
-    }
-    public static <T> SortedSetX<T> fromIterator(final Iterator<T> it) {
-        return fromIterable(()->it);
-    }
-
-    public static <T> SortedSetX<T> fromIterable(final Collector<T, ?, SortedSet<T>> collector, final Iterable<T> it) {
-        if (it instanceof SortedSetX)
-            return ((SortedSetX<T>) it).type(collector);
-        if (it instanceof SortedSet)
-            return new LazySortedSetX<T>(
-                                         (SortedSet) it, collector,Evaluation.LAZY);
+        }
+        if (it instanceof SortedSet) {
+            return new LazySortedSetX<T>((SortedSet) it,
+                                         defaultCollector(),
+                                         Evaluation.LAZY);
+        }
         return new LazySortedSetX<T>(null,
                                      ReactiveSeq.fromIterable(it),
-                                     collector,Evaluation.LAZY);
+                                     defaultCollector(),
+                                     Evaluation.LAZY);
+    }
+
+    static <T> SortedSetX<T> fromIterator(final Iterator<T> it) {
+        return fromIterable(() -> it);
+    }
+
+    static <T> SortedSetX<T> fromIterable(final Collector<T, ?, SortedSet<T>> collector,
+                                          final Iterable<T> it) {
+        if (it instanceof SortedSetX) {
+            return ((SortedSetX<T>) it).type(collector);
+        }
+        if (it instanceof SortedSet) {
+            return new LazySortedSetX<T>((SortedSet) it,
+                                         collector,
+                                         Evaluation.LAZY);
+        }
+        return new LazySortedSetX<T>(null,
+                                     ReactiveSeq.fromIterable(it),
+                                     collector,
+                                     Evaluation.LAZY);
+    }
+
+    /**
+     * Narrow a covariant SortedSet
+     *
+     * <pre>
+     * {@code
+     * SortedSetX<? extends Fruit> set = SortedSetX.of(apple,bannana);
+     * SortedSetX<Fruit> fruitSet = SortedSetX.narrowK3(set);
+     * }
+     * </pre>
+     *
+     * @param setX to narrowK3 generic type
+     * @return SortedSetX with narrowed type
+     */
+    static <T> SortedSetX<T> narrow(final SortedSetX<? extends T> setX) {
+        return (SortedSetX<T>) setX;
+    }
+
+    static <T, R> SortedSetX<R> tailRec(T initial,
+                                        Function<? super T, ? extends SortedSetX<? extends Either<T, R>>> fn) {
+        ListX<Either<T, R>> lazy = ListX.of(Either.left(initial));
+        ListX<Either<T, R>> next = lazy.eager();
+        boolean[] newValue = {true};
+        for (; ; ) {
+
+            next = next.concatMap(e -> e.fold(s -> {
+                                                  newValue[0] = true;
+                                                  return fn.apply(s);
+                                              },
+                                              p -> {
+                                                  newValue[0] = false;
+                                                  return ListX.of(e);
+                                              }));
+            if (!newValue[0]) {
+                break;
+            }
+
+        }
+        return Either.sequenceRight(next)
+                     .orElse(ReactiveSeq.empty())
+                     .to(ReactiveConvertableSequence::converter)
+                     .sortedSetX(Evaluation.LAZY);
+    }
+
+    default Tuple2<SortedSetX<T>, SortedSetX<T>> splitAt(int n) {
+        materialize();
+        return Tuple.tuple(take(n),
+                           drop(n));
+    }
+
+    default Tuple2<SortedSetX<T>, SortedSetX<T>> span(Predicate<? super T> pred) {
+        return tuple(takeWhile(pred),
+                     dropWhile(pred));
+    }
+
+    default Tuple2<SortedSetX<T>, SortedSetX<T>> splitBy(Predicate<? super T> test) {
+        return span(test.negate());
+    }
+
+    default Tuple2<SortedSetX<T>, SortedSetX<T>> partition(final Predicate<? super T> splitter) {
+
+        return tuple(filter(splitter),
+                     filter(splitter.negate()));
+
+    }
+
+    @Override
+    default Object[] toArray() {
+        return LazyCollectionX.super.toArray();
+    }
+
+    @Override
+    default <T1> T1[] toArray(T1[] a) {
+        return LazyCollectionX.super.toArray(a);
+    }
+
+    SortedSetX<T> lazy();
+
+    SortedSetX<T> eager();
+
+    @Override
+    default SortedSetX<T> materialize() {
+        return (SortedSetX<T>) LazyCollectionX.super.materialize();
     }
 
     SortedSetX<T> type(Collector<T, ?, SortedSet<T>> collector);
@@ -291,26 +351,27 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      * }
      * </pre>
      *
-     *
      * @param fn mapping function
      * @return Transformed SortedSet
      */
-    default <R> SortedSetX<R> coflatMap(Function<? super SortedSetX<T>, ? extends R> fn){
-        return fn.andThen(r ->  this.<R>unit(r))
-                .apply(this);
+    default <R> SortedSetX<R> coflatMap(Function<? super SortedSetX<T>, ? extends R> fn) {
+        return fn.andThen(r -> this.<R>unit(r))
+                 .apply(this);
     }
-
 
     /* (non-Javadoc)
      * @see CollectionX#forEach4(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.QuadFunction)
      */
     @Override
     default <R1, R2, R3, R> SortedSetX<R> forEach4(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
-            Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+                                                   BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                                   Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
+                                                   Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (SortedSetX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, yieldingFunction);
+        return (SortedSetX) LazyCollectionX.super.forEach4(stream1,
+                                                           stream2,
+                                                           stream3,
+                                                           yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -318,34 +379,39 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      */
     @Override
     default <R1, R2, R3, R> SortedSetX<R> forEach4(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
-            Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
-            Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+                                                   BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                                   Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
+                                                   Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
+                                                   Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (SortedSetX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, filterFunction, yieldingFunction);
+        return (SortedSetX) LazyCollectionX.super.forEach4(stream1,
+                                                           stream2,
+                                                           stream3,
+                                                           filterFunction,
+                                                           yieldingFunction);
     }
+
     /**
-    default ConvertableSequence<T> to(){
-
-
-        return new ConvertableSequence<>(this);
-    }
-    default Collectable<T> collectors(){
-
-
-
-        return Seq.seq(this);
-    }**/
+     * default ConvertableSequence<T> to(){
+     * <p>
+     * <p>
+     * return new ConvertableSequence<>(this); } default Collectable<T> collectors(){
+     * <p>
+     * <p>
+     * <p>
+     * return Seq.seq(this); }
+     **/
     /* (non-Javadoc)
      * @see CollectionX#forEach3(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction)
      */
     @Override
     default <R1, R2, R> SortedSetX<R> forEach3(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+                                               BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                               Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (SortedSetX)LazyCollectionX.super.forEach3(stream1, stream2, yieldingFunction);
+        return (SortedSetX) LazyCollectionX.super.forEach3(stream1,
+                                                           stream2,
+                                                           yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -353,11 +419,14 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      */
     @Override
     default <R1, R2, R> SortedSetX<R> forEach3(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
-            Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+                                               BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                               Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
+                                               Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (SortedSetX)LazyCollectionX.super.forEach3(stream1, stream2, filterFunction, yieldingFunction);
+        return (SortedSetX) LazyCollectionX.super.forEach3(stream1,
+                                                           stream2,
+                                                           filterFunction,
+                                                           yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -365,9 +434,10 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      */
     @Override
     default <R1, R> SortedSetX<R> forEach2(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+                                           BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (SortedSetX)LazyCollectionX.super.forEach2(stream1, yieldingFunction);
+        return (SortedSetX) LazyCollectionX.super.forEach2(stream1,
+                                                           yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -375,38 +445,44 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      */
     @Override
     default <R1, R> SortedSetX<R> forEach2(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, Boolean> filterFunction,
-            BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+                                           BiFunction<? super T, ? super R1, Boolean> filterFunction,
+                                           BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (SortedSetX)LazyCollectionX.super.forEach2(stream1, filterFunction, yieldingFunction);
+        return (SortedSetX) LazyCollectionX.super.forEach2(stream1,
+                                                           filterFunction,
+                                                           yieldingFunction);
     }
 
-
     /**
-     * Combine two adjacent elements in a SortedSetX using the supplied BinaryOperator
-     * This is a stateful grouping and reduction operation. The emitted of a combination may in turn be combined
-     * with it's neighbor
+     * Combine two adjacent elements in a SortedSetX using the supplied BinaryOperator This is a stateful grouping and reduction
+     * operation. The emitted of a combination may in turn be combined with it's neighbor
      * <pre>
      * {@code
      *  SortedSetX.of(1,1,2,3)
-                   .combine((a, b)->a.equals(b),SemigroupK.intSum)
-                   .listX(Evaluation.LAZY)
-
+     * .combine((a, b)->a.equals(b),SemigroupK.intSum)
+     * .listX(Evaluation.LAZY)
+     *
      *  //ListX(3,4)
      * }</pre>
      *
      * @param predicate Test to see if two neighbors should be joined
-     * @param op Reducer to combine neighbors
+     * @param op        Reducer to combine neighbors
      * @return Combined / Partially Reduced SortedSetX
      */
     @Override
-    default SortedSetX<T> combine(final BiPredicate<? super T, ? super T> predicate, final BinaryOperator<T> op) {
-        return (SortedSetX<T>) LazyCollectionX.super.combine(predicate, op);
+    default SortedSetX<T> combine(final BiPredicate<? super T, ? super T> predicate,
+                                  final BinaryOperator<T> op) {
+        return (SortedSetX<T>) LazyCollectionX.super.combine(predicate,
+                                                             op);
     }
+
     @Override
-    default SortedSetX<T> combine(final Monoid<T> op, final BiPredicate<? super T, ? super T> predicate) {
-        return (SortedSetX<T>)LazyCollectionX.super.combine(op,predicate);
+    default SortedSetX<T> combine(final Monoid<T> op,
+                                  final BiPredicate<? super T, ? super T> predicate) {
+        return (SortedSetX<T>) LazyCollectionX.super.combine(op,
+                                                             predicate);
     }
+
     @Override
     default <R> SortedSetX<R> unit(final R value) {
         return singleton(value);
@@ -430,15 +506,17 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
     @Override
     default <T1> SortedSetX<T1> from(final Iterable<T1> c) {
-        return SortedSetX.<T1> fromIterable(getCollector(), c);
+        return SortedSetX.fromIterable(getCollector(),
+                                       c);
     }
 
-    public <T> Collector<T, ?, SortedSet<T>> getCollector();
+    <T> Collector<T, ?, SortedSet<T>> getCollector();
 
     @Override
     default <X> SortedSetX<X> fromStream(final ReactiveSeq<X> stream) {
-        return new LazySortedSetX<>(
-                                    stream.collect(getCollector()), getCollector(),Evaluation.LAZY);
+        return new LazySortedSetX<>(stream.collect(getCollector()),
+                                    getCollector(),
+                                    Evaluation.LAZY);
     }
 
     /* (non-Javadoc)
@@ -464,7 +542,7 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     @Override
     default <R> SortedSetX<R> map(final Function<? super T, ? extends R> mapper) {
 
-        return (SortedSetX<R>) LazyCollectionX.super.<R> map(mapper);
+        return (SortedSetX<R>) LazyCollectionX.super.<R>map(mapper);
     }
 
     /* (non-Javadoc)
@@ -474,29 +552,26 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     default <R> SortedSetX<R> concatMap(final Function<? super T, ? extends Iterable<? extends R>> mapper) {
 
         return (SortedSetX<R>) LazyCollectionX.super.concatMap(mapper);
-}
-
+    }
 
     default SortedSetX<T> take(final long num) {
         return (SortedSetX<T>) LazyCollectionX.super.take(num);
     }
 
-
     default SortedSetX<T> drop(final long num) {
 
-        return (SortedSetX<T>)LazyCollectionX.super.drop(num);
+        return (SortedSetX<T>) LazyCollectionX.super.drop(num);
     }
-
-
-
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#slice(long, long)
      */
     @Override
-    default SortedSetX<T> slice(final long from, final long to) {
+    default SortedSetX<T> slice(final long from,
+                                final long to) {
 
-        return (SortedSetX<T>) LazyCollectionX.super.slice(from, to);
+        return (SortedSetX<T>) LazyCollectionX.super.slice(from,
+                                                           to);
     }
 
     /* (non-Javadoc)
@@ -510,10 +585,8 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
     @Override
     default SortedSetX<Vector<T>> grouped(final int groupSize) {
-        return (SortedSetX<Vector<T>>) (SortedSetX<T>) LazyCollectionX.super.grouped(groupSize);
+        return (SortedSetX<Vector<T>>) LazyCollectionX.super.grouped(groupSize);
     }
-
-
 
     @Override
     default <U> SortedSetX<Tuple2<T, U>> zip(final Iterable<? extends U> other) {
@@ -524,19 +597,22 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#zip(java.lang.Iterable, java.util.function.BiFunction)
      */
     @Override
-    default <U, R> SortedSetX<R> zip(final Iterable<? extends U> other, final BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return (SortedSetX<R>) LazyCollectionX.super.zip(other, zipper);
-    }
-
-
-  @Override
-    default SortedSetX<Seq<T>> sliding(final int windowSize) {
-        return (SortedSetX<Seq<T>>) (SortedSetX<T>) LazyCollectionX.super.sliding(windowSize);
+    default <U, R> SortedSetX<R> zip(final Iterable<? extends U> other,
+                                     final BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return (SortedSetX<R>) LazyCollectionX.super.zip(other,
+                                                         zipper);
     }
 
     @Override
-    default SortedSetX<Seq<T>> sliding(final int windowSize, final int increment) {
-        return (SortedSetX<Seq<T>>) (SortedSetX<T>) LazyCollectionX.super.sliding(windowSize, increment);
+    default SortedSetX<Seq<T>> sliding(final int windowSize) {
+        return (SortedSetX<Seq<T>>) LazyCollectionX.super.sliding(windowSize);
+    }
+
+    @Override
+    default SortedSetX<Seq<T>> sliding(final int windowSize,
+                                       final int increment) {
+        return (SortedSetX<Seq<T>>) LazyCollectionX.super.sliding(windowSize,
+                                                                  increment);
     }
 
     @Override
@@ -545,8 +621,10 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     }
 
     @Override
-    default <U> SortedSetX<U> scanLeft(final U seed, final BiFunction<? super U, ? super T, ? extends U> function) {
-        return (SortedSetX<U>) (SortedSetX<T>) LazyCollectionX.super.scanLeft(seed, function);
+    default <U> SortedSetX<U> scanLeft(final U seed,
+                                       final BiFunction<? super U, ? super T, ? extends U> function) {
+        return (SortedSetX<U>) LazyCollectionX.super.scanLeft(seed,
+                                                              function);
     }
 
     @Override
@@ -555,8 +633,10 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     }
 
     @Override
-    default <U> SortedSetX<U> scanRight(final U identity, final BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return (SortedSetX<U>) (SortedSetX<T>) LazyCollectionX.super.scanRight(identity, combiner);
+    default <U> SortedSetX<U> scanRight(final U identity,
+                                        final BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return (SortedSetX<U>) LazyCollectionX.super.scanRight(identity,
+                                                               combiner);
     }
 
     @Override
@@ -567,7 +647,7 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
     @Override
     default SortedSetX<T> plusAll(final Iterable<? extends T> list) {
-        for(T next : list) {
+        for (T next : list) {
             add(next);
         }
         return this;
@@ -581,7 +661,7 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
     @Override
     default SortedSetX<T> removeAll(final Iterable<? extends T> list) {
-        for(T next : list) {
+        for (T next : list) {
             remove(next);
         }
         return this;
@@ -596,18 +676,21 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
         return this.stream()
                    .cycle(times)
                    .to(ReactiveConvertableSequence::converter)
-                    .listX(LAZY);
+                   .listX(LAZY);
     }
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#cycle(com.oath.cyclops.sequence.Monoid, int)
      */
     @Override
-    default ListX<T> cycle(final Monoid<T> m, final long times) {
+    default ListX<T> cycle(final Monoid<T> m,
+                           final long times) {
 
         return this.stream()
-                   .cycle(m, times)
-                   .to(ReactiveConvertableSequence::converter).listX(LAZY);
+                   .cycle(m,
+                          times)
+                   .to(ReactiveConvertableSequence::converter)
+                   .listX(LAZY);
     }
 
     /* (non-Javadoc)
@@ -618,7 +701,8 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
         return this.stream()
                    .cycleWhile(predicate)
-                   .to(ReactiveConvertableSequence::converter).listX(LAZY);
+                   .to(ReactiveConvertableSequence::converter)
+                   .listX(LAZY);
     }
 
     /* (non-Javadoc)
@@ -629,7 +713,8 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
         return this.stream()
                    .cycleUntil(predicate)
-                   .to(ReactiveConvertableSequence::converter).listX(LAZY);
+                   .to(ReactiveConvertableSequence::converter)
+                   .listX(LAZY);
     }
 
     /* (non-Javadoc)
@@ -641,25 +726,28 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
         return (SortedSetX) LazyCollectionX.super.zipWithStream(other);
     }
 
-
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#zip3(java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <S, U> SortedSetX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third) {
+    default <S, U> SortedSetX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second,
+                                                    final Iterable<? extends U> third) {
 
-        return (SortedSetX) LazyCollectionX.super.zip3(second, third);
+        return (SortedSetX) LazyCollectionX.super.zip3(second,
+                                                       third);
     }
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#zip4(java.util.stream.Stream, java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <T2, T3, T4> SortedSetX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third,
-            final Iterable<? extends T4> fourth) {
+    default <T2, T3, T4> SortedSetX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second,
+                                                                final Iterable<? extends T3> third,
+                                                                final Iterable<? extends T4> fourth) {
 
-        return (SortedSetX) LazyCollectionX.super.zip4(second, third, fourth);
+        return (SortedSetX) LazyCollectionX.super.zip4(second,
+                                                       third,
+                                                       fourth);
     }
 
     /* (non-Javadoc)
@@ -769,8 +857,9 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
      */
     @Override
     default SortedSetX<T> onEmptySwitch(final Supplier<? extends SortedSet<T>> supplier) {
-        if (isEmpty())
+        if (isEmpty()) {
             return SortedSetX.fromIterable(supplier.get());
+        }
         return this;
     }
 
@@ -848,9 +937,8 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
 
     @Override
     default SortedSetX<T> removeAll(CollectionX<? extends T> it) {
-        return removeAll((Iterable<T>)it);
+        return removeAll((Iterable<T>) it);
     }
-
 
     @Override
     default SortedSetX<T> removeAll(final T... values) {
@@ -858,13 +946,11 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
         return (SortedSetX<T>) LazyCollectionX.super.removeAll(values);
     }
 
-
     @Override
     default SortedSetX<T> retainAll(final Iterable<? extends T> it) {
 
         return (SortedSetX<T>) LazyCollectionX.super.retainAll(it);
     }
-
 
     @Override
     default SortedSetX<T> retainStream(final Stream<? extends T> seq) {
@@ -872,19 +958,18 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
         return (SortedSetX<T>) LazyCollectionX.super.retainStream(seq);
     }
 
-
     @Override
     default SortedSetX<T> retainAll(final T... values) {
 
         return (SortedSetX<T>) LazyCollectionX.super.retainAll(values);
     }
 
-
-
     @Override
-    default <C extends PersistentCollection<? super T>> SortedSetX<C> grouped(final int size, final Supplier<C> supplier) {
+    default <C extends PersistentCollection<? super T>> SortedSetX<C> grouped(final int size,
+                                                                              final Supplier<C> supplier) {
 
-        return (SortedSetX<C>) LazyCollectionX.super.grouped(size, supplier);
+        return (SortedSetX<C>) LazyCollectionX.super.grouped(size,
+                                                             supplier);
     }
 
     @Override
@@ -900,15 +985,19 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> SortedSetX<C> groupedWhile(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> SortedSetX<C> groupedWhile(final Predicate<? super T> predicate,
+                                                                                   final Supplier<C> factory) {
 
-        return (SortedSetX<C>) LazyCollectionX.super.groupedWhile(predicate, factory);
+        return (SortedSetX<C>) LazyCollectionX.super.groupedWhile(predicate,
+                                                                  factory);
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> SortedSetX<C> groupedUntil(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> SortedSetX<C> groupedUntil(final Predicate<? super T> predicate,
+                                                                                   final Supplier<C> factory) {
 
-        return (SortedSetX<C>) LazyCollectionX.super.groupedUntil(predicate, factory);
+        return (SortedSetX<C>) LazyCollectionX.super.groupedUntil(predicate,
+                                                                  factory);
     }
 
     @Override
@@ -917,16 +1006,15 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
         return (SortedSetX<Vector<T>>) LazyCollectionX.super.groupedUntil(predicate);
     }
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.lambda.monads.ExtendedTraversable#permutations()
      */
     @Override
     default SetX<ReactiveSeq<T>> permutations() {
         ReactiveSeq<ReactiveSeq<T>> x = stream().permutations()
-                .map(c->{
-                    return Comparables.comparable(c);
-                });
+                                                .map(c -> {
+                                                    return Comparables.comparable(c);
+                                                });
         return SetX.setX(x);
 
     }
@@ -937,9 +1025,9 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     @Override
     default SetX<ReactiveSeq<T>> combinations(final int size) {
         ReactiveSeq<ReactiveSeq<T>> x = stream().combinations(size)
-                .map(c->{
-                    return Comparables.comparable(c);
-                });
+                                                .map(c -> {
+                                                    return Comparables.comparable(c);
+                                                });
         return SetX.setX(x);
     }
 
@@ -950,165 +1038,205 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
     default SetX<ReactiveSeq<T>> combinations() {
 
         ReactiveSeq<ReactiveSeq<T>> x = stream().combinations()
-                                            .map(c->{
-                                                return Comparables.comparable(c);
-                                            });
+                                                .map(c -> {
+                                                    return Comparables.comparable(c);
+                                                });
         return SetX.setX(x);
     }
 
-
     @Override
     default <R> SortedSetX<R> retry(final Function<? super T, ? extends R> fn) {
-        return (SortedSetX<R>)LazyCollectionX.super.retry(fn);
+        return (SortedSetX<R>) LazyCollectionX.super.retry(fn);
     }
 
     @Override
-    default <R> SortedSetX<R> retry(final Function<? super T, ? extends R> fn, final int retries, final long delay, final TimeUnit timeUnit) {
-        return (SortedSetX<R>)LazyCollectionX.super.retry(fn,retries,delay,timeUnit);
+    default <R> SortedSetX<R> retry(final Function<? super T, ? extends R> fn,
+                                    final int retries,
+                                    final long delay,
+                                    final TimeUnit timeUnit) {
+        return (SortedSetX<R>) LazyCollectionX.super.retry(fn,
+                                                           retries,
+                                                           delay,
+                                                           timeUnit);
     }
 
     @Override
     default <R> SortedSetX<R> flatMap(Function<? super T, ? extends Stream<? extends R>> fn) {
-        return (SortedSetX<R>)LazyCollectionX.super.flatMap(fn);
+        return (SortedSetX<R>) LazyCollectionX.super.flatMap(fn);
     }
 
     @Override
     default <R> SortedSetX<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (SortedSetX<R>)LazyCollectionX.super.mergeMap(fn);
-    }
-    @Override
-    default <R> SortedSetX<R> mergeMap(int maxConcurency, Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (SortedSetX<R>)LazyCollectionX.super.mergeMap(maxConcurency,fn);
+        return (SortedSetX<R>) LazyCollectionX.super.mergeMap(fn);
     }
 
+    @Override
+    default <R> SortedSetX<R> mergeMap(int maxConcurency,
+                                       Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return (SortedSetX<R>) LazyCollectionX.super.mergeMap(maxConcurency,
+                                                              fn);
+    }
 
     @Override
     default SortedSetX<T> removeFirst(Predicate<? super T> pred) {
-        return (SortedSetX<T>)LazyCollectionX.super.removeFirst(pred);
+        return (SortedSetX<T>) LazyCollectionX.super.removeFirst(pred);
     }
 
     @Override
     default SortedSetX<T> appendAll(Iterable<? extends T> value) {
-        return (SortedSetX<T>)LazyCollectionX.super.appendAll(value);
+        return (SortedSetX<T>) LazyCollectionX.super.appendAll(value);
     }
 
     @Override
     default SortedSetX<T> prependAll(Iterable<? extends T> value) {
-        return (SortedSetX<T>)LazyCollectionX.super.prependAll(value);
+        return (SortedSetX<T>) LazyCollectionX.super.prependAll(value);
     }
 
     @Override
-    default SortedSetX<T> updateAt(int pos, T value) {
-        return (SortedSetX<T>)LazyCollectionX.super.updateAt(pos,value);
+    default SortedSetX<T> updateAt(int pos,
+                                   T value) {
+        return (SortedSetX<T>) LazyCollectionX.super.updateAt(pos,
+                                                              value);
     }
 
     @Override
-    default SortedSetX<T> insertAt(int pos, ReactiveSeq<? extends T> values) {
-        return (SortedSetX<T>)LazyCollectionX.super.insertAt(pos,values);
+    default SortedSetX<T> insertAt(int pos,
+                                   ReactiveSeq<? extends T> values) {
+        return (SortedSetX<T>) LazyCollectionX.super.insertAt(pos,
+                                                              values);
     }
-
 
     @Override
     default SortedSetX<T> prependStream(Stream<? extends T> stream) {
-        return (SortedSetX<T>)LazyCollectionX.super.prependStream(stream);
+        return (SortedSetX<T>) LazyCollectionX.super.prependStream(stream);
     }
 
     @Override
     default SortedSetX<T> appendAll(T... values) {
-        return (SortedSetX<T>)LazyCollectionX.super.appendAll(values);
+        return (SortedSetX<T>) LazyCollectionX.super.appendAll(values);
     }
 
     @Override
     default SortedSetX<T> append(T value) {
-        return (SortedSetX<T>)LazyCollectionX.super.append(value);
+        return (SortedSetX<T>) LazyCollectionX.super.append(value);
     }
 
     @Override
     default SortedSetX<T> prepend(T value) {
-        return (SortedSetX<T>)LazyCollectionX.super.prepend(value);
+        return (SortedSetX<T>) LazyCollectionX.super.prepend(value);
     }
 
     @Override
     default SortedSetX<T> prependAll(T... values) {
-        return (SortedSetX<T>)LazyCollectionX.super.prependAll(values);
+        return (SortedSetX<T>) LazyCollectionX.super.prependAll(values);
     }
 
     @Override
-    default SortedSetX<T> insertAt(int pos, T... values) {
-        return (SortedSetX<T>)LazyCollectionX.super.insertAt(pos,values);
+    default SortedSetX<T> insertAt(int pos,
+                                   T... values) {
+        return (SortedSetX<T>) LazyCollectionX.super.insertAt(pos,
+                                                              values);
     }
 
     @Override
-    default SortedSetX<T> deleteBetween(int start, int end) {
-        return (SortedSetX<T>)LazyCollectionX.super.deleteBetween(start,end);
+    default SortedSetX<T> deleteBetween(int start,
+                                        int end) {
+        return (SortedSetX<T>) LazyCollectionX.super.deleteBetween(start,
+                                                                   end);
     }
 
     @Override
-    default SortedSetX<T> insertStreamAt(int pos, Stream<T> stream) {
-        return (SortedSetX<T>)LazyCollectionX.super.insertStreamAt(pos,stream);
+    default SortedSetX<T> insertStreamAt(int pos,
+                                         Stream<T> stream) {
+        return (SortedSetX<T>) LazyCollectionX.super.insertStreamAt(pos,
+                                                                    stream);
     }
 
     @Override
     default SortedSetX<T> recover(final Function<? super Throwable, ? extends T> fn) {
-        return (SortedSetX<T>)LazyCollectionX.super.recover(fn);
+        return (SortedSetX<T>) LazyCollectionX.super.recover(fn);
     }
 
     @Override
-    default <EX extends Throwable> SortedSetX<T> recover(Class<EX> exceptionClass, final Function<? super EX, ? extends T> fn) {
-        return (SortedSetX<T>)LazyCollectionX.super.recover(exceptionClass,fn);
+    default <EX extends Throwable> SortedSetX<T> recover(Class<EX> exceptionClass,
+                                                         final Function<? super EX, ? extends T> fn) {
+        return (SortedSetX<T>) LazyCollectionX.super.recover(exceptionClass,
+                                                             fn);
     }
+
     @Override
-    default SortedSetX<T> plusLoop(int max, IntFunction<T> value) {
-        return (SortedSetX<T>)LazyCollectionX.super.plusLoop(max,value);
+    default SortedSetX<T> plusLoop(int max,
+                                   IntFunction<T> value) {
+        return (SortedSetX<T>) LazyCollectionX.super.plusLoop(max,
+                                                              value);
     }
 
     @Override
     default SortedSetX<T> plusLoop(Supplier<Option<T>> supplier) {
-        return (SortedSetX<T>)LazyCollectionX.super.plusLoop(supplier);
+        return (SortedSetX<T>) LazyCollectionX.super.plusLoop(supplier);
     }
 
-  @Override
-    default <T2, R> SortedSetX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn, final Publisher<? extends T2> publisher) {
-        return (SortedSetX<R>)LazyCollectionX.super.zip(fn, publisher);
+    @Override
+    default <T2, R> SortedSetX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn,
+                                      final Publisher<? extends T2> publisher) {
+        return (SortedSetX<R>) LazyCollectionX.super.zip(fn,
+                                                         publisher);
     }
-
-
 
     @Override
     default <U> SortedSetX<Tuple2<T, U>> zipWithPublisher(final Publisher<? extends U> other) {
-        return (SortedSetX)LazyCollectionX.super.zipWithPublisher(other);
-    }
-
-
-    @Override
-    default <S, U, R> SortedSetX<R> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third, final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return (SortedSetX<R>)LazyCollectionX.super.zip3(second,third,fn3);
+        return (SortedSetX) LazyCollectionX.super.zipWithPublisher(other);
     }
 
     @Override
-    default <T2, T3, T4, R> SortedSetX<R> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third, final Iterable<? extends T4> fourth, final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return (SortedSetX<R>)LazyCollectionX.super.zip4(second,third,fourth,fn);
+    default <S, U, R> SortedSetX<R> zip3(final Iterable<? extends S> second,
+                                         final Iterable<? extends U> third,
+                                         final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return (SortedSetX<R>) LazyCollectionX.super.zip3(second,
+                                                          third,
+                                                          fn3);
     }
 
-    /**
-     * Narrow a covariant SortedSet
-     *
-     * <pre>
-     * {@code
-     * SortedSetX<? extends Fruit> set = SortedSetX.of(apple,bannana);
-     * SortedSetX<Fruit> fruitSet = SortedSetX.narrowK3(set);
-     * }
-     * </pre>
-     *
-     * @param setX to narrowK3 generic type
-     * @return SortedSetX with narrowed type
-     */
-    public static <T> SortedSetX<T> narrow(final SortedSetX<? extends T> setX) {
-        return (SortedSetX<T>) setX;
+    @Override
+    default <T2, T3, T4, R> SortedSetX<R> zip4(final Iterable<? extends T2> second,
+                                               final Iterable<? extends T3> third,
+                                               final Iterable<? extends T4> fourth,
+                                               final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return (SortedSetX<R>) LazyCollectionX.super.zip4(second,
+                                                          third,
+                                                          fourth,
+                                                          fn);
     }
 
-    static class Comparables {
+    class CompletableSortedSetX<T> implements InvocationHandler {
 
+        Future<SortedSetX<T>> future = Future.future();
+
+        public boolean complete(SortedSet<T> result) {
+            return future.complete(SortedSetX.fromIterable(result));
+        }
+
+        public SortedSetX<T> asSortedSetX() {
+            SortedSetX f = (SortedSetX) Proxy.newProxyInstance(SortedSetX.class.getClassLoader(),
+                                                               new Class[]{SortedSetX.class},
+                                                               this);
+            return f;
+        }
+
+        @Override
+        public Object invoke(Object proxy,
+                             Method method,
+                             Object[] args) throws Throwable {
+            SortedSetX<T> target = future.fold(l -> l,
+                                               t -> {
+                                                   throw ExceptionSoftener.throwSoftenedException(t);
+                                               });
+            return method.invoke(target,
+                                 args);
+        }
+    }
+
+    class Comparables {
 
 
         @SuppressWarnings("unchecked")
@@ -1120,39 +1248,20 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>,SortedSet<T>, LazyColle
                                            .findFirst()
                                            .get();
 
-            return (R) Proxy.newProxyInstance(SortedSetX.class.getClassLoader(), new Class[] { ReactiveSeq.class, Comparable.class },
+            return (R) Proxy.newProxyInstance(SortedSetX.class.getClassLoader(),
+                                              new Class[]{ReactiveSeq.class, Comparable.class},
                                               (proxy, method, args) -> {
-                                                  if (compareTo.equals(method))
-                                                      return Objects.compare(System.identityHashCode(seq), System.identityHashCode(args[0]),
+                                                  if (compareTo.equals(method)) {
+                                                      return Objects.compare(System.identityHashCode(seq),
+                                                                             System.identityHashCode(args[0]),
                                                                              Comparator.naturalOrder());
-                                                  else
-                                                      return method.invoke(seq, args);
+                                                  } else {
+                                                      return method.invoke(seq,
+                                                                           args);
+                                                  }
                                               });
 
         }
-    }
-
-    public static  <T,R> SortedSetX<R> tailRec(T initial, Function<? super T, ? extends SortedSetX<? extends Either<T, R>>> fn) {
-        ListX<Either<T, R>> lazy = ListX.of(Either.left(initial));
-        ListX<Either<T, R>> next = lazy.eager();
-        boolean newValue[] = {true};
-        for(;;){
-
-            next = next.concatMap(e -> e.fold(s -> {
-                        newValue[0]=true;
-                        return fn.apply(s); },
-                    p -> {
-                        newValue[0]=false;
-                        return ListX.of(e);
-                    }));
-            if(!newValue[0])
-                break;
-
-        }
-        return Either.sequenceRight(next)
-                     .orElse(ReactiveSeq.empty())
-                     .to(ReactiveConvertableSequence::converter)
-                     .sortedSetX(Evaluation.LAZY);
     }
 
 }

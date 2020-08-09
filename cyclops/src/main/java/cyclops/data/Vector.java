@@ -18,100 +18,294 @@ import cyclops.function.Memoize;
 import cyclops.function.Monoid;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AllArgsConstructor;
-import org.reactivestreams.Publisher;
-
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
+import org.reactivestreams.Publisher;
 
-public class Vector<T> implements ImmutableList<T>,
-                                  Serializable,
-                                 Higher<vector,T> {
+public class Vector<T> implements ImmutableList<T>, Serializable, Higher<vector, T> {
 
     private final BAMT.NestedArray<T> root;
     private final BAMT.ActiveTail<T> tail;
     private final int size;
     private Supplier<Integer> hash = null;
 
-    public Vector(BAMT.NestedArray<T> root,BAMT.ActiveTail<T> tail, int size) {
+    public Vector(BAMT.NestedArray<T> root,
+                  BAMT.ActiveTail<T> tail,
+                  int size) {
         this.root = root;
         this.tail = tail;
         this.size = size;
     }
 
-    @Override
-    public Vector<T> plusAll(Iterable<? extends T> list) {
-        return ( Vector<T>)appendAll((Iterable<T>)list);
+    static <T> Collector<T, List<T>, Vector<T>> collector() {
+        Collector<T, ?, List<T>> c = Collectors.toList();
+        return Collectors.<T, List<T>, Iterable<T>, Vector<T>>collectingAndThen((Collector) c,
+                                                                                Vector::fromIterable);
     }
 
-    static <T> Collector<T, List<T>, Vector<T>> collector() {
-        Collector<T, ?, List<T>> c  = Collectors.toList();
-        return Collectors.<T, List<T>, Iterable<T>,Vector<T>>collectingAndThen((Collector)c,Vector::fromIterable);
+    public static <T> Vector<T> narrowK(final Higher<vector, T> list) {
+        return (Vector<T>) list;
     }
+
+    public static <C2, T> Higher<C2, Higher<vector, T>> widen2(Higher<C2, Vector<T>> list) {
+        return (Higher) list;
+    }
+
+    public static <T> Vector<T> empty() {
+        return new Vector<>(new BAMT.Zero<>(),
+                            BAMT.ActiveTail.emptyTail(),
+                            0);
+    }
+
+    public static <T> Vector<T> fill(T t,
+                                     int max) {
+        return Vector.fromStream(ReactiveSeq.fill(t)
+                                            .take(max));
+    }
+
+    public static <U, T> Vector<T> unfold(final U seed,
+                                          final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
+        return fromStream(ReactiveSeq.unfold(seed,
+                                             unfolder));
+    }
+
+    public static <T> Vector<T> iterate(final T seed,
+                                        Predicate<? super T> pred,
+                                        final UnaryOperator<T> f) {
+        return fromStream(ReactiveSeq.iterate(seed,
+                                              pred,
+                                              f));
+
+    }
+
+    public static <T> Vector<T> iterate(final T seed,
+                                        final UnaryOperator<T> f,
+                                        int max) {
+        return fromStream(ReactiveSeq.iterate(seed,
+                                              f)
+                                     .limit(max));
+    }
+
+    public static <T, U> Tuple2<Vector<T>, Vector<U>> unzip(final Vector<Tuple2<T, U>> sequence) {
+        return ReactiveSeq.unzip(sequence.stream())
+                          .transform((a, b) -> Tuple.tuple(fromStream(a),
+                                                           fromStream(b)));
+    }
+
+    public static <T> Vector<T> generate(Supplier<T> s,
+                                         int max) {
+        return fromStream(ReactiveSeq.generate(s)
+                                     .limit(max));
+    }
+
+    @Deprecated
+    public static <T> Vector<T> generate(Generator<T> s) {
+        return fromStream(ReactiveSeq.generate(s));
+    }
+
+    public static Vector<Integer> range(final int start,
+                                        final int end) {
+        return Vector.fromStream(ReactiveSeq.range(start,
+                                                   end));
+
+    }
+
+    public static Vector<Integer> range(final int start,
+                                        final int step,
+                                        final int end) {
+        return Vector.fromStream(ReactiveSeq.range(start,
+                                                   step,
+                                                   end));
+
+    }
+
+    public static Vector<Long> rangeLong(final long start,
+                                         final long step,
+                                         final long end) {
+        return Vector.fromStream(ReactiveSeq.rangeLong(start,
+                                                       step,
+                                                       end));
+    }
+
+    public static Vector<Long> rangeLong(final long start,
+                                         final long end) {
+        return Vector.fromStream(ReactiveSeq.rangeLong(start,
+                                                       end));
+
+    }
+
+    public static <T> Vector<T> fromStream(Stream<T> it) {
+        return fromIterable(() -> it.iterator());
+    }
+
+    public static <T> Vector<T> fromIterator(Iterator<T> it) {
+        return fromIterable(() -> it);
+    }
+
+    public static <T> Vector<T> fromIterable(Iterable<T> it) {
+        if (it instanceof Vector) {
+            return (Vector<T>) it;
+        }
+        Vector<T> res = empty();
+        for (T next : it) {
+            res = res.plus(next);
+        }
+        return res;
+    }
+
+    public static <T> Vector<T> of(T... value) {
+        Vector<T> res = empty();
+        for (T next : value) {
+            res = res.plus(next);
+        }
+        return res;
+    }
+
+    public static <T, R> Vector<R> tailRec(T initial,
+                                           Function<? super T, ? extends Vector<? extends Either<T, R>>> fn) {
+        Vector<Either<T, R>> next = Vector.of(Either.left(initial));
+
+        boolean newValue[] = {true};
+        for (; ; ) {
+
+            next = next.flatMap(e -> e.fold(s -> {
+                                                newValue[0] = true;
+                                                return fn.apply(s);
+                                            },
+                                            p -> {
+                                                newValue[0] = false;
+                                                return Vector.of(e);
+                                            }));
+            if (!newValue[0]) {
+                break;
+            }
+
+        }
+
+        return Vector.fromStream(Either.sequenceRight(next)
+                                       .orElse(ReactiveSeq.empty()));
+    }
+
+    public static <T> Higher<vector, T> widen(Vector<T> narrow) {
+        return narrow;
+    }
+
+    @Override
+    public Vector<T> plusAll(Iterable<? extends T> list) {
+        return (Vector<T>) appendAll((Iterable<T>) list);
+    }
+
     @Override
     public boolean containsValue(T value) {
-        return stream().filter(i->Objects.equals(i,value)).findFirst().isPresent();
+        return stream().filter(i -> Objects.equals(i,
+                                                   value))
+                       .findFirst()
+                       .isPresent();
     }
+
     @Override
-    public<R> Vector<R> unitIterable(Iterable<R> it){
-        if(it instanceof Vector){
-            return (Vector<R>)it;
+    public <R> Vector<R> unitIterable(Iterable<R> it) {
+        if (it instanceof Vector) {
+            return (Vector<R>) it;
         }
         return fromIterable(it);
     }
 
-  public static <T> Vector<T> narrowK(final Higher<vector, T> list) {
-    return (Vector<T>)list;
-  }
-  public static <C2,T> Higher<C2, Higher<vector,T>> widen2(Higher<C2, Vector<T>> list){
-    return (Higher)list;
-  }
-
-  @Override
-  public <R1, R2, R3, R> Vector<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3, Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
-    return (Vector< R>) ImmutableList.super.forEach4(iterable1,iterable2,iterable3,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R2, R3, R> Vector<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3, Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction, Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
-    return (Vector< R>) ImmutableList.super.forEach4(iterable1,iterable2,iterable3,filterFunction,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R2, R> Vector<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
-    return (Vector< R>) ImmutableList.super.forEach3(iterable1,iterable2,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R2, R> Vector<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction, Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
-    return (Vector< R>) ImmutableList.super.forEach3(iterable1,iterable2,filterFunction,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R> Vector<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
-    return (Vector< R>) ImmutableList.super.forEach2(iterable1,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R> Vector<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, Boolean> filterFunction, BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
-    return (Vector< R>) ImmutableList.super.forEach2(iterable1,filterFunction,yieldingFunction);
-  }
     @Override
-    public Iterator<T> iterator(){
+    public <R1, R2, R3, R> Vector<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                              BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                              Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3,
+                                              Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+        return (Vector<R>) ImmutableList.super.forEach4(iterable1,
+                                                        iterable2,
+                                                        iterable3,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R2, R3, R> Vector<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                              BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                              Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3,
+                                              Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
+                                              Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+        return (Vector<R>) ImmutableList.super.forEach4(iterable1,
+                                                        iterable2,
+                                                        iterable3,
+                                                        filterFunction,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R2, R> Vector<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                          BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                          Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+        return (Vector<R>) ImmutableList.super.forEach3(iterable1,
+                                                        iterable2,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R2, R> Vector<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                          BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                          Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
+                                          Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+        return (Vector<R>) ImmutableList.super.forEach3(iterable1,
+                                                        iterable2,
+                                                        filterFunction,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R> Vector<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                      BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+        return (Vector<R>) ImmutableList.super.forEach2(iterable1,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R> Vector<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                      BiFunction<? super T, ? super R1, Boolean> filterFunction,
+                                      BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+        return (Vector<R>) ImmutableList.super.forEach2(iterable1,
+                                                        filterFunction,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
         return new Iterator<T>() {
-            int index =0;
+            int index = 0;
+
             @Override
             public boolean hasNext() {
-                return index <size;
+                return index < size;
             }
 
             @Override
             public T next() {
-                return getOrElse(index++,null);
+                return getOrElse(index++,
+                                 null);
             }
         };
 
@@ -119,126 +313,69 @@ public class Vector<T> implements ImmutableList<T>,
 
     @Override
     public Vector<T> removeValue(T e) {
-        return removeFirst(i-> Objects.equals(i,e));
+        return removeFirst(i -> Objects.equals(i,
+                                               e));
     }
 
     @Override
     public Vector<T> removeAll(Iterable<? extends T> list) {
-        return fromStream(this.stream().removeAll(list));
+        return fromStream(this.stream()
+                              .removeAll(list));
     }
 
     @Override
     public Vector<T> removeAt(long i) {
-        return (Vector<T>)ImmutableList.super.removeAt(i);
+        return (Vector<T>) ImmutableList.super.removeAt(i);
     }
 
     @Override
-    public Vector<T> insertAt(int pos, T... values) {
-        return (Vector<T>)ImmutableList.super.insertAt(pos,values);
-    }
-    @Override
-    public Vector<T> insertAt(int i, T e){
-        return (Vector<T>)ImmutableList.super.insertAt(i,e);
+    public Vector<T> insertAt(int pos,
+                              T... values) {
+        return (Vector<T>) ImmutableList.super.insertAt(pos,
+                                                        values);
     }
 
     @Override
-    public Vector<T> insertAt(int pos, Iterable<? extends T> values) {
-        return (Vector<T>)ImmutableList.super.insertAt(pos,values);
+    public Vector<T> insertAt(int i,
+                              T e) {
+        return (Vector<T>) ImmutableList.super.insertAt(i,
+                                                        e);
     }
+
     @Override
-    public Vector<T> insertAt(int pos, ReactiveSeq<? extends T> values) {
-        return (Vector<T>)ImmutableList.super.insertAt(pos,values);
-    }
-    public Vector<T> plusAll(int i, Iterable<? extends T> values){
-        return insertAt(i,values);
-    }
-
-    public static <T> Vector<T> empty(){
-        return new Vector<>(new BAMT.Zero<>(),BAMT.ActiveTail.emptyTail(),0);
+    public Vector<T> insertAt(int pos,
+                              Iterable<? extends T> values) {
+        return (Vector<T>) ImmutableList.super.insertAt(pos,
+                                                        values);
     }
 
-    public static <T> Vector<T> fill(T t, int max){
-        return Vector.fromStream(ReactiveSeq.fill(t).take(max));
+    @Override
+    public Vector<T> insertAt(int pos,
+                              ReactiveSeq<? extends T> values) {
+        return (Vector<T>) ImmutableList.super.insertAt(pos,
+                                                        values);
     }
 
-    public static <U, T> Vector<T> unfold(final U seed, final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
-        return fromStream(ReactiveSeq.unfold(seed,unfolder));
+    public Vector<T> plusAll(int i,
+                             Iterable<? extends T> values) {
+        return insertAt(i,
+                        values);
     }
-
-    public static <T> Vector<T> iterate(final T seed, Predicate<? super T> pred, final UnaryOperator<T> f) {
-        return fromStream(ReactiveSeq.iterate(seed,pred,f));
-
-    }
-    public static <T> Vector<T> iterate(final T seed, final UnaryOperator<T> f,int max) {
-        return fromStream(ReactiveSeq.iterate(seed,f).limit(max));
-    }
-
-    public static <T, U> Tuple2<Vector<T>, Vector<U>> unzip(final Vector<Tuple2<T, U>> sequence) {
-        return ReactiveSeq.unzip(sequence.stream()).transform((a, b)->Tuple.tuple(fromStream(a),fromStream(b)));
-    }
-    public static <T> Vector<T> generate(Supplier<T> s, int max){
-        return fromStream(ReactiveSeq.generate(s).limit(max));
-    }
-    @Deprecated
-    public static <T> Vector<T> generate(Generator<T> s){
-        return fromStream(ReactiveSeq.generate(s));
-    }
-    public static Vector<Integer> range(final int start, final int end) {
-        return Vector.fromStream(ReactiveSeq.range(start,end));
-
-    }
-    public static Vector<Integer> range(final int start, final int step, final int end) {
-        return Vector.fromStream(ReactiveSeq.range(start,step,end));
-
-    }
-    public static Vector<Long> rangeLong(final long start, final long step, final long end) {
-        return Vector.fromStream(ReactiveSeq.rangeLong(start,step,end));
-    }
-
-
-    public static Vector<Long> rangeLong(final long start, final long end) {
-        return Vector.fromStream(ReactiveSeq.rangeLong(start, end));
-
-    }
-    public static <T> Vector<T> fromStream(Stream<T> it){
-        return fromIterable(()->it.iterator());
-    }
-    public static <T> Vector<T> fromIterator(Iterator<T> it){
-     return fromIterable(()->it);
-    }
-    public static <T> Vector<T> fromIterable(Iterable<T> it){
-        if(it instanceof Vector){
-            return (Vector<T>)it;
-        }
-        Vector<T> res = empty();
-        for(T next : it){
-            res = res.plus(next);
-        }
-        return res;
-    }
-    public static <T> Vector<T> of(T... value){
-        Vector<T> res = empty();
-        for(T next : value){
-            res = res.plus(next);
-        }
-        return res;
-    }
-
 
     public Vector<T> removeFirst(Predicate<? super T> pred) {
-        return (Vector<T>)ImmutableList.super.removeFirst(pred);
+        return (Vector<T>) ImmutableList.super.removeFirst(pred);
     }
 
-    public ReactiveSeq<T> stream(){
+    public ReactiveSeq<T> stream() {
         return ReactiveSeq.fromIterable(this);
     }
 
-    public Vector<T> filter(Predicate<? super T> pred){
-        int newSize= 0;
-        BAMT.NestedArray<T> newRoot =new BAMT.Zero<>();
+    public Vector<T> filter(Predicate<? super T> pred) {
+        int newSize = 0;
+        BAMT.NestedArray<T> newRoot = new BAMT.Zero<>();
         BAMT.ActiveTail<T> newTail = BAMT.ActiveTail.emptyTail();
         for (T t : this) {
-            if(pred.test(t)) {
+            if (pred.test(t)) {
                 if (newTail.size() < 32) {
                     newTail = newTail.append(t);
                     newSize++;
@@ -251,147 +388,172 @@ public class Vector<T> implements ImmutableList<T>,
 
 
         }
-        return new Vector<>(newRoot,newTail,newSize);
+        return new Vector<>(newRoot,
+                            newTail,
+                            newSize);
     }
 
-    public <R> Vector<R> map(Function<? super T, ? extends R> fn){
+    public <R> Vector<R> map(Function<? super T, ? extends R> fn) {
 
-        return new Vector<>(this.root.map(fn),tail.map(fn),size);
+        return new Vector<>(this.root.map(fn),
+                            tail.map(fn),
+                            size);
     }
 
     private Object writeReplace() {
         return new Proxy(this);
     }
+
     private Object readResolve() throws InvalidObjectException {
         throw new InvalidObjectException("Use Serialization Proxy instead.");
     }
 
     @Override
-    public <R> R fold(Function<? super Some<T>, ? extends R> fn1, Function<? super None<T>, ? extends R> fn2) {
-        return size()==0? fn2.apply(VectorNone.empty()) : fn1.apply(this.new VectorSome(this));
+    public <R> R fold(Function<? super Some<T>, ? extends R> fn1,
+                      Function<? super None<T>, ? extends R> fn2) {
+        return size() == 0 ? fn2.apply(VectorNone.empty()) : fn1.apply(this.new VectorSome(this));
     }
 
     @Override
     public Vector<T> onEmpty(T value) {
-        return size()==0? Vector.of(value) : this;
+        return size() == 0 ? Vector.of(value) : this;
     }
 
     @Override
     public Vector<T> onEmptyGet(Supplier<? extends T> supplier) {
-        return size()==0? Vector.of(supplier.get()) : this;
+        return size() == 0 ? Vector.of(supplier.get()) : this;
     }
 
-
     @Override
-    public Vector<T> replaceFirst(T currentElement, T newElement) {
-        return (Vector<T>)ImmutableList.super.replaceFirst(currentElement,newElement);
+    public Vector<T> replaceFirst(T currentElement,
+                                  T newElement) {
+        return (Vector<T>) ImmutableList.super.replaceFirst(currentElement,
+                                                            newElement);
     }
 
     @Override
     public <U> Vector<U> ofType(Class<? extends U> type) {
-        return (Vector<U>)ImmutableList.super.ofType(type);
+        return (Vector<U>) ImmutableList.super.ofType(type);
     }
 
     @Override
     public Vector<T> filterNot(Predicate<? super T> predicate) {
-        return (Vector<T>)ImmutableList.super.filterNot(predicate);
+        return (Vector<T>) ImmutableList.super.filterNot(predicate);
     }
 
     @Override
     public Vector<T> notNull() {
-        return (Vector<T>)ImmutableList.super.notNull();
+        return (Vector<T>) ImmutableList.super.notNull();
     }
 
     @Override
     public Vector<T> peek(Consumer<? super T> c) {
-        return (Vector<T>)ImmutableList.super.peek(c);
+        return (Vector<T>) ImmutableList.super.peek(c);
     }
-
 
     @Override
     public Vector<T> removeStream(Stream<? extends T> stream) {
-        return (Vector<T>)ImmutableList.super.removeStream(stream);
+        return (Vector<T>) ImmutableList.super.removeStream(stream);
     }
 
     @Override
     public Vector<T> retainAll(Iterable<? extends T> it) {
-        return (Vector<T>)ImmutableList.super.retainAll(it);
+        return (Vector<T>) ImmutableList.super.retainAll(it);
     }
 
     @Override
     public Vector<T> retainStream(Stream<? extends T> stream) {
-        return (Vector<T>)ImmutableList.super.retainStream(stream);
+        return (Vector<T>) ImmutableList.super.retainStream(stream);
     }
 
     @Override
     public Vector<T> retainAll(T... values) {
-        return (Vector<T>)ImmutableList.super.retainAll(values);
+        return (Vector<T>) ImmutableList.super.retainAll(values);
     }
 
     @Override
     public Vector<ReactiveSeq<T>> permutations() {
-        return (Vector<ReactiveSeq<T>>)ImmutableList.super.permutations();
+        return (Vector<ReactiveSeq<T>>) ImmutableList.super.permutations();
     }
 
     @Override
     public Vector<ReactiveSeq<T>> combinations(int size) {
-        return (Vector<ReactiveSeq<T>>)ImmutableList.super.combinations(size);
+        return (Vector<ReactiveSeq<T>>) ImmutableList.super.combinations(size);
     }
 
     @Override
     public Vector<ReactiveSeq<T>> combinations() {
-        return (Vector<ReactiveSeq<T>>)ImmutableList.super.combinations();
-    }
-
-  @Override
-    public <T2, R> Vector<R> zip(BiFunction<? super T, ? super T2, ? extends R> fn, Publisher<? extends T2> publisher) {
-        return (Vector<R>)ImmutableList.super.zip(fn, publisher);
+        return (Vector<ReactiveSeq<T>>) ImmutableList.super.combinations();
     }
 
     @Override
-    public <U, R> Vector<R> zipWithStream(Stream<? extends U> other, BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return (Vector<R>)ImmutableList.super.zipWithStream(other,zipper);
+    public <T2, R> Vector<R> zip(BiFunction<? super T, ? super T2, ? extends R> fn,
+                                 Publisher<? extends T2> publisher) {
+        return (Vector<R>) ImmutableList.super.zip(fn,
+                                                   publisher);
+    }
+
+    @Override
+    public <U, R> Vector<R> zipWithStream(Stream<? extends U> other,
+                                          BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return (Vector<R>) ImmutableList.super.zipWithStream(other,
+                                                             zipper);
     }
 
     @Override
     public <U> Vector<Tuple2<T, U>> zipWithPublisher(Publisher<? extends U> other) {
-        return (Vector)ImmutableList.super.zipWithPublisher(other);
+        return (Vector) ImmutableList.super.zipWithPublisher(other);
     }
 
     @Override
     public <U> Vector<Tuple2<T, U>> zip(Iterable<? extends U> other) {
-        return (Vector)ImmutableList.super.zip(other);
+        return (Vector) ImmutableList.super.zip(other);
     }
 
     @Override
-    public <S, U, R> Vector<R> zip3(Iterable<? extends S> second, Iterable<? extends U> third, Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return (Vector<R>)ImmutableList.super.zip3(second,third,fn3);
+    public <S, U, R> Vector<R> zip3(Iterable<? extends S> second,
+                                    Iterable<? extends U> third,
+                                    Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return (Vector<R>) ImmutableList.super.zip3(second,
+                                                    third,
+                                                    fn3);
     }
 
     @Override
-    public <T2, T3, T4, R> Vector<R> zip4(Iterable<? extends T2> second, Iterable<? extends T3> third, Iterable<? extends T4> fourth, Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return (Vector<R>)ImmutableList.super.zip4(second,third,fourth,fn);
+    public <T2, T3, T4, R> Vector<R> zip4(Iterable<? extends T2> second,
+                                          Iterable<? extends T3> third,
+                                          Iterable<? extends T4> fourth,
+                                          Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return (Vector<R>) ImmutableList.super.zip4(second,
+                                                    third,
+                                                    fourth,
+                                                    fn);
     }
 
-
     @Override
-    public Vector<T> combine(BiPredicate<? super T, ? super T> predicate, BinaryOperator<T> op) {
-        return (Vector<T>)ImmutableList.super.combine(predicate,op);
+    public Vector<T> combine(BiPredicate<? super T, ? super T> predicate,
+                             BinaryOperator<T> op) {
+        return (Vector<T>) ImmutableList.super.combine(predicate,
+                                                       op);
     }
 
     @Override
-    public Vector<T> combine(Monoid<T> op, BiPredicate<? super T, ? super T> predicate) {
-        return (Vector<T>)ImmutableList.super.combine(op,predicate);
+    public Vector<T> combine(Monoid<T> op,
+                             BiPredicate<? super T, ? super T> predicate) {
+        return (Vector<T>) ImmutableList.super.combine(op,
+                                                       predicate);
     }
 
     @Override
     public Vector<T> cycle(long times) {
-        return (Vector<T>)ImmutableList.super.cycle(times);
+        return (Vector<T>) ImmutableList.super.cycle(times);
     }
 
     @Override
-    public Vector<T> cycle(Monoid<T> m, long times) {
-        return (Vector<T>)ImmutableList.super.cycle(m,times);
+    public Vector<T> cycle(Monoid<T> m,
+                           long times) {
+        return (Vector<T>) ImmutableList.super.cycle(m,
+                                                     times);
     }
 
     @Override
@@ -405,48 +567,55 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public <U, R> Vector<R> zip(Iterable<? extends U> other, BiFunction<? super T, ? super U, ? extends R> zipper) {
-        int newSize= 0;
-        BAMT.NestedArray<R> newRoot =new BAMT.Zero<>();
+    public <U, R> Vector<R> zip(Iterable<? extends U> other,
+                                BiFunction<? super T, ? super U, ? extends R> zipper) {
+        int newSize = 0;
+        BAMT.NestedArray<R> newRoot = new BAMT.Zero<>();
         BAMT.ActiveTail<R> newTail = BAMT.ActiveTail.emptyTail();
         Iterator<? extends U> it = other.iterator();
         for (T t : this) {
-            if(it.hasNext()) {
-                R r = zipper.apply(t, it.next());
-                if(newTail.size()<32) {
+            if (it.hasNext()) {
+                R r = zipper.apply(t,
+                                   it.next());
+                if (newTail.size() < 32) {
                     newTail = newTail.append(r);
                     newSize++;
-                }else{
+                } else {
                     newRoot = newRoot.append(newTail);
                     newTail = BAMT.ActiveTail.tail(r);
                     newSize++;
                 }
-            }
-            else{
+            } else {
                 break;
             }
 
 
-
-
         }
-        return new Vector<R>(newRoot,newTail,newSize);
-       // return (Vector<R>) ImmutableList.super.zip(other,zipper);
+        return new Vector<R>(newRoot,
+                             newTail,
+                             newSize);
+        // return (Vector<R>) ImmutableList.super.zip(other,zipper);
     }
 
     @Override
-    public <S, U> Vector<Tuple3<T, S, U>> zip3(Iterable<? extends S> second, Iterable<? extends U> third) {
-        return (Vector) ImmutableList.super.zip3(second,third);
+    public <S, U> Vector<Tuple3<T, S, U>> zip3(Iterable<? extends S> second,
+                                               Iterable<? extends U> third) {
+        return (Vector) ImmutableList.super.zip3(second,
+                                                 third);
     }
 
     @Override
-    public <T2, T3, T4> Vector<Tuple4<T, T2, T3, T4>> zip4(Iterable<? extends T2> second, Iterable<? extends T3> third, Iterable<? extends T4> fourth) {
-        return (Vector) ImmutableList.super.zip4(second,third,fourth);
+    public <T2, T3, T4> Vector<Tuple4<T, T2, T3, T4>> zip4(Iterable<? extends T2> second,
+                                                           Iterable<? extends T3> third,
+                                                           Iterable<? extends T4> fourth) {
+        return (Vector) ImmutableList.super.zip4(second,
+                                                 third,
+                                                 fourth);
     }
 
     @Override
     public Vector<Tuple2<T, Long>> zipWithIndex() {
-        return (Vector<Tuple2<T,Long>>) ImmutableList.super.zipWithIndex();
+        return (Vector<Tuple2<T, Long>>) ImmutableList.super.zipWithIndex();
     }
 
     @Override
@@ -455,13 +624,17 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public Vector<Seq<T>> sliding(int windowSize, int increment) {
-        return (Vector<Seq<T>>) ImmutableList.super.sliding(windowSize,increment);
+    public Vector<Seq<T>> sliding(int windowSize,
+                                  int increment) {
+        return (Vector<Seq<T>>) ImmutableList.super.sliding(windowSize,
+                                                            increment);
     }
 
     @Override
-    public <C extends PersistentCollection<? super T>> Vector<C> grouped(int size, Supplier<C> supplier) {
-        return (Vector<C>) ImmutableList.super.grouped(size,supplier);
+    public <C extends PersistentCollection<? super T>> Vector<C> grouped(int size,
+                                                                         Supplier<C> supplier) {
+        return (Vector<C>) ImmutableList.super.grouped(size,
+                                                       supplier);
     }
 
     @Override
@@ -485,13 +658,17 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public <C extends PersistentCollection<? super T>> Vector<C> groupedWhile(Predicate<? super T> predicate, Supplier<C> factory) {
-        return (Vector<C>) ImmutableList.super.groupedWhile(predicate,factory);
+    public <C extends PersistentCollection<? super T>> Vector<C> groupedWhile(Predicate<? super T> predicate,
+                                                                              Supplier<C> factory) {
+        return (Vector<C>) ImmutableList.super.groupedWhile(predicate,
+                                                            factory);
     }
 
     @Override
-    public <C extends PersistentCollection<? super T>> Vector<C> groupedUntil(Predicate<? super T> predicate, Supplier<C> factory) {
-        return (Vector<C>) ImmutableList.super.groupedUntil(predicate,factory);
+    public <C extends PersistentCollection<? super T>> Vector<C> groupedUntil(Predicate<? super T> predicate,
+                                                                              Supplier<C> factory) {
+        return (Vector<C>) ImmutableList.super.groupedUntil(predicate,
+                                                            factory);
     }
 
     @Override
@@ -510,8 +687,10 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public <U> Vector<U> scanLeft(U seed, BiFunction<? super U, ? super T, ? extends U> function) {
-        return (Vector<U>) ImmutableList.super.scanLeft(seed,function);
+    public <U> Vector<U> scanLeft(U seed,
+                                  BiFunction<? super U, ? super T, ? extends U> function) {
+        return (Vector<U>) ImmutableList.super.scanLeft(seed,
+                                                        function);
     }
 
     @Override
@@ -520,8 +699,10 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public <U> Vector<U> scanRight(U identity, BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return (Vector<U>) ImmutableList.super.scanRight(identity,combiner);
+    public <U> Vector<U> scanRight(U identity,
+                                   BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return (Vector<U>) ImmutableList.super.scanRight(identity,
+                                                         combiner);
     }
 
     @Override
@@ -554,7 +735,6 @@ public class Vector<T> implements ImmutableList<T>,
         return (Vector<T>) ImmutableList.super.dropUntil(p);
     }
 
-
     @Override
     public Vector<T> intersperse(T value) {
         return (Vector<T>) ImmutableList.super.intersperse(value);
@@ -565,17 +745,17 @@ public class Vector<T> implements ImmutableList<T>,
         return (Vector<T>) ImmutableList.super.shuffle();
     }
 
-
     @Override
     public Vector<T> shuffle(Random random) {
         return (Vector<T>) ImmutableList.super.shuffle(random);
     }
 
     @Override
-    public Vector<T> slice(long from, long to) {
-        return (Vector<T>) ImmutableList.super.slice(from,to);
+    public Vector<T> slice(long from,
+                           long to) {
+        return (Vector<T>) ImmutableList.super.slice(from,
+                                                     to);
     }
-
 
     @Override
     public Vector<T> prependStream(Stream<? extends T> stream) {
@@ -593,17 +773,18 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public Vector<T> deleteBetween(int start, int end) {
-        return (Vector<T>) ImmutableList.super.deleteBetween(start,end);
+    public Vector<T> deleteBetween(int start,
+                                   int end) {
+        return (Vector<T>) ImmutableList.super.deleteBetween(start,
+                                                             end);
     }
 
     @Override
-    public Vector<T> insertStreamAt(int pos, Stream<T> stream) {
-        return (Vector<T>) ImmutableList.super.insertStreamAt(pos,stream);
+    public Vector<T> insertStreamAt(int pos,
+                                    Stream<T> stream) {
+        return (Vector<T>) ImmutableList.super.insertStreamAt(pos,
+                                                              stream);
     }
-
-
-
 
     @Override
     public <U extends Comparable<? super U>> Vector<T> sorted(Function<? super T, ? extends U> function) {
@@ -611,119 +792,106 @@ public class Vector<T> implements ImmutableList<T>,
     }
 
     @Override
-    public Vector<T> updateAt(int pos, T value) {
-        if(pos<0||pos>=size){
+    public Vector<T> updateAt(int pos,
+                              T value) {
+        if (pos < 0 || pos >= size) {
             return this;
         }
-        int tailStart = size-tail.size();
-        if(pos>=tailStart){
-            return new Vector<T>(root,tail.set(pos-tailStart,value),size);
+        int tailStart = size - tail.size();
+        if (pos >= tailStart) {
+            return new Vector<T>(root,
+                                 tail.set(pos - tailStart,
+                                          value),
+                                 size);
         }
-        return new Vector<>(root.match(z->z, p->p.set(pos,value)),tail,size);
+        return new Vector<>(root.match(z -> z,
+                                       p -> p.set(pos,
+                                                  value)),
+                            tail,
+                            size);
     }
 
     @Override
     public ImmutableList<T> onEmptySwitch(Supplier<? extends ImmutableList<T>> supplier) {
-        if(size()!=0)
+        if (size() != 0) {
             return this;
+        }
         return supplier.get();
     }
 
-    public <R> Vector<R> flatMap(Function<? super T, ? extends ImmutableList<? extends R>> fn){
+    public <R> Vector<R> flatMap(Function<? super T, ? extends ImmutableList<? extends R>> fn) {
         return concatMap(fn);
     }
 
     @Override
     public <R> Vector<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-      return fromIterable(stream().mergeMap(fn));
+        return fromIterable(stream().mergeMap(fn));
     }
 
     @Override
-    public <R> Vector<R> mergeMap(int maxConcurecy, Function<? super T, ? extends Publisher<? extends R>> fn) {
-      return fromIterable(stream().mergeMap(fn));
+    public <R> Vector<R> mergeMap(int maxConcurecy,
+                                  Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return fromIterable(stream().mergeMap(fn));
     }
 
-  @Override
+    @Override
     public <R> Vector<R> concatMap(Function<? super T, ? extends Iterable<? extends R>> fn) {
-      int newSize= 0;
-      BAMT.NestedArray<R> newRoot =new BAMT.Zero<>();
-      BAMT.ActiveTail<R> newTail = BAMT.ActiveTail.emptyTail();
-      for (T t : this) {
-          for(R r : fn.apply(t)) {
+        int newSize = 0;
+        BAMT.NestedArray<R> newRoot = new BAMT.Zero<>();
+        BAMT.ActiveTail<R> newTail = BAMT.ActiveTail.emptyTail();
+        for (T t : this) {
+            for (R r : fn.apply(t)) {
 
-              if(newTail.size()<32) {
-                  newTail = newTail.append(r);
-                  newSize++;
-              }else{
-                  newRoot = newRoot.append(newTail);
-                  newTail = BAMT.ActiveTail.tail(r);
-                  newSize++;
-              }
+                if (newTail.size() < 32) {
+                    newTail = newTail.append(r);
+                    newSize++;
+                } else {
+                    newRoot = newRoot.append(newTail);
+                    newTail = BAMT.ActiveTail.tail(r);
+                    newSize++;
+                }
 
-          }
-      }
-      return new Vector<R>(newRoot,newTail,newSize);
+            }
+        }
+        return new Vector<R>(newRoot,
+                             newTail,
+                             newSize);
     }
 
-    public Either<Integer,Vector<T>> set(int pos, T value) {
+    public Either<Integer, Vector<T>> set(int pos,
+                                          T value) {
         if (pos < 0 || pos >= size) {
             return Either.left(size);
         }
-        return Either.right(updateAt(pos, value));
+        return Either.right(updateAt(pos,
+                                     value));
     }
 
-    public Either<Integer,Vector<T>> delete(int pos){
-        if(pos<0||pos>=size){
+    public Either<Integer, Vector<T>> delete(int pos) {
+        if (pos < 0 || pos >= size) {
             return Either.left(size);
         }
         return Either.right(removeAt(pos));
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-
-
     @Override
     public boolean isEmpty() {
-        return size==0;
+        return size == 0;
     }
 
-    public Vector<T> plus(T t){
-        if(tail.size()<32) {
-            return new Vector<T>(root,tail.append(t),size+1);
-        }else{
-            return new Vector<T>(root.append(tail),BAMT.ActiveTail.tail(t),size+1);
-        }
-    }
-    @AllArgsConstructor
-    private static final class Proxy<T> implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-        Vector<T> v;
-
-        private void writeObject(ObjectOutputStream s) throws IOException {
-            s.defaultWriteObject();
-            s.writeInt(v.size());
-            Iterator<T> it = v.iterator();
-            while(it.hasNext()){
-                s.writeObject(it.next());
-            }
-        }
-        private Object readResolve() {
-            return v;
-        }
-
-        private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
-            s.defaultReadObject();
-            final int size = s.readInt();
-            Vector<T> res = empty();
-            for (int i = 0; i < size; i++) {
-                T n = (T) s.readObject();
-                res = res.append(n);
-            }
-            v=res;
+    public Vector<T> plus(T t) {
+        if (tail.size() < 32) {
+            return new Vector<T>(root,
+                                 tail.append(t),
+                                 size + 1);
+        } else {
+            return new Vector<T>(root.append(tail),
+                                 BAMT.ActiveTail.tail(t),
+                                 size + 1);
         }
     }
 
@@ -737,53 +905,77 @@ public class Vector<T> implements ImmutableList<T>,
         return empty();
     }
 
-    public Vector<T> takeRight(int num){
-        if(num<=0)
+    public Vector<T> takeRight(int num) {
+        if (num <= 0) {
             return empty();
-        if(num>=size())
-            return this;
-        if(num==tail.size())
-            return new Vector<>(new BAMT.Zero<>(),tail,num);
-        if(num<tail.size()){
-            BAMT.ActiveTail<T> newTail = tail.takeRight(num);
-            return new Vector<>(new BAMT.Zero<>(),newTail,newTail.size());
         }
-        return (Vector<T>)ImmutableList.super.dropRight(num);
+        if (num >= size()) {
+            return this;
+        }
+        if (num == tail.size()) {
+            return new Vector<>(new BAMT.Zero<>(),
+                                tail,
+                                num);
+        }
+        if (num < tail.size()) {
+            BAMT.ActiveTail<T> newTail = tail.takeRight(num);
+            return new Vector<>(new BAMT.Zero<>(),
+                                newTail,
+                                newTail.size());
+        }
+        return (Vector<T>) ImmutableList.super.dropRight(num);
     }
 
-    public Vector<T> dropRight(int num){
-        if(num<=0)
+    public Vector<T> dropRight(int num) {
+        if (num <= 0) {
             return this;
-        if(num>=size())
-            return empty();
-        if(tail.size()==1){
-            return new Vector<>(this.root,BAMT.ActiveTail.emptyTail(),size()-1).drop(num-1);
         }
-        if(tail.size()>0){
-            return new Vector<>(this.root,tail.dropRight(num),size()-(Math.min(tail.size(),num))).dropRight(num-tail.size());
+        if (num >= size()) {
+            return empty();
+        }
+        if (tail.size() == 1) {
+            return new Vector<>(this.root,
+                                BAMT.ActiveTail.emptyTail(),
+                                size() - 1).drop(num - 1);
+        }
+        if (tail.size() > 0) {
+            return new Vector<>(this.root,
+                                tail.dropRight(num),
+                                size() - (Math.min(tail.size(),
+                                                   num))).dropRight(num - tail.size());
         }
         return unitStream(stream().dropRight(num));
     }
+
     @Override
     public Vector<T> drop(long num) {
-        if(num<=0)
+        if (num <= 0) {
             return this;
-        if(num>=size())
+        }
+        if (num >= size()) {
             return empty();
-        if(size()<32){
-            return new Vector<>(this.root,tail.drop((int)num),size()-(int)num);
+        }
+        if (size() < 32) {
+            return new Vector<>(this.root,
+                                tail.drop((int) num),
+                                size() - (int) num);
         }
         return unitStream(stream().drop(num));
     }
 
     @Override
     public Vector<T> take(long num) {
-        if(num<=0)
+        if (num <= 0) {
             return empty();
-        if(num>=size())
+        }
+        if (num >= size()) {
             return this;
-        if(size()<32){
-            return new Vector<T>(this.root,tail.dropRight(Math.max(tail.size()-(int)num,0)),(int)num);
+        }
+        if (size() < 32) {
+            return new Vector<T>(this.root,
+                                 tail.dropRight(Math.max(tail.size() - (int) num,
+                                                         0)),
+                                 (int) num);
         }
         return unitStream(stream().take(num));
     }
@@ -793,19 +985,18 @@ public class Vector<T> implements ImmutableList<T>,
         return prependAll(Arrays.asList(value));
     }
 
-
     @Override
     public Vector<T> prependAll(Iterable<? extends T> value) {
-        int newSize= 0;
-        BAMT.NestedArray<T> newRoot =new BAMT.Zero<>();
+        int newSize = 0;
+        BAMT.NestedArray<T> newRoot = new BAMT.Zero<>();
         BAMT.ActiveTail<T> newTail = BAMT.ActiveTail.emptyTail();
 
         for (T t : value) {
 
-            if(newTail.size()<32) {
+            if (newTail.size() < 32) {
                 newTail = newTail.append(t);
                 newSize++;
-            }else{
+            } else {
                 newRoot = newRoot.append(newTail);
                 newTail = BAMT.ActiveTail.tail(t);
                 newSize++;
@@ -815,10 +1006,10 @@ public class Vector<T> implements ImmutableList<T>,
         }
         for (T t : this) {
 
-            if(newTail.size()<32) {
+            if (newTail.size() < 32) {
                 newTail = newTail.append(t);
                 newSize++;
-            }else{
+            } else {
                 newRoot = newRoot.append(newTail);
                 newTail = BAMT.ActiveTail.tail(t);
                 newSize++;
@@ -827,7 +1018,9 @@ public class Vector<T> implements ImmutableList<T>,
 
         }
 
-        return new Vector<>(newRoot,newTail,newSize);
+        return new Vector<>(newRoot,
+                            newTail,
+                            newSize);
     }
 
     public Vector<T> append(T value) {
@@ -836,114 +1029,161 @@ public class Vector<T> implements ImmutableList<T>,
 
     @Override
     public Vector<T> appendAll(Iterable<? extends T> value) {
-        int newSize= size;
-        BAMT.NestedArray<T> newRoot =root;
+        int newSize = size;
+        BAMT.NestedArray<T> newRoot = root;
         BAMT.ActiveTail<T> newTail = tail;
         for (T t : value) {
 
-                if(newTail.size()<32) {
-                    newTail = newTail.append(t);
-                    newSize++;
-                }else{
-                    newRoot = newRoot.append(newTail);
-                    newTail = BAMT.ActiveTail.tail(t);
-                    newSize++;
-                }
+            if (newTail.size() < 32) {
+                newTail = newTail.append(t);
+                newSize++;
+            } else {
+                newRoot = newRoot.append(newTail);
+                newTail = BAMT.ActiveTail.tail(t);
+                newSize++;
+            }
 
 
         }
-        return new Vector<>(newRoot,newTail,newSize);
+        return new Vector<>(newRoot,
+                            newTail,
+                            newSize);
     }
-    public Vector<T> subList(int start, int end){
-        return drop(start).take(end-start);
+
+    public Vector<T> subList(int start,
+                             int end) {
+        return drop(start).take(end - start);
     }
 
     @Override
     public ImmutableList<T> reverse() {
-            return unitStream(stream().reverse());
+        return unitStream(stream().reverse());
     }
 
-    public Option<T> get(int pos){
-        if(pos<0||pos>=size){
+    public Option<T> get(int pos) {
+        if (pos < 0 || pos >= size) {
             return Option.none();
         }
-        int tailStart = size-tail.size();
-        if(pos>=tailStart){
-            return tail.get(pos-tailStart);
+        int tailStart = size - tail.size();
+        if (pos >= tailStart) {
+            return tail.get(pos - tailStart);
         }
         return root.get(pos);
 
     }
 
     @Override
-    public T getOrElse(int pos, T alt) {
-        if(pos<0||pos>=size){
+    public T getOrElse(int pos,
+                       T alt) {
+        if (pos < 0 || pos >= size) {
             return alt;
         }
-        int tailStart = size-tail.size();
-        if(pos>=tailStart){
-            return tail.getOrElse(pos-tailStart,alt);
+        int tailStart = size - tail.size();
+        if (pos >= tailStart) {
+            return tail.getOrElse(pos - tailStart,
+                                  alt);
         }
 
-        return root.getOrElse(pos,alt);
+        return root.getOrElse(pos,
+                              alt);
     }
 
     @Override
-    public T getOrElseGet(int pos, Supplier<? extends T> alt) {
-        if(pos<0||pos>=size){
+    public T getOrElseGet(int pos,
+                          Supplier<? extends T> alt) {
+        if (pos < 0 || pos >= size) {
             return alt.get();
         }
-        int tailStart = size-tail.size();
-        if(pos>=tailStart){
-            return tail.getOrElse(pos-tailStart,alt.get());
+        int tailStart = size - tail.size();
+        if (pos >= tailStart) {
+            return tail.getOrElse(pos - tailStart,
+                                  alt.get());
         }
-        return root.getOrElse(pos,alt.get());
+        return root.getOrElse(pos,
+                              alt.get());
     }
 
-    class VectorSome extends Vector<T> implements ImmutableList.Some<T>{
+    @Override
+    public String toString() {
+        return stream().join(", ",
+                             "[",
+                             "]");
+    }
 
-        public VectorSome(Vector<T> vec) {
-            super(vec.root, vec.tail, vec.size);
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PersistentIndexed) || o == null) {
+            return false;
+        }
+        return equalToDirectAccess((Iterable<T>) o);
+
+    }
+
+    private int calcHash() {
+        int hashCode = 1;
+        for (T e : this) {
+            hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+        }
+        return hashCode;
+    }
+
+    @Override
+    public int hashCode() {
+        if (hash == null) {
+            Supplier<Integer> local = Memoize.memoizeSupplier(() -> calcHash());
+            hash = local;
+            return local.get();
+        }
+        return hash.get();
+    }
+
+    @AllArgsConstructor
+    private static final class Proxy<T> implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+        Vector<T> v;
+
+        private void writeObject(ObjectOutputStream s) throws IOException {
+            s.defaultWriteObject();
+            s.writeInt(v.size());
+            Iterator<T> it = v.iterator();
+            while (it.hasNext()) {
+                s.writeObject(it.next());
+            }
         }
 
-        @Override
-        public ImmutableList<T> tail() {
-
-            return drop(1);
+        private Object readResolve() {
+            return v;
         }
 
-        @Override
-        public T head() {
-            return getOrElse(0,null);
-        }
-
-        @Override
-        public Some<T> reverse() {
-            ImmutableList<T> vec = Vector.this.reverse();
-            Vector<T> rev = (Vector<T>)vec;
-            return rev.new VectorSome(rev);
-        }
-
-        @Override
-        public Tuple2<T, ImmutableList<T>> unapply() {
-            return Tuple.tuple(head(),tail());
+        private void readObject(ObjectInputStream s) throws ClassNotFoundException, IOException {
+            s.defaultReadObject();
+            final int size = s.readInt();
+            Vector<T> res = empty();
+            for (int i = 0; i < size; i++) {
+                T n = (T) s.readObject();
+                res = res.append(n);
+            }
+            v = res;
         }
     }
 
-    static class VectorNone<T> implements ImmutableList.None<T>{
+    static class VectorNone<T> implements ImmutableList.None<T> {
+
         static VectorNone Instance = new VectorNone();
 
+        public static <T> VectorNone<T> empty() {
+            return Instance;
+        }
+
         @Override
-        public<R> Vector<R> unitIterable(Iterable<R> it){
-            if(it instanceof Vector){
-                return (Vector<R>)it;
+        public <R> Vector<R> unitIterable(Iterable<R> it) {
+            if (it instanceof Vector) {
+                return (Vector<R>) it;
             }
             return fromIterable(it);
         }
 
-        public static <T> VectorNone<T> empty(){
-            return Instance;
-        }
         @Override
         public <R> ImmutableList<R> unitStream(Stream<R> stream) {
             return empty();
@@ -980,7 +1220,6 @@ public class Vector<T> implements ImmutableList<T>,
         }
 
 
-
         @Override
         public ImmutableList<T> appendAll(Iterable<? extends T> value) {
             return empty();
@@ -997,12 +1236,14 @@ public class Vector<T> implements ImmutableList<T>,
         }
 
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             return alt;
         }
 
         @Override
-        public T getOrElseGet(int pos, Supplier<? extends T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<? extends T> alt) {
             return alt.get();
         }
 
@@ -1043,15 +1284,16 @@ public class Vector<T> implements ImmutableList<T>,
 
         @Override
         public <R> ImmutableList<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-          return empty();
+            return empty();
         }
 
         @Override
-        public <R> ImmutableList<R> mergeMap(int maxConcurecy, Function<? super T, ? extends Publisher<? extends R>> fn) {
-          return empty();
+        public <R> ImmutableList<R> mergeMap(int maxConcurecy,
+                                             Function<? super T, ? extends Publisher<? extends R>> fn) {
+            return empty();
         }
 
-      @Override
+        @Override
         public ImmutableList<T> onEmpty(T value) {
             return Vector.of(value);
         }
@@ -1068,56 +1310,37 @@ public class Vector<T> implements ImmutableList<T>,
         }
     }
 
-    @Override
-    public String toString() {
-        return stream().join(", ","[","]");
-    }
+    class VectorSome extends Vector<T> implements ImmutableList.Some<T> {
 
-    @Override
-    public boolean equals(Object o) {
-        if(!(o instanceof PersistentIndexed) || o==null)
-            return false;
-        return equalToDirectAccess((Iterable<T>)o);
-
-    }
-
-    private int calcHash() {
-        int hashCode = 1;
-        for (T e : this)
-            hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
-        return hashCode;
-    }
-    @Override
-    public int hashCode() {
-        if(hash==null){
-           Supplier<Integer> local = Memoize.memoizeSupplier(() -> calcHash());
-           hash = local;
-           return local.get();
+        public VectorSome(Vector<T> vec) {
+            super(vec.root,
+                  vec.tail,
+                  vec.size);
         }
-       return hash.get();
-    }
-    public static  <T,R> Vector<R> tailRec(T initial, Function<? super T, ? extends Vector<? extends Either<T, R>>> fn) {
-      Vector<Either<T, R>> next = Vector.of(Either.left(initial));
 
-      boolean newValue[] = {true};
-      for(;;){
+        @Override
+        public ImmutableList<T> tail() {
 
-        next = next.flatMap(e -> e.fold(s -> {
-            newValue[0]=true;
-            return fn.apply(s);
-          },
-          p -> {
-            newValue[0]=false;
-            return Vector.of(e);
-          }));
-        if(!newValue[0])
-          break;
+            return drop(1);
+        }
 
-      }
+        @Override
+        public T head() {
+            return getOrElse(0,
+                             null);
+        }
 
-      return Vector.fromStream(Either.sequenceRight(next).orElse(ReactiveSeq.empty()));
-    }
-    public static <T> Higher<vector, T> widen(Vector<T> narrow) {
-      return narrow;
+        @Override
+        public Some<T> reverse() {
+            ImmutableList<T> vec = Vector.this.reverse();
+            Vector<T> rev = (Vector<T>) vec;
+            return rev.new VectorSome(rev);
+        }
+
+        @Override
+        public Tuple2<T, ImmutableList<T>> unapply() {
+            return Tuple.tuple(head(),
+                               tail());
+        }
     }
 }

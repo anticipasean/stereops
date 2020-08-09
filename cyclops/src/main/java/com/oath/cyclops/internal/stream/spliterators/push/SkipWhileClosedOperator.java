@@ -6,27 +6,29 @@ import java.util.function.Predicate;
 /**
  * Created by johnmcclean on 12/01/2017.
  */
-public class SkipWhileClosedOperator<T,R> extends BaseOperator<T,T> {
+public class SkipWhileClosedOperator<T, R> extends BaseOperator<T, T> {
 
 
     final Predicate<? super T> predicate;
 
-    public SkipWhileClosedOperator(Operator<T> source, final Predicate<? super T> predicate){
+    public SkipWhileClosedOperator(Operator<T> source,
+                                   final Predicate<? super T> predicate) {
         super(source);
         this.predicate = predicate;
-
 
 
     }
 
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         boolean[] skipping = {true};
         boolean[] resetSkipping = {false};
         boolean[] first = {true};
         StreamSubscription sub[] = {null};
-        StreamSubscription res = new StreamSubscription(){
+        StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {
                 super.request(n);
@@ -39,50 +41,54 @@ public class SkipWhileClosedOperator<T,R> extends BaseOperator<T,T> {
                 super.cancel();
             }
         };
-        sub[0] = source.subscribe(e-> {
-               try {
+        sub[0] = source.subscribe(e -> {
+                                      try {
 
-                        if(skipping[0]){
-                            if(!predicate.test(e)){
-                                skipping[0] = false;
+                                          if (skipping[0]) {
+                                              if (!predicate.test(e)) {
+                                                  skipping[0] = false;
 
-                            }
-                            sub[0].request(1l);
-                        }
-                        else {
+                                              }
+                                              sub[0].request(1l);
+                                          } else {
 
-                            onNext.accept(e);
-                        }
+                                              onNext.accept(e);
+                                          }
 
-                    } catch (Throwable t) {
+                                      } catch (Throwable t) {
 
-                        onError.accept(t);
-                    }
-                }
-                ,onError,onComplete);
+                                          onError.accept(t);
+                                      }
+                                  },
+                                  onError,
+                                  onComplete);
         return res;
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
         boolean[] skipping = {true};
         boolean[] first = {true};
-        source.subscribeAll(e->{
-            try {
+        source.subscribeAll(e -> {
+                                try {
 
-                if (skipping[0]) {
-                    if (!predicate.test(e)) {
-                        skipping[0] = false;
+                                    if (skipping[0]) {
+                                        if (!predicate.test(e)) {
+                                            skipping[0] = false;
 
-                    }
+                                        }
 
-                } else {
-                    onNext.accept(e);
-                }
-            }catch(Throwable t){
-                onError.accept(t);
-            }
-        },onError,onCompleteDs);
+                                    } else {
+                                        onNext.accept(e);
+                                    }
+                                } catch (Throwable t) {
+                                    onError.accept(t);
+                                }
+                            },
+                            onError,
+                            onCompleteDs);
 
     }
 }

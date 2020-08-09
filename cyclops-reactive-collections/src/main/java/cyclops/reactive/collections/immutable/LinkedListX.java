@@ -1,139 +1,87 @@
 package cyclops.reactive.collections.immutable;
 
+import static cyclops.data.tuple.Tuple.tuple;
+
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.ReactiveWitness.linkedListX;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
+import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
 import com.oath.cyclops.data.collections.extensions.lazy.immutable.LazyLinkedListX;
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
 import com.oath.cyclops.hkt.Higher;
+import com.oath.cyclops.types.foldable.Evaluation;
+import com.oath.cyclops.types.foldable.To;
 import com.oath.cyclops.types.persistent.PersistentCollection;
+import com.oath.cyclops.types.persistent.PersistentList;
+import com.oath.cyclops.types.recoverable.OnEmptySwitch;
 import com.oath.cyclops.util.ExceptionSoftener;
 import cyclops.ReactiveReducers;
-import cyclops.control.Future;
-import cyclops.control.*;
-
-import cyclops.data.Seq;
-import com.oath.cyclops.types.foldable.Evaluation;
-import cyclops.data.Vector;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
 import cyclops.companion.Reducers;
-import cyclops.reactive.ReactiveSeq;
-import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.reactive.collections.mutable.ListX;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.types.foldable.To;
-
-import cyclops.function.Function3;
-import cyclops.function.Function4;
-import cyclops.reactive.Spouts;
+import cyclops.control.Either;
+import cyclops.control.Future;
+import cyclops.control.Option;
+import cyclops.data.Seq;
+import cyclops.data.Vector;
 import cyclops.data.tuple.Tuple2;
 import cyclops.data.tuple.Tuple3;
 import cyclops.data.tuple.Tuple4;
-import com.oath.cyclops.types.persistent.PersistentList;
-import org.reactivestreams.Publisher;
-
+import cyclops.function.Function3;
+import cyclops.function.Function4;
+import cyclops.function.Monoid;
+import cyclops.function.Reducer;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.Spouts;
+import cyclops.reactive.collections.mutable.ListX;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
-
-import static cyclops.data.tuple.Tuple.tuple;
+import org.reactivestreams.Publisher;
 
 /**
- * An eXtended Persistent List type, that offers additional functional style operators such as bimap, filter and more
- * Can operate eagerly, lazily or reactively (async push)
- *
- * @author johnmcclean
+ * An eXtended Persistent List type, that offers additional functional style operators such as bimap, filter and more Can operate
+ * eagerly, lazily or reactively (async push)
  *
  * @param <T> the type of elements held in this collection
+ * @author johnmcclean
  */
-public interface LinkedListX<T> extends To<LinkedListX<T>>,
-                                      PersistentList<T>,
-                                      LazyCollectionX<T>,
-                                      IndexedSequenceX<T>,
-                                      OnEmptySwitch<T, PersistentList<T>>,
-                                      Higher<linkedListX,T> {
+public interface LinkedListX<T> extends To<LinkedListX<T>>, PersistentList<T>, LazyCollectionX<T>, IndexedSequenceX<T>,
+                                        OnEmptySwitch<T, PersistentList<T>>, Higher<linkedListX, T> {
 
 
-
-    public static <T> LinkedListX<T> defer(Supplier<LinkedListX<T>> s){
-      return of(s)
-        .map(Supplier::get)
-        .concatMap(l->l);
+    static <T> LinkedListX<T> defer(Supplier<LinkedListX<T>> s) {
+        return of(s).map(Supplier::get)
+                    .concatMap(l -> l);
     }
 
-    default Tuple2<LinkedListX<T>, LinkedListX<T>> splitAt(int n) {
-        materialize();
-        return tuple(take(n), drop(n));
-    }
-
-    default Tuple2<LinkedListX<T>, LinkedListX<T>> span(Predicate<? super T> pred) {
-        return tuple(takeWhile(pred), dropWhile(pred));
-    }
-
-    default Tuple2<LinkedListX<T>,LinkedListX<T>> splitBy(Predicate<? super T> test) {
-        return span(test.negate());
-    }
-    default Tuple2<LinkedListX<T>, LinkedListX<T>> partition(final Predicate<? super T> splitter) {
-
-        return tuple(filter(splitter), filter(splitter.negate()));
-
-    }
-
-    @Override
-    default boolean isEmpty() {
-        return PersistentList.super.isEmpty();
-    }
-
-
-
-    static <T> CompletableLinkedListX<T> completable(){
+    static <T> CompletableLinkedListX<T> completable() {
         return new CompletableLinkedListX<>();
     }
 
-    static class CompletableLinkedListX<T> implements InvocationHandler {
-        Future<LinkedListX<T>> future = Future.future();
-        public boolean complete(PersistentList<T> result){
-            return future.complete(LinkedListX.fromIterable(result));
-        }
+    static <C2, T> Higher<C2, Higher<linkedListX, T>> widen2(Higher<C2, LinkedListX<T>> list) {
 
-        public LinkedListX<T> asLinkedListX(){
-            LinkedListX f = (LinkedListX) Proxy.newProxyInstance(LinkedListX.class.getClassLoader(),
-                    new Class[] { LinkedListX.class },
-                    this);
-            return f;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            LinkedListX<T> target = future.fold(l->l, t->{throw ExceptionSoftener.throwSoftenedException(t);});
-            return method.invoke(target,args);
-        }
+        return (Higher) list;
     }
 
-
-    @Override
-    LinkedListX<T> lazy();
-    @Override
-    LinkedListX<T> eager();
-
-
-    public static <C2,T> Higher<C2, Higher<linkedListX,T>> widen2(Higher<C2, LinkedListX<T>> list){
-
-        return (Higher)list;
-    }
-    public static <T> Higher<linkedListX, T> widen(LinkedListX<T> narrow) {
-      return narrow;
+    static <T> Higher<linkedListX, T> widen(LinkedListX<T> narrow) {
+        return narrow;
     }
 
-    public static <T> LinkedListX<T> narrowK(final Higher<linkedListX, T> list) {
-        return (LinkedListX<T>)list;
+    static <T> LinkedListX<T> narrowK(final Higher<linkedListX, T> list) {
+        return (LinkedListX<T>) list;
     }
-
 
     /**
      * Narrow a covariant LinkedListX
@@ -148,36 +96,38 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      * @param stackX to narrow generic type
      * @return OrderedSetX with narrowed type
      */
-    public static <T> LinkedListX<T> narrow(final LinkedListX<? extends T> stackX) {
+    static <T> LinkedListX<T> narrow(final LinkedListX<? extends T> stackX) {
         return (LinkedListX<T>) stackX;
     }
 
     /**
      * Create a LinkedListX that contains the Integers between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range LinkedListX
      */
-    public static LinkedListX<Integer> range(final int start, final int end) {
-        return ReactiveSeq.range(start, end).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+    static LinkedListX<Integer> range(final int start,
+                                      final int end) {
+        return ReactiveSeq.range(start,
+                                 end)
+                          .to(ReactiveConvertableSequence::converter)
+                          .linkedListX(Evaluation.LAZY);
     }
 
     /**
      * Create a LinkedListX that contains the Longs between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range LinkedListX
      */
-    public static LinkedListX<Long> rangeLong(final long start, final long end) {
-        return ReactiveSeq.rangeLong(start, end).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+    static LinkedListX<Long> rangeLong(final long start,
+                                       final long end) {
+        return ReactiveSeq.rangeLong(start,
+                                     end)
+                          .to(ReactiveConvertableSequence::converter)
+                          .linkedListX(Evaluation.LAZY);
     }
 
     /**
@@ -195,58 +145,65 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      * @param unfolder Iteratively applied function, terminated by an zero Optional
      * @return LinkedListX generated by unfolder function
      */
-    static <U, T> LinkedListX<T> unfold(final U seed, final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
-        return ReactiveSeq.unfold(seed, unfolder).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+    static <U, T> LinkedListX<T> unfold(final U seed,
+                                        final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
+        return ReactiveSeq.unfold(seed,
+                                  unfolder)
+                          .to(ReactiveConvertableSequence::converter)
+                          .linkedListX(Evaluation.LAZY);
     }
 
     /**
      * Generate a LinkedListX from the provided Supplier up to the provided limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param s Supplier to generate LinkedListX elements
+     * @param s     Supplier to generate LinkedListX elements
      * @return LinkedListX generated from the provided Supplier
      */
-    public static <T> LinkedListX<T> generate(final long limit, final Supplier<T> s) {
+    static <T> LinkedListX<T> generate(final long limit,
+                                       final Supplier<T> s) {
 
         return ReactiveSeq.generate(s)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
+                          .linkedListX(Evaluation.LAZY);
     }
 
     /**
      * Generate a LinkedListX from the provided value up to the provided limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param s Value for LinkedListX elements
+     * @param s     Value for LinkedListX elements
      * @return LinkedListX generated from the provided Supplier
      */
-    public static <T> LinkedListX<T> fill(final long limit, final T s) {
+    static <T> LinkedListX<T> fill(final long limit,
+                                   final T s) {
 
         return ReactiveSeq.fill(s)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
+                          .linkedListX(Evaluation.LAZY);
     }
 
     /**
      * Create a LinkedListX by iterative application of a function to an initial element up to the supplied limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param seed Initial element
-     * @param f Iteratively applied to each element to generate the next element
+     * @param seed  Initial element
+     * @param f     Iteratively applied to each element to generate the next element
      * @return LinkedListX generated by iterative application
      */
-    public static <T> LinkedListX<T> iterate(final long limit, final T seed, final UnaryOperator<T> f) {
-        return ReactiveSeq.iterate(seed, f)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+    static <T> LinkedListX<T> iterate(final long limit,
+                                      final T seed,
+                                      final UnaryOperator<T> f) {
+        return ReactiveSeq.iterate(seed,
+                                   f)
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
+                          .linkedListX(Evaluation.LAZY);
     }
 
-
-    LinkedListX<T> type(Reducer<? extends PersistentList<T>,T> reducer);
-
     /**
-     *
      * <pre>
      * {@code
      *  import static cyclops.stream.ReactiveSeq.range;
@@ -255,15 +212,17 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      *
      * }
      * </pre>
+     *
      * @param stream To create LinkedListX from
-     * @param <T> LinkedListX generated from Stream
+     * @param <T>    LinkedListX generated from Stream
      * @return
      */
-    public static <T> LinkedListX<T> linkedListX(ReactiveSeq<T> stream) {
-        return new LazyLinkedListX<T>(null,stream,Reducers.toPersistentList(),Evaluation.LAZY);
+    static <T> LinkedListX<T> linkedListX(ReactiveSeq<T> stream) {
+        return new LazyLinkedListX<T>(null,
+                                      stream,
+                                      Reducers.toPersistentList(),
+                                      Evaluation.LAZY);
     }
-
-
 
     /**
      * Construct a Persistent LinkedList from the provided values
@@ -280,52 +239,56 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      * }
      * </pre>
      *
-     *
      * @param values To add to PStack
      * @return new PStack
      */
     @SafeVarargs
-    public static <T> LinkedListX<T> of(final T... values) {
+    static <T> LinkedListX<T> of(final T... values) {
         return new LazyLinkedListX<>(null,
-                                 ReactiveSeq.of(values),Reducers.toPersistentList(), Evaluation.LAZY);
+                                     ReactiveSeq.of(values),
+                                     Reducers.toPersistentList(),
+                                     Evaluation.LAZY);
     }
+
     /**
-     *
      * Construct a LinkedListX from the provided Iterator
      *
      * @param it Iterator to populate LinkedListX
      * @return Newly populated LinkedListX
      */
-    public static <T> LinkedListX<T> fromIterator(final Iterator<T> it) {
-        return fromIterable(()->it);
+    static <T> LinkedListX<T> fromIterator(final Iterator<T> it) {
+        return fromIterable(() -> it);
     }
+
     /**
      * Construct a LinkedListX from an Publisher
      *
-     * @param publisher
-     *            to construct LinkedListX from
+     * @param publisher to construct LinkedListX from
      * @return LinkedListX
      */
-    public static <T> LinkedListX<T> fromPublisher(final Publisher<? extends T> publisher) {
-        return Spouts.from((Publisher<T>) publisher).to(ReactiveConvertableSequence::converter)
-                .linkedListX(Evaluation.LAZY);
+    static <T> LinkedListX<T> fromPublisher(final Publisher<? extends T> publisher) {
+        return Spouts.from(publisher)
+                     .to(ReactiveConvertableSequence::converter)
+                     .linkedListX(Evaluation.LAZY);
     }
 
-    public static <T> LinkedListX<T> fromIterable(final Iterable<T> iterable) {
-        if (iterable instanceof LinkedListX)
+    static <T> LinkedListX<T> fromIterable(final Iterable<T> iterable) {
+        if (iterable instanceof LinkedListX) {
             return (LinkedListX) iterable;
-        if (iterable instanceof PersistentList)
-            return new LazyLinkedListX<T>(
-                    (PersistentList) iterable,null,Reducers.toPersistentList(),Evaluation.LAZY);
+        }
+        if (iterable instanceof PersistentList) {
+            return new LazyLinkedListX<T>((PersistentList) iterable,
+                                          null,
+                                          Reducers.toPersistentList(),
+                                          Evaluation.LAZY);
+        }
 
-        return new LazyLinkedListX<>(null,ReactiveSeq.fromIterable(iterable),Reducers.toPersistentList(),Evaluation.LAZY);
+        return new LazyLinkedListX<>(null,
+                                     ReactiveSeq.fromIterable(iterable),
+                                     Reducers.toPersistentList(),
+                                     Evaluation.LAZY);
 
     }
-
-
-
-
-
 
     /**
      * <pre>
@@ -336,37 +299,83 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      *     PStack<String> zero = PStack.zero();
      * }
      * </pre>
+     *
      * @return an zero PStack
      */
-    public static <T> LinkedListX<T> empty() {
-        return new LazyLinkedListX<>(
-                                 Seq.empty(),null,Reducers.toPersistentList(),Evaluation.LAZY);
+    static <T> LinkedListX<T> empty() {
+        return new LazyLinkedListX<>(Seq.empty(),
+                                     null,
+                                     Reducers.toPersistentList(),
+                                     Evaluation.LAZY);
     }
 
     /**
      * Construct a PStack containing a single value
      * </pre>
-     * {@code
-     *    List<String> single = PStacks.singleton("1");
-     *
-     *    //or
-     *
-     *    PStack<String> single = PStacks.singleton("1");
-     *
+     * {@code List<String> single = PStacks.singleton("1");
+     * <p>
+     * //or
+     * <p>
+     * PStack<String> single = PStacks.singleton("1");
+     * <p>
      * }
      * </pre>
      *
      * @param value Active value for PVector
      * @return PVector with a single value
      */
-    public static <T> LinkedListX<T> singleton(final T value){
-        return new LazyLinkedListX<>(
-                                 Seq.of(value),null,Reducers.toPersistentList(),Evaluation.LAZY);
+    static <T> LinkedListX<T> singleton(final T value) {
+        return new LazyLinkedListX<>(Seq.of(value),
+                                     null,
+                                     Reducers.toPersistentList(),
+                                     Evaluation.LAZY);
     }
 
+    static <T, R> LinkedListX<R> tailRec(T initial,
+                                         Function<? super T, ? extends LinkedListX<? extends Either<T, R>>> fn) {
+        return ListX.tailRec(initial,
+                             fn)
+                    .to()
+                    .linkedListX(Evaluation.LAZY);
+    }
+
+    default Tuple2<LinkedListX<T>, LinkedListX<T>> splitAt(int n) {
+        materialize();
+        return tuple(take(n),
+                     drop(n));
+    }
+
+    default Tuple2<LinkedListX<T>, LinkedListX<T>> span(Predicate<? super T> pred) {
+        return tuple(takeWhile(pred),
+                     dropWhile(pred));
+    }
+
+    default Tuple2<LinkedListX<T>, LinkedListX<T>> splitBy(Predicate<? super T> test) {
+        return span(test.negate());
+    }
+
+    default Tuple2<LinkedListX<T>, LinkedListX<T>> partition(final Predicate<? super T> splitter) {
+
+        return tuple(filter(splitter),
+                     filter(splitter.negate()));
+
+    }
+
+    @Override
+    default boolean isEmpty() {
+        return PersistentList.super.isEmpty();
+    }
+
+    @Override
+    LinkedListX<T> lazy();
+
+    @Override
+    LinkedListX<T> eager();
+
+    LinkedListX<T> type(Reducer<? extends PersistentList<T>, T> reducer);
+
     /**
-     * Reduce (immutable Collection) a Stream to a PStack, note for efficiency reasons,
-     * the emitted PStack is reversed.
+     * Reduce (immutable Collection) a Stream to a PStack, note for efficiency reasons, the emitted PStack is reversed.
      *
      *
      * <pre>
@@ -376,18 +385,16 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      *  //list = [3,2,1]
      * }</pre>
      *
-     *
      * @param stream to convert to a PVector
      * @return
      */
     default <T> LinkedListX<T> fromStream(final ReactiveSeq<T> stream) {
-        return ReactiveReducers.<T>toLinkedListX()
-                       .foldMap(stream);
+        return ReactiveReducers.<T>toLinkedListX().foldMap(stream);
     }
 
     @Override
     default LinkedListX<T> materialize() {
-        return (LinkedListX<T>)LazyCollectionX.super.materialize();
+        return (LinkedListX<T>) LazyCollectionX.super.materialize();
     }
 
     /* (non-Javadoc)
@@ -399,7 +406,10 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
                                                     Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
                                                     Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (LinkedListX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, yieldingFunction);
+        return (LinkedListX) LazyCollectionX.super.forEach4(stream1,
+                                                            stream2,
+                                                            stream3,
+                                                            yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -412,7 +422,11 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
                                                     Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
                                                     Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (LinkedListX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, filterFunction, yieldingFunction);
+        return (LinkedListX) LazyCollectionX.super.forEach4(stream1,
+                                                            stream2,
+                                                            stream3,
+                                                            filterFunction,
+                                                            yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -423,7 +437,9 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
                                                 BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
                                                 Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (LinkedListX)LazyCollectionX.super.forEach3(stream1, stream2, yieldingFunction);
+        return (LinkedListX) LazyCollectionX.super.forEach3(stream1,
+                                                            stream2,
+                                                            yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -435,7 +451,10 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
                                                 Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
                                                 Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (LinkedListX)LazyCollectionX.super.forEach3(stream1, stream2, filterFunction, yieldingFunction);
+        return (LinkedListX) LazyCollectionX.super.forEach3(stream1,
+                                                            stream2,
+                                                            filterFunction,
+                                                            yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -445,7 +464,8 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     default <R1, R> LinkedListX<R> forEach2(Function<? super T, ? extends Iterable<R1>> stream1,
                                             BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (LinkedListX)LazyCollectionX.super.forEach2(stream1, yieldingFunction);
+        return (LinkedListX) LazyCollectionX.super.forEach2(stream1,
+                                                            yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -456,7 +476,9 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
                                             BiFunction<? super T, ? super R1, Boolean> filterFunction,
                                             BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (LinkedListX)LazyCollectionX.super.forEach2(stream1, filterFunction, yieldingFunction);
+        return (LinkedListX) LazyCollectionX.super.forEach2(stream1,
+                                                            filterFunction,
+                                                            yieldingFunction);
     }
 
 
@@ -474,41 +496,43 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      * }
      * </pre>
      *
-     *
      * @param fn mapping function
      * @return Transformed LinkedListX
      */
-    default <R> LinkedListX<R> coflatMap(Function<? super LinkedListX<T>, ? extends R> fn){
-       return fn.andThen(r ->  this.<R>unit(r))
-                .apply(this);
+    default <R> LinkedListX<R> coflatMap(Function<? super LinkedListX<T>, ? extends R> fn) {
+        return fn.andThen(r -> this.<R>unit(r))
+                 .apply(this);
     }
+
     /**
-    * Combine two adjacent elements in a LinkedListX using the supplied BinaryOperator
-    * This is a stateful grouping & reduction operation. The emitted of a combination may in turn be combined
-    * with it's neighbor
-    * <pre>
-    * {@code
-    *  LinkedListX.of(1,1,2,3)
-                 .combine((a, b)->a.equals(b),SemigroupK.intSum)
-                 .listX()
-
-    *  //ListX(3,4)
-    * }</pre>
-    *
-    * @param predicate Test to see if two neighbors should be joined
-    * @param op Reducer to combine neighbors
-    * @return Combined / Partially Reduced LinkedListX
-    */
+     * Combine two adjacent elements in a LinkedListX using the supplied BinaryOperator This is a stateful grouping & reduction
+     * operation. The emitted of a combination may in turn be combined with it's neighbor
+     * <pre>
+     * {@code
+     *  LinkedListX.of(1,1,2,3)
+     * .combine((a, b)->a.equals(b),SemigroupK.intSum)
+     * .listX()
+     *
+     *  //ListX(3,4)
+     * }</pre>
+     *
+     * @param predicate Test to see if two neighbors should be joined
+     * @param op        Reducer to combine neighbors
+     * @return Combined / Partially Reduced LinkedListX
+     */
     @Override
-    default LinkedListX<T> combine(final BiPredicate<? super T, ? super T> predicate, final BinaryOperator<T> op) {
-        return (LinkedListX<T>) LazyCollectionX.super.combine(predicate, op);
+    default LinkedListX<T> combine(final BiPredicate<? super T, ? super T> predicate,
+                                   final BinaryOperator<T> op) {
+        return (LinkedListX<T>) LazyCollectionX.super.combine(predicate,
+                                                              op);
     }
 
     @Override
-    default LinkedListX<T> combine(final Monoid<T> op, final BiPredicate<? super T, ? super T> predicate) {
-        return (LinkedListX<T>)LazyCollectionX.super.combine(op,predicate);
+    default LinkedListX<T> combine(final Monoid<T> op,
+                                   final BiPredicate<? super T, ? super T> predicate) {
+        return (LinkedListX<T>) LazyCollectionX.super.combine(op,
+                                                              predicate);
     }
-
 
 
     @Override
@@ -530,14 +554,14 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     //@Override
     default <R> LinkedListX<R> emptyUnit() {
 
-        return LinkedListX.<R> empty();
+        return LinkedListX.empty();
     }
-
 
 
     @Override
     default LinkedListX<T> plusInOrder(final T e) {
-        return insertAt(size(), e);
+        return insertAt(size(),
+                        e);
     }
 
     @Override
@@ -553,7 +577,7 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
     //@Override
-    default <T> Reducer<PersistentList<T>,T> monoid() {
+    default <T> Reducer<PersistentList<T>, T> monoid() {
         return Reducers.toPersistentList();
 
     }
@@ -565,11 +589,12 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     default LinkedListX<T> reverse() {
         PersistentList<T> reversed = Seq.empty();
         final Iterator<T> it = iterator();
-        while (it.hasNext())
-            reversed = reversed.insertAt(0, it.next());
+        while (it.hasNext()) {
+            reversed = reversed.insertAt(0,
+                                         it.next());
+        }
         return fromIterable(reversed);
     }
-
 
 
     /* (non-Javadoc)
@@ -593,7 +618,7 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      */
     @Override
     default <R> LinkedListX<R> concatMap(final Function<? super T, ? extends Iterable<? extends R>> mapper) {
-       return (LinkedListX) LazyCollectionX.super.concatMap(mapper);
+        return (LinkedListX) LazyCollectionX.super.concatMap(mapper);
     }
 
     /* (non-Javadoc)
@@ -611,15 +636,14 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
 
-
-
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#slice(long, long)
      */
     @Override
-    default LinkedListX<T> slice(final long from, final long to) {
-        return (LinkedListX) LazyCollectionX.super.slice(from, to);
+    default LinkedListX<T> slice(final long from,
+                                 final long to) {
+        return (LinkedListX) LazyCollectionX.super.slice(from,
+                                                         to);
     }
 
     /* (non-Javadoc)
@@ -631,33 +655,35 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
     @Override
-    public LinkedListX<T> removeAll(Iterable<? extends T> list);
+    LinkedListX<T> removeAll(Iterable<? extends T> list);
 
     @Override
-    public LinkedListX<T> removeValue(T remove);
-
-
-    @Override
-    public LinkedListX<T> updateAt(int i, T e);
+    LinkedListX<T> removeValue(T remove);
 
 
     @Override
-    public LinkedListX<T> insertAt(int i, T e);
-
-    @Override
-    public LinkedListX<T> plus(T e);
-
-    @Override
-    public LinkedListX<T> plusAll(Iterable<? extends T> list);
+    LinkedListX<T> updateAt(int i,
+                            T e);
 
 
     @Override
-    public LinkedListX<T> insertAt(int i, Iterable<? extends T> list);
+    LinkedListX<T> insertAt(int i,
+                            T e);
+
+    @Override
+    LinkedListX<T> plus(T e);
+
+    @Override
+    LinkedListX<T> plusAll(Iterable<? extends T> list);
 
 
     @Override
-    public LinkedListX<T> removeAt(long i);
+    LinkedListX<T> insertAt(int i,
+                            Iterable<? extends T> list);
 
+
+    @Override
+    LinkedListX<T> removeAt(long i);
 
 
     @Override
@@ -669,6 +695,7 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     default boolean containsValue(T item) {
         return LazyCollectionX.super.containsValue(item);
     }
+
     @Override
     default <U> LinkedListX<Tuple2<T, U>> zip(final Iterable<? extends U> other) {
         return (LinkedListX) LazyCollectionX.super.zip(other);
@@ -678,15 +705,17 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#zip(java.lang.Iterable, java.util.function.BiFunction)
      */
     @Override
-    default <U, R> LinkedListX<R> zip(final Iterable<? extends U> other, final BiFunction<? super T, ? super U, ? extends R> zipper) {
+    default <U, R> LinkedListX<R> zip(final Iterable<? extends U> other,
+                                      final BiFunction<? super T, ? super U, ? extends R> zipper) {
 
-        return (LinkedListX<R>) LazyCollectionX.super.zip(other, zipper);
+        return (LinkedListX<R>) LazyCollectionX.super.zip(other,
+                                                          zipper);
     }
 
 
-  /* (non-Javadoc)
-   * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#permutations()
-   */
+    /* (non-Javadoc)
+     * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#permutations()
+     */
     @Override
     default LinkedListX<ReactiveSeq<T>> permutations() {
 
@@ -717,18 +746,24 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
     @Override
-    default LinkedListX<Seq<T>> sliding(final int windowSize, final int increment) {
-        return (LinkedListX<Seq<T>>) LazyCollectionX.super.sliding(windowSize, increment);
+    default LinkedListX<Seq<T>> sliding(final int windowSize,
+                                        final int increment) {
+        return (LinkedListX<Seq<T>>) LazyCollectionX.super.sliding(windowSize,
+                                                                   increment);
     }
 
     @Override
-    default <U> LinkedListX<U> scanLeft(final U seed, final BiFunction<? super U, ? super T, ? extends U> function) {
-        return (LinkedListX<U>) LazyCollectionX.super.scanLeft(seed, function);
+    default <U> LinkedListX<U> scanLeft(final U seed,
+                                        final BiFunction<? super U, ? super T, ? extends U> function) {
+        return (LinkedListX<U>) LazyCollectionX.super.scanLeft(seed,
+                                                               function);
     }
 
     @Override
-    default <U> LinkedListX<U> scanRight(final U identity, final BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return (LinkedListX<U>) LazyCollectionX.super.scanRight(identity, combiner);
+    default <U> LinkedListX<U> scanRight(final U identity,
+                                         final BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return (LinkedListX<U>) LazyCollectionX.super.scanRight(identity,
+                                                                combiner);
     }
 
     @Override
@@ -757,9 +792,11 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#cycle(com.oath.cyclops.sequence.Monoid, int)
      */
     @Override
-    default LinkedListX<T> cycle(final Monoid<T> m, final long times) {
+    default LinkedListX<T> cycle(final Monoid<T> m,
+                                 final long times) {
 
-        return (LinkedListX<T>) LazyCollectionX.super.cycle(m, times);
+        return (LinkedListX<T>) LazyCollectionX.super.cycle(m,
+                                                            times);
     }
 
     /* (non-Javadoc)
@@ -790,24 +827,28 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#zip3(java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <S, U> LinkedListX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third) {
+    default <S, U> LinkedListX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second,
+                                                     final Iterable<? extends U> third) {
 
-        return (LinkedListX) LazyCollectionX.super.zip3(second, third);
+        return (LinkedListX) LazyCollectionX.super.zip3(second,
+                                                        third);
     }
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#zip4(java.util.stream.Stream, java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <T2, T3, T4> LinkedListX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third,
+    default <T2, T3, T4> LinkedListX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second,
+                                                                 final Iterable<? extends T3> third,
                                                                  final Iterable<? extends T4> fourth) {
 
-        return (LinkedListX) LazyCollectionX.super.zip4(second, third, fourth);
+        return (LinkedListX) LazyCollectionX.super.zip4(second,
+                                                        third,
+                                                        fourth);
     }
 
     /* (non-Javadoc)
@@ -909,8 +950,9 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
      */
     @Override
     default LinkedListX<T> onEmptySwitch(final Supplier<? extends PersistentList<T>> supplier) {
-        if (this.isEmpty())
+        if (this.isEmpty()) {
             return LinkedListX.fromIterable(supplier.get());
+        }
         return this;
     }
 
@@ -987,7 +1029,6 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#removeAll(java.lang.Object[])
      */
@@ -1025,11 +1066,12 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
 
-
     @Override
-    default <C extends PersistentCollection<? super T>> LinkedListX<C> grouped(final int size, final Supplier<C> supplier) {
+    default <C extends PersistentCollection<? super T>> LinkedListX<C> grouped(final int size,
+                                                                               final Supplier<C> supplier) {
 
-        return (LinkedListX<C>) LazyCollectionX.super.grouped(size, supplier);
+        return (LinkedListX<C>) LazyCollectionX.super.grouped(size,
+                                                              supplier);
     }
 
     @Override
@@ -1051,155 +1093,213 @@ public interface LinkedListX<T> extends To<LinkedListX<T>>,
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> LinkedListX<C> groupedWhile(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> LinkedListX<C> groupedWhile(final Predicate<? super T> predicate,
+                                                                                    final Supplier<C> factory) {
 
-        return (LinkedListX<C>) LazyCollectionX.super.groupedWhile(predicate, factory);
+        return (LinkedListX<C>) LazyCollectionX.super.groupedWhile(predicate,
+                                                                   factory);
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> LinkedListX<C> groupedUntil(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> LinkedListX<C> groupedUntil(final Predicate<? super T> predicate,
+                                                                                    final Supplier<C> factory) {
 
-        return (LinkedListX<C>) LazyCollectionX.super.groupedUntil(predicate, factory);
+        return (LinkedListX<C>) LazyCollectionX.super.groupedUntil(predicate,
+                                                                   factory);
     }
 
     @Override
     default <R> LinkedListX<R> retry(final Function<? super T, ? extends R> fn) {
-        return (LinkedListX<R>)LazyCollectionX.super.retry(fn);
+        return (LinkedListX<R>) LazyCollectionX.super.retry(fn);
     }
 
     @Override
-    default <R> LinkedListX<R> retry(final Function<? super T, ? extends R> fn, final int retries, final long delay, final TimeUnit timeUnit) {
-        return (LinkedListX<R>)LazyCollectionX.super.retry(fn,retries,delay,timeUnit);
+    default <R> LinkedListX<R> retry(final Function<? super T, ? extends R> fn,
+                                     final int retries,
+                                     final long delay,
+                                     final TimeUnit timeUnit) {
+        return (LinkedListX<R>) LazyCollectionX.super.retry(fn,
+                                                            retries,
+                                                            delay,
+                                                            timeUnit);
     }
 
     @Override
     default <R> LinkedListX<R> flatMap(Function<? super T, ? extends Stream<? extends R>> fn) {
-        return (LinkedListX<R>)LazyCollectionX.super.flatMap(fn);
+        return (LinkedListX<R>) LazyCollectionX.super.flatMap(fn);
     }
 
     @Override
     default <R> LinkedListX<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (LinkedListX<R>)LazyCollectionX.super.mergeMap(fn);
+        return (LinkedListX<R>) LazyCollectionX.super.mergeMap(fn);
     }
+
     @Override
-    default <R> LinkedListX<R> mergeMap(int maxConcurency, Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (LinkedListX<R>)LazyCollectionX.super.mergeMap(maxConcurency,fn);
+    default <R> LinkedListX<R> mergeMap(int maxConcurency,
+                                        Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return (LinkedListX<R>) LazyCollectionX.super.mergeMap(maxConcurency,
+                                                               fn);
     }
 
 
     @Override
     default LinkedListX<T> removeFirst(Predicate<? super T> pred) {
-        return (LinkedListX<T>)LazyCollectionX.super.removeFirst(pred);
+        return (LinkedListX<T>) LazyCollectionX.super.removeFirst(pred);
     }
 
     @Override
     default LinkedListX<T> appendAll(Iterable<? extends T> value) {
-        return (LinkedListX<T>)LazyCollectionX.super.appendAll(value);
+        return (LinkedListX<T>) LazyCollectionX.super.appendAll(value);
     }
 
     @Override
     default LinkedListX<T> prependAll(Iterable<? extends T> value) {
-        return (LinkedListX<T>)LazyCollectionX.super.prependAll(value);
+        return (LinkedListX<T>) LazyCollectionX.super.prependAll(value);
     }
 
 
     @Override
-    default LinkedListX<T> insertAt(int pos, ReactiveSeq<? extends T> values) {
-        return (LinkedListX<T>)LazyCollectionX.super.insertAt(pos,values);
+    default LinkedListX<T> insertAt(int pos,
+                                    ReactiveSeq<? extends T> values) {
+        return (LinkedListX<T>) LazyCollectionX.super.insertAt(pos,
+                                                               values);
     }
 
 
     @Override
     default LinkedListX<T> prependStream(Stream<? extends T> stream) {
-        return (LinkedListX<T>)LazyCollectionX.super.prependStream(stream);
+        return (LinkedListX<T>) LazyCollectionX.super.prependStream(stream);
     }
 
     @Override
     default LinkedListX<T> appendAll(T... values) {
-        return (LinkedListX<T>)LazyCollectionX.super.appendAll(values);
+        return (LinkedListX<T>) LazyCollectionX.super.appendAll(values);
     }
 
     @Override
     default LinkedListX<T> append(T value) {
-        return (LinkedListX<T>)LazyCollectionX.super.append(value);
+        return (LinkedListX<T>) LazyCollectionX.super.append(value);
     }
 
     @Override
     default LinkedListX<T> prepend(T value) {
-        return (LinkedListX<T>)LazyCollectionX.super.prepend(value);
+        return (LinkedListX<T>) LazyCollectionX.super.prepend(value);
     }
 
     @Override
     default LinkedListX<T> prependAll(T... values) {
-        return (LinkedListX<T>)LazyCollectionX.super.prependAll(values);
+        return (LinkedListX<T>) LazyCollectionX.super.prependAll(values);
     }
 
     @Override
-    default LinkedListX<T> insertAt(int pos, T... values) {
-        return (LinkedListX<T>)LazyCollectionX.super.insertAt(pos,values);
+    default LinkedListX<T> insertAt(int pos,
+                                    T... values) {
+        return (LinkedListX<T>) LazyCollectionX.super.insertAt(pos,
+                                                               values);
     }
 
     @Override
-    default LinkedListX<T> deleteBetween(int start, int end) {
-        return (LinkedListX<T>)LazyCollectionX.super.deleteBetween(start,end);
+    default LinkedListX<T> deleteBetween(int start,
+                                         int end) {
+        return (LinkedListX<T>) LazyCollectionX.super.deleteBetween(start,
+                                                                    end);
     }
 
     @Override
-    default LinkedListX<T> insertStreamAt(int pos, Stream<T> stream) {
-        return (LinkedListX<T>)LazyCollectionX.super.insertStreamAt(pos,stream);
+    default LinkedListX<T> insertStreamAt(int pos,
+                                          Stream<T> stream) {
+        return (LinkedListX<T>) LazyCollectionX.super.insertStreamAt(pos,
+                                                                     stream);
     }
 
     @Override
     default LinkedListX<T> recover(final Function<? super Throwable, ? extends T> fn) {
-        return (LinkedListX<T>)LazyCollectionX.super.recover(fn);
+        return (LinkedListX<T>) LazyCollectionX.super.recover(fn);
     }
 
     @Override
-    default <EX extends Throwable> LinkedListX<T> recover(Class<EX> exceptionClass, final Function<? super EX, ? extends T> fn) {
-        return (LinkedListX<T>)LazyCollectionX.super.recover(exceptionClass,fn);
+    default <EX extends Throwable> LinkedListX<T> recover(Class<EX> exceptionClass,
+                                                          final Function<? super EX, ? extends T> fn) {
+        return (LinkedListX<T>) LazyCollectionX.super.recover(exceptionClass,
+                                                              fn);
     }
 
     @Override
-    default LinkedListX<T> plusLoop(int max, IntFunction<T> value) {
-        return (LinkedListX<T>)LazyCollectionX.super.plusLoop(max,value);
+    default LinkedListX<T> plusLoop(int max,
+                                    IntFunction<T> value) {
+        return (LinkedListX<T>) LazyCollectionX.super.plusLoop(max,
+                                                               value);
     }
 
     @Override
     default LinkedListX<T> plusLoop(Supplier<Option<T>> supplier) {
-        return (LinkedListX<T>)LazyCollectionX.super.plusLoop(supplier);
+        return (LinkedListX<T>) LazyCollectionX.super.plusLoop(supplier);
     }
 
-  @Override
-    default <T2, R> LinkedListX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn, final Publisher<? extends T2> publisher) {
-        return (LinkedListX<R>)LazyCollectionX.super.zip(fn, publisher);
+    @Override
+    default <T2, R> LinkedListX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn,
+                                       final Publisher<? extends T2> publisher) {
+        return (LinkedListX<R>) LazyCollectionX.super.zip(fn,
+                                                          publisher);
     }
-
 
 
     @Override
     default <U> LinkedListX<Tuple2<T, U>> zipWithPublisher(final Publisher<? extends U> other) {
-        return (LinkedListX)LazyCollectionX.super.zipWithPublisher(other);
+        return (LinkedListX) LazyCollectionX.super.zipWithPublisher(other);
     }
 
 
     @Override
-    default <S, U, R> LinkedListX<R> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third, final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return (LinkedListX<R>)LazyCollectionX.super.zip3(second,third,fn3);
+    default <S, U, R> LinkedListX<R> zip3(final Iterable<? extends S> second,
+                                          final Iterable<? extends U> third,
+                                          final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return (LinkedListX<R>) LazyCollectionX.super.zip3(second,
+                                                           third,
+                                                           fn3);
     }
 
     @Override
-    default <T2, T3, T4, R> LinkedListX<R> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third, final Iterable<? extends T4> fourth, final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return (LinkedListX<R>)LazyCollectionX.super.zip4(second,third,fourth,fn);
+    default <T2, T3, T4, R> LinkedListX<R> zip4(final Iterable<? extends T2> second,
+                                                final Iterable<? extends T3> third,
+                                                final Iterable<? extends T4> fourth,
+                                                final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return (LinkedListX<R>) LazyCollectionX.super.zip4(second,
+                                                           third,
+                                                           fourth,
+                                                           fn);
     }
+
     @Override
     default LinkedListX<T> removeAll(CollectionX<? extends T> it) {
-        return removeAll((Iterable<T>)it);
+        return removeAll((Iterable<T>) it);
     }
 
+    class CompletableLinkedListX<T> implements InvocationHandler {
 
+        Future<LinkedListX<T>> future = Future.future();
 
+        public boolean complete(PersistentList<T> result) {
+            return future.complete(LinkedListX.fromIterable(result));
+        }
 
-    public static  <T,R> LinkedListX<R> tailRec(T initial, Function<? super T, ? extends LinkedListX<? extends Either<T, R>>> fn) {
-       return ListX.tailRec(initial,fn).to().linkedListX(Evaluation.LAZY);
+        public LinkedListX<T> asLinkedListX() {
+            LinkedListX f = (LinkedListX) Proxy.newProxyInstance(LinkedListX.class.getClassLoader(),
+                                                                 new Class[]{LinkedListX.class},
+                                                                 this);
+            return f;
+        }
+
+        @Override
+        public Object invoke(Object proxy,
+                             Method method,
+                             Object[] args) throws Throwable {
+            LinkedListX<T> target = future.fold(l -> l,
+                                                t -> {
+                                                    throw ExceptionSoftener.throwSoftenedException(t);
+                                                });
+            return method.invoke(target,
+                                 args);
+        }
     }
 }

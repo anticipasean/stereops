@@ -19,36 +19,36 @@ package scrabble;
  */
 
 
-
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.stream.Stream;
+import java.util.stream.Stream;
 //JMH Benchmarking test file : not part of distribution
+
 /**
  * Shakespeare plays Scrabble with Java Streams.
+ *
  * @author José
  */
 public class NonParallelStreams extends ShakespearePlaysScrabbleWithStreams {
-
-    @Override
-    Stream<String> buildShakerspeareWordsStream() {
-        return shakespeareWords.stream() ;
-    }
 
     public static void main(String[] args) throws Exception {
         NonParallelStreams s = new NonParallelStreams();
         s.init();
         // System.out.println(s.measureThroughput());
-        int count =0;
+        int count = 0;
         boolean run = true;
-        while(run)
-        {
+        while (run) {
             long start = System.currentTimeMillis();
-            for(int i=0;i<100;i++)
-                count +=s.measureThroughput().size();
-            System.out.println("Time " + (System.currentTimeMillis()-start));
+            for (int i = 0; i < 100; i++) {
+                count += s.measureThroughput()
+                          .size();
+            }
+            System.out.println("Time " + (System.currentTimeMillis() - start));
         }
-        System.out.println( "" + count);
+        System.out.println("" + count);
 
+    }
+
+    @Override
+    Stream<String> buildShakerspeareWordsStream() {
+        return shakespeareWords.stream();
     }
 }

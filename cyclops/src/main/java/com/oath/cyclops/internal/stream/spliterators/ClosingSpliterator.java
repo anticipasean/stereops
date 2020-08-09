@@ -8,21 +8,33 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ClosingSpliterator<IN,T> extends BaseComposableSpliterator<IN,T,ClosingSpliterator<IN,?>> implements Spliterator<T> {
+public class ClosingSpliterator<IN, T> extends BaseComposableSpliterator<IN, T, ClosingSpliterator<IN, ?>> implements
+                                                                                                           Spliterator<T> {
+
     private final long estimate;
 
     private final Queue<IN> queue;
     private final AtomicBoolean open;
 
-    public ClosingSpliterator(final long estimate, final Queue queue, final AtomicBoolean open) {
-        super(estimate, ORDERED,null);
+    public ClosingSpliterator(final long estimate,
+                              final Queue queue,
+                              final AtomicBoolean open) {
+        super(estimate,
+              ORDERED,
+              null);
         this.estimate = estimate;
         this.open = open;
         this.queue = queue;
 
     }
-    ClosingSpliterator(Function<? super IN, ? extends T> fn,final long estimate, final Queue queue, final AtomicBoolean open) {
-        super(estimate, ORDERED,fn);
+
+    ClosingSpliterator(Function<? super IN, ? extends T> fn,
+                       final long estimate,
+                       final Queue queue,
+                       final AtomicBoolean open) {
+        super(estimate,
+              ORDERED,
+              fn);
         this.estimate = estimate;
         this.open = open;
         this.queue = queue;
@@ -79,6 +91,9 @@ public class ClosingSpliterator<IN,T> extends BaseComposableSpliterator<IN,T,Clo
 
     @Override
     <R2> ClosingSpliterator<IN, ?> create(Function<? super IN, ? extends R2> after) {
-        return new ClosingSpliterator(fn,estimate,queue,open);
+        return new ClosingSpliterator(fn,
+                                      estimate,
+                                      queue,
+                                      open);
     }
 }

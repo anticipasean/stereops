@@ -1,31 +1,29 @@
 package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
 
-import com.oath.cyclops.types.persistent.PersistentList;
 import com.oath.cyclops.types.foldable.Evaluation;
-import cyclops.reactive.collections.immutable.LinkedListX;
+import com.oath.cyclops.types.persistent.PersistentList;
 import cyclops.control.Option;
 import cyclops.data.Seq;
 import cyclops.function.Reducer;
 import cyclops.reactive.ReactiveSeq;
-
-
-import java.util.*;
+import cyclops.reactive.collections.immutable.LinkedListX;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 /**
- * An extended List type {@see java.util.List}
- * Extended List operations execute lazily e.g.
+ * An extended List type {@see java.util.List} Extended List operations execute lazily e.g.
  * <pre>
  * {@code
  *    StreamX<Integer> q = StreamX.of(1,2,3)
  *                                      .map(i->i*2);
  * }
  * </pre>
- * The transform operation above is not executed immediately. It will only be executed when (if) the data inside the
- * queue is accessed. This allows lazy operations to be chained and executed more efficiently e.g.
+ * The transform operation above is not executed immediately. It will only be executed when (if) the data inside the queue is
+ * accessed. This allows lazy operations to be chained and executed more efficiently e.g.
  *
  * <pre>
  * {@code
@@ -34,16 +32,47 @@ import java.util.function.Supplier;
  *                              .filter(i->i<5);
  * }
  * </pre>
- *
+ * <p>
  * The operation above is more efficient than the equivalent operation with a ListX.
  *
- * @author johnmcclean
- *
  * @param <T> the type of elements held in this toX
+ * @author johnmcclean
  */
-public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,PersistentList<T>> implements LinkedListX<T> {
+public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T, PersistentList<T>> implements LinkedListX<T> {
 
     private final FoldToList<T> generator;
+
+    public LazyLinkedListX(PersistentList<T> list,
+                           ReactiveSeq<T> seq,
+                           Reducer<PersistentList<T>, T> reducer,
+                           FoldToList<T> generator,
+                           Evaluation strict) {
+        super(strict,
+              list,
+              seq,
+              reducer,
+              asyncLinkedList());
+        this.generator = generator;
+
+        handleStrict();
+
+
+    }
+
+    public LazyLinkedListX(PersistentList<T> list,
+                           ReactiveSeq<T> seq,
+                           Reducer<PersistentList<T>, T> reducer,
+                           Evaluation strict) {
+        super(strict,
+              list,
+              seq,
+              reducer,
+              asyncLinkedList());
+        this.generator = new PStackGeneator<>();
+        handleStrict();
+
+
+    }
 
     public static final <T> Function<ReactiveSeq<PersistentList<T>>, PersistentList<T>> asyncLinkedList() {
         return r -> {
@@ -52,46 +81,23 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
             return res.asLinkedListX();
         };
     }
-    public LazyLinkedListX(PersistentList<T> list, ReactiveSeq<T> seq, Reducer<PersistentList<T>,T> reducer, FoldToList<T> generator, Evaluation strict) {
-        super(strict,list, seq, reducer,asyncLinkedList());
-        this.generator = generator;
 
-        handleStrict();
-
-
-
-    }
-    public LazyLinkedListX(PersistentList<T> list, ReactiveSeq<T> seq, Reducer<PersistentList<T>,T> reducer, Evaluation strict) {
-        super(strict,list, seq, reducer,asyncLinkedList());
-        this.generator = new PStackGeneator<>();
-        handleStrict();
-
-
-    }
-    public class PStackGeneator<T> implements FoldToList<T> {
-         public PersistentList<T> from(final Iterator<T> i, int depth) {
-
-             if (!i.hasNext())
-                 return Seq.empty();
-             return Seq.<T>empty().prependAll(() -> i);
-
-         }
-    }
-
-    public PersistentList<T> materializeList(ReactiveSeq<T> toUse){
+    public PersistentList<T> materializeList(ReactiveSeq<T> toUse) {
 
         return toUse.fold(s -> {
-            PersistentList<T> res = generator.from(toUse.iterator(),0);
-            return new LazyLinkedListX<T>(
-                    res,null, this.getCollectorInternal(),generator, evaluation());
-                },
-                r -> super.materializeList(toUse),
-                a -> super.materializeList(toUse));
-
+                              PersistentList<T> res = generator.from(toUse.iterator(),
+                                                                     0);
+                              return new LazyLinkedListX<T>(res,
+                                                            null,
+                                                            this.getCollectorInternal(),
+                                                            generator,
+                                                            evaluation());
+                          },
+                          r -> super.materializeList(toUse),
+                          a -> super.materializeList(toUse));
 
 
     }
-
 
     //@Override
     public LinkedListX<T> materialize() {
@@ -99,41 +105,63 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
         return this;
     }
 
-
     @Override
     public LinkedListX<T> lazy() {
-        return new LazyLinkedListX<T>(list,seq.get(),getCollectorInternal(),Evaluation.LAZY) ;
+        return new LazyLinkedListX<T>(list,
+                                      seq.get(),
+                                      getCollectorInternal(),
+                                      Evaluation.LAZY);
     }
 
     @Override
     public LinkedListX<T> eager() {
-        return new LazyLinkedListX<T>(list,seq.get(),getCollectorInternal(),Evaluation.EAGER) ;
+        return new LazyLinkedListX<T>(list,
+                                      seq.get(),
+                                      getCollectorInternal(),
+                                      Evaluation.EAGER);
     }
 
     @Override
-    public LinkedListX<T> type(Reducer<? extends PersistentList<T>,T> reducer) {
-        return new LazyLinkedListX<T>(list,seq.get(),Reducer.narrow(reducer),generator, evaluation());
+    public LinkedListX<T> type(Reducer<? extends PersistentList<T>, T> reducer) {
+        return new LazyLinkedListX<T>(list,
+                                      seq.get(),
+                                      Reducer.narrow(reducer),
+                                      generator,
+                                      evaluation());
     }
 
     //  @Override
     public <X> LazyLinkedListX<X> fromStream(ReactiveSeq<X> stream) {
 
-        Reducer<PersistentList<T>,T> reducer = getCollectorInternal();
-        return new LazyLinkedListX<X>((PersistentList<X>)getList(),(ReactiveSeq)stream,(Reducer)reducer,(FoldToList)generator, evaluation());
+        Reducer<PersistentList<T>, T> reducer = getCollectorInternal();
+        return new LazyLinkedListX<X>((PersistentList<X>) getList(),
+                                      stream,
+                                      (Reducer) reducer,
+                                      (FoldToList) generator,
+                                      evaluation());
     }
 
     @Override
     public <T1> LazyLinkedListX<T1> from(Iterable<T1> c) {
-        if(c instanceof PersistentList)
-            return new LazyLinkedListX<T1>((PersistentList)c,null,(Reducer)getCollectorInternal(),(FoldToList)generator, evaluation());
+        if (c instanceof PersistentList) {
+            return new LazyLinkedListX<T1>((PersistentList) c,
+                                           null,
+                                           (Reducer) getCollectorInternal(),
+                                           (FoldToList) generator,
+                                           evaluation());
+        }
         return fromStream(ReactiveSeq.fromIterable(c));
     }
+
     public <T1> LazyLinkedListX<T1> from(PersistentList<T1> c) {
 
-            return new LazyLinkedListX<T1>(c,null,(Reducer)getCollectorInternal(),(FoldToList)generator, evaluation());
+        return new LazyLinkedListX<T1>(c,
+                                       null,
+                                       (Reducer) getCollectorInternal(),
+                                       (FoldToList) generator,
+                                       evaluation());
 
     }
-
 
     @Override
     public LinkedListX<T> removeAll(Iterable<? extends T> list) {
@@ -146,13 +174,17 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
     }
 
     @Override
-    public LinkedListX<T> updateAt(int i, T e) {
-        return from(get().updateAt(i,e));
+    public LinkedListX<T> updateAt(int i,
+                                   T e) {
+        return from(get().updateAt(i,
+                                   e));
     }
 
     @Override
-    public LinkedListX<T> insertAt(int i, T e) {
-        return from(get().insertAt(i,e));
+    public LinkedListX<T> insertAt(int i,
+                                   T e) {
+        return from(get().insertAt(i,
+                                   e));
     }
 
     @Override
@@ -166,8 +198,10 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
     }
 
     @Override
-    public LinkedListX<T> insertAt(int i, Iterable<? extends T> list) {
-        return from(get().insertAt(i,list));
+    public LinkedListX<T> insertAt(int i,
+                                   Iterable<? extends T> list) {
+        return from(get().insertAt(i,
+                                   list));
     }
 
     @Override
@@ -175,22 +209,18 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
         return from(get().removeAt(i));
     }
 
-
     @Override
     public boolean equals(Object o) {
-       if(o instanceof List){
-           return equalToIteration((List)o);
-       }
-       return super.equals(o);
+        if (o instanceof List) {
+            return equalToIteration((List) o);
+        }
+        return super.equals(o);
     }
-
 
     @Override
     public <U> LazyLinkedListX<U> unitIterable(Iterable<U> it) {
         return fromStream(ReactiveSeq.fromIterable(it));
     }
-
-
 
     @Override
     public <R> LazyLinkedListX<R> unit(Iterable<R> col) {
@@ -198,13 +228,15 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
     }
 
     @Override
-    public LinkedListX<T> plusLoop(int max, IntFunction<T> value) {
-        return (LinkedListX<T>)super.plusLoop(max,value);
+    public LinkedListX<T> plusLoop(int max,
+                                   IntFunction<T> value) {
+        return (LinkedListX<T>) super.plusLoop(max,
+                                               value);
     }
 
     @Override
     public LinkedListX<T> plusLoop(Supplier<Option<T>> supplier) {
-        return (LinkedListX<T>)super.plusLoop(supplier);
+        return (LinkedListX<T>) super.plusLoop(supplier);
     }
 
     @Override
@@ -214,18 +246,37 @@ public class LazyLinkedListX<T> extends AbstractLazyPersistentCollection<T,Persi
     }
 
     @Override
-    public T getOrElse(int index, T value) {
+    public T getOrElse(int index,
+                       T value) {
         PersistentList<T> x = get();
-        if(index>x.size())
+        if (index > x.size()) {
             return value;
-        return x.getOrElse(index,value);
+        }
+        return x.getOrElse(index,
+                           value);
     }
 
     @Override
-    public T getOrElseGet(int index, Supplier<? extends T> supplier) {
+    public T getOrElseGet(int index,
+                          Supplier<? extends T> supplier) {
         PersistentList<T> x = get();
-        if(index>x.size())
+        if (index > x.size()) {
             return supplier.get();
-        return x.getOrElseGet(index,supplier);
+        }
+        return x.getOrElseGet(index,
+                              supplier);
+    }
+
+    public class PStackGeneator<T> implements FoldToList<T> {
+
+        public PersistentList<T> from(final Iterator<T> i,
+                                      int depth) {
+
+            if (!i.hasNext()) {
+                return Seq.empty();
+            }
+            return Seq.<T>empty().prependAll(() -> i);
+
+        }
     }
 }

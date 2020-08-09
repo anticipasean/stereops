@@ -3,43 +3,47 @@ package com.oath.cyclops.internal.stream.spliterators.push;
 
 import com.oath.cyclops.async.adapters.Queue;
 import cyclops.data.Seq;
-import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
-import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 
 public class LazyConcat<IN> {
 
     final AtomicLong produced = new AtomicLong(0);
     final AtomicLong requested = new AtomicLong(0);
-    boolean processAll = false;
-
     final StreamSubscription sub;
     final AtomicReference<Subscription> active = new AtomicReference<>(null);
-    final AtomicReference<Subscription>  next = new AtomicReference<>(null);
-
-
+    final AtomicReference<Subscription> next = new AtomicReference<>(null);
     final Publisher<Operator<IN>> operators;
-    AtomicBoolean finished = new AtomicBoolean(false);
     final Consumer<? super IN> onNext;
     final Consumer<? super Throwable> onError;
     final Runnable onComplete;
     final AtomicLong queued = new AtomicLong(0);
+    boolean processAll = false;
+    AtomicBoolean finished = new AtomicBoolean(false);
     AtomicInteger wip = new AtomicInteger(0);
 
     ManyToOneConcurrentArrayQueue<Operator<IN>> ops = new ManyToOneConcurrentArrayQueue<>(1024);
     Subscription operatorsSub;
+    volatile boolean complete = false;
+    volatile boolean running = false;
+    AtomicInteger mainActive = new AtomicInteger(0);
+    int consumed = 0;
+    int limit = 1;
 
     public LazyConcat(StreamSubscription sub,
 
-                      Seq<Operator<IN>> operators, Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+                      Seq<Operator<IN>> operators,
+                      Consumer<? super IN> onNext,
+                      Consumer<? super Throwable> onError,
+                      Runnable onComplete) {
         this.sub = sub;
         this.operators = operators;
         this.onNext = onNext;
@@ -50,18 +54,16 @@ public class LazyConcat<IN> {
         operatorsSub.request(1);
     }
 
-
-
-
     public void request(long n) {
 
-        if(!sub.isOpen){
+        if (!sub.isOpen) {
             return;
         }
         if (processAll) {
             return;
         }
-        if(wip.compareAndSet(0,1)){
+        if (wip.compareAndSet(0,
+                              1)) {
 
             //if processAll the demand is self-sustaining, passed on in onComplete
             if (n == Long.MAX_VALUE || sub.requested.get() == Long.MAX_VALUE) {
@@ -80,24 +82,26 @@ public class LazyConcat<IN> {
                         nextLocal.request(Long.MAX_VALUE);
 
                     }
-                }while(sa==null && nextLocal==null && !complete);
+                } while (sa == null && nextLocal == null && !complete);
                 return;
             }
-            requested.accumulateAndGet(n,(a,b)->a+b);
+            requested.accumulateAndGet(n,
+                                       (a, b) -> a + b);
 
             Subscription local = active.get();
             if (decrementAndCheckActive()) {
                 addMissingRequests();
             }
-            if(local!=null) {
+            if (local != null) {
                 local.request(n);
             }
 
-        }else{
+        } else {
 
-            queued.accumulateAndGet(n,(a,b)->a+b);
+            queued.accumulateAndGet(n,
+                                    (a, b) -> a + b);
 
-            if(incrementAndCheckInactive()){
+            if (incrementAndCheckInactive()) {
 
                 addMissingRequests();
             }
@@ -105,84 +109,87 @@ public class LazyConcat<IN> {
         }
 
 
-
     }
 
     private boolean decrementAndCheckActive() {
-        return wip.decrementAndGet()!=0;
+        return wip.decrementAndGet() != 0;
     }
 
     //transfer demand from previous to next
-    public void addMissingRequests(){
+    public void addMissingRequests() {
 
-
-        int missed=1;
-        long toRequest=0L;
-
+        int missed = 1;
+        long toRequest = 0L;
 
         do {
             long localQueued = queued.getAndSet(0l);
             Subscription localSub = next.getAndSet(null);
             long missedOutput = produced.get();
 
-
-
             Subscription localActive = active.get();
             long reqs = requested.get() + localQueued;
 
-            if(reqs<0 || toRequest<0) {
-                processAll=true;
-                if(localSub!=null)
+            if (reqs < 0 || toRequest < 0) {
+                processAll = true;
+                if (localSub != null) {
                     localSub.request(Long.MAX_VALUE);
-                if(localActive!=null)
+                }
+                if (localActive != null) {
                     localActive.request(Long.MAX_VALUE);
+                }
                 return;
             }
             requested.set(reqs);
-            if(localSub!=null){
+            if (localSub != null) {
                 active.set(localSub);
-                toRequest +=reqs;
-            }else if(localQueued !=0 && localActive!=null) {
+                toRequest += reqs;
+            } else if (localQueued != 0 && localActive != null) {
                 toRequest += reqs;
             }
-            missed = wip.accumulateAndGet(missed,(a,b)->a-b);
+            missed = wip.accumulateAndGet(missed,
+                                          (a, b) -> a - b);
 
-        }while(missed!=0);
+        } while (missed != 0);
 
-        if(toRequest>0) {
+        if (toRequest > 0) {
 
-            active.get().request(toRequest);
+            active.get()
+                  .request(toRequest);
         }
 
     }
+
     public void emitted(long n) {
         if (processAll) {
             return;
         }
-        if (wip.compareAndSet(0, 1)) {
-            requested.accumulateAndGet(n,(a,b)->a-b);
+        if (wip.compareAndSet(0,
+                              1)) {
+            requested.accumulateAndGet(n,
+                                       (a, b) -> a - b);
             if (decrementAndCheckActive()) {
                 addMissingRequests();
             }
 
-        }else {
-            produced.accumulateAndGet(n, (a, b) -> a + b);
+        } else {
+            produced.accumulateAndGet(n,
+                                      (a, b) -> a + b);
             if (incrementAndCheckInactive()) {
                 addMissingRequests();
             }
         }
     }
 
-    public void onError(Throwable t){
+    public void onError(Throwable t) {
         emitted(1);
         onError.accept(t);
 
     }
 
-    public void onNext(IN e){
+    public void onNext(IN e) {
 
         emitted(1);
-        if(!sub.isOpen){
+        if (!sub.isOpen) {
             return;
         }
 
@@ -197,15 +204,12 @@ public class LazyConcat<IN> {
 
     }
 
-    public void onComplete(){
+    public void onComplete() {
 
-        running =false;
+        running = false;
         handleMainPublisher();
 
     }
-
-    volatile boolean complete = false;
-
 
     private void operatorsSubscription() {
         operators.subscribe(new Subscriber<Operator<IN>>() {
@@ -217,7 +221,7 @@ public class LazyConcat<IN> {
             @Override
             public void onNext(Operator<IN> inOperator) {
 
-                ops.add((Operator<IN>)nilsafeIn(inOperator));
+                ops.add((Operator<IN>) nilsafeIn(inOperator));
                 handleMainPublisher();
 
             }
@@ -231,59 +235,62 @@ public class LazyConcat<IN> {
             @Override
             public void onComplete() {
 
-                complete =true;
+                complete = true;
                 handleMainPublisher();
             }
         });
     }
-    private Object nilsafeIn(Object o){
-        if(o==null)
+
+    private Object nilsafeIn(Object o) {
+        if (o == null) {
             return Queue.NILL;
+        }
         return o;
     }
-    private <T> T nilsafeOut(Object o){
-        if(Queue.NILL==o){
+
+    private <T> T nilsafeOut(Object o) {
+        if (Queue.NILL == o) {
             return null;
         }
-        return (T)o;
+        return (T) o;
     }
-    volatile boolean running = false;
-    AtomicInteger mainActive = new AtomicInteger(0);
-    int consumed =0;
-    int limit =1;
+
     void handleMainPublisher() {
-        if (mainActive.getAndIncrement()==0) {
+        if (mainActive.getAndIncrement() == 0) {
             do {
                 if (!sub.isOpen) {
                     return;
                 }
                 if (!running) {
                     Object next = ops.poll();
-                    if (complete && next==null) {
+                    if (complete && next == null) {
                         onComplete.run();
                         break;
-                    }else if(next!=null) {
+                    } else if (next != null) {
                         operatorsSub.request(1l);
                         Operator<IN> pub = (Operator<IN>) nilsafeOut(next);
                         running = true;
                         nextSub(pub);
                     }
                 }
-            } while (mainActive.decrementAndGet()!=0) ;
+            } while (mainActive.decrementAndGet() != 0);
 
         }
     }
 
-    public void nextSub(Operator<IN> op){
+    public void nextSub(Operator<IN> op) {
 
-        Subscription local = op.subscribe(this::onNext ,this::onError,this::onComplete);
-        if(processAll){
+        Subscription local = op.subscribe(this::onNext,
+                                          this::onError,
+                                          this::onComplete);
+        if (processAll) {
 
             local.request(Long.MAX_VALUE);
             active.set(local);
             return;
         }
-        if (wip.compareAndSet(0, 1)) {
+        if (wip.compareAndSet(0,
+                              1)) {
             active.set(local);
             long r = requested.get();
             if (decrementAndCheckActive()) {
@@ -291,13 +298,13 @@ public class LazyConcat<IN> {
                 this.addMissingRequests();
             }
 
-            if(r>0) {
+            if (r > 0) {
                 local.request(r);
             }
             return;
         }
         next.set(local);
-        if(incrementAndCheckInactive()){
+        if (incrementAndCheckInactive()) {
             this.addMissingRequests();
             return;
         }
@@ -305,16 +312,18 @@ public class LazyConcat<IN> {
     }
 
     private boolean incrementAndCheckInactive() {
-        return wip.getAndIncrement()==0;
+        return wip.getAndIncrement() == 0;
     }
 
 
     public void cancel() {
         Subscription local = active.get();
-        if(local!=null)
+        if (local != null) {
             local.cancel();
+        }
         local = next.get();
-        if(local!=null)
+        if (local != null) {
             local.cancel();
+        }
     }
 }

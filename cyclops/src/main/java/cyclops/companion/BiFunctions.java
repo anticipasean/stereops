@@ -1,14 +1,18 @@
 package cyclops.companion;
 
-import cyclops.function.Semigroup;
-
-import java.util.*;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.function.BinaryOperator;
 
 public interface BiFunctions {
+
     /**
      * Concatenate mutable collections
-     *
+     * <p>
      * To manage javac type inference first assign the semigroup
      * <pre>
      * {@code
@@ -20,6 +24,7 @@ public interface BiFunctions {
      *
      * }
      * </pre>
+     *
      * @return A Semigroup that can combine any mutable toX type
      */
     static <T, C extends Collection<T>> BinaryOperator<C> mutableCollectionConcat() {
@@ -71,7 +76,7 @@ public interface BiFunctions {
 
     /**
      * This Semigroup will combine JDK Collections.
-     *
+     * <p>
      * To manage javac type inference first assign the semigroup
      * <pre>
      * {@code
@@ -83,6 +88,7 @@ public interface BiFunctions {
      *
      * }
      * </pre>
+     *
      * @return A Semigroup that attempts to combine the supplied Collections
      */
     static <T, C extends Collection<T>> BinaryOperator<C> collectionConcat() {

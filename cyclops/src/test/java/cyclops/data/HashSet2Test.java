@@ -1,39 +1,50 @@
 package cyclops.data;
 
-import cyclops.reactive.ReactiveSeq;
-import org.junit.Test;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class HashSet2Test {
-    @Test
-    public void duplicates(){
-        assertThat(HashSet.of(1,2,1,2,1,2).size(),equalTo(2));
-    }
-    @Test
-    public void nines(){
-   /**     HashSet<Integer> hs = HashSet.<Integer>empty().plus(9).plus(-10).plus(8)
-                .plus(-9);
-        System.out.println("-9?"+hs.containsValue(-9));
-    **/
+import org.junit.Test;
 
-        System.out.println(HashSet.<Long>empty().plus(9l).plus(-10l)
-                .plus(8l));
-              //  .plus(-9l));
-    }
+public class HashSet2Test {
+
     @Test
-    public void reversedRangeLongWithReverse(){
-        HashSet<Long> s = HashSet.rangeLong(10, -10);
-     //   HashSet<Long> s = (HashSet)HashSet.rangeLong(10, -10).reverse();
-       //System.out.println(HashSet.fromStream(ReactiveSeq.rangeLong(10,-10).reverse()));
+    public void duplicates() {
+        assertThat(HashSet.of(1,
+                              2,
+                              1,
+                              2,
+                              1,
+                              2)
+                          .size(),
+                   equalTo(2));
+    }
+
+    @Test
+    public void nines() {
+        /**     HashSet<Integer> hs = HashSet.<Integer>empty().plus(9).plus(-10).plus(8)
+         .plus(-9);
+         System.out.println("-9?"+hs.containsValue(-9));
+         **/
+
+        System.out.println(HashSet.<Long>empty().plus(9l)
+                                                .plus(-10l)
+                                                .plus(8l));
+        //  .plus(-9l));
+    }
+
+    @Test
+    public void reversedRangeLongWithReverse() {
+        HashSet<Long> s = HashSet.rangeLong(10,
+                                            -10);
+        //   HashSet<Long> s = (HashSet)HashSet.rangeLong(10, -10).reverse();
+        //System.out.println(HashSet.fromStream(ReactiveSeq.rangeLong(10,-10).reverse()));
 
         System.out.println("******************");
         System.out.println("******************");
 
         System.out.println(s.reverse());
-   /**     System.out.println(((HashSet)s.reverse()).getMap());
-        assertThat(HashSet.rangeLong(10, -10).reverse().count(),equalTo(20L));
+        /**     System.out.println(((HashSet)s.reverse()).getMap());
+         assertThat(HashSet.rangeLong(10, -10).reverse().count(),equalTo(20L));
          **/
     }
 }

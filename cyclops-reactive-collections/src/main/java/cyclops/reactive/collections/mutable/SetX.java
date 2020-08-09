@@ -1,5 +1,7 @@
 package cyclops.reactive.collections.mutable;
 
+import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.ReactiveWitness.set;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
@@ -11,91 +13,76 @@ import com.oath.cyclops.types.foldable.To;
 import com.oath.cyclops.types.persistent.PersistentCollection;
 import com.oath.cyclops.types.recoverable.OnEmptySwitch;
 import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.data.Seq;
 import cyclops.control.Either;
 import cyclops.control.Future;
 import cyclops.control.Option;
+import cyclops.data.Seq;
+import cyclops.data.Vector;
 import cyclops.data.tuple.Tuple2;
 import cyclops.data.tuple.Tuple3;
 import cyclops.data.tuple.Tuple4;
-import cyclops.data.Vector;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.function.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
-import org.reactivestreams.Publisher;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import org.reactivestreams.Publisher;
 
 /**
- * An eXtended Set type, that offers additional functional style operators such as bimap, filter and more
- * Can operate eagerly, lazily or reactively (async push)
- *
- * @author johnmcclean
+ * An eXtended Set type, that offers additional functional style operators such as bimap, filter and more Can operate eagerly,
+ * lazily or reactively (async push)
  *
  * @param <T> the type of elements held in this SetX
+ * @author johnmcclean
  */
-public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<set,T>,OnEmptySwitch<T, Set<T>> {
+public interface SetX<T> extends To<SetX<T>>, Set<T>, LazyCollectionX<T>, Higher<set, T>, OnEmptySwitch<T, Set<T>> {
 
-    public static <T> SetX<T> defer(Supplier<SetX<T>> s){
-      return of(s)
-             .map(Supplier::get)
-             .concatMap(l->l);
+    static <T> SetX<T> defer(Supplier<SetX<T>> s) {
+        return of(s).map(Supplier::get)
+                    .concatMap(l -> l);
     }
 
-    static <T> CompletableSetX<T> completable(){
+    static <T> CompletableSetX<T> completable() {
         return new CompletableSetX<>();
     }
 
-    static class CompletableSetX<T> implements InvocationHandler {
-        Future<SetX<T>> future    = Future.future();
-        public boolean complete(Set<T> result){
-            return future.complete(SetX.fromIterable(result));
-        }
-
-        public SetX<T> asSetX(){
-            SetX f = (SetX) Proxy.newProxyInstance(SetX.class.getClassLoader(),
-                    new Class[] { SetX.class },
-                    this);
-            return f;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            //@TODO
-            SetX<T> target = future.fold(l->l, t->{throw ExceptionSoftener.throwSoftenedException(t);});
-            return method.invoke(target,args);
-        }
+    static <T> Higher<set, T> widen(SetX<T> narrow) {
+        return narrow;
     }
-    SetX<T> lazy();
-    SetX<T> eager();
 
-    public static <T> Higher<set, T> widen(SetX<T> narrow) {
-    return narrow;
-  }
     /**
      * Create a SetX that contains the Integers between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range SetX
      */
-    public static SetX<Integer> range(final int start, final int end) {
+    static SetX<Integer> range(final int start,
+                               final int end) {
 
-        return ReactiveSeq.range(start, end)
+        return ReactiveSeq.range(start,
+                                 end)
                           .to(ReactiveConvertableSequence::converter)
                           .setX(LAZY);
     }
@@ -103,14 +90,15 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
     /**
      * Create a SetX that contains the Longs between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range SetX
      */
-    public static SetX<Long> rangeLong(final long start, final long end) {
-        return ReactiveSeq.rangeLong(start, end).to(ReactiveConvertableSequence::converter)
+    static SetX<Long> rangeLong(final long start,
+                                final long end) {
+        return ReactiveSeq.rangeLong(start,
+                                     end)
+                          .to(ReactiveConvertableSequence::converter)
                           .setX(LAZY);
     }
 
@@ -125,12 +113,15 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      *
      * }</pre>
      *
-     * @param seed Initial value
+     * @param seed     Initial value
      * @param unfolder Iteratively applied function, terminated by an zero Optional
      * @return SetX generated by unfolder function
      */
-    static <U, T> SetX<T> unfold(final U seed, final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
-        return ReactiveSeq.unfold(seed, unfolder).to(ReactiveConvertableSequence::converter)
+    static <U, T> SetX<T> unfold(final U seed,
+                                 final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
+        return ReactiveSeq.unfold(seed,
+                                  unfolder)
+                          .to(ReactiveConvertableSequence::converter)
                           .setX(LAZY);
     }
 
@@ -138,13 +129,15 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      * Generate a SetX from the provided Supplier up to the provided limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param s Supplier to generate SetX elements
+     * @param s     Supplier to generate SetX elements
      * @return SetX generated from the provided Supplier
      */
-    public static <T> SetX<T> generate(final long limit, final Supplier<T> s) {
+    static <T> SetX<T> generate(final long limit,
+                                final Supplier<T> s) {
 
         return ReactiveSeq.generate(s)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
                           .setX(LAZY);
     }
 
@@ -152,13 +145,17 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      * Create a SetX by iterative application of a function to an initial element up to the supplied limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param seed Initial element
-     * @param f Iteratively applied to each element to generate the next element
+     * @param seed  Initial element
+     * @param f     Iteratively applied to each element to generate the next element
      * @return SetX generated by iterative application
      */
-    public static <T> SetX<T> iterate(final long limit, final T seed, final UnaryOperator<T> f) {
-        return ReactiveSeq.iterate(seed, f)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
+    static <T> SetX<T> iterate(final long limit,
+                               final T seed,
+                               final UnaryOperator<T> f) {
+        return ReactiveSeq.iterate(seed,
+                                   f)
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
                           .setX(LAZY);
 
     }
@@ -172,41 +169,45 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
     }
 
     static <T> Collector<T, ?, Set<T>> immutableCollector() {
-        return Collectors.collectingAndThen(defaultCollector(), (final Set<T> d) -> Collections.unmodifiableSet(d));
+        return Collectors.collectingAndThen(defaultCollector(),
+                                            (final Set<T> d) -> Collections.unmodifiableSet(d));
 
     }
 
-    public static <T> SetX<T> empty() {
+    static <T> SetX<T> empty() {
         return fromIterable((Set<T>) defaultCollector().supplier()
                                                        .get());
     }
 
     @SafeVarargs
-    public static <T> SetX<T> of(final T... values) {
-      return new LazySetX<T>(null,
-                ReactiveSeq.of(values),
-                defaultCollector(), LAZY);
+    static <T> SetX<T> of(final T... values) {
+        return new LazySetX<T>(null,
+                               ReactiveSeq.of(values),
+                               defaultCollector(),
+                               LAZY);
     }
-    public static <T> SetX<T> fromIterator(final Iterator<T> it) {
-        return fromIterable(()->it);
+
+    static <T> SetX<T> fromIterator(final Iterator<T> it) {
+        return fromIterable(() -> it);
     }
-    public static <T> SetX<T> singleton(final T value) {
-        return SetX.<T> of(value);
+
+    static <T> SetX<T> singleton(final T value) {
+        return SetX.of(value);
     }
 
     /**
      * Construct a SetX from an Publisher
      *
-     * @param publisher
-     *            to construct SetX from
+     * @param publisher to construct SetX from
      * @return SetX
      */
-    public static <T> SetX<T> fromPublisher(final Publisher<? extends T> publisher) {
-        return Spouts.from((Publisher<T>) publisher).to(ReactiveConvertableSequence::converter)
-                          .setX(LAZY);
+    static <T> SetX<T> fromPublisher(final Publisher<? extends T> publisher) {
+        return Spouts.from(publisher)
+                     .to(ReactiveConvertableSequence::converter)
+                     .setX(LAZY);
     }
+
     /**
-     *
      * <pre>
      * {@code
      *  import static cyclops.stream.ReactiveSeq.range;
@@ -215,51 +216,113 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      *
      * }
      * </pre>
+     *
      * @param stream To create SetX from
-     * @param <T> SetX generated from Stream
+     * @param <T>    SetX generated from Stream
      * @return
      */
-    public static <T> SetX<T> setX(ReactiveSeq<T> stream){
+    static <T> SetX<T> setX(ReactiveSeq<T> stream) {
         return new LazySetX<T>(null,
-                stream,
-                defaultCollector(), LAZY);
+                               stream,
+                               defaultCollector(),
+                               LAZY);
     }
 
-
-
-    public static <T> SetX<T> fromIterable(final Iterable<T> it) {
-        if (it instanceof SetX)
+    static <T> SetX<T> fromIterable(final Iterable<T> it) {
+        if (it instanceof SetX) {
             return (SetX) it;
-        if (it instanceof Set)
-            return new LazySetX<T>(
-                                   (Set) it, defaultCollector(), LAZY);
-        return new LazySetX<T>(null,ReactiveSeq.fromIterable(it),
-                                          defaultCollector(), LAZY);
+        }
+        if (it instanceof Set) {
+            return new LazySetX<T>((Set) it,
+                                   defaultCollector(),
+                                   LAZY);
+        }
+        return new LazySetX<T>(null,
+                               ReactiveSeq.fromIterable(it),
+                               defaultCollector(),
+                               LAZY);
     }
 
-    public static <T> SetX<T> fromIterable(final Collector<T, ?, Set<T>> collector, final Iterable<T> it) {
-        if (it instanceof SetX)
+    static <T> SetX<T> fromIterable(final Collector<T, ?, Set<T>> collector,
+                                    final Iterable<T> it) {
+        if (it instanceof SetX) {
             return ((SetX) it).type(collector);
-        if (it instanceof Set)
-            return new LazySetX<T>(
-                                   (Set) it, collector, LAZY);
+        }
+        if (it instanceof Set) {
+            return new LazySetX<T>((Set) it,
+                                   collector,
+                                   LAZY);
+        }
         return new LazySetX<T>(null,
-                                ReactiveSeq.fromIterable(it),
-                                collector, LAZY);
+                               ReactiveSeq.fromIterable(it),
+                               collector,
+                               LAZY);
     }
+
+    /**
+     * Narrow a covariant Set
+     *
+     * <pre>
+     * {@code
+     * SetX<? extends Fruit> set = SetX.of(apple,bannana);
+     * SetX<Fruit> fruitSet = SetX.narrowK(set);
+     * }
+     * </pre>
+     *
+     * @param setX to narrowK generic type
+     * @return SetX with narrowed type
+     */
+    static <T> SetX<T> narrow(final SetX<? extends T> setX) {
+        return (SetX<T>) setX;
+    }
+
+    static <T> SetX<T> narrowK(final Higher<set, T> set) {
+        return (SetX<T>) set;
+    }
+
+    static <T, R> SetX<R> tailRec(T initial,
+                                  Function<? super T, ? extends SetX<? extends Either<T, R>>> fn) {
+        ListX<Either<T, R>> lazy = ListX.of(Either.left(initial));
+        ListX<Either<T, R>> next = lazy.eager();
+        boolean[] newValue = {true};
+        for (; ; ) {
+
+            next = next.concatMap(e -> e.fold(s -> {
+                                                  newValue[0] = true;
+                                                  return fn.apply(s);
+                                              },
+                                              p -> {
+                                                  newValue[0] = false;
+                                                  return ListX.of(e);
+                                              }));
+            if (!newValue[0]) {
+                break;
+            }
+
+        }
+        return Either.sequenceRight(next)
+                     .orElse(ReactiveSeq.empty())
+                     .to(ReactiveConvertableSequence::converter)
+                     .setX(Evaluation.LAZY);
+    }
+
+    SetX<T> lazy();
+
+    SetX<T> eager();
+
     @Override
-    default Object[] toArray(){
+    default Object[] toArray() {
         return LazyCollectionX.super.toArray();
     }
 
     @Override
-    default <T1> T1[] toArray(T1[] a){
+    default <T1> T1[] toArray(T1[] a) {
         return LazyCollectionX.super.toArray(a);
     }
 
     @Override
     default SetX<T> materialize() {
-        return (SetX<T>)LazyCollectionX.super.materialize();
+        return (SetX<T>) LazyCollectionX.super.materialize();
     }
 
     @Override
@@ -267,10 +330,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
 
         return (SetX<T>) LazyCollectionX.super.take(num);
     }
+
     @Override
     default SetX<T> drop(final long num) {
 
-        return (SetX<T>)LazyCollectionX.super.drop(num);
+        return (SetX<T>) LazyCollectionX.super.drop(num);
     }
 
     /* (non-Javadoc)
@@ -278,11 +342,14 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      */
     @Override
     default <R1, R2, R3, R> SetX<R> forEach4(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
-            Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+                                             BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                             Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
+                                             Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (SetX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, yieldingFunction);
+        return (SetX) LazyCollectionX.super.forEach4(stream1,
+                                                     stream2,
+                                                     stream3,
+                                                     yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -290,12 +357,16 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      */
     @Override
     default <R1, R2, R3, R> SetX<R> forEach4(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
-            Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
-            Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+                                             BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                             Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
+                                             Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
+                                             Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (SetX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, filterFunction, yieldingFunction);
+        return (SetX) LazyCollectionX.super.forEach4(stream1,
+                                                     stream2,
+                                                     stream3,
+                                                     filterFunction,
+                                                     yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -303,10 +374,12 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      */
     @Override
     default <R1, R2, R> SetX<R> forEach3(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+                                         BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                         Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (SetX)LazyCollectionX.super.forEach3(stream1, stream2, yieldingFunction);
+        return (SetX) LazyCollectionX.super.forEach3(stream1,
+                                                     stream2,
+                                                     yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -314,11 +387,14 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      */
     @Override
     default <R1, R2, R> SetX<R> forEach3(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
-            Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
-            Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+                                         BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
+                                         Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
+                                         Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (SetX)LazyCollectionX.super.forEach3(stream1, stream2, filterFunction, yieldingFunction);
+        return (SetX) LazyCollectionX.super.forEach3(stream1,
+                                                     stream2,
+                                                     filterFunction,
+                                                     yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -326,9 +402,10 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      */
     @Override
     default <R1, R> SetX<R> forEach2(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+                                     BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (SetX)LazyCollectionX.super.forEach2(stream1, yieldingFunction);
+        return (SetX) LazyCollectionX.super.forEach2(stream1,
+                                                     yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -336,10 +413,12 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      */
     @Override
     default <R1, R> SetX<R> forEach2(Function<? super T, ? extends Iterable<R1>> stream1,
-            BiFunction<? super T, ? super R1, Boolean> filterFunction,
-            BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+                                     BiFunction<? super T, ? super R1, Boolean> filterFunction,
+                                     BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (SetX)LazyCollectionX.super.forEach2(stream1, filterFunction, yieldingFunction);
+        return (SetX) LazyCollectionX.super.forEach2(stream1,
+                                                     filterFunction,
+                                                     yieldingFunction);
     }
 
     SetX<T> type(Collector<T, ?, Set<T>> collector);
@@ -358,39 +437,42 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      * }
      * </pre>
      *
-     *
      * @param fn mapping function
      * @return Transformed Set
      */
-    default <R> SetX<R> coflatMap(Function<? super SetX<T>, ? extends R> fn){
-        return fn.andThen(r ->  this.<R>unit(r))
-                  .apply(this);
+    default <R> SetX<R> coflatMap(Function<? super SetX<T>, ? extends R> fn) {
+        return fn.andThen(r -> this.<R>unit(r))
+                 .apply(this);
     }
 
     /**
-     * Combine two adjacent elements in a SetX using the supplied BinaryOperator
-     * This is a stateful grouping and reduction operation. The emitted of a combination may in turn be combined
-     * with it's neighbor
+     * Combine two adjacent elements in a SetX using the supplied BinaryOperator This is a stateful grouping and reduction
+     * operation. The emitted of a combination may in turn be combined with it's neighbor
      * <pre>
      * {@code
      *  SetX.of(1,1,2,3)
-                   .combine((a, b)->a.equals(b),SemigroupK.intSum)
-                   .listX(Evaluation.LAZY)
-
+     * .combine((a, b)->a.equals(b),SemigroupK.intSum)
+     * .listX(Evaluation.LAZY)
+     *
      *  //ListX(3,4)
      * }</pre>
      *
      * @param predicate Test to see if two neighbors should be joined
-     * @param op Reducer to combine neighbors
+     * @param op        Reducer to combine neighbors
      * @return Combined / Partially Reduced SetX
      */
     @Override
-    default SetX<T> combine(final BiPredicate<? super T, ? super T> predicate, final BinaryOperator<T> op) {
-        return (SetX<T>) LazyCollectionX.super.combine(predicate, op);
+    default SetX<T> combine(final BiPredicate<? super T, ? super T> predicate,
+                            final BinaryOperator<T> op) {
+        return (SetX<T>) LazyCollectionX.super.combine(predicate,
+                                                       op);
     }
+
     @Override
-    default SetX<T> combine(final Monoid<T> op, final BiPredicate<? super T, ? super T> predicate) {
-        return (SetX<T>)LazyCollectionX.super.combine(op,predicate);
+    default SetX<T> combine(final Monoid<T> op,
+                            final BiPredicate<? super T, ? super T> predicate) {
+        return (SetX<T>) LazyCollectionX.super.combine(op,
+                                                       predicate);
     }
 
     @Override
@@ -416,15 +498,17 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
 
     @Override
     default <T1> SetX<T1> from(final Iterable<T1> c) {
-        return SetX.<T1> fromIterable(getCollector(), c);
+        return SetX.fromIterable(getCollector(),
+                                 c);
     }
 
-    public <T> Collector<T, ?, Set<T>> getCollector();
+    <T> Collector<T, ?, Set<T>> getCollector();
 
     @Override
     default <X> SetX<X> fromStream(final ReactiveSeq<X> stream) {
-        return new LazySetX<>(
-                              stream.collect(getCollector()), getCollector(), LAZY);
+        return new LazySetX<>(stream.collect(getCollector()),
+                              getCollector(),
+                              LAZY);
     }
 
     /* (non-Javadoc)
@@ -450,7 +534,7 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
     @Override
     default <R> SetX<R> map(final Function<? super T, ? extends R> mapper) {
 
-        return (SetX<R>) LazyCollectionX.super.<R> map(mapper);
+        return (SetX<R>) LazyCollectionX.super.<R>map(mapper);
     }
 
     /* (non-Javadoc)
@@ -459,9 +543,8 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
     @Override
     default <R> SetX<R> concatMap(final Function<? super T, ? extends Iterable<? extends R>> mapper) {
 
-        return (SetX<R>)LazyCollectionX.super.concatMap(mapper);
+        return (SetX<R>) LazyCollectionX.super.concatMap(mapper);
     }
-
 
     @Override
     default SetX<T> takeRight(final int num) {
@@ -473,13 +556,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.dropRight(num);
     }
 
-
     @Override
     default SetX<T> takeWhile(final Predicate<? super T> p) {
 
         return (SetX<T>) LazyCollectionX.super.takeWhile(p);
     }
-
 
     @Override
     default SetX<T> dropWhile(final Predicate<? super T> p) {
@@ -487,13 +568,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.dropWhile(p);
     }
 
-
     @Override
     default SetX<T> takeUntil(final Predicate<? super T> p) {
 
         return (SetX<T>) LazyCollectionX.super.takeUntil(p);
     }
-
 
     @Override
     default SetX<T> dropUntil(final Predicate<? super T> p) {
@@ -501,15 +580,13 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.dropUntil(p);
     }
 
-
-
-
     @Override
-    default SetX<T> slice(final long from, final long to) {
+    default SetX<T> slice(final long from,
+                          final long to) {
 
-        return (SetX<T>) LazyCollectionX.super.slice(from, to);
+        return (SetX<T>) LazyCollectionX.super.slice(from,
+                                                     to);
     }
-
 
     @Override
     default <U extends Comparable<? super U>> SetX<T> sorted(final Function<? super T, ? extends U> function) {
@@ -522,8 +599,6 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX) LazyCollectionX.super.grouped(groupSize);
     }
 
-
-
     @Override
     default <U> SetX<Tuple2<T, U>> zip(final Iterable<? extends U> other) {
         return (SetX) LazyCollectionX.super.zip(other);
@@ -533,20 +608,23 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#zip(java.lang.Iterable, java.util.function.BiFunction)
      */
     @Override
-    default <U, R> SetX<R> zip(final Iterable<? extends U> other, final BiFunction<? super T, ? super U, ? extends R> zipper) {
+    default <U, R> SetX<R> zip(final Iterable<? extends U> other,
+                               final BiFunction<? super T, ? super U, ? extends R> zipper) {
 
-        return (SetX<R>) LazyCollectionX.super.zip(other, zipper);
+        return (SetX<R>) LazyCollectionX.super.zip(other,
+                                                   zipper);
     }
 
-
-  @Override
+    @Override
     default SetX<Seq<T>> sliding(final int windowSize) {
         return (SetX<Seq<T>>) LazyCollectionX.super.sliding(windowSize);
     }
 
     @Override
-    default SetX<Seq<T>> sliding(final int windowSize, final int increment) {
-        return (SetX<Seq<T>>) LazyCollectionX.super.sliding(windowSize, increment);
+    default SetX<Seq<T>> sliding(final int windowSize,
+                                 final int increment) {
+        return (SetX<Seq<T>>) LazyCollectionX.super.sliding(windowSize,
+                                                            increment);
     }
 
     @Override
@@ -555,8 +633,10 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
     }
 
     @Override
-    default <U> SetX<U> scanLeft(final U seed, final BiFunction<? super U, ? super T, ? extends U> function) {
-        return (SetX<U>) LazyCollectionX.super.scanLeft(seed, function);
+    default <U> SetX<U> scanLeft(final U seed,
+                                 final BiFunction<? super U, ? super T, ? extends U> function) {
+        return (SetX<U>) LazyCollectionX.super.scanLeft(seed,
+                                                        function);
     }
 
     @Override
@@ -565,8 +645,10 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
     }
 
     @Override
-    default <U> SetX<U> scanRight(final U identity, final BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return (SetX<U>) LazyCollectionX.super.scanRight(identity, combiner);
+    default <U> SetX<U> scanRight(final U identity,
+                                  final BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return (SetX<U>) LazyCollectionX.super.scanRight(identity,
+                                                         combiner);
     }
 
     @Override
@@ -577,7 +659,7 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
 
     @Override
     default SetX<T> plusAll(final Iterable<? extends T> list) {
-        for(T next : list) {
+        for (T next : list) {
             add(next);
         }
         return this;
@@ -591,7 +673,7 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
 
     @Override
     default SetX<T> removeAll(final Iterable<? extends T> list) {
-        for(T next : list) {
+        for (T next : list) {
             removeValue(next);
         }
         return this;
@@ -613,10 +695,12 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#cycle(com.oath.cyclops.sequence.Monoid, int)
      */
     @Override
-    default ListX<T> cycle(final Monoid<T> m, final long times) {
+    default ListX<T> cycle(final Monoid<T> m,
+                           final long times) {
 
         return this.stream()
-                   .cycle(m, times)
+                   .cycle(m,
+                          times)
                    .to(ReactiveConvertableSequence::converter)
                    .listX(LAZY);
     }
@@ -632,7 +716,6 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
                    .to(ReactiveConvertableSequence::converter)
                    .listX(LAZY);
     }
-
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#cycleUntil(java.util.function.Predicate)
@@ -655,24 +738,28 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX) LazyCollectionX.super.zipWithStream(other);
     }
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#zip3(java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <S, U> SetX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third) {
+    default <S, U> SetX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second,
+                                              final Iterable<? extends U> third) {
 
-        return (SetX) LazyCollectionX.super.zip3(second, third);
+        return (SetX) LazyCollectionX.super.zip3(second,
+                                                 third);
     }
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.collections.extensions.standard.LazyCollectionX#zip4(java.util.stream.Stream, java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <T2, T3, T4> SetX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third,
-            final Iterable<? extends T4> fourth) {
+    default <T2, T3, T4> SetX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second,
+                                                          final Iterable<? extends T3> third,
+                                                          final Iterable<? extends T4> fourth) {
 
-        return (SetX) LazyCollectionX.super.zip4(second, third, fourth);
+        return (SetX) LazyCollectionX.super.zip4(second,
+                                                 third,
+                                                 fourth);
     }
 
     /* (non-Javadoc)
@@ -711,13 +798,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.sorted(c);
     }
 
-
     @Override
     default SetX<T> intersperse(final T value) {
 
         return (SetX<T>) LazyCollectionX.super.intersperse(value);
     }
-
 
     @Override
     default SetX<T> shuffle() {
@@ -725,15 +810,13 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.shuffle();
     }
 
-
-
     @Override
     default SetX<T> onEmptySwitch(final Supplier<? extends Set<T>> supplier) {
-        if (isEmpty())
+        if (isEmpty()) {
             return SetX.fromIterable(supplier.get());
+        }
         return this;
     }
-
 
     @Override
     default SetX<T> onEmpty(final T value) {
@@ -741,13 +824,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.onEmpty(value);
     }
 
-
     @Override
     default SetX<T> onEmptyGet(final Supplier<? extends T> supplier) {
 
         return (SetX<T>) LazyCollectionX.super.onEmptyGet(supplier);
     }
-
 
     @Override
     default <X extends Throwable> SetX<T> onEmptyError(final Supplier<? extends X> supplier) {
@@ -755,13 +836,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.onEmptyError(supplier);
     }
 
-
     @Override
     default SetX<T> shuffle(final Random random) {
 
         return (SetX<T>) LazyCollectionX.super.shuffle(random);
     }
-
 
     @Override
     default <U> SetX<U> ofType(final Class<? extends U> type) {
@@ -769,20 +848,17 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<U>) LazyCollectionX.super.ofType(type);
     }
 
-
     @Override
     default SetX<T> filterNot(final Predicate<? super T> fn) {
 
         return (SetX<T>) LazyCollectionX.super.filterNot(fn);
     }
 
-
     @Override
     default SetX<T> notNull() {
 
         return (SetX<T>) LazyCollectionX.super.notNull();
     }
-
 
     @Override
     default SetX<T> removeStream(final Stream<? extends T> stream) {
@@ -792,9 +868,8 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
 
     @Override
     default SetX<T> removeAll(CollectionX<? extends T> it) {
-        return removeAll((Iterable<T>)it);
+        return removeAll((Iterable<T>) it);
     }
-
 
     @Override
     default SetX<T> removeAll(final T... values) {
@@ -802,13 +877,11 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.removeAll(values);
     }
 
-
     @Override
     default SetX<T> retainAll(final Iterable<? extends T> it) {
 
         return (SetX<T>) LazyCollectionX.super.retainAll(it);
     }
-
 
     @Override
     default SetX<T> retainStream(final Stream<? extends T> seq) {
@@ -816,21 +889,19 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<T>) LazyCollectionX.super.retainStream(seq);
     }
 
-
     @Override
     default SetX<T> retainAll(final T... values) {
 
         return (SetX<T>) LazyCollectionX.super.retainAll(values);
     }
 
-
-
     @Override
-    default <C extends PersistentCollection<? super T>> SetX<C> grouped(final int size, final Supplier<C> supplier) {
+    default <C extends PersistentCollection<? super T>> SetX<C> grouped(final int size,
+                                                                        final Supplier<C> supplier) {
 
-        return (SetX<C>) LazyCollectionX.super.grouped(size, supplier);
+        return (SetX<C>) LazyCollectionX.super.grouped(size,
+                                                       supplier);
     }
-
 
     @Override
     default SetX<cyclops.data.Vector<T>> groupedUntil(final Predicate<? super T> predicate) {
@@ -838,210 +909,224 @@ public interface SetX<T> extends To<SetX<T>>,Set<T>, LazyCollectionX<T>, Higher<
         return (SetX<Vector<T>>) LazyCollectionX.super.groupedUntil(predicate);
     }
 
-
     @Override
     default SetX<Vector<T>> groupedWhile(final Predicate<? super T> predicate) {
 
         return (SetX<Vector<T>>) LazyCollectionX.super.groupedWhile(predicate);
     }
 
-
     @Override
-    default <C extends PersistentCollection<? super T>> SetX<C> groupedWhile(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> SetX<C> groupedWhile(final Predicate<? super T> predicate,
+                                                                             final Supplier<C> factory) {
 
-        return (SetX<C>) LazyCollectionX.super.groupedWhile(predicate, factory);
+        return (SetX<C>) LazyCollectionX.super.groupedWhile(predicate,
+                                                            factory);
     }
 
-
     @Override
-    default <C extends PersistentCollection<? super T>> SetX<C> groupedUntil(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> SetX<C> groupedUntil(final Predicate<? super T> predicate,
+                                                                             final Supplier<C> factory) {
 
-        return (SetX<C>) LazyCollectionX.super.groupedUntil(predicate, factory);
+        return (SetX<C>) LazyCollectionX.super.groupedUntil(predicate,
+                                                            factory);
     }
-
 
     @Override
     default SetX<Vector<T>> groupedUntil(final BiPredicate<Vector<? super T>, ? super T> predicate) {
         return (SetX<Vector<T>>) LazyCollectionX.super.groupedUntil(predicate);
     }
 
-
     @Override
     default <R> SetX<R> retry(final Function<? super T, ? extends R> fn) {
-        return (SetX<R>)LazyCollectionX.super.retry(fn);
+        return (SetX<R>) LazyCollectionX.super.retry(fn);
     }
 
     @Override
-    default <R> SetX<R> retry(final Function<? super T, ? extends R> fn, final int retries, final long delay, final TimeUnit timeUnit) {
-        return (SetX<R>)LazyCollectionX.super.retry(fn,retries,delay,timeUnit);
+    default <R> SetX<R> retry(final Function<? super T, ? extends R> fn,
+                              final int retries,
+                              final long delay,
+                              final TimeUnit timeUnit) {
+        return (SetX<R>) LazyCollectionX.super.retry(fn,
+                                                     retries,
+                                                     delay,
+                                                     timeUnit);
     }
 
     @Override
     default <R> SetX<R> flatMap(Function<? super T, ? extends Stream<? extends R>> fn) {
-        return (SetX<R>)LazyCollectionX.super.flatMap(fn);
+        return (SetX<R>) LazyCollectionX.super.flatMap(fn);
     }
 
     @Override
     default <R> SetX<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (SetX<R>)LazyCollectionX.super.mergeMap(fn);
-    }
-    @Override
-    default <R> SetX<R> mergeMap(int maxConcurency, Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (SetX<R>)LazyCollectionX.super.mergeMap(maxConcurency,fn);
+        return (SetX<R>) LazyCollectionX.super.mergeMap(fn);
     }
 
+    @Override
+    default <R> SetX<R> mergeMap(int maxConcurency,
+                                 Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return (SetX<R>) LazyCollectionX.super.mergeMap(maxConcurency,
+                                                        fn);
+    }
 
     @Override
     default SetX<T> removeFirst(Predicate<? super T> pred) {
-        return (SetX<T>)LazyCollectionX.super.removeFirst(pred);
+        return (SetX<T>) LazyCollectionX.super.removeFirst(pred);
     }
 
     @Override
     default SetX<T> appendAll(Iterable<? extends T> value) {
-        return (SetX<T>)LazyCollectionX.super.appendAll(value);
+        return (SetX<T>) LazyCollectionX.super.appendAll(value);
     }
 
     @Override
     default SetX<T> prependAll(Iterable<? extends T> value) {
-        return (SetX<T>)LazyCollectionX.super.prependAll(value);
+        return (SetX<T>) LazyCollectionX.super.prependAll(value);
     }
 
     @Override
-    default SetX<T> updateAt(int pos, T value) {
-        return (SetX<T>)LazyCollectionX.super.updateAt(pos,value);
+    default SetX<T> updateAt(int pos,
+                             T value) {
+        return (SetX<T>) LazyCollectionX.super.updateAt(pos,
+                                                        value);
     }
 
     @Override
-    default SetX<T> insertAt(int pos, ReactiveSeq<? extends T> values) {
-        return (SetX<T>)LazyCollectionX.super.insertAt(pos,values);
+    default SetX<T> insertAt(int pos,
+                             ReactiveSeq<? extends T> values) {
+        return (SetX<T>) LazyCollectionX.super.insertAt(pos,
+                                                        values);
     }
-
 
     @Override
     default SetX<T> prependStream(Stream<? extends T> stream) {
-        return (SetX<T>)LazyCollectionX.super.prependStream(stream);
+        return (SetX<T>) LazyCollectionX.super.prependStream(stream);
     }
 
     @Override
     default SetX<T> appendAll(T... values) {
-        return (SetX<T>)LazyCollectionX.super.appendAll(values);
+        return (SetX<T>) LazyCollectionX.super.appendAll(values);
     }
 
     @Override
     default SetX<T> append(T value) {
-        return (SetX<T>)LazyCollectionX.super.append(value);
+        return (SetX<T>) LazyCollectionX.super.append(value);
     }
 
     @Override
     default SetX<T> prepend(T value) {
-        return (SetX<T>)LazyCollectionX.super.prepend(value);
+        return (SetX<T>) LazyCollectionX.super.prepend(value);
     }
 
     @Override
     default SetX<T> prependAll(T... values) {
-        return (SetX<T>)LazyCollectionX.super.prependAll(values);
+        return (SetX<T>) LazyCollectionX.super.prependAll(values);
     }
 
     @Override
-    default SetX<T> insertAt(int pos, T... values) {
-        return (SetX<T>)LazyCollectionX.super.insertAt(pos,values);
+    default SetX<T> insertAt(int pos,
+                             T... values) {
+        return (SetX<T>) LazyCollectionX.super.insertAt(pos,
+                                                        values);
     }
 
     @Override
-    default SetX<T> deleteBetween(int start, int end) {
-        return (SetX<T>)LazyCollectionX.super.deleteBetween(start,end);
+    default SetX<T> deleteBetween(int start,
+                                  int end) {
+        return (SetX<T>) LazyCollectionX.super.deleteBetween(start,
+                                                             end);
     }
 
     @Override
-    default SetX<T> insertStreamAt(int pos, Stream<T> stream) {
-        return (SetX<T>)LazyCollectionX.super.insertStreamAt(pos,stream);
+    default SetX<T> insertStreamAt(int pos,
+                                   Stream<T> stream) {
+        return (SetX<T>) LazyCollectionX.super.insertStreamAt(pos,
+                                                              stream);
     }
 
     @Override
     default SetX<T> recover(final Function<? super Throwable, ? extends T> fn) {
-        return (SetX<T>)LazyCollectionX.super.recover(fn);
+        return (SetX<T>) LazyCollectionX.super.recover(fn);
     }
 
     @Override
-    default <EX extends Throwable> SetX<T> recover(Class<EX> exceptionClass, final Function<? super EX, ? extends T> fn) {
-        return (SetX<T>)LazyCollectionX.super.recover(exceptionClass,fn);
+    default <EX extends Throwable> SetX<T> recover(Class<EX> exceptionClass,
+                                                   final Function<? super EX, ? extends T> fn) {
+        return (SetX<T>) LazyCollectionX.super.recover(exceptionClass,
+                                                       fn);
     }
 
     @Override
-    default SetX<T> plusLoop(int max, IntFunction<T> value) {
-        return (SetX<T>)LazyCollectionX.super.plusLoop(max,value);
+    default SetX<T> plusLoop(int max,
+                             IntFunction<T> value) {
+        return (SetX<T>) LazyCollectionX.super.plusLoop(max,
+                                                        value);
     }
 
     @Override
     default SetX<T> plusLoop(Supplier<Option<T>> supplier) {
-        return (SetX<T>)LazyCollectionX.super.plusLoop(supplier);
+        return (SetX<T>) LazyCollectionX.super.plusLoop(supplier);
     }
 
-  @Override
-    default <T2, R> SetX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn, final Publisher<? extends T2> publisher) {
-        return (SetX<R>)LazyCollectionX.super.zip(fn, publisher);
+    @Override
+    default <T2, R> SetX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn,
+                                final Publisher<? extends T2> publisher) {
+        return (SetX<R>) LazyCollectionX.super.zip(fn,
+                                                   publisher);
     }
-
-
 
     @Override
     default <U> SetX<Tuple2<T, U>> zipWithPublisher(final Publisher<? extends U> other) {
-        return (SetX)LazyCollectionX.super.zipWithPublisher(other);
-    }
-
-
-    @Override
-    default <S, U, R> SetX<R> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third, final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return (SetX<R>)LazyCollectionX.super.zip3(second,third,fn3);
+        return (SetX) LazyCollectionX.super.zipWithPublisher(other);
     }
 
     @Override
-    default <T2, T3, T4, R> SetX<R> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third, final Iterable<? extends T4> fourth, final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return (SetX<R>)LazyCollectionX.super.zip4(second,third,fourth,fn);
+    default <S, U, R> SetX<R> zip3(final Iterable<? extends S> second,
+                                   final Iterable<? extends U> third,
+                                   final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return (SetX<R>) LazyCollectionX.super.zip3(second,
+                                                    third,
+                                                    fn3);
     }
 
-    /**
-     * Narrow a covariant Set
-     *
-     * <pre>
-     * {@code
-     * SetX<? extends Fruit> set = SetX.of(apple,bannana);
-     * SetX<Fruit> fruitSet = SetX.narrowK(set);
-     * }
-     * </pre>
-     *
-     * @param setX to narrowK generic type
-     * @return SetX with narrowed type
-     */
-    public static <T> SetX<T> narrow(final SetX<? extends T> setX) {
-        return (SetX<T>) setX;
+    @Override
+    default <T2, T3, T4, R> SetX<R> zip4(final Iterable<? extends T2> second,
+                                         final Iterable<? extends T3> third,
+                                         final Iterable<? extends T4> fourth,
+                                         final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return (SetX<R>) LazyCollectionX.super.zip4(second,
+                                                    third,
+                                                    fourth,
+                                                    fn);
     }
 
-    public static <T> SetX<T> narrowK(final Higher<set, T> set) {
-        return (SetX<T>)set;
-    }
+    class CompletableSetX<T> implements InvocationHandler {
 
-    public static  <T,R> SetX<R> tailRec(T initial, Function<? super T, ? extends SetX<? extends Either<T, R>>> fn) {
-        ListX<Either<T, R>> lazy = ListX.of(Either.left(initial));
-        ListX<Either<T, R>> next = lazy.eager();
-        boolean newValue[] = {true};
-        for(;;){
+        Future<SetX<T>> future = Future.future();
 
-            next = next.concatMap(e -> e.fold(s -> {
-                        newValue[0]=true;
-                        return  fn.apply(s); },
-                    p -> {
-                        newValue[0]=false;
-                        return ListX.of(e);
-                    }));
-            if(!newValue[0])
-                break;
-
+        public boolean complete(Set<T> result) {
+            return future.complete(SetX.fromIterable(result));
         }
-        return Either.sequenceRight(next)
-                     .orElse(ReactiveSeq.empty())
-                     .to(ReactiveConvertableSequence::converter)
-                     .setX(Evaluation.LAZY);
+
+        public SetX<T> asSetX() {
+            SetX f = (SetX) Proxy.newProxyInstance(SetX.class.getClassLoader(),
+                                                   new Class[]{SetX.class},
+                                                   this);
+            return f;
+        }
+
+        @Override
+        public Object invoke(Object proxy,
+                             Method method,
+                             Object[] args) throws Throwable {
+            //@TODO
+            SetX<T> target = future.fold(l -> l,
+                                         t -> {
+                                             throw ExceptionSoftener.throwSoftenedException(t);
+                                         });
+            return method.invoke(target,
+                                 args);
+        }
     }
 
 }

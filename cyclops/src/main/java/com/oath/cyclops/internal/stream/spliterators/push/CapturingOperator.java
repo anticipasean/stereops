@@ -2,14 +2,13 @@ package com.oath.cyclops.internal.stream.spliterators.push;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
-
 import lombok.Getter;
 import org.reactivestreams.Subscription;
 
 public class CapturingOperator<T> implements Operator<T> {
 
 
-
+    final Runnable onInit;
     @Getter
     Consumer<? super T> action;
     @Getter
@@ -18,57 +17,13 @@ public class CapturingOperator<T> implements Operator<T> {
     Runnable onComplete;
     Subscription s;
     volatile boolean complete;
-    private AtomicBoolean initialized = new AtomicBoolean(false);
-
-    public CapturingOperator(Subscription s){
-        this.s = s;
-        onInit = ()->{};
-    }
-
-
-    final Runnable onInit;
-    public CapturingOperator(Runnable onInit){
-        this.onInit = onInit;
-        this.subscription = new StreamSubscription();
-        this.s=new Subscription() {
-            @Override
-            public void request(long n) {
-
-            }
-
-            @Override
-            public void cancel() {
-
-            }
-        };
-    }
-    public CapturingOperator(){
-        this.onInit = ()->{};
-        this.subscription = new StreamSubscription();
-        this.s=new Subscription() {
-            @Override
-            public void request(long n) {
-                if(complete)
-                    onComplete.run();
-            }
-
-            @Override
-            public void cancel() {
-
-            }
-        };
-    }
-
-    public void setSubscription(Subscription s){
-        this.s =s;
-    }
-
-    StreamSubscription subscription = new StreamSubscription(){
+    StreamSubscription subscription = new StreamSubscription() {
         @Override
         public void request(long n) {
-            if(complete)
+            if (complete) {
                 onComplete.run();
-             s.request(n);
+            }
+            s.request(n);
         }
 
         @Override
@@ -77,11 +32,59 @@ public class CapturingOperator<T> implements Operator<T> {
             super.cancel();
         }
     };
+    private AtomicBoolean initialized = new AtomicBoolean(false);
+
+    public CapturingOperator(Subscription s) {
+        this.s = s;
+        onInit = () -> {
+        };
+    }
+
+    public CapturingOperator(Runnable onInit) {
+        this.onInit = onInit;
+        this.subscription = new StreamSubscription();
+        this.s = new Subscription() {
+            @Override
+            public void request(long n) {
+
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        };
+    }
+
+    public CapturingOperator() {
+        this.onInit = () -> {
+        };
+        this.subscription = new StreamSubscription();
+        this.s = new Subscription() {
+            @Override
+            public void request(long n) {
+                if (complete) {
+                    onComplete.run();
+                }
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        };
+    }
+
+    public void setSubscription(Subscription s) {
+        this.s = s;
+    }
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
 
-        this.action=onNext;
+        this.action = onNext;
         this.error = onError;
         this.onComplete = onComplete;
         this.initialized.set(true);
@@ -90,8 +93,10 @@ public class CapturingOperator<T> implements Operator<T> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
-        this.action=onNext;
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onComplete) {
+        this.action = onNext;
         this.error = onError;
         this.onComplete = onComplete;
         this.initialized.set(true);

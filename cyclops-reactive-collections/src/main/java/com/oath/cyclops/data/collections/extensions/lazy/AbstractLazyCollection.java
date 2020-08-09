@@ -4,9 +4,6 @@ import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
 import com.oath.cyclops.types.foldable.Evaluation;
 import com.oath.cyclops.util.ExceptionSoftener;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AccessLevel;
-import lombok.Getter;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -17,26 +14,31 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * Created by johnmcclean on 22/12/2016.
  */
-public abstract class AbstractLazyCollection<T, C extends Collection<T>> implements  LazyCollectionX<T> {
-    @Getter(AccessLevel.PROTECTED)
-    private volatile C list;
+public abstract class AbstractLazyCollection<T, C extends Collection<T>> implements LazyCollectionX<T> {
+
+    final AtomicBoolean updating = new AtomicBoolean(false);
+    final AtomicReference<Throwable> error = new AtomicReference<>(null);
     @Getter(AccessLevel.PROTECTED)
     private final AtomicReference<ReactiveSeq<T>> seq = new AtomicReference<>(null);
     @Getter(AccessLevel.PROTECTED)
     private final Collector<T, ?, C> collectorInternal;
-
     //@Getter//(AccessLevel.PROTECTED)
     private final Evaluation strict;
-    final AtomicBoolean updating = new AtomicBoolean(false);
-    final AtomicReference<Throwable> error = new AtomicReference<>(null);
+    private final Function<ReactiveSeq<C>, C> fn;
+    @Getter(AccessLevel.PROTECTED)
+    private volatile C list;
 
-
-    private final Function<ReactiveSeq<C>,C> fn;
-    public AbstractLazyCollection(C list, ReactiveSeq<T> seq, Collector<T, ?, C> collector,Evaluation strict,Function<ReactiveSeq<C>,C> fn) {
+    public AbstractLazyCollection(C list,
+                                  ReactiveSeq<T> seq,
+                                  Collector<T, ?, C> collector,
+                                  Evaluation strict,
+                                  Function<ReactiveSeq<C>, C> fn) {
         this.list = list;
         this.seq.set(seq);
         this.collectorInternal = collector;
@@ -46,11 +48,11 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
     }
 
 
-
     @Override
-    public <T> T unwrap(){
-        return (T)get();
+    public <T> T unwrap() {
+        return (T) get();
     }
+
     @Override
     public Iterator<T> iterator() {
         return get().iterator();
@@ -58,36 +60,36 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
 
     public C get() {
         if (seq.get() != null) {
-            if(updating.compareAndSet(false, true)) { //check if can materialize
+            if (updating.compareAndSet(false,
+                                       true)) { //check if can materialize
 
-
-                try{
+                try {
 
                     ReactiveSeq<T> toUse = seq.get();
-                    if(toUse!=null){//dbl check - as we may pass null check on on thread and set updating false on another
+                    if (toUse != null) {//dbl check - as we may pass null check on on thread and set updating false on another
 
+                        list = toUse.fold(s -> {
 
-                        list = toUse.fold(s->{
-
-                            return toUse.collect(collectorInternal);
-                            },
-                                            r->fn.apply(toUse.collectAll(collectorInternal)),
-                                                    a->fn.apply(toUse.collectAll(collectorInternal)));
+                                              return toUse.collect(collectorInternal);
+                                          },
+                                          r -> fn.apply(toUse.collectAll(collectorInternal)),
+                                          a -> fn.apply(toUse.collectAll(collectorInternal)));
                         seq.set(null);
                     }
-                }catch(Throwable t){
+                } catch (Throwable t) {
                     error.set(t); //catch any errors for propagation on access
 
-                }finally{
+                } finally {
                     updating.set(false); //finished updating
                 }
             }
-            while(updating.get()){ //Check if another thread updating
+            while (updating.get()) { //Check if another thread updating
                 LockSupport.parkNanos(0l); //spin until updating thread completes
             }
-            if(error.get()!=null) //if updating thread failed, throw error
+            if (error.get() != null) //if updating thread failed, throw error
+            {
                 throw ExceptionSoftener.throwSoftenedException(error.get());
-
+            }
 
             return list;
         }
@@ -95,8 +97,6 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
         return list;
 
     }
-
-
 
 
     @Override
@@ -108,21 +108,21 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
     public boolean isEager() {
         return strict == Evaluation.EAGER;
     }
+
     @Override
-    public Evaluation evaluation(){
+    public Evaluation evaluation() {
         return strict;
     }
 
-    protected void handleStrict(){
-        if(isEager())
+    protected void handleStrict() {
+        if (isEager()) {
             get();
+        }
     }
-
 
 
     @Override
     public ReactiveSeq<T> stream() {
-
 
         ReactiveSeq<T> toUse = seq.get();
         if (toUse != null) {
@@ -131,10 +131,11 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
         return ReactiveSeq.fromIterable(list);
     }
 
-    public boolean isMaterialized(){
+    public boolean isMaterialized() {
 
-        return seq.get()==null;
+        return seq.get() == null;
     }
+
     @Override
     public LazyCollectionX<T> materialize() {
         get();
@@ -142,58 +143,58 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
     }
 
     @Override
-    public int size(){
+    public int size() {
         return get().size();
     }
 
     @Override
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return get().isEmpty();
     }
 
     @Override
-    public boolean containsValue(T o){
-        return get().contains(o);
-    }
-    @Override
-    public boolean contains(Object o){
+    public boolean containsValue(T o) {
         return get().contains(o);
     }
 
+    @Override
+    public boolean contains(Object o) {
+        return get().contains(o);
+    }
 
 
     @Override
-    public Object[] toArray(){
+    public Object[] toArray() {
         return get().toArray();
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a){
+    public <T1> T1[] toArray(T1[] a) {
         return get().toArray(a);
     }
 
     @Override
-    public boolean add(T t){
+    public boolean add(T t) {
         return get().add(t);
     }
 
     @Override
-    public boolean remove(Object o){
+    public boolean remove(Object o) {
         return get().remove(o);
     }
 
     @Override
-    public boolean containsAll(Collection<?> c){
+    public boolean containsAll(Collection<?> c) {
         return get().containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c){
+    public boolean addAll(Collection<? extends T> c) {
         return get().addAll(c);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c){
+    public boolean removeAll(Collection<?> c) {
         return get().removeAll(c);
     }
 
@@ -203,24 +204,24 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
     }
 
     @Override
-    public boolean retainAll(Collection<?> c){
+    public boolean retainAll(Collection<?> c) {
         return get().retainAll(c);
     }
 
     @Override
-    public void clear(){
+    public void clear() {
         get().clear();
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         C c = get();
         boolean res = c.equals(o);
         return res;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return get().hashCode();
     }
 

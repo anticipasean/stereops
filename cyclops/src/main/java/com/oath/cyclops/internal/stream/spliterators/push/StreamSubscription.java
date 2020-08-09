@@ -1,24 +1,24 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
-import cyclops.control.Either;
-import org.reactivestreams.Subscription;
-
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.*;
+import java.util.function.LongConsumer;
+import org.reactivestreams.Subscription;
 
 /**
  * Created by johnmcclean on 12/01/2017.
- *
  */
 public class StreamSubscription implements Subscription {
+
+    protected final AtomicLong requested = new AtomicLong(0);
     public volatile boolean isOpen = true;
-    protected final AtomicLong requested= new AtomicLong(0);
-    public boolean isActive(){
-        return isOpen && requested.get()>0;
+
+    public boolean isActive() {
+        return isOpen && requested.get() > 0;
     }
 
-    public boolean singleActiveRequest(long n, LongConsumer work){
-        if(this.requestInternal(n)) {
+    public boolean singleActiveRequest(long n,
+                                       LongConsumer work) {
+        if (this.requestInternal(n)) {
             work.accept(n);
             return true;
         }
@@ -31,12 +31,13 @@ public class StreamSubscription implements Subscription {
 
         for (; ; ) {
             long currentRequests = requested.get();
-            if (Long.MAX_VALUE==currentRequests) {
+            if (Long.MAX_VALUE == currentRequests) {
                 return false;
             }
             long newTotal = currentRequests + n;
-            if (requested.compareAndSet(currentRequests, newTotal <0 ? Long.MAX_VALUE : newTotal)) {
-                return currentRequests==0;
+            if (requested.compareAndSet(currentRequests,
+                                        newTotal < 0 ? Long.MAX_VALUE : newTotal)) {
+                return currentRequests == 0;
             }
 
         }

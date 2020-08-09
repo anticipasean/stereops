@@ -1,22 +1,20 @@
 package com.oath.cyclops.types.reactive;
 
+import cyclops.data.tuple.Tuple3;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-
-import cyclops.data.tuple.Tuple3;
-import org.reactivestreams.Subscription;
-
 import lombok.Value;
 import lombok.experimental.Wither;
+import org.reactivestreams.Subscription;
 
 /**
  * Class that represents an active reactive-streams task
  *
  * @author johnmcclean
- *
  */
 @Value
 public class ReactiveTask implements Subscription {
+
     @Wither
     Executor exec;
     @Wither
@@ -27,8 +25,9 @@ public class ReactiveTask implements Subscription {
      */
     @Override
     public void cancel() {
-        subscriptionAndTask._1().join()
-                              .cancel();
+        subscriptionAndTask._1()
+                           .join()
+                           .cancel();
     }
 
     /* (non-Javadoc)
@@ -36,22 +35,25 @@ public class ReactiveTask implements Subscription {
      */
     @Override
     public void request(final long n) {
-        subscriptionAndTask._1().join()
-                              .request(n);
+        subscriptionAndTask._1()
+                           .join()
+                           .request(n);
     }
 
     /**
      * @return true if current task is complete
      */
     public boolean isCurrentTaskComplete() {
-        return subscriptionAndTask._2().isDone();
+        return subscriptionAndTask._2()
+                                  .isDone();
     }
 
     /**
      * @return true if the entire Stream has been processed
      */
     public boolean isStreamComplete() {
-        return subscriptionAndTask._3().isDone();
+        return subscriptionAndTask._3()
+                                  .isDone();
     }
 
     /**
@@ -61,8 +63,9 @@ public class ReactiveTask implements Subscription {
      * @return New ReactiveTask that references the execution of the new async task
      */
     public ReactiveTask requestAsync(final long n) {
-        return withSubscriptionAndTask(subscriptionAndTask.map2(c -> CompletableFuture.runAsync(() -> subscriptionAndTask._1().join()
-                                                                                                                            .request(n),
+        return withSubscriptionAndTask(subscriptionAndTask.map2(c -> CompletableFuture.runAsync(() -> subscriptionAndTask._1()
+                                                                                                                         .join()
+                                                                                                                         .request(n),
                                                                                                 exec)));
     }
 
@@ -86,6 +89,7 @@ public class ReactiveTask implements Subscription {
      * Block until the currently active reactive task completes
      */
     public void block() {
-        subscriptionAndTask._2().join();
+        subscriptionAndTask._2()
+                           .join();
     }
 }

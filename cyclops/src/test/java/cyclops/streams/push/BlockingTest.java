@@ -1,32 +1,33 @@
 package cyclops.streams.push;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import com.oath.cyclops.types.reactive.AsyncSubscriber;
 import com.oath.cyclops.types.reactive.ReactiveSubscriber;
-
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
-import org.junit.Test;
-import reactor.core.publisher.Flux;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.LockSupport;
 import java.util.stream.Collectors;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import reactor.core.publisher.Flux;
 
 /**
  * Created by johnmcclean on 14/01/2017.
  */
 public class BlockingTest {
-    @Test
-    public void blockingOrNot(){
 
-        for(int k=0;k<10;k++) {
+    Integer result = null;
+
+    @Test
+    public void blockingOrNot() {
+
+        for (int k = 0; k < 10; k++) {
             AsyncSubscriber<Integer> sub = Spouts.asyncSubscriber();
 
             System.out.println("Starting!");
@@ -53,7 +54,11 @@ public class BlockingTest {
             t.start();
             System.out.println("Setting up Stream!");
             //sub.onComplete();
-            assertThat(sub.stream().peek(System.out::println).collect(Collectors.toList()).size(), equalTo(100));
+            assertThat(sub.stream()
+                          .peek(System.out::println)
+                          .collect(Collectors.toList())
+                          .size(),
+                       equalTo(100));
             //   sub.stream().forEach(System.out::println);
             sub.onNext(1);
             System.out.println("End!");
@@ -62,73 +67,131 @@ public class BlockingTest {
     }
 
     @Test
-    public void reactiveStreams(){
+    public void reactiveStreams() {
         ReactiveSubscriber<Integer> sub = Spouts.reactiveSubscriber();
 
-        Flux.just(1,2,3).subscribe(sub);
-        sub.reactiveStream().forEach(System.out::println);
+        Flux.just(1,
+                  2,
+                  3)
+            .subscribe(sub);
+        sub.reactiveStream()
+           .forEach(System.out::println);
     }
 
     @Test
-    public void spoutCollect(){
-        assertThat(Spouts.of(1,2,3).collect(Collectors.toList()),equalTo(Arrays.asList(1,2,3)));
+    public void spoutCollect() {
+        assertThat(Spouts.of(1,
+                             2,
+                             3)
+                         .collect(Collectors.toList()),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
     }
+
     @Test
-    public void findFirst(){
-        assertThat(Spouts.of(1,2,3).findFirst().get(),equalTo(1));
+    public void findFirst() {
+        assertThat(Spouts.of(1,
+                             2,
+                             3)
+                         .findFirst()
+                         .get(),
+                   equalTo(1));
     }
 
     @Test
-    public void testIterator(){
-        assertThat(Spouts.of(1).iterator().next(),equalTo(1));
-        assertThat(Spouts.of(1).iterator().hasNext(),equalTo(true));
-        Iterator<Integer> it = Spouts.of(1,2).iterator();
-        assertThat(it.hasNext(),equalTo(true));
-        assertThat(it.next(),equalTo(1));
-        assertThat(it.hasNext(),equalTo(true));
-        assertThat(it.next(),equalTo(2));
-        assertThat(it.hasNext(),equalTo(false));
+    public void testIterator() {
+        assertThat(Spouts.of(1)
+                         .iterator()
+                         .next(),
+                   equalTo(1));
+        assertThat(Spouts.of(1)
+                         .iterator()
+                         .hasNext(),
+                   equalTo(true));
+        Iterator<Integer> it = Spouts.of(1,
+                                         2)
+                                     .iterator();
+        assertThat(it.hasNext(),
+                   equalTo(true));
+        assertThat(it.next(),
+                   equalTo(1));
+        assertThat(it.hasNext(),
+                   equalTo(true));
+        assertThat(it.next(),
+                   equalTo(2));
+        assertThat(it.hasNext(),
+                   equalTo(false));
 
     }
 
-    Integer result = null;
     @Test
-    public void simple(){
+    public void simple() {
 
-        Spouts.of(1).forEach(i->result = i);
-        assertThat(result,equalTo(1));
-        Spouts.of(1).map(i->i*2).forEach(i->result = i);
-        assertThat(result,equalTo(2));
+        Spouts.of(1)
+              .forEach(i -> result = i);
+        assertThat(result,
+                   equalTo(1));
+        Spouts.of(1)
+              .map(i -> i * 2)
+              .forEach(i -> result = i);
+        assertThat(result,
+                   equalTo(2));
     }
+
     @Test
-    public void simpleList(){
+    public void simpleList() {
         List<Integer> list = new ArrayList<>();
-        Spouts.of(1,2).forEach(list::add);
-        assertThat(list,equalTo(Arrays.asList(1,2)));
+        Spouts.of(1,
+                  2)
+              .forEach(list::add);
+        assertThat(list,
+                   equalTo(Arrays.asList(1,
+                                         2)));
         list = new ArrayList<>();
-        Spouts.of(1,2).map(i->i*2).forEach(list::add);
-        assertThat(list,equalTo(Arrays.asList(2,4)));
+        Spouts.of(1,
+                  2)
+              .map(i -> i * 2)
+              .forEach(list::add);
+        assertThat(list,
+                   equalTo(Arrays.asList(2,
+                                         4)));
     }
 
 
     @Test
-    public void collect(){
+    public void collect() {
         ReactiveSubscriber<Integer> sub = Spouts.reactiveSubscriber();
-        ReactiveSeq.of(1,2,3).peek(System.out::println).subscribe(sub);
-        System.out.println(sub.reactiveStream().peek(System.out::println).collect(Collectors.toList()));
-    }
-    @Test
-    public void forEach(){
-        ReactiveSubscriber<Integer> sub = Spouts.reactiveSubscriber();
-        ReactiveSeq.of(1,2,3).subscribe(sub);
-        sub.reactiveStream().forEach(System.out::println);
+        ReactiveSeq.of(1,
+                       2,
+                       3)
+                   .peek(System.out::println)
+                   .subscribe(sub);
+        System.out.println(sub.reactiveStream()
+                              .peek(System.out::println)
+                              .collect(Collectors.toList()));
     }
 
     @Test
-    public void init(){
+    public void forEach() {
         ReactiveSubscriber<Integer> sub = Spouts.reactiveSubscriber();
-        Flux.just(1,2,3).subscribe(sub);
-        sub.reactiveStream().forEach(System.out::println);
+        ReactiveSeq.of(1,
+                       2,
+                       3)
+                   .subscribe(sub);
+        sub.reactiveStream()
+           .forEach(System.out::println);
+    }
+
+    @Test
+    public void init() {
+        ReactiveSubscriber<Integer> sub = Spouts.reactiveSubscriber();
+        Flux.just(1,
+                  2,
+                  3)
+            .subscribe(sub);
+        sub.reactiveStream()
+           .forEach(System.out::println);
         assertTrue(sub.isInitialized());
     }
 }

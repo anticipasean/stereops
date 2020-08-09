@@ -11,11 +11,14 @@ public class IteratePredicateSpliterator<T> implements Spliterator<T>, CopyableS
     private final T in;
     private final UnaryOperator<T> fn;
     private final Predicate<? super T> pred;
+    private T current;
 
-    public IteratePredicateSpliterator(T in, UnaryOperator<T>fn, Predicate<? super T> pred) {
+    public IteratePredicateSpliterator(T in,
+                                       UnaryOperator<T> fn,
+                                       Predicate<? super T> pred) {
         this.in = in;
         this.fn = fn;
-        this.pred=pred;
+        this.pred = pred;
 
     }
 
@@ -29,18 +32,15 @@ public class IteratePredicateSpliterator<T> implements Spliterator<T>, CopyableS
         return IMMUTABLE;
     }
 
-
-
-    private T current;
     @Override
     public boolean tryAdvance(final Consumer<? super T> action) {
 
-
-        current = (current!=null ? fn.apply(current) : in);
-        if(pred.test(current))
+        current = (current != null ? fn.apply(current) : in);
+        if (pred.test(current)) {
             action.accept(current);
-        else
+        } else {
             return false;
+        }
 
         return true;
 
@@ -49,12 +49,13 @@ public class IteratePredicateSpliterator<T> implements Spliterator<T>, CopyableS
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
 
-        for(;;){
-            current = (current!=null ? fn.apply(current) : in);
-            if(pred.test(current))
+        for (; ; ) {
+            current = (current != null ? fn.apply(current) : in);
+            if (pred.test(current)) {
                 action.accept(current);
-            else
+            } else {
                 return;
+            }
         }
     }
 
@@ -67,6 +68,8 @@ public class IteratePredicateSpliterator<T> implements Spliterator<T>, CopyableS
 
     @Override
     public Spliterator<T> copy() {
-        return new IteratePredicateSpliterator<>(in,fn,pred);
+        return new IteratePredicateSpliterator<>(in,
+                                                 fn,
+                                                 pred);
     }
 }

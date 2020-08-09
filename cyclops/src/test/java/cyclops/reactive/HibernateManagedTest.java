@@ -1,5 +1,12 @@
 package cyclops.reactive;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import cyclops.control.Try;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -9,16 +16,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static cyclops.data.tuple.Tuple.tuple;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.*;
-
 public class HibernateManagedTest {
+
     SessionFactory factory;
     Session session;
+
     @Before
-    public void setup(){
+    public void setup() {
         factory = mock(SessionFactory.class);
         session = mock(Session.class);
         when(factory.openSession()).thenReturn(session);
@@ -27,72 +31,84 @@ public class HibernateManagedTest {
     }
 
 
-    private Try<String,Throwable> deleteFromMyTable(Session s){
+    private Try<String, Throwable> deleteFromMyTable(Session s) {
         s.createQuery("DELETE FROM myTable")
-            .executeUpdate();
+         .executeUpdate();
         s.flush();
         return Try.success("deleted");
     }
 
     @Test
-    public void hibernate(){
+    public void hibernate() {
 
         Try<String, Throwable> res = Managed.of(factory::openSession)
                                             .with(Session::beginTransaction)
-                                            .map((session, tx) ->{
+                                            .map((session, tx) -> {
                                                 try {
-                                                    verify(session,never()).close();
-                                                }catch(Exception e) {
+                                                    verify(session,
+                                                           never()).close();
+                                                } catch (Exception e) {
                                                 }
 
-                                                return deleteFromMyTable(session)
-                                                        .bipeek(success -> tx.commit(),error -> tx.rollback());
+                                                return deleteFromMyTable(session).bipeek(success -> tx.commit(),
+                                                                                         error -> tx.rollback());
 
 
-    } ).foldRun(Try::flatten);
+                                            })
+                                            .foldRun(Try::flatten);
 
-        assertThat(res,equalTo(Try.success("deleted")));
+        assertThat(res,
+                   equalTo(Try.success("deleted")));
 
     }
 
     @Test
-    public void hibernateIO(){
+    public void hibernateIO() {
 
         Try<String, Throwable> res = IO.of(factory)
-                                        .checkedBracketWith(SessionFactory::openSession,Session::beginTransaction)
-            .mapIO((session, tx) ->{
-                try {
-                    verify(session,never()).close();
-                }catch(Exception e) {
-                }
+                                       .checkedBracketWith(SessionFactory::openSession,
+                                                           Session::beginTransaction)
+                                       .mapIO((session, tx) -> {
+                                           try {
+                                               verify(session,
+                                                      never()).close();
+                                           } catch (Exception e) {
+                                           }
 
-                return deleteFromMyTable(session)
-                    .bipeek(success -> tx.commit(),error -> tx.rollback());
+                                           return deleteFromMyTable(session).bipeek(success -> tx.commit(),
+                                                                                    error -> tx.rollback());
 
 
-            } ).foldRun(Try::flatten);
+                                       })
+                                       .foldRun(Try::flatten);
 
-        assertThat(res,equalTo(Try.success("deleted")));
+        assertThat(res,
+                   equalTo(Try.success("deleted")));
 
     }
+
     @Test
-    public void hibernateSyncIO(){
+    public void hibernateSyncIO() {
 
         Try<String, Throwable> res = IO.SyncIO.of(factory)
-            .checkedBracketWith(SessionFactory::openSession,Session::beginTransaction)
-            .mapIO((session, tx) ->{
-                try {
-                    verify(session,never()).close();
-                }catch(Exception e) {
-                }
+                                              .checkedBracketWith(SessionFactory::openSession,
+                                                                  Session::beginTransaction)
+                                              .mapIO((session, tx) -> {
+                                                  try {
+                                                      verify(session,
+                                                             never()).close();
+                                                  } catch (Exception e) {
+                                                  }
 
-                return deleteFromMyTable(session)
-                    .bipeek(success -> tx.commit(),error -> tx.rollback());
+                                                  return deleteFromMyTable(session).bipeek(success -> tx.commit(),
+                                                                                           error -> tx.rollback());
 
 
-            } ).foldRun(Try::flatten);
+                                              })
+                                              .foldRun(Try::flatten);
 
-        assertThat(res,equalTo(Try.success("deleted")));
+        assertThat(res,
+                   equalTo(Try.success("deleted")));
 
     }
 

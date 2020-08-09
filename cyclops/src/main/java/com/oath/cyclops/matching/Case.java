@@ -8,13 +8,12 @@ import cyclops.data.tuple.Tuple2;
 import cyclops.data.tuple.Tuple3;
 import cyclops.data.tuple.Tuple4;
 import cyclops.data.tuple.Tuple5;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
-
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 /**
  * Pattern matching use case contract.
@@ -34,8 +33,7 @@ public interface Case<T, R> {
     Option<R> test(T value);
 
     /**
-     * Return the test for this user case or for the other. there is no guarantee
-     * one successful result will be produced.
+     * Return the test for this user case or for the other. there is no guarantee one successful result will be produced.
      *
      * @param orCase the case bo be tested in case this one fail.
      * @return a composite case to perform a XOR operation.
@@ -45,6 +43,17 @@ public interface Case<T, R> {
             Option<R> val = test(t);
             return val.isPresent() ? val : orCase.test(t);
         };
+    }
+
+    /**
+     * Marker interface to build a Default Case when no pattern matches.
+     *
+     * @param <R> return type.
+     * @see cyclops.matching.Api#Any(Function)
+     * @see cyclops.matching.Api#Any(Supplier)
+     **/
+    interface Any<T, R> extends Function<T, R> {
+
     }
 
     @AllArgsConstructor
@@ -111,7 +120,8 @@ public interface Case<T, R> {
 
         @Override
         public Option<R> test(Tuple3<T1, T2, T3> value) {
-            return predicate1.test(value._1()) && predicate2.test(value._2()) && predicate3.test(value._3()) ? Option.some(supplier.apply(value)) : none();
+            return predicate1.test(value._1()) && predicate2.test(value._2()) && predicate3.test(value._3())
+                ? Option.some(supplier.apply(value)) : none();
         }
 
     }
@@ -128,7 +138,8 @@ public interface Case<T, R> {
 
         @Override
         public Option<R> test(Tuple4<T1, T2, T3, T4> value) {
-            return predicate1.test(value._1()) && predicate2.test(value._2()) && predicate3.test(value._3()) && predicate4.test(value._4()) ? Option.some(supplier.apply(value)) : none();
+            return predicate1.test(value._1()) && predicate2.test(value._2()) && predicate3.test(value._3())
+                && predicate4.test(value._4()) ? Option.some(supplier.apply(value)) : none();
         }
 
     }
@@ -146,13 +157,15 @@ public interface Case<T, R> {
 
         @Override
         public Option<R> test(Tuple5<T1, T2, T3, T4, T5> value) {
-            return predicate1.test(value._1()) && predicate2.test(value._2()) && predicate3.test(value._3()) && predicate4.test(value._4()) && predicate5.test(value._5()) ? Option.some(supplier.apply(value)) : none();
+            return predicate1.test(value._1()) && predicate2.test(value._2()) && predicate3.test(value._3())
+                && predicate4.test(value._4()) && predicate5.test(value._5()) ? Option.some(supplier.apply(value)) : none();
         }
 
     }
 
     @AllArgsConstructor
     final class CaseOptional<T, R> implements Case<Optional<T>, R> {
+
         @NonNull
         final Supplier<R> supplier0;
         @NonNull
@@ -162,17 +175,6 @@ public interface Case<T, R> {
         public Option<R> test(Optional<T> optional) {
             return Option.some(optional.isPresent() ? supplier0.get() : supplier1.get());
         }
-
-    }
-
-    /**
-     * Marker interface to build a Default Case when no pattern matches.
-     *
-     * @param <R> return type.
-     * @see cyclops.matching.Api#Any(Function)
-     * @see cyclops.matching.Api#Any(Supplier)
-     **/
-    interface Any<T, R> extends Function<T, R> {
 
     }
 

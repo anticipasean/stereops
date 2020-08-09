@@ -2,32 +2,35 @@ package com.oath.cyclops.internal.stream.spliterators.ints;
 
 
 import com.oath.cyclops.internal.stream.spliterators.ReversableSpliterator;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
+import lombok.Getter;
+import lombok.Setter;
 
 //@AllArgsConstructor
-public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,ReversableSpliterator<java.lang.Integer> {
+public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt, ReversableSpliterator<java.lang.Integer> {
 
     private final int[] array;
+    int index = 0;
     private int max;
     private int start;
     @Getter
     @Setter
     private boolean reverse;
 
-    int index = 0;
-
-    public ReversingIntArraySpliterator(int[] array, int start, int max, boolean reverse) {
+    public ReversingIntArraySpliterator(int[] array,
+                                        int start,
+                                        int max,
+                                        boolean reverse) {
         this.array = array;
-        this.reverse=reverse;
+        this.reverse = reverse;
 
-        this.max = Math.min(array.length,max);
-        this.start= Math.max(0,start);
+        this.max = Math.min(array.length,
+                            max);
+        this.start = Math.max(0,
+                              start);
         this.index = calcIndex();
     }
 
@@ -50,9 +53,9 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
     }
 
     private int calcIndex() {
-        if(isReverse()) {
+        if (isReverse()) {
             return max - 1;
-        }else{
+        } else {
             return start;
         }
     }
@@ -61,16 +64,14 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
     public boolean tryAdvance(Consumer<? super java.lang.Integer> action) {
         Objects.requireNonNull(action);
 
-
-
         if (!reverse) {
             if (index < max && index > -1) {
                 action.accept(array[index++]);
                 return true;
             }
         } else {
-            if (index > (start-1) & index < max) {
-                action.accept( array[index--]);
+            if (index > (start - 1) & index < max) {
+                action.accept(array[index--]);
                 return true;
             }
         }
@@ -85,12 +86,12 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
         int index = this.index; //local index for replayability
 
         if (!reverse) {
-            for (;index < max && index > -1;) {
+            for (; index < max && index > -1; ) {
                 action.accept(array[index++]);
 
             }
         } else {
-            for (;index > (start-1) & index < max;) {
+            for (; index > (start - 1) & index < max; ) {
                 action.accept(array[index--]);
 
             }
@@ -103,23 +104,18 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
     }
 
 
-
-
-
     @Override
     public boolean tryAdvance(IntConsumer action) {
         Objects.requireNonNull(action);
 
-
-
         if (!reverse) {
             if (index < max && index > -1) {
-                action.accept( array[index++]);
+                action.accept(array[index++]);
                 return true;
             }
         } else {
-            if (index > (start-1) & index < max) {
-                action.accept( array[index--]);
+            if (index > (start - 1) & index < max) {
+                action.accept(array[index--]);
                 return true;
             }
         }
@@ -134,12 +130,12 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
         int index = this.index; //local index for replayability
 
         if (!reverse) {
-            for (;index < max && index > -1;) {
+            for (; index < max && index > -1; ) {
                 action.accept(array[index++]);
 
             }
         } else {
-            for (;index > (start-1) & index < max;) {
+            for (; index > (start - 1) & index < max; ) {
                 action.accept(array[index--]);
 
             }
@@ -148,10 +144,11 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
 
     @Override
     public ReversableSpliterator<java.lang.Integer> copy() {
-        return new ReversingIntArraySpliterator<>(
-                array, start,max,reverse);
+        return new ReversingIntArraySpliterator<>(array,
+                                                  start,
+                                                  max,
+                                                  reverse);
     }
-
 
 
 }

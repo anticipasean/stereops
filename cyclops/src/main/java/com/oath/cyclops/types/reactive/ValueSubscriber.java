@@ -1,5 +1,12 @@
 package com.oath.cyclops.types.reactive;
 
+import com.oath.cyclops.types.Value;
+import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.control.Either;
+import cyclops.control.Future;
+import cyclops.control.Ior;
+import cyclops.control.Try;
+import cyclops.function.Memoize;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.Executor;
@@ -7,21 +14,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.control.Future;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import cyclops.control.Ior;
-import cyclops.control.Try;
-import cyclops.control.Either;
-import cyclops.function.Memoize;
-
 /**
- * A reactive-streams Subscriber that can take 1 value from a reactive-streams publisher and convert
- * it into various forms
+ * A reactive-streams Subscriber that can take 1 value from a reactive-streams publisher and convert it into various forms
  *
  * <pre>
  * {@code
@@ -36,17 +33,14 @@ import cyclops.function.Memoize;
  * }
  * </pre>
  *
- * @author johnmcclean
- *
  * @param <T> Subscriber type
+ * @author johnmcclean
  */
 public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
 
     private final Object UNSET = new Object();
-    private final AtomicReference firstValue = new AtomicReference(
-                                                                   UNSET);
-    private final AtomicReference firstError = new AtomicReference(
-                                                                   UNSET);
+    private final AtomicReference firstValue = new AtomicReference(UNSET);
+    private final AtomicReference firstError = new AtomicReference(UNSET);
     private final Runnable onComplete;
 
     private volatile Subscription s;
@@ -58,14 +52,12 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
     }
 
     public static <T> ValueSubscriber<T> subscriber(final Runnable onComplete) {
-        return new ValueSubscriber<>(
-                                     onComplete);
+        return new ValueSubscriber<>(onComplete);
     }
 
     public static <T> ValueSubscriber<T> subscriber() {
-        return new ValueSubscriber<>(
-                                     () -> {
-                                     });
+        return new ValueSubscriber<>(() -> {
+        });
     }
 
     @Override
@@ -74,8 +66,9 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
         if (this.s == null) {
             this.s = s;
             s.request(1);
-        } else
+        } else {
             s.cancel();
+        }
 
     }
 
@@ -83,22 +76,23 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
     public void onNext(final T t) {
 
         Objects.requireNonNull(t);
-        firstValue.compareAndSet(UNSET, t);
+        firstValue.compareAndSet(UNSET,
+                                 t);
     }
 
     @Override
     public void onError(final Throwable t) {
         Objects.requireNonNull(t);
-        firstError.compareAndSet(UNSET, t);
+        firstError.compareAndSet(UNSET,
+                                 t);
     }
 
     @Override
     public void onComplete() {
 
         this.onComplete.run();
-        if(firstValue.get()==UNSET && firstError.get()==UNSET) {
-            firstError.set(new NoSuchElementException(
-                "publisher has no elements"));
+        if (firstValue.get() == UNSET && firstError.get() == UNSET) {
+            firstError.set(new NoSuchElementException("publisher has no elements"));
         }
 
     }
@@ -113,20 +107,25 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
     @Override
     public T orElse(T alt) {
 
-        while (firstValue.get() == UNSET && firstError.get() == UNSET)
+        while (firstValue.get() == UNSET && firstError.get() == UNSET) {
             LockSupport.parkNanos(1000000l);
-        if (firstValue.get() == UNSET)
+        }
+        if (firstValue.get() == UNSET) {
             return alt;
+        }
 
         return (T) firstValue.get();
     }
+
     @Override
     public T orElseGet(Supplier<? extends T> alt) {
 
-        while (firstValue.get() == UNSET && firstError.get() == UNSET)
+        while (firstValue.get() == UNSET && firstError.get() == UNSET) {
             LockSupport.parkNanos(1000000l);
-        if (firstValue.get() == UNSET)
+        }
+        if (firstValue.get() == UNSET) {
             return alt.get();
+        }
 
         return (T) firstValue.get();
     }
@@ -141,17 +140,20 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
 
     private T throwingGet() {
 
-        while (firstValue.get() == UNSET && firstError.get() == UNSET)
+        while (firstValue.get() == UNSET && firstError.get() == UNSET) {
             LockSupport.parkNanos(1000000l);
-        if (firstValue.get() == UNSET)
+        }
+        if (firstValue.get() == UNSET) {
             throw ExceptionSoftener.throwSoftenedException((Throwable) firstError.get());
+        }
 
         return (T) firstValue.get();
     }
 
 
     public <X extends Throwable> Try<T, X> toTry(final Class<X>... classes) {
-        return Try.withCatch(() -> throwingGet(), classes);
+        return Try.withCatch(() -> throwingGet(),
+                             classes);
     }
 
 
@@ -167,25 +169,33 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
         if (firstValue.get() != UNSET) {
             primary = Ior.<Throwable, T>right((T) firstValue.get());
         }
-        if (secondary != null && primary != null)
-            return Ior.both((Throwable)firstError.get(), (T) firstValue.get());
-        if (primary != null)
+        if (secondary != null && primary != null) {
+            return Ior.both((Throwable) firstError.get(),
+                            (T) firstValue.get());
+        }
+        if (primary != null) {
             return primary;
+        }
 
         return secondary;
 
     }
 
     @Override
-    public <R> R fold(Function<? super T, ? extends R> present, Supplier<? extends R> absent) {
-        while (firstValue.get() == UNSET && firstError.get() == UNSET)
+    public <R> R fold(Function<? super T, ? extends R> present,
+                      Supplier<? extends R> absent) {
+        while (firstValue.get() == UNSET && firstError.get() == UNSET) {
             LockSupport.parkNanos(1000000l);
-        if (firstValue.get() == UNSET)
+        }
+        if (firstValue.get() == UNSET) {
             return absent.get();
+        }
 
         return present.apply((T) firstValue.get());
     }
+
     public Future<T> toFutureAsync(final Executor ex) {
-        return Future.of(()->orElse(null),ex);
+        return Future.of(() -> orElse(null),
+                         ex);
     }
 }

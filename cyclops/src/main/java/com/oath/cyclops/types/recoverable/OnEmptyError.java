@@ -1,10 +1,10 @@
 package com.oath.cyclops.types.recoverable;
 
 import cyclops.control.Try;
-
 import java.util.function.Supplier;
 
-public interface OnEmptyError<T, E extends OnEmptyError<T,?>> {
+public interface OnEmptyError<T, E extends OnEmptyError<T, ?>> {
+
     /**
      * If this container instance is zero, throw the exception returned by the provided Supplier
      *

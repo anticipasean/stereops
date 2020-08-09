@@ -8,13 +8,14 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Tuple0 {
+
     static Tuple0 INSTANCE = new Tuple0();
 
-    public static Tuple0 empty(){
+    public static Tuple0 empty() {
         return INSTANCE;
     }
 
-    public <T> Tuple1<T> add(T t){
+    public <T> Tuple1<T> add(T t) {
         return Tuple.tuple(t);
     }
 }

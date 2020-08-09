@@ -2,32 +2,35 @@ package com.oath.cyclops.internal.stream.spliterators.doubles;
 
 
 import com.oath.cyclops.internal.stream.spliterators.ReversableSpliterator;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
+import lombok.Getter;
+import lombok.Setter;
 
 //@AllArgsConstructor
-public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDouble,ReversableSpliterator<java.lang.Double> {
+public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDouble, ReversableSpliterator<java.lang.Double> {
 
     private final double[] array;
+    int index = 0;
     private int max;
     private int start;
     @Getter
     @Setter
     private boolean reverse;
 
-    int index = 0;
-
-    public ReversingDoubleArraySpliterator(double[] array, int start, int max, boolean reverse) {
+    public ReversingDoubleArraySpliterator(double[] array,
+                                           int start,
+                                           int max,
+                                           boolean reverse) {
         this.array = array;
-        this.reverse=reverse;
+        this.reverse = reverse;
 
-        this.max = Math.min(array.length,max);
-        this.start= Math.max(0,start);
+        this.max = Math.min(array.length,
+                            max);
+        this.start = Math.max(0,
+                              start);
         this.index = calcIndex();
     }
 
@@ -50,9 +53,9 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
     }
 
     private int calcIndex() {
-        if(isReverse()) {
+        if (isReverse()) {
             return max - 1;
-        }else{
+        } else {
             return start;
         }
     }
@@ -61,16 +64,14 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
     public boolean tryAdvance(Consumer<? super java.lang.Double> action) {
         Objects.requireNonNull(action);
 
-
-
         if (!reverse) {
             if (index < max && index > -1) {
                 action.accept(array[index++]);
                 return true;
             }
         } else {
-            if (index > (start-1) & index < max) {
-                action.accept( array[index--]);
+            if (index > (start - 1) & index < max) {
+                action.accept(array[index--]);
                 return true;
             }
         }
@@ -85,12 +86,12 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
         int index = this.index; //local index for replayability
 
         if (!reverse) {
-            for (;index < max && index > -1;) {
+            for (; index < max && index > -1; ) {
                 action.accept(array[index++]);
 
             }
         } else {
-            for (;index > (start-1) & index < max;) {
+            for (; index > (start - 1) & index < max; ) {
                 action.accept(array[index--]);
 
             }
@@ -103,23 +104,18 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
     }
 
 
-
-
-
     @Override
     public boolean tryAdvance(DoubleConsumer action) {
         Objects.requireNonNull(action);
 
-
-
         if (!reverse) {
             if (index < max && index > -1) {
-                action.accept( array[index++]);
+                action.accept(array[index++]);
                 return true;
             }
         } else {
-            if (index > (start-1) & index < max) {
-                action.accept( array[index--]);
+            if (index > (start - 1) & index < max) {
+                action.accept(array[index--]);
                 return true;
             }
         }
@@ -134,12 +130,12 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
         int index = this.index; //local index for replayability
 
         if (!reverse) {
-            for (;index < max && index > -1;) {
+            for (; index < max && index > -1; ) {
                 action.accept(array[index++]);
 
             }
         } else {
-            for (;index > (start-1) & index < max;) {
+            for (; index > (start - 1) & index < max; ) {
                 action.accept(array[index--]);
 
             }
@@ -148,8 +144,10 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
 
     @Override
     public ReversableSpliterator<java.lang.Double> copy() {
-        return new ReversingDoubleArraySpliterator<>(
-                array, start,max,reverse);
+        return new ReversingDoubleArraySpliterator<>(array,
+                                                     start,
+                                                     max,
+                                                     reverse);
     }
 
 

@@ -9,55 +9,62 @@ import java.util.function.Function;
  * Created by johnmcclean on 15/12/2016.
  */
 //@AllArgsConstructor
-public class ZippingSpliterator<T1,T2,R> implements CopyableSpliterator<R>,
-                                            ComposableFunction<R,T1,ZippingSpliterator<T1,T2,?>> {
+public class ZippingSpliterator<T1, T2, R> implements CopyableSpliterator<R>,
+                                                      ComposableFunction<R, T1, ZippingSpliterator<T1, T2, ?>> {
+
     private final Spliterator<T1> left;
     private final Spliterator<T2> right;
     private final BiFunction<? super T1, ? super T2, ? extends R> fn;
 
 
-    public ZippingSpliterator(Spliterator<T1> left, Spliterator<T2> right, BiFunction<? super T1, ? super T2, ? extends R> fn) {
+    public ZippingSpliterator(Spliterator<T1> left,
+                              Spliterator<T2> right,
+                              BiFunction<? super T1, ? super T2, ? extends R> fn) {
         this.left = CopyableSpliterator.copy(left);
         this.right = CopyableSpliterator.copy(right);
         this.fn = fn;
     }
-    public <R2> ZippingSpliterator<T1,T2,R2> compose(Function<? super R,? extends R2> fn){
-        return new ZippingSpliterator<>(CopyableSpliterator.copy(left),CopyableSpliterator.copy(right),
-                this.fn.andThen(fn));
+
+    public <R2> ZippingSpliterator<T1, T2, R2> compose(Function<? super R, ? extends R2> fn) {
+        return new ZippingSpliterator<>(CopyableSpliterator.copy(left),
+                                        CopyableSpliterator.copy(right),
+                                        this.fn.andThen(fn));
     }
 
 
     @Override
     public boolean tryAdvance(Consumer<? super R> action) {
-         boolean found[] = {false};
-         return left.tryAdvance(l ->
-                right.tryAdvance(r -> {
-                    action.accept(fn.apply(l, r));
-                    found[0]=true;
-                })) && found[0];
+        boolean found[] = {false};
+        return left.tryAdvance(l -> right.tryAdvance(r -> {
+            action.accept(fn.apply(l,
+                                   r));
+            found[0] = true;
+        })) && found[0];
 
     }
 
     @Override
     public void forEachRemaining(Consumer<? super R> action) {
-        if(hasCharacteristics(SIZED)) {
-            if(left.getExactSizeIfKnown() < right.getExactSizeIfKnown()){
+        if (hasCharacteristics(SIZED)) {
+            if (left.getExactSizeIfKnown() < right.getExactSizeIfKnown()) {
                 left.forEachRemaining(l -> {
                     right.tryAdvance(r -> {
-                        action.accept(fn.apply(l, r));
+                        action.accept(fn.apply(l,
+                                               r));
 
                     });
                 });
-            }else {
+            } else {
                 right.forEachRemaining(r -> {
                     left.tryAdvance(l -> {
-                        action.accept(fn.apply(l, r));
+                        action.accept(fn.apply(l,
+                                               r));
 
                     });
                 });
             }
 
-        }else{
+        } else {
             CopyableSpliterator.super.forEachRemaining(action);
             return;
         }
@@ -68,7 +75,8 @@ public class ZippingSpliterator<T1,T2,R> implements CopyableSpliterator<R>,
     @Override
     public Spliterator<R> copy() {
         return new ZippingSpliterator(CopyableSpliterator.copy(left),
-                                        CopyableSpliterator.copy(right),fn);
+                                      CopyableSpliterator.copy(right),
+                                      fn);
     }
 
     @Override
@@ -79,7 +87,8 @@ public class ZippingSpliterator<T1,T2,R> implements CopyableSpliterator<R>,
 
     @Override
     public long estimateSize() {
-        return Math.min(left.estimateSize(),right.estimateSize());
+        return Math.min(left.estimateSize(),
+                        right.estimateSize());
     }
 
 

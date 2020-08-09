@@ -1,6 +1,7 @@
 package cyclops.data.vector;
 
 import cyclops.data.Vector;
+import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -12,8 +13,6 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.concurrent.TimeUnit;
-
 @State(Scope.Benchmark)
 public class VectorFilter {
 
@@ -22,8 +21,12 @@ public class VectorFilter {
 
     @Setup
     public void before() {
-        vector = Vector.range(0, 1000).map(i->""+i);
-        js = io.vavr.collection.Vector.range(0, 1000).map(i->""+i);
+        vector = Vector.range(0,
+                              1000)
+                       .map(i -> "" + i);
+        js = io.vavr.collection.Vector.range(0,
+                                             1000)
+                                      .map(i -> "" + i);
 
     }
 
@@ -31,32 +34,24 @@ public class VectorFilter {
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-        iterations = 10
-    )
-    @Measurement(
-        iterations = 10
-    )
+    @Warmup(iterations = 10)
+    @Measurement(iterations = 10)
     @Fork(1)
     public void cyclopsOps() {
-        vector.filter(i -> Integer.parseInt(i) % 2==0);
+        vector.filter(i -> Integer.parseInt(i) % 2 == 0);
 
     }
+
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-        iterations = 10
-    )
-    @Measurement(
-        iterations = 10
-    )
+    @Warmup(iterations = 10)
+    @Measurement(iterations = 10)
     @Fork(1)
     public void vavrOps() {
-        js.filter(i -> Integer.parseInt(i) % 2==0);
+        js.filter(i -> Integer.parseInt(i) % 2 == 0);
 
     }
-
 
 
 }

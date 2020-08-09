@@ -1,8 +1,6 @@
 package com.oath.cyclops.internal.stream.spliterators;
 
 import com.oath.cyclops.types.persistent.PersistentCollection;
-
-import java.util.Collection;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.concurrent.TimeUnit;
@@ -13,73 +11,87 @@ import java.util.function.Supplier;
 /**
  * Created by johnmcclean on 22/12/2016.
  */
-public class GroupedByTimeSpliterator<T, C extends PersistentCollection<? super T>,R> extends Spliterators.AbstractSpliterator<R>
-                                implements CopyableSpliterator<R>,ComposableFunction<R,T,GroupedByTimeSpliterator<T,C,?>> {
+public class GroupedByTimeSpliterator<T, C extends PersistentCollection<? super T>, R> extends
+                                                                                       Spliterators.AbstractSpliterator<R> implements
+                                                                                                                           CopyableSpliterator<R>,
+                                                                                                                           ComposableFunction<R, T, GroupedByTimeSpliterator<T, C, ?>> {
+
+    final long toRun;
     private final Spliterator<T> source;
     private final Supplier<? extends C> factory;
     private final Function<? super C, ? extends R> finalizer;
     private final long time;
     private final TimeUnit t;
-    final long toRun;
+    C collection;
+    boolean sent = false;
+    boolean data = false;
+    long start = -1;
+    boolean closed = false;
+
     public GroupedByTimeSpliterator(final Spliterator<T> source,
                                     Supplier<? extends C> factory,
                                     Function<? super C, ? extends R> finalizer,
                                     long time,
                                     TimeUnit t) {
-        super(source.estimateSize(),source.characteristics() & Spliterator.ORDERED);
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
 
         this.source = source;
         this.factory = factory;
-        this.finalizer=finalizer;
+        this.finalizer = finalizer;
         this.time = time;
         this.t = t;
-        collection =factory.get();
-        toRun =t.toNanos(time);
+        collection = factory.get();
+        toRun = t.toNanos(time);
 
 
     }
-    public <R2> GroupedByTimeSpliterator<T,C,?> compose(Function<? super R,? extends R2> fn){
-        return new GroupedByTimeSpliterator<T, C,R2>(CopyableSpliterator.copy(source),factory,finalizer.andThen(fn),time,t);
+
+    public <R2> GroupedByTimeSpliterator<T, C, ?> compose(Function<? super R, ? extends R2> fn) {
+        return new GroupedByTimeSpliterator<T, C, R2>(CopyableSpliterator.copy(source),
+                                                      factory,
+                                                      finalizer.andThen(fn),
+                                                      time,
+                                                      t);
     }
 
-    C collection;
-    boolean sent = false;
-    boolean data = false;
     @Override
     public void forEachRemaining(Consumer<? super R> action) {
         start = System.nanoTime();
-        source.forEachRemaining(t->{
-            if(data==false)
+        source.forEachRemaining(t -> {
+            if (data == false) {
                 data = true;
-             collection = (C)collection.plus(t);
+            }
+            collection = (C) collection.plus(t);
 
-            if(System.nanoTime() - start >= toRun){
+            if (System.nanoTime() - start >= toRun) {
                 action.accept(finalizer.apply(collection));
                 sent = true;
                 collection = factory.get();
                 start = System.nanoTime();
-            }else{
+            } else {
                 sent = false;
             }
 
         });
-        if(data && !sent){
+        if (data && !sent) {
             action.accept(finalizer.apply(collection));
         }
 
     }
-    long start = -1;
-    boolean closed =false;
+
     @Override
     public boolean tryAdvance(Consumer<? super R> action) {
-        if(closed)
+        if (closed) {
             return false;
-        if(start ==-1 )
+        }
+        if (start == -1) {
             start = System.nanoTime();
+        }
 
-       do  {
+        do {
             boolean canAdvance = source.tryAdvance(t -> {
-                collection = (C)collection.plus(t);
+                collection = (C) collection.plus(t);
             });
             if (!canAdvance) {
                 action.accept(finalizer.apply(collection));
@@ -88,8 +100,7 @@ public class GroupedByTimeSpliterator<T, C extends PersistentCollection<? super 
                 closed = true;
                 return false;
             }
-        }while(System.nanoTime() - start < toRun);
-
+        } while (System.nanoTime() - start < toRun);
 
         action.accept(finalizer.apply(collection));
         collection = factory.get();
@@ -99,7 +110,11 @@ public class GroupedByTimeSpliterator<T, C extends PersistentCollection<? super 
 
     @Override
     public Spliterator<R> copy() {
-        return new GroupedByTimeSpliterator<T, C,R>(CopyableSpliterator.copy(source),factory,finalizer,time,t);
+        return new GroupedByTimeSpliterator<T, C, R>(CopyableSpliterator.copy(source),
+                                                     factory,
+                                                     finalizer,
+                                                     time,
+                                                     t);
     }
 
 

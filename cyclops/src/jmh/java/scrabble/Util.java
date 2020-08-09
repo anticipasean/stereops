@@ -20,7 +20,6 @@
 package scrabble;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
@@ -30,34 +29,36 @@ import java.util.stream.Stream;
 
 public final class Util {
 
-    private Util() { }
+    private Util() {
+    }
 
     public static Set<String> readScrabbleWords() {
-        Set<String> scrabbleWords = new HashSet<>() ;
+        Set<String> scrabbleWords = new HashSet<>();
 
-            System.out.println(Util.class.getResource("files/ospd.txt"));
+        System.out.println(Util.class.getResource("files/ospd.txt"));
 
+        try (Stream<String> scrabbleWordsStream = Files.lines(Paths.get("src/jmh/resources/files",
+                                                                        "ospd.txt"))) {
+            scrabbleWords.addAll(scrabbleWordsStream.map(String::toLowerCase)
+                                                    .collect(Collectors.toSet()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            try (Stream<String> scrabbleWordsStream = Files.lines(Paths.get("src/jmh/resources/files","ospd.txt"))) {
-                scrabbleWords.addAll(scrabbleWordsStream.map(String::toLowerCase).collect(Collectors.toSet()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        return scrabbleWords ;
+        return scrabbleWords;
     }
 
     public static Set<String> readShakespeareWords() {
-        Set<String> shakespeareWords = new HashSet<>() ;
+        Set<String> shakespeareWords = new HashSet<>();
 
+        try (Stream<String> shakespeareWordsStream = Files.lines(Paths.get("src/jmh/resources/files",
+                                                                           "words.shakespeare.txt"))) {
+            shakespeareWords.addAll(shakespeareWordsStream.map(String::toLowerCase)
+                                                          .collect(Collectors.toSet()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            try (Stream<String> shakespeareWordsStream = Files.lines(Paths.get("src/jmh/resources/files","words.shakespeare.txt"))) {
-                shakespeareWords.addAll(shakespeareWordsStream.map(String::toLowerCase).collect(Collectors.toSet()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        return shakespeareWords ;
+        return shakespeareWords;
     }
 }

@@ -1,75 +1,112 @@
 package cyclops.streams.push;
 
 
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.companion.Streamable;
-import org.junit.Test;
-import reactor.core.publisher.Flux;
-
-import java.util.Arrays;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+
+import cyclops.companion.Streamable;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.Spouts;
+import java.util.Arrays;
+import org.junit.Test;
+import reactor.core.publisher.Flux;
 
 public class ReactiveStreamsTest {
 
     @Test
-    public void subscribeToEmpty(){
+    public void subscribeToEmpty() {
 
-        Spouts.from(ReactiveSeq.<Integer>empty()).forEach(System.out::println);
+        Spouts.from(ReactiveSeq.<Integer>empty())
+              .forEach(System.out::println);
 
-    }
-    @Test
-    public void subscribeToFlux(){
-
-        assertThat(Spouts.from(Flux.just(1,2,3)).toList(),equalTo(
-                Arrays.asList(1,2,3)));
-    }
-    @Test
-    public void fromFluxReactiveSeq(){
-        assertThat( ReactiveSeq.fromPublisher(Flux.just(1,2,3)).toList(),equalTo(
-                Arrays.asList(1,2,3)));
     }
 
     @Test
-    public void fromFluxStreamableX(){
-        assertThat( Streamable.fromPublisher(Flux.just(1,2,3)).toList(),equalTo(
-                Arrays.asList(1,2,3)));
+    public void subscribeToFlux() {
+
+        assertThat(Spouts.from(Flux.just(1,
+                                         2,
+                                         3))
+                         .toList(),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
     }
 
-	@Test
-	public void publishAndSubscribe(){
-
-		assertThat(Spouts.from(ReactiveSeq.of(1,2,3)).toList(),equalTo(
-				Arrays.asList(1,2,3)));
-	}
-	@Test
-	public void publishAndSubscribeEmpty(){
-
-
-		assertThat(Spouts.from(ReactiveSeq.of()).toList(),equalTo(
-				Arrays.asList()));
-	}
-	@Test
-    public void subscribeToFluxIterator(){
-
-
-        assertThat(ReactiveSeq.fromIterator(Spouts.from(Flux.just(1,2,3)).iterator()).toList(),equalTo(
-                Arrays.asList(1,2,3)));
-    }
     @Test
-    public void publishAndSubscribeIterator(){
-
-
-        assertThat(ReactiveSeq.fromIterator(Spouts.from(ReactiveSeq.of(1,2,3)).iterator()).toList(),equalTo(
-                Arrays.asList(1,2,3)));
+    public void fromFluxReactiveSeq() {
+        assertThat(ReactiveSeq.fromPublisher(Flux.just(1,
+                                                       2,
+                                                       3))
+                              .toList(),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
     }
+
     @Test
-    public void publishAndSubscribeEmptyIterator(){
+    public void fromFluxStreamableX() {
+        assertThat(Streamable.fromPublisher(Flux.just(1,
+                                                      2,
+                                                      3))
+                             .toList(),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
+    }
 
+    @Test
+    public void publishAndSubscribe() {
 
-        assertThat(ReactiveSeq.fromIterator(Spouts.from(ReactiveSeq.of()).iterator()).toList(),equalTo(
-                Arrays.asList()));
+        assertThat(Spouts.from(ReactiveSeq.of(1,
+                                              2,
+                                              3))
+                         .toList(),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
+    }
+
+    @Test
+    public void publishAndSubscribeEmpty() {
+
+        assertThat(Spouts.from(ReactiveSeq.of())
+                         .toList(),
+                   equalTo(Arrays.asList()));
+    }
+
+    @Test
+    public void subscribeToFluxIterator() {
+
+        assertThat(ReactiveSeq.fromIterator(Spouts.from(Flux.just(1,
+                                                                  2,
+                                                                  3))
+                                                  .iterator())
+                              .toList(),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
+    }
+
+    @Test
+    public void publishAndSubscribeIterator() {
+
+        assertThat(ReactiveSeq.fromIterator(Spouts.from(ReactiveSeq.of(1,
+                                                                       2,
+                                                                       3))
+                                                  .iterator())
+                              .toList(),
+                   equalTo(Arrays.asList(1,
+                                         2,
+                                         3)));
+    }
+
+    @Test
+    public void publishAndSubscribeEmptyIterator() {
+
+        assertThat(ReactiveSeq.fromIterator(Spouts.from(ReactiveSeq.of())
+                                                  .iterator())
+                              .toList(),
+                   equalTo(Arrays.asList()));
     }
 }

@@ -9,40 +9,45 @@ import java.util.function.Consumer;
  * Created by johnmcclean on 22/12/2016.
  */
 public class SkipWhileTimeSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements CopyableSpliterator<T> {
+
+    final long toRun;
     private final Spliterator<T> source;
     private final long time;
     private final TimeUnit t;
-    final long toRun;
-
     boolean closed = false;
-    public SkipWhileTimeSpliterator(final Spliterator<T> source, long time, TimeUnit t) {
-        super(source.estimateSize(),source.characteristics() & Spliterator.ORDERED);
+    boolean open = false;
+    long start = -1;
+    public SkipWhileTimeSpliterator(final Spliterator<T> source,
+                                    long time,
+                                    TimeUnit t) {
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
 
         this.source = source;
         this.time = time;
-        this.t=t;
+        this.t = t;
 
         toRun = t.toNanos(time);
 
     }
-    boolean open = false;
-    long start =-1;
+
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
         start = System.nanoTime();
-        while(!closed){
+        while (!closed) {
             boolean canAdvance = source.tryAdvance(t -> {
-                if(!open) {
-                    open = System.nanoTime()-start >= toRun;
+                if (!open) {
+                    open = System.nanoTime() - start >= toRun;
 
-                    if (open)
+                    if (open) {
                         action.accept(t);
-                }else{
+                    }
+                } else {
                     action.accept(t);
                 }
 
             });
-            if(!canAdvance){
+            if (!canAdvance) {
                 closed = true;
                 return;
             }
@@ -54,33 +59,34 @@ public class SkipWhileTimeSpliterator<T> extends Spliterators.AbstractSpliterato
 
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
-        if(closed)
+        if (closed) {
             return true;
-        if(start == -1) {
+        }
+        if (start == -1) {
             start = System.nanoTime();
         }
 
         boolean[] sent = {false};
-        for(;;) {
+        for (; ; ) {
             boolean canAdvance = source.tryAdvance(t -> {
                 if (!open) {
                     open = System.nanoTime() - start >= toRun;
 
                     if (open) {
                         action.accept(t);
-                        sent[0]=true;
+                        sent[0] = true;
                     }
                 } else {
                     action.accept(t);
-                    sent[0]=true;
+                    sent[0] = true;
                 }
             });
 
-            if(!canAdvance){
+            if (!canAdvance) {
                 closed = true;
                 return false;
             }
-            if(sent[0]){
+            if (sent[0]) {
                 return canAdvance;
             }
         }
@@ -89,6 +95,8 @@ public class SkipWhileTimeSpliterator<T> extends Spliterators.AbstractSpliterato
 
     @Override
     public Spliterator<T> copy() {
-        return new SkipWhileTimeSpliterator<>(CopyableSpliterator.copy(source),time,t);
+        return new SkipWhileTimeSpliterator<>(CopyableSpliterator.copy(source),
+                                              time,
+                                              t);
     }
 }

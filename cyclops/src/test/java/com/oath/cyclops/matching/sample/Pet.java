@@ -7,31 +7,35 @@ import lombok.Getter;
 
 public interface Pet extends Deconstruct.Deconstruct3<String, Integer, String> {
 
-  String getName();
+    String getName();
 
-  int getAge();
+    int getAge();
 
-  String getGender();
+    String getGender();
 
-  @Override
-  default Tuple3<String, Integer, String> unapply() {
-    return new Tuple3<>(getName(), getAge(), getGender());
-  }
+    @Override
+    default Tuple3<String, Integer, String> unapply() {
+        return new Tuple3<>(getName(),
+                            getAge(),
+                            getGender());
+    }
 
-  @AllArgsConstructor
-  @Getter
-  class Dog implements Pet {
-    private final String name;
-    private final int age;
-    private final String gender;
-  }
+    @AllArgsConstructor
+    @Getter
+    class Dog implements Pet {
 
-  @AllArgsConstructor
-  @Getter
-  class Cat implements Pet {
-    private final String name;
-    private final int age;
-    private final String gender;
-  }
+        private final String name;
+        private final int age;
+        private final String gender;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    class Cat implements Pet {
+
+        private final String name;
+        private final int age;
+        private final String gender;
+    }
 
 }

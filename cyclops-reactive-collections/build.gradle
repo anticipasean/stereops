@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = javaSourceCompatibility
 jar {
     manifest {
         attributes 'Implementation-Title': 'cyclops-futurestream', 'Implementation-Version': version
@@ -11,11 +11,13 @@ jar {
 }
 
 dependencies {
-    compile project(':cyclops')
-    testCompileClasspath project(':cyclops').sourceSets.test.output
+    implementation project(':cyclops')
+    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    testCompileClasspath project(':cyclops')
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    testCompileClasspath project(':cyclops').sourceSets.test.output
-    testCompileClasspath 'org.reactivestreams:reactive-streams-tck:1.0.0'
+    compileClasspath "org.projectlombok:lombok:${lombokVersion}"
+    testCompileClasspath project(':cyclops')
+    implementation 'org.reactivestreams:reactive-streams-tck:1.0.0'
     testCompileClasspath group: 'io.projectreactor', name: 'reactor-test', version: '3.2.2.RELEASE'
     testCompileClasspath 'org.mockito:mockito-core:1.9.5'
     testCompileClasspath 'io.projectreactor:reactor-core:3.0.7.RELEASE'

@@ -1,16 +1,14 @@
 package com.oath.cyclops.types.functor;
 
 import com.oath.cyclops.types.Filters;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
  * Represents a Transformable that is also Filters (e.g. a Stream or Optional type)
  *
- * @author johnmcclean
- *
  * @param <T> Data type of the element(s) in this FilterableTransformable
+ * @author johnmcclean
  */
 public interface FilterableTransformable<T> extends Filters<T>, Transformable<T> {
 

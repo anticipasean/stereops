@@ -1,5 +1,9 @@
 package com.oath.cyclops.data.collections.extensions;
 
+import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
+import com.oath.cyclops.types.foldable.Evaluation;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collections.mutable.ListX;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -7,12 +11,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -66,8 +64,9 @@ public class CollectionXImpl<T> implements LazyCollectionX<T> {
     public boolean containsValue(final Object o) {
         return delegate.contains(o);
     }
+
     @Override
-    public boolean contains(Object o){
+    public boolean contains(Object o) {
         return delegate.contains(o);
     }
 
@@ -195,7 +194,6 @@ public class CollectionXImpl<T> implements LazyCollectionX<T> {
     }
 
     /**
-     *
      * @see java.util.Collection#clear()
      */
     @Override
@@ -259,10 +257,10 @@ public class CollectionXImpl<T> implements LazyCollectionX<T> {
      */
     @Override
     public <T1> CollectionX<T1> from(final Iterable<T1> c) {
-        if (c instanceof CollectionX)
+        if (c instanceof CollectionX) {
             return (CollectionX) c;
-        return new CollectionXImpl(
-                                   ListX.fromIterable(c));
+        }
+        return new CollectionXImpl(ListX.fromIterable(c));
     }
 
 
@@ -284,7 +282,8 @@ public class CollectionXImpl<T> implements LazyCollectionX<T> {
 
     @Override
     public String toString() {
-        return String.format("%s", delegate);
+        return String.format("%s",
+                             delegate);
     }
 
 

@@ -1,6 +1,8 @@
 package cyclops.reactive.collections.immutable;
 
 
+import static cyclops.data.tuple.Tuple.tuple;
+
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.ReactiveWitness.persistentQueueX;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
@@ -31,8 +33,6 @@ import cyclops.function.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
-import org.reactivestreams.Publisher;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -40,67 +40,43 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
-
-import static cyclops.data.tuple.Tuple.tuple;
+import org.reactivestreams.Publisher;
 
 /**
- * An eXtended Persistent Queue type, that offers additional functional style operators such as bimap, filter and more
- * Can operate eagerly, lazily or reactively (async push)
- *
- * @author johnmcclean
+ * An eXtended Persistent Queue type, that offers additional functional style operators such as bimap, filter and more Can operate
+ * eagerly, lazily or reactively (async push)
  *
  * @param <T> the type of elements held in this collection
+ * @author johnmcclean
  */
-public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
-                                              PersistentQueue<T>,
-                                             LazyCollectionX<T>,
-                                             OnEmptySwitch<T, PersistentQueue<T>>,
-                                             Higher<persistentQueueX,T>{
+public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>, PersistentQueue<T>, LazyCollectionX<T>,
+                                             OnEmptySwitch<T, PersistentQueue<T>>, Higher<persistentQueueX, T> {
 
-    PersistentQueueX<T> lazy();
-    PersistentQueueX<T> eager();
-
-    public static <T> PersistentQueueX<T> defer(Supplier<PersistentQueueX<T>> s){
-      return of(s)
-                .map(Supplier::get)
-                .concatMap(l->l);
+    static <T> PersistentQueueX<T> defer(Supplier<PersistentQueueX<T>> s) {
+        return of(s).map(Supplier::get)
+                    .concatMap(l -> l);
     }
-    static <T> CompletablePersistentQueueX<T> completable(){
+
+    static <T> CompletablePersistentQueueX<T> completable() {
         return new CompletablePersistentQueueX<>();
     }
 
-    static class CompletablePersistentQueueX<T> implements InvocationHandler {
-        Future<PersistentQueueX<T>> future = Future.future();
-        public boolean complete(PersistentQueue<T> result){
-            return future.complete(PersistentQueueX.fromIterable(result));
-        }
-
-        public PersistentQueueX<T> asPersistentQueueX(){
-            PersistentQueueX f = (PersistentQueueX) Proxy.newProxyInstance(PersistentQueueX.class.getClassLoader(),
-                    new Class[] { PersistentQueueX.class },
-                    this);
-            return f;
-        }
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            PersistentQueueX<T> target = future.fold(l->l, t->{throw ExceptionSoftener.throwSoftenedException(t);});
-            return method.invoke(target,args);
-        }
-    }
-
-
-    public static <T> Higher<persistentQueueX, T> widen(PersistentQueueX<T> narrow) {
+    static <T> Higher<persistentQueueX, T> widen(PersistentQueueX<T> narrow) {
         return narrow;
     }
 
-
     static <T> PersistentQueueX<T> fromIterator(Iterator<T> iterator) {
-        return fromIterable(()->iterator);
+        return fromIterable(() -> iterator);
     }
-
 
     /**
      * Narrow a covariant PersistentQueueX
@@ -115,7 +91,7 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * @param queueX to narrow generic type
      * @return OrderedSetX with narrowed type
      */
-    public static <T> PersistentQueueX<T> narrow(final PersistentQueueX<? extends T> queueX) {
+    static <T> PersistentQueueX<T> narrow(final PersistentQueueX<? extends T> queueX) {
         return (PersistentQueueX<T>) queueX;
     }
 
@@ -125,46 +101,50 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * @param list HTK encoded type containing  a PQueue to widen
      * @return HKT encoded type with a widened PQueue
      */
-    public static <C2,T> Higher<C2, Higher<persistentQueueX,T>> widen2(Higher<C2, PersistentQueueX<T>> list){
+    static <C2, T> Higher<C2, Higher<persistentQueueX, T>> widen2(Higher<C2, PersistentQueueX<T>> list) {
         //a functor could be used (if C2 is a functor / one exists for C2 type) instead of casting
         //cast seems safer as Higher<persistentQueueX,T> must be a PQueueType
-        return (Higher)list;
+        return (Higher) list;
     }
+
     /**
      * Convert the raw Higher Kinded Type for PQueue types into the PQueueType type definition class
      *
      * @param list HKT encoded list into a PQueueType
      * @return PQueueType
      */
-    public static <T> PersistentQueueX<T> narrowK(final Higher<persistentQueueX, T> list) {
-        return (PersistentQueueX<T>)list;
+    static <T> PersistentQueueX<T> narrowK(final Higher<persistentQueueX, T> list) {
+        return (PersistentQueueX<T>) list;
     }
+
     /**
      * Create a PersistentQueueX that contains the Integers between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range PersistentQueueX
      */
-    public static PersistentQueueX<Integer> range(final int start, final int end) {
-        return ReactiveSeq.range(start, end).to(ReactiveConvertableSequence::converter)
-                .persistentQueueX(Evaluation.LAZY);
+    static PersistentQueueX<Integer> range(final int start,
+                                           final int end) {
+        return ReactiveSeq.range(start,
+                                 end)
+                          .to(ReactiveConvertableSequence::converter)
+                          .persistentQueueX(Evaluation.LAZY);
     }
 
     /**
      * Create a PersistentQueueX that contains the Longs between skip and take
      *
-     * @param start
-     *            Number of range to skip from
-     * @param end
-     *            Number for range to take at
+     * @param start Number of range to skip from
+     * @param end   Number for range to take at
      * @return Range PersistentQueueX
      */
-    public static PersistentQueueX<Long> rangeLong(final long start, final long end) {
-        return ReactiveSeq.rangeLong(start, end).to(ReactiveConvertableSequence::converter)
-                .persistentQueueX(Evaluation.LAZY);
+    static PersistentQueueX<Long> rangeLong(final long start,
+                                            final long end) {
+        return ReactiveSeq.rangeLong(start,
+                                     end)
+                          .to(ReactiveConvertableSequence::converter)
+                          .persistentQueueX(Evaluation.LAZY);
     }
 
     /**
@@ -182,83 +162,97 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * @param unfolder Iteratively applied function, terminated by an zero Optional
      * @return PersistentQueueX generated by unfolder function
      */
-    static <U, T> PersistentQueueX<T> unfold(final U seed, final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
-        return ReactiveSeq.unfold(seed, unfolder).to(ReactiveConvertableSequence::converter)
-                .persistentQueueX(Evaluation.LAZY);
+    static <U, T> PersistentQueueX<T> unfold(final U seed,
+                                             final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
+        return ReactiveSeq.unfold(seed,
+                                  unfolder)
+                          .to(ReactiveConvertableSequence::converter)
+                          .persistentQueueX(Evaluation.LAZY);
     }
 
     /**
      * Generate a PersistentQueueX from the provided Supplier up to the provided limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param s Supplier to generate PersistentQueueX elements
+     * @param s     Supplier to generate PersistentQueueX elements
      * @return PersistentQueueX generated from the provided Supplier
      */
-    public static <T> PersistentQueueX<T> generate(final long limit, final Supplier<T> s) {
+    static <T> PersistentQueueX<T> generate(final long limit,
+                                            final Supplier<T> s) {
 
         return ReactiveSeq.generate(s)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
-                .persistentQueueX(Evaluation.LAZY);
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
+                          .persistentQueueX(Evaluation.LAZY);
     }
 
     /**
      * Generate a PersistentQueueX from the provided value up to the provided limit number of times
      *
      * @param limit Max number of elements to generate
-     * @param s Value for PersistentQueueX elements
+     * @param s     Value for PersistentQueueX elements
      * @return PersistentQueueX generated from the provided Supplier
      */
-    public static <T> PersistentQueueX<T> fill(final long limit, final T s) {
+    static <T> PersistentQueueX<T> fill(final long limit,
+                                        final T s) {
 
         return ReactiveSeq.fill(s)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
-                .persistentQueueX(Evaluation.LAZY);
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
+                          .persistentQueueX(Evaluation.LAZY);
     }
 
     /**
-     * Create a PersistentQueueX by iterative application of a function to an initial element up to the supplied limit number of times
+     * Create a PersistentQueueX by iterative application of a function to an initial element up to the supplied limit number of
+     * times
      *
      * @param limit Max number of elements to generate
-     * @param seed Initial element
-     * @param f Iteratively applied to each element to generate the next element
+     * @param seed  Initial element
+     * @param f     Iteratively applied to each element to generate the next element
      * @return PersistentQueueX generated by iterative application
      */
-    public static <T> PersistentQueueX<T> iterate(final long limit, final T seed, final UnaryOperator<T> f) {
-        return ReactiveSeq.iterate(seed, f)
-                          .limit(limit).to(ReactiveConvertableSequence::converter)
-                .persistentQueueX(Evaluation.LAZY);
+    static <T> PersistentQueueX<T> iterate(final long limit,
+                                           final T seed,
+                                           final UnaryOperator<T> f) {
+        return ReactiveSeq.iterate(seed,
+                                   f)
+                          .limit(limit)
+                          .to(ReactiveConvertableSequence::converter)
+                          .persistentQueueX(Evaluation.LAZY);
 
     }
 
-    public static <T> PersistentQueueX<T> of(final T... values) {
-        return new LazyPQueueX<>(null,ReactiveSeq.of(values),Reducers.toPersistentQueue(),Evaluation.LAZY);
+    static <T> PersistentQueueX<T> of(final T... values) {
+        return new LazyPQueueX<>(null,
+                                 ReactiveSeq.of(values),
+                                 Reducers.toPersistentQueue(),
+                                 Evaluation.LAZY);
     }
 
-    public static <T> PersistentQueueX<T> empty() {
-        return new LazyPQueueX<>(
-                                 BankersQueue.empty(),null,Reducers.toPersistentQueue(),Evaluation.LAZY);
+    static <T> PersistentQueueX<T> empty() {
+        return new LazyPQueueX<>(BankersQueue.empty(),
+                                 null,
+                                 Reducers.toPersistentQueue(),
+                                 Evaluation.LAZY);
     }
 
-    public static <T> PersistentQueueX<T> singleton(final T value) {
-        return PersistentQueueX.<T> empty()
-                      .plus(value);
+    static <T> PersistentQueueX<T> singleton(final T value) {
+        return PersistentQueueX.<T>empty().plus(value);
     }
 
     /**
      * Construct a PersistentQueueX from an Publisher
      *
-     * @param publisher
-     *            to construct PersistentQueueX from
+     * @param publisher to construct PersistentQueueX from
      * @return PersistentQueueX
      */
-    public static <T> PersistentQueueX<T> fromPublisher(final Publisher<? extends T> publisher) {
-        return Spouts.from((Publisher<T>) publisher).to(ReactiveConvertableSequence::converter)
-                          .persistentQueueX(Evaluation.LAZY);
+    static <T> PersistentQueueX<T> fromPublisher(final Publisher<? extends T> publisher) {
+        return Spouts.from(publisher)
+                     .to(ReactiveConvertableSequence::converter)
+                     .persistentQueueX(Evaluation.LAZY);
     }
-    PersistentQueueX<T> type(Reducer<? extends PersistentQueue<T>,T> reducer);
 
     /**
-     *
      * <pre>
      * {@code
      *  import static cyclops.stream.ReactiveSeq.range;
@@ -267,46 +261,75 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      *
      * }
      * </pre>
+     *
      * @param stream To create a PersistentQueueX from
-     * @param <T> PersistentQueueX generated from Stream
+     * @param <T>    PersistentQueueX generated from Stream
      * @return
      */
-    public static <T> PersistentQueueX<T> persistentQueueX(ReactiveSeq<T> stream) {
-        return new LazyPQueueX<>(null,stream,Reducers.toPersistentQueue(),Evaluation.LAZY);
+    static <T> PersistentQueueX<T> persistentQueueX(ReactiveSeq<T> stream) {
+        return new LazyPQueueX<>(null,
+                                 stream,
+                                 Reducers.toPersistentQueue(),
+                                 Evaluation.LAZY);
     }
 
-    public static <T> PersistentQueueX<T> fromIterable(final Iterable<T> iterable) {
-        if (iterable instanceof PersistentQueueX)
+    static <T> PersistentQueueX<T> fromIterable(final Iterable<T> iterable) {
+        if (iterable instanceof PersistentQueueX) {
             return (PersistentQueueX) iterable;
-        if (iterable instanceof PersistentQueue)
-            return new LazyPQueueX<>(
-                                     (PersistentQueue) iterable,null,Reducers.toPersistentQueue(),Evaluation.LAZY);
-
+        }
+        if (iterable instanceof PersistentQueue) {
+            return new LazyPQueueX<>((PersistentQueue) iterable,
+                                     null,
+                                     Reducers.toPersistentQueue(),
+                                     Evaluation.LAZY);
+        }
 
         return new LazyPQueueX<>(null,
-                ReactiveSeq.fromIterable(iterable),
-                Reducers.toPersistentQueue(),Evaluation.LAZY);
+                                 ReactiveSeq.fromIterable(iterable),
+                                 Reducers.toPersistentQueue(),
+                                 Evaluation.LAZY);
     }
+
+    static <T, R> PersistentQueueX<R> tailRec(T initial,
+                                              Function<? super T, ? extends PersistentQueueX<? extends Either<T, R>>> fn) {
+        return ListX.tailRec(initial,
+                             fn)
+                    .to()
+                    .persistentQueueX(Evaluation.LAZY);
+    }
+
+    PersistentQueueX<T> lazy();
+
+    PersistentQueueX<T> eager();
+
+    PersistentQueueX<T> type(Reducer<? extends PersistentQueue<T>, T> reducer);
 
     default Tuple2<PersistentQueueX<T>, PersistentQueueX<T>> splitAt(int n) {
         materialize();
-        return Tuple.tuple(take(n), drop(n));
-    }
-    default Tuple2<PersistentQueueX<T>, PersistentQueueX<T>> span(Predicate<? super T> pred) {
-        return tuple(takeWhile(pred), dropWhile(pred));
+        return Tuple.tuple(take(n),
+                           drop(n));
     }
 
-    default Tuple2<PersistentQueueX<T>,PersistentQueueX<T>> splitBy(Predicate<? super T> test) {
+    default Tuple2<PersistentQueueX<T>, PersistentQueueX<T>> span(Predicate<? super T> pred) {
+        return tuple(takeWhile(pred),
+                     dropWhile(pred));
+    }
+
+    default Tuple2<PersistentQueueX<T>, PersistentQueueX<T>> splitBy(Predicate<? super T> test) {
         return span(test.negate());
     }
+
     default Tuple2<PersistentQueueX<T>, PersistentQueueX<T>> partition(final Predicate<? super T> splitter) {
 
-        return tuple(filter(splitter), filter(splitter.negate()));
+        return tuple(filter(splitter),
+                     filter(splitter.negate()));
 
     }
+
     default <T> PersistentQueueX<T> fromStream(final ReactiveSeq<T> stream) {
         return persistentQueueX(stream);
     }
+
     /**
      * coflatMap pattern, can be used to perform maybe reductions / collections / folds and other terminal operations
      *
@@ -321,13 +344,12 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * }
      * </pre>
      *
-     *
      * @param fn mapping function
      * @return Transformed PersistentQueueX
      */
-    default <R> PersistentQueueX<R> coflatMap(Function<? super PersistentQueueX<T>, ? extends R> fn){
-       return fn.andThen(r ->  this.<R>unit(r))
-                .apply(this);
+    default <R> PersistentQueueX<R> coflatMap(Function<? super PersistentQueueX<T>, ? extends R> fn) {
+        return fn.andThen(r -> this.<R>unit(r))
+                 .apply(this);
     }
 
     /* (non-Javadoc)
@@ -339,10 +361,11 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
                                                          Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> stream3,
                                                          Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (PersistentQueueX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, yieldingFunction);
+        return (PersistentQueueX) LazyCollectionX.super.forEach4(stream1,
+                                                                 stream2,
+                                                                 stream3,
+                                                                 yieldingFunction);
     }
-
-
 
 
     /* (non-Javadoc)
@@ -355,7 +378,11 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
                                                          Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
                                                          Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-        return (PersistentQueueX)LazyCollectionX.super.forEach4(stream1, stream2, stream3, filterFunction, yieldingFunction);
+        return (PersistentQueueX) LazyCollectionX.super.forEach4(stream1,
+                                                                 stream2,
+                                                                 stream3,
+                                                                 filterFunction,
+                                                                 yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -366,7 +393,9 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
                                                      BiFunction<? super T, ? super R1, ? extends Iterable<R2>> stream2,
                                                      Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (PersistentQueueX)LazyCollectionX.super.forEach3(stream1, stream2, yieldingFunction);
+        return (PersistentQueueX) LazyCollectionX.super.forEach3(stream1,
+                                                                 stream2,
+                                                                 yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -378,7 +407,10 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
                                                      Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
                                                      Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
 
-        return (PersistentQueueX)LazyCollectionX.super.forEach3(stream1, stream2, filterFunction, yieldingFunction);
+        return (PersistentQueueX) LazyCollectionX.super.forEach3(stream1,
+                                                                 stream2,
+                                                                 filterFunction,
+                                                                 yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -388,7 +420,8 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     default <R1, R> PersistentQueueX<R> forEach2(Function<? super T, ? extends Iterable<R1>> stream1,
                                                  BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (PersistentQueueX)LazyCollectionX.super.forEach2(stream1, yieldingFunction);
+        return (PersistentQueueX) LazyCollectionX.super.forEach2(stream1,
+                                                                 yieldingFunction);
     }
 
     /* (non-Javadoc)
@@ -399,7 +432,9 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
                                                  BiFunction<? super T, ? super R1, Boolean> filterFunction,
                                                  BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
-        return (PersistentQueueX)LazyCollectionX.super.forEach2(stream1, filterFunction, yieldingFunction);
+        return (PersistentQueueX) LazyCollectionX.super.forEach2(stream1,
+                                                                 filterFunction,
+                                                                 yieldingFunction);
 
     }
 
@@ -410,38 +445,42 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
 
 
     /**
-     * Combine two adjacent elements in a PersistentQueueX using the supplied
-     * BinaryOperator This is a stateful grouping & reduction operation. The
-     * emitted of a combination may in turn be combined with it's neighbor
+     * Combine two adjacent elements in a PersistentQueueX using the supplied BinaryOperator This is a stateful grouping &
+     * reduction operation. The emitted of a combination may in turn be combined with it's neighbor
      *
      * <pre>
      * {@code
      *  PersistentQueueX.of(1,1,2,3)
-                   .combine((a, b)->a.equals(b),SemigroupK.intSum)
-                   .listX()
-
+     * .combine((a, b)->a.equals(b),SemigroupK.intSum)
+     * .listX()
+     *
      *  //ListX(3,4)
      * }
      * </pre>
      *
-     * @param predicate
-     *            Test to see if two neighbors should be joined
-     * @param op
-     *            Reducer to combine neighbors
+     * @param predicate Test to see if two neighbors should be joined
+     * @param op        Reducer to combine neighbors
      * @return Combined / Partially Reduced PersistentQueueX
      */
     @Override
-    default PersistentQueueX<T> combine(final BiPredicate<? super T, ? super T> predicate, final BinaryOperator<T> op) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.combine(predicate, op);
+    default PersistentQueueX<T> combine(final BiPredicate<? super T, ? super T> predicate,
+                                        final BinaryOperator<T> op) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.combine(predicate,
+                                                                   op);
     }
+
     @Override
-    default PersistentQueueX<T> combine(final Monoid<T> op, final BiPredicate<? super T, ? super T> predicate) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.combine(op, predicate);
+    default PersistentQueueX<T> combine(final Monoid<T> op,
+                                        final BiPredicate<? super T, ? super T> predicate) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.combine(op,
+                                                                   predicate);
     }
+
     @Override
     default boolean isEmpty() {
         return PersistentQueue.super.isEmpty();
     }
+
     @Override
     default <R> PersistentQueueX<R> unit(final Iterable<R> col) {
         return fromIterable(col);
@@ -457,14 +496,14 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
         return fromIterable(it);
     }
 
-  //  @Override
+    //  @Override
     default <R> PersistentQueueX<R> emptyUnit() {
         return empty();
     }
 
     @Override
     default PersistentQueueX<T> materialize() {
-        return (PersistentQueueX<T>)LazyCollectionX.super.materialize();
+        return (PersistentQueueX<T>) LazyCollectionX.super.materialize();
     }
 
     @Override
@@ -482,8 +521,8 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
         return fromIterable(col);
     }
 
-   // @Override
-    default <T> Reducer<PersistentQueue<T>,T> monoid() {
+    // @Override
+    default <T> Reducer<PersistentQueue<T>, T> monoid() {
         return Reducers.toPersistentQueue();
     }
 
@@ -493,7 +532,7 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * @see org.pcollections.PSet#plus(java.lang.Object)
      */
     @Override
-    public PersistentQueueX<T> plus(T e);
+    PersistentQueueX<T> plus(T e);
 
     /*
      * (non-Javadoc)
@@ -501,17 +540,18 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * @see org.pcollections.PSet#insertAt(java.util.Collection)
      */
     @Override
-    public PersistentQueueX<T> plusAll(Iterable<? extends T> list);
+    PersistentQueueX<T> plusAll(Iterable<? extends T> list);
 
     @Override
-    public PersistentQueueX<T> minus();
+    PersistentQueueX<T> minus();
+
     /*
      * (non-Javadoc)
      *
      * @see org.pcollections.PSet#removeValue(java.lang.Object)
      */
     @Override
-    public PersistentQueueX<T> removeValue(T e);
+    PersistentQueueX<T> removeValue(T e);
 
     /*
      * (non-Javadoc)
@@ -519,7 +559,7 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * @see org.pcollections.PSet#removeAll(java.util.Collection)
      */
     @Override
-    public PersistentQueueX<T> removeAll(Iterable<? extends T> list);
+    PersistentQueueX<T> removeAll(Iterable<? extends T> list);
 
     /*
      * (non-Javadoc)
@@ -575,8 +615,10 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
 
 
     @Override
-    default <R> PersistentQueueX<R> mergeMap(int maxConcurency, Function<? super T, ? extends Publisher<? extends R>> fn) {
-        return (PersistentQueueX<R>) LazyCollectionX.super.mergeMap(maxConcurency,fn);
+    default <R> PersistentQueueX<R> mergeMap(int maxConcurency,
+                                             Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return (PersistentQueueX<R>) LazyCollectionX.super.mergeMap(maxConcurency,
+                                                                    fn);
     }
 
     @Override
@@ -585,8 +627,14 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default <R> PersistentQueueX<R> retry(final Function<? super T, ? extends R> fn, final int retries, final long delay, final TimeUnit timeUnit) {
-        return (PersistentQueueX<R>) LazyCollectionX.super.retry(fn,retries,delay,timeUnit);
+    default <R> PersistentQueueX<R> retry(final Function<? super T, ? extends R> fn,
+                                          final int retries,
+                                          final long delay,
+                                          final TimeUnit timeUnit) {
+        return (PersistentQueueX<R>) LazyCollectionX.super.retry(fn,
+                                                                 retries,
+                                                                 delay,
+                                                                 timeUnit);
     }
 
     @Override
@@ -625,23 +673,31 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default PersistentQueueX<T> insertAt(int pos, T... values) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,values);
+    default PersistentQueueX<T> insertAt(int pos,
+                                         T... values) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,
+                                                                    values);
     }
 
     @Override
-    default PersistentQueueX<T> insertAt(int pos, T value) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,value);
+    default PersistentQueueX<T> insertAt(int pos,
+                                         T value) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,
+                                                                    value);
     }
 
     @Override
-    default PersistentQueueX<T> deleteBetween(int start, int end) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.deleteBetween(start,end);
+    default PersistentQueueX<T> deleteBetween(int start,
+                                              int end) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.deleteBetween(start,
+                                                                         end);
     }
 
     @Override
-    default PersistentQueueX<T> insertStreamAt(int pos, Stream<T> stream) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.insertStreamAt(pos,stream);
+    default PersistentQueueX<T> insertStreamAt(int pos,
+                                               Stream<T> stream) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.insertStreamAt(pos,
+                                                                          stream);
     }
 
     @Override
@@ -665,23 +721,31 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default PersistentQueueX<T> updateAt(int pos, T value) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.updateAt(pos,value);
+    default PersistentQueueX<T> updateAt(int pos,
+                                         T value) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.updateAt(pos,
+                                                                    value);
     }
 
     @Override
-    default PersistentQueueX<T> insertAt(int pos, Iterable<? extends T> values) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,values);
+    default PersistentQueueX<T> insertAt(int pos,
+                                         Iterable<? extends T> values) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,
+                                                                    values);
     }
 
     @Override
-    default PersistentQueueX<T> insertAt(int pos, ReactiveSeq<? extends T> values) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,values);
+    default PersistentQueueX<T> insertAt(int pos,
+                                         ReactiveSeq<? extends T> values) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.insertAt(pos,
+                                                                    values);
     }
 
     @Override
-    default PersistentQueueX<T> slice(final long from, final long to) {
-        return (PersistentQueueX<T>) LazyCollectionX.super.slice(from, to);
+    default PersistentQueueX<T> slice(final long from,
+                                      final long to) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.slice(from,
+                                                                 to);
     }
 
 
@@ -709,19 +773,21 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * zip(java.lang.Iterable, java.util.function.BiFunction)
      */
     @Override
-    default <U, R> PersistentQueueX<R> zip(final Iterable<? extends U> other, final BiFunction<? super T, ? super U, ? extends R> zipper) {
+    default <U, R> PersistentQueueX<R> zip(final Iterable<? extends U> other,
+                                           final BiFunction<? super T, ? super U, ? extends R> zipper) {
 
-        return (PersistentQueueX<R>) LazyCollectionX.super.zip(other, zipper);
+        return (PersistentQueueX<R>) LazyCollectionX.super.zip(other,
+                                                               zipper);
     }
 
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#
-   * permutations()
-   */
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.oath.cyclops.collections.extensions.persistent.LazyCollectionX#
+     * permutations()
+     */
     @Override
     default PersistentQueueX<ReactiveSeq<T>> permutations() {
 
@@ -760,8 +826,10 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default PersistentQueueX<Seq<T>> sliding(final int windowSize, final int increment) {
-        return (PersistentQueueX<Seq<T>>) LazyCollectionX.super.sliding(windowSize, increment);
+    default PersistentQueueX<Seq<T>> sliding(final int windowSize,
+                                             final int increment) {
+        return (PersistentQueueX<Seq<T>>) LazyCollectionX.super.sliding(windowSize,
+                                                                        increment);
     }
 
     @Override
@@ -770,8 +838,10 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default <U> PersistentQueueX<U> scanLeft(final U seed, final BiFunction<? super U, ? super T, ? extends U> function) {
-        return (PersistentQueueX<U>) LazyCollectionX.super.scanLeft(seed, function);
+    default <U> PersistentQueueX<U> scanLeft(final U seed,
+                                             final BiFunction<? super U, ? super T, ? extends U> function) {
+        return (PersistentQueueX<U>) LazyCollectionX.super.scanLeft(seed,
+                                                                    function);
     }
 
     @Override
@@ -780,8 +850,10 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default <U> PersistentQueueX<U> scanRight(final U identity, final BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return (PersistentQueueX<U>) LazyCollectionX.super.scanRight(identity, combiner);
+    default <U> PersistentQueueX<U> scanRight(final U identity,
+                                              final BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return (PersistentQueueX<U>) LazyCollectionX.super.scanRight(identity,
+                                                                     combiner);
     }
 
     /*
@@ -818,9 +890,11 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * cycle(com.oath.cyclops.sequence.Monoid, int)
      */
     @Override
-    default PersistentQueueX<T> cycle(final Monoid<T> m, final long times) {
+    default PersistentQueueX<T> cycle(final Monoid<T> m,
+                                      final long times) {
 
-        return (PersistentQueueX<T>) LazyCollectionX.super.cycle(m, times);
+        return (PersistentQueueX<T>) LazyCollectionX.super.cycle(m,
+                                                                 times);
     }
 
     /*
@@ -871,9 +945,11 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * zip3(java.util.stream.Stream, java.util.stream.Stream)
      */
     @Override
-    default <S, U> PersistentQueueX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third) {
+    default <S, U> PersistentQueueX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second,
+                                                          final Iterable<? extends U> third) {
 
-        return (PersistentQueueX) LazyCollectionX.super.zip3(second, third);
+        return (PersistentQueueX) LazyCollectionX.super.zip3(second,
+                                                             third);
     }
 
     /*
@@ -885,10 +961,13 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * java.util.stream.Stream)
      */
     @Override
-    default <T2, T3, T4> PersistentQueueX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third,
+    default <T2, T3, T4> PersistentQueueX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second,
+                                                                      final Iterable<? extends T3> third,
                                                                       final Iterable<? extends T4> fourth) {
 
-        return (PersistentQueueX) LazyCollectionX.super.zip4(second, third, fourth);
+        return (PersistentQueueX) LazyCollectionX.super.zip4(second,
+                                                             third,
+                                                             fourth);
     }
 
     /*
@@ -1046,8 +1125,9 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      */
     @Override
     default PersistentQueueX<T> onEmptySwitch(final Supplier<? extends PersistentQueue<T>> supplier) {
-        if (isEmpty())
+        if (isEmpty()) {
             return PersistentQueueX.fromIterable(supplier.get());
+        }
         return this;
     }
 
@@ -1085,7 +1165,7 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
      * onEmptyError(java.util.function.Supplier)
      */
     @Override
-    default <X extends Throwable> PersistentQueueX<T>  onEmptyError(final Supplier<? extends X> supplier) {
+    default <X extends Throwable> PersistentQueueX<T> onEmptyError(final Supplier<? extends X> supplier) {
 
         return (PersistentQueueX<T>) LazyCollectionX.super.onEmptyError(supplier);
     }
@@ -1156,15 +1236,15 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
 
-
     @Override
     default PersistentQueueX<T> removeAll(final T... values) {
 
         return (PersistentQueueX<T>) LazyCollectionX.super.removeAll(values);
     }
+
     @Override
     default PersistentQueueX<T> removeAll(CollectionX<? extends T> it) {
-        return removeAll((Iterable<T>)it);
+        return removeAll((Iterable<T>) it);
     }
 
 
@@ -1190,9 +1270,11 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
 
 
     @Override
-    default <C extends PersistentCollection<? super T>> PersistentQueueX<C> grouped(final int size, final Supplier<C> supplier) {
+    default <C extends PersistentCollection<? super T>> PersistentQueueX<C> grouped(final int size,
+                                                                                    final Supplier<C> supplier) {
 
-        return (PersistentQueueX<C>) LazyCollectionX.super.grouped(size, supplier);
+        return (PersistentQueueX<C>) LazyCollectionX.super.grouped(size,
+                                                                   supplier);
     }
 
     @Override
@@ -1214,62 +1296,104 @@ public interface PersistentQueueX<T> extends To<PersistentQueueX<T>>,
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> PersistentQueueX<C> groupedWhile(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> PersistentQueueX<C> groupedWhile(final Predicate<? super T> predicate,
+                                                                                         final Supplier<C> factory) {
 
-        return (PersistentQueueX<C>) LazyCollectionX.super.groupedWhile(predicate, factory);
+        return (PersistentQueueX<C>) LazyCollectionX.super.groupedWhile(predicate,
+                                                                        factory);
     }
 
     @Override
-    default <C extends PersistentCollection<? super T>> PersistentQueueX<C> groupedUntil(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> PersistentQueueX<C> groupedUntil(final Predicate<? super T> predicate,
+                                                                                         final Supplier<C> factory) {
 
-        return (PersistentQueueX<C>) LazyCollectionX.super.groupedUntil(predicate, factory);
+        return (PersistentQueueX<C>) LazyCollectionX.super.groupedUntil(predicate,
+                                                                        factory);
     }
 
     @Override
     default PersistentQueueX<T> recover(final Function<? super Throwable, ? extends T> fn) {
-        return (PersistentQueueX<T>)LazyCollectionX.super.recover(fn);
+        return (PersistentQueueX<T>) LazyCollectionX.super.recover(fn);
     }
 
     @Override
-    default <EX extends Throwable> PersistentQueueX<T> recover(Class<EX> exceptionClass, final Function<? super EX, ? extends T> fn) {
-        return (PersistentQueueX<T>)LazyCollectionX.super.recover(exceptionClass,fn);
+    default <EX extends Throwable> PersistentQueueX<T> recover(Class<EX> exceptionClass,
+                                                               final Function<? super EX, ? extends T> fn) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.recover(exceptionClass,
+                                                                   fn);
     }
+
     @Override
-    default PersistentQueueX<T> plusLoop(int max, IntFunction<T> value) {
-        return (PersistentQueueX<T>)LazyCollectionX.super.plusLoop(max,value);
+    default PersistentQueueX<T> plusLoop(int max,
+                                         IntFunction<T> value) {
+        return (PersistentQueueX<T>) LazyCollectionX.super.plusLoop(max,
+                                                                    value);
     }
 
     @Override
     default PersistentQueueX<T> plusLoop(Supplier<Option<T>> supplier) {
-        return (PersistentQueueX<T>)LazyCollectionX.super.plusLoop(supplier);
+        return (PersistentQueueX<T>) LazyCollectionX.super.plusLoop(supplier);
     }
 
-  @Override
-    default <T2, R> PersistentQueueX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn, final Publisher<? extends T2> publisher) {
-        return (PersistentQueueX<R>)LazyCollectionX.super.zip(fn, publisher);
+    @Override
+    default <T2, R> PersistentQueueX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn,
+                                            final Publisher<? extends T2> publisher) {
+        return (PersistentQueueX<R>) LazyCollectionX.super.zip(fn,
+                                                               publisher);
     }
-
 
 
     @Override
     default <U> PersistentQueueX<Tuple2<T, U>> zipWithPublisher(final Publisher<? extends U> other) {
-        return (PersistentQueueX)LazyCollectionX.super.zipWithPublisher(other);
+        return (PersistentQueueX) LazyCollectionX.super.zipWithPublisher(other);
     }
 
 
     @Override
-    default <S, U, R> PersistentQueueX<R> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third, final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return (PersistentQueueX<R>)LazyCollectionX.super.zip3(second,third,fn3);
+    default <S, U, R> PersistentQueueX<R> zip3(final Iterable<? extends S> second,
+                                               final Iterable<? extends U> third,
+                                               final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return (PersistentQueueX<R>) LazyCollectionX.super.zip3(second,
+                                                                third,
+                                                                fn3);
     }
 
     @Override
-    default <T2, T3, T4, R> PersistentQueueX<R> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third, final Iterable<? extends T4> fourth, final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return (PersistentQueueX<R>)LazyCollectionX.super.zip4(second,third,fourth,fn);
+    default <T2, T3, T4, R> PersistentQueueX<R> zip4(final Iterable<? extends T2> second,
+                                                     final Iterable<? extends T3> third,
+                                                     final Iterable<? extends T4> fourth,
+                                                     final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return (PersistentQueueX<R>) LazyCollectionX.super.zip4(second,
+                                                                third,
+                                                                fourth,
+                                                                fn);
     }
 
+    class CompletablePersistentQueueX<T> implements InvocationHandler {
 
+        Future<PersistentQueueX<T>> future = Future.future();
 
-    public static  <T,R> PersistentQueueX<R> tailRec(T initial, Function<? super T, ? extends PersistentQueueX<? extends Either<T, R>>> fn) {
-        return ListX.tailRec(initial,fn).to().persistentQueueX(Evaluation.LAZY);
+        public boolean complete(PersistentQueue<T> result) {
+            return future.complete(PersistentQueueX.fromIterable(result));
+        }
+
+        public PersistentQueueX<T> asPersistentQueueX() {
+            PersistentQueueX f = (PersistentQueueX) Proxy.newProxyInstance(PersistentQueueX.class.getClassLoader(),
+                                                                           new Class[]{PersistentQueueX.class},
+                                                                           this);
+            return f;
+        }
+
+        @Override
+        public Object invoke(Object proxy,
+                             Method method,
+                             Object[] args) throws Throwable {
+            PersistentQueueX<T> target = future.fold(l -> l,
+                                                     t -> {
+                                                         throw ExceptionSoftener.throwSoftenedException(t);
+                                                     });
+            return method.invoke(target,
+                                 args);
+        }
     }
 }

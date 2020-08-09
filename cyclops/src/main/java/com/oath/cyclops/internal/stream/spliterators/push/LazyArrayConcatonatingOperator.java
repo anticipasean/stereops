@@ -1,7 +1,6 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
 import cyclops.data.Seq;
-
 import java.util.function.Consumer;
 
 /**
@@ -13,24 +12,26 @@ public class LazyArrayConcatonatingOperator<IN> implements Operator<IN> {
     private final Seq<Operator<IN>> operators;
 
 
-    public LazyArrayConcatonatingOperator(Operator<IN>... sources){
-        Seq<Operator<IN>> ops  = Seq.empty();
-        for(Operator<IN> next : sources){
+    public LazyArrayConcatonatingOperator(Operator<IN>... sources) {
+        Seq<Operator<IN>> ops = Seq.empty();
+        for (Operator<IN> next : sources) {
             ops = ops.append(next);
         }
         this.operators = ops;
 
     }
-    public LazyArrayConcatonatingOperator(Seq<Operator<IN>> sources){
+
+    public LazyArrayConcatonatingOperator(Seq<Operator<IN>> sources) {
         this.operators = sources;
 
 
     }
 
 
-
     @Override
-    public StreamSubscription subscribe(Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super IN> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
 
         LazyConcat[] ref = {null};
         StreamSubscription sub = new StreamSubscription() {
@@ -43,13 +44,9 @@ public class LazyArrayConcatonatingOperator<IN> implements Operator<IN> {
                     return;
                 }
 
-
                 super.request(n);
 
                 ref[0].request(n);
-
-
-
 
 
             }
@@ -62,26 +59,25 @@ public class LazyArrayConcatonatingOperator<IN> implements Operator<IN> {
             }
         };
 
-        LazyConcat c = new LazyConcat(sub,operators,onNext,onError,onComplete);
-        ref[0]=c;
-
-
-
-
-
+        LazyConcat c = new LazyConcat(sub,
+                                      operators,
+                                      onNext,
+                                      onError,
+                                      onComplete);
+        ref[0] = c;
 
         return sub;
     }
 
 
-
-
-
     @Override
-    public void subscribeAll(Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super IN> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
 
-        subscribe(onNext,onError,onCompleteDs).request(Long.MAX_VALUE);
-
+        subscribe(onNext,
+                  onError,
+                  onCompleteDs).request(Long.MAX_VALUE);
 
 
     }

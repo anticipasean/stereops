@@ -1,16 +1,13 @@
 package com.oath.cyclops.async.wait;
 
 import java.util.concurrent.locks.LockSupport;
-
 import lombok.AllArgsConstructor;
 
 /**
- * Will recover to recieve or push data to a Queue, backing off by an exponentially increasing wait time
- * until successful.
- *
- * @author johnmcclean
+ * Will recover to recieve or push data to a Queue, backing off by an exponentially increasing wait time until successful.
  *
  * @param <T> Data type of elements in the async.Queue
+ * @author johnmcclean
  */
 @AllArgsConstructor
 public class ExponentialBackofWaitStrategy<T> implements WaitStrategy<T> {

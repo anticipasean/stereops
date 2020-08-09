@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = javaSourceCompatibility
 jar {
     manifest {
         attributes 'Implementation-Title': 'cyclops-futurestream', 'Implementation-Version': version
@@ -16,6 +16,7 @@ dependencies {
     compileClasspath project(':cyclops-reactive-collections')
 
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileClasspath "org.projectlombok:lombok:${lombokVersion}"
     testCompileClasspath project(':cyclops').sourceSets.test.output
     testCompileClasspath 'org.reactivestreams:reactive-streams-tck:1.0.0'
     testCompileClasspath 'org.mockito:mockito-core:1.9.5'

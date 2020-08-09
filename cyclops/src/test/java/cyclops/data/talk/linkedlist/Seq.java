@@ -3,7 +3,7 @@ package cyclops.data.talk.linkedlist;
 import lombok.AllArgsConstructor;
 
 
-public  interface Seq<E> {
+public interface Seq<E> {
 
     @AllArgsConstructor
     static class Cons<E> implements Seq<E> {
@@ -13,7 +13,7 @@ public  interface Seq<E> {
 
     }
 
-    static class Nil<E> implements Seq<E>{
+    static class Nil<E> implements Seq<E> {
 
     }
 

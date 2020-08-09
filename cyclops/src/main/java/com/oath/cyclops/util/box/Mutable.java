@@ -1,57 +1,47 @@
 package com.oath.cyclops.util.box;
 
 import com.oath.cyclops.types.foldable.To;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
- * Class that represents a Closed Variable
- * In Java 8 because of the effectively final rule references to captured
- * variables can't be changed.
- * e.g.
- *<pre>
+ * Class that represents a Closed Variable In Java 8 because of the effectively final rule references to captured variables can't
+ * be changed. e.g.
+ * <pre>
  * {@code
  * String var = "hello";
  * Runnable r = () -> var ="world";
  * }</pre>
- *
- * Won't compile because var is treated as if it is final.
- * This can be 'worked around' by using a wrapping object or array.
- *
+ * <p>
+ * Won't compile because var is treated as if it is final. This can be 'worked around' by using a wrapping object or array.
+ * <p>
  * e.g.
  * <pre>{@code
  * Mutable<String> var =  Mutable.of("hello");
  * Runnable r = () -> var.set("world");
  * }</pre>
  *
- * @author johnmcclean
- *
  * @param <T> Type held inside closed var
+ * @author johnmcclean
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Iterable<T> {
+public class Mutable<T> implements To<Mutable<T>>, Supplier<T>, Consumer<T>, Iterable<T> {
 
     private T var;
 
-    @Override
-    public Iterator<T> iterator() {
-        return var!=null ? Arrays.asList(var).iterator() : Arrays.<T>asList().iterator();
-    }
-
     /**
      * Create a Mutable variable, which can be mutated inside a Closure
-     *
+     * <p>
      * e.g.
      * <pre>{@code
      *   Mutable<Integer> num = Mutable.of(20);
@@ -66,13 +56,12 @@ public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Itera
      * @return New Mutable instance
      */
     public static <T> Mutable<T> of(final T var) {
-        return new Mutable<T>(
-                              var);
+        return new Mutable<T>(var);
     }
 
     /**
      * Construct a Mutable that gets and sets an external value using the provided Supplier and Consumer
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -80,12 +69,12 @@ public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Itera
      * }
      * </pre>
      *
-     *
      * @param s Supplier of an external value
      * @param c Consumer that sets an external value
      * @return Mutable that gets / sets an external (mutable) value
      */
-    public static <T> Mutable<T> fromExternal(final Supplier<T> s, final Consumer<T> c) {
+    public static <T> Mutable<T> fromExternal(final Supplier<T> s,
+                                              final Consumer<T> c) {
         return new Mutable<T>() {
             @Override
             public T get() {
@@ -98,6 +87,12 @@ public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Itera
                 return this;
             }
         };
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return var != null ? Arrays.asList(var)
+                                   .iterator() : Arrays.<T>asList().iterator();
     }
 
     public <R> Mutable<R> mapOutput(final Function<T, R> fn) {
@@ -133,7 +128,7 @@ public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Itera
 
     /**
      * @param var New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public Mutable<T> set(final T var) {
         this.var = var;
@@ -142,7 +137,7 @@ public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Itera
 
     /**
      * @param varFn New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public Mutable<T> mutate(final Function<T, T> varFn) {
         return set(varFn.apply(get()));
@@ -156,7 +151,6 @@ public class Mutable<T> implements To<Mutable<T>>,Supplier<T>, Consumer<T>,Itera
         set(t);
 
     }
-
 
 
 }

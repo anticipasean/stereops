@@ -1,8 +1,6 @@
 package com.oath.cyclops.internal.stream.spliterators;
 
 import com.oath.cyclops.types.persistent.PersistentCollection;
-
-import java.util.Collection;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.concurrent.TimeUnit;
@@ -13,50 +11,62 @@ import java.util.function.Supplier;
 /**
  * Created by johnmcclean on 22/12/2016.
  */
-public class GroupedByTimeAndSizeSpliterator<T, C extends PersistentCollection<? super T>,R> extends Spliterators.AbstractSpliterator<R>
-                                implements CopyableSpliterator<R>,ComposableFunction<R,T,GroupedByTimeAndSizeSpliterator<T,C,?>> {
+public class GroupedByTimeAndSizeSpliterator<T, C extends PersistentCollection<? super T>, R> extends
+                                                                                              Spliterators.AbstractSpliterator<R> implements
+                                                                                                                                  CopyableSpliterator<R>,
+                                                                                                                                  ComposableFunction<R, T, GroupedByTimeAndSizeSpliterator<T, C, ?>> {
+
+    final long toRun;
     private final Spliterator<T> source;
     private final Supplier<? extends C> factory;
     private final Function<? super C, ? extends R> finalizer;
     private final int groupSize;
     private final long time;
     private final TimeUnit t;
-    final long toRun;
+    C collection;
+    long start = -1;
+    boolean closed = false;
+
     public GroupedByTimeAndSizeSpliterator(final Spliterator<T> source,
                                            Supplier<? extends C> factory,
                                            Function<? super C, ? extends R> finalizer,
                                            int groupSize,
                                            long time,
                                            TimeUnit t) {
-        super(source.estimateSize(),source.characteristics() & Spliterator.ORDERED);
-        if(groupSize<=0)
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
+        if (groupSize <= 0) {
             throw new IllegalArgumentException("Group size must be greater than 0");
+        }
         this.source = source;
         this.factory = factory;
         this.groupSize = groupSize;
-        this.finalizer=finalizer;
+        this.finalizer = finalizer;
         this.time = time;
         this.t = t;
-        collection =factory.get();
-        toRun =t.toNanos(time);
+        collection = factory.get();
+        toRun = t.toNanos(time);
 
 
     }
-    public <R2> GroupedByTimeAndSizeSpliterator<T,C,?> compose(Function<? super R,? extends R2> fn){
-        return new GroupedByTimeAndSizeSpliterator<T, C,R2>(CopyableSpliterator.copy(source),factory,finalizer.andThen(fn),groupSize,time,t);
-    }
 
-    C collection;
+    public <R2> GroupedByTimeAndSizeSpliterator<T, C, ?> compose(Function<? super R, ? extends R2> fn) {
+        return new GroupedByTimeAndSizeSpliterator<T, C, R2>(CopyableSpliterator.copy(source),
+                                                             factory,
+                                                             finalizer.andThen(fn),
+                                                             groupSize,
+                                                             time,
+                                                             t);
+    }
 
     @Override
     public void forEachRemaining(Consumer<? super R> action) {
         start = System.nanoTime();
-        source.forEachRemaining(t->{
+        source.forEachRemaining(t -> {
 
+            collection = (C) collection.plus(t);
 
-            collection = (C)collection.plus(t);
-
-            if(collection.size()==groupSize || System.nanoTime() - start >= toRun){
+            if (collection.size() == groupSize || System.nanoTime() - start >= toRun) {
 
                 start = System.nanoTime();
 
@@ -67,30 +77,30 @@ public class GroupedByTimeAndSizeSpliterator<T, C extends PersistentCollection<?
             }
 
 
-
         });
-        if(collection.size()>0){
+        if (collection.size() > 0) {
             action.accept(finalizer.apply(collection));
         }
 
     }
-    long start = -1;
-    boolean closed =false;
+
     @Override
     public boolean tryAdvance(Consumer<? super R> action) {
 
-        if(closed)
+        if (closed) {
             return false;
-        if(start ==-1 )
+        }
+        if (start == -1) {
             start = System.nanoTime();
+        }
 
-        while (System.nanoTime() - start < toRun  && collection.size() < groupSize) {
+        while (System.nanoTime() - start < toRun && collection.size() < groupSize) {
             boolean canAdvance = source.tryAdvance(t -> {
 
-                collection = (C)collection.plus(t);
+                collection = (C) collection.plus(t);
             });
             if (!canAdvance) {
-                if(collection.size()>0) {
+                if (collection.size() > 0) {
                     action.accept(finalizer.apply(collection));
                     start = System.nanoTime();
                     collection = factory.get();
@@ -101,8 +111,7 @@ public class GroupedByTimeAndSizeSpliterator<T, C extends PersistentCollection<?
 
         }
 
-
-        if(collection.size()>0) {
+        if (collection.size() > 0) {
             action.accept(finalizer.apply(collection));
             collection = factory.get();
         }
@@ -112,7 +121,12 @@ public class GroupedByTimeAndSizeSpliterator<T, C extends PersistentCollection<?
 
     @Override
     public Spliterator<R> copy() {
-        return new GroupedByTimeAndSizeSpliterator<T, C,R>(CopyableSpliterator.copy(source),factory,finalizer,groupSize,time,t);
+        return new GroupedByTimeAndSizeSpliterator<T, C, R>(CopyableSpliterator.copy(source),
+                                                            factory,
+                                                            finalizer,
+                                                            groupSize,
+                                                            time,
+                                                            t);
     }
 
 

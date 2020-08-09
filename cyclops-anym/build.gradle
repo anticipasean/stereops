@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
+sourceCompatibility = javaSourceCompatibility
 
-sourceCompatibility = 1.8
 jar {
   manifest {
     attributes 'Implementation-Title': 'cyclops-anym', 'Implementation-Version': version
@@ -17,6 +17,7 @@ dependencies {
   compileClasspath project(':cyclops-reactive-collections')
   compileClasspath project(':cyclops-pure')
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileClasspath "org.projectlombok:lombok:${lombokVersion}"
   testCompileClasspath project(':cyclops').sourceSets.test.output
   testCompileClasspath 'io.projectreactor:reactor-core:3.0.7.RELEASE'
   testCompileClasspath group: 'junit', name: 'junit', version: '4.12'

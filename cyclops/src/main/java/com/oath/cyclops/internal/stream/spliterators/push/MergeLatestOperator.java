@@ -1,14 +1,13 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
 import com.oath.cyclops.async.adapters.Queue;
-import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
+import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
 
 /**
  * Created by johnmcclean on 12/01/2017.
@@ -19,34 +18,37 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
     private final Operator<IN>[] operators;
 
 
-    public MergeLatestOperator(Operator<IN>[] sources){
-        this.operators=sources;
+    public MergeLatestOperator(Operator<IN>[] sources) {
+        this.operators = sources;
 
 
     }
 
-    private Object nilsafeIn(Object o){
-        if(o==null)
+    private Object nilsafeIn(Object o) {
+        if (o == null) {
             return Queue.NILL;
+        }
         return o;
     }
-    private <T> T nilsafeOut(Object o){
-        if(Queue.NILL==o){
+
+    private <T> T nilsafeOut(Object o) {
+        if (Queue.NILL == o) {
             return null;
         }
-        return (T)o;
+        return (T) o;
     }
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super IN> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         ManyToOneConcurrentArrayQueue<IN> data = new ManyToOneConcurrentArrayQueue<IN>(1024 * operators.length);
         List<StreamSubscription> subs = new ArrayList<>(operators.length);
         AtomicInteger completed = new AtomicInteger(0);
         AtomicInteger index = new AtomicInteger(0);
-        StreamSubscription sub = new StreamSubscription(){
-            LongConsumer work = n->{
-                while(requested.get()>0)
-                {
+        StreamSubscription sub = new StreamSubscription() {
+            LongConsumer work = n -> {
+                while (requested.get() > 0) {
                     if (completed.get() == subs.size() && data.size() == 0) {
 
                         onComplete.run();
@@ -56,8 +58,9 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
                     long sent = 0;
                     long reqCycle = requested.get();
                     for (long k = 0; k < reqCycle; k++) {
-                        if (!isOpen)
+                        if (!isOpen) {
                             return;
+                        }
                         int toUse = index.incrementAndGet() - 1;
                         if (toUse + 1 >= subs.size()) {
                             index.set(0);
@@ -65,10 +68,12 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
                         }
 
                         if (subs.get(toUse).isOpen) {
-                            subs.get(toUse).request(1l);
+                            subs.get(toUse)
+                                .request(1l);
 
-                        } else
+                        } else {
                             k--;
+                        }
 
                         IN fromQ = nilsafeOut(data.poll());
                         if (fromQ != null) {
@@ -82,7 +87,6 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
                             onComplete.run();
                             return;
                         }
-
 
 
                     }
@@ -108,13 +112,15 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
 
 
             };
+
             @Override
             public void request(long n) {
-                if(n<=0) {
+                if (n <= 0) {
                     onError.accept(new IllegalArgumentException("3.9 While the Subscription is not cancelled, Subscription.request(long n) MUST throw a java.lang.IllegalArgumentException if the argument is <= 0."));
                     return;
                 }
-                super.singleActiveRequest(n,work);
+                super.singleActiveRequest(n,
+                                          work);
 
             }
 
@@ -124,73 +130,75 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
             }
         };
 
-        for(int i=0;i<operators.length;i++){
+        for (int i = 0; i < operators.length; i++) {
             int current = i;
-            subs.add(operators[current].subscribe(e-> {
-                        try {
+            subs.add(operators[current].subscribe(e -> {
+                                                      try {
 
-                            while(!data.offer((IN)nilsafeIn(e))){
+                                                          while (!data.offer((IN) nilsafeIn(e))) {
 
-                            }
+                                                          }
 
-                        } catch (Throwable t) {
+                                                      } catch (Throwable t) {
 
-                            onError.accept(t);
-                        }finally{
+                                                          onError.accept(t);
+                                                      } finally {
 
+                                                      }
+                                                  },
+                                                  onError,
+                                                  () -> {
+                                                      completed.incrementAndGet();
 
-                        }
-                    }
-                    ,onError,()->{
-                        completed.incrementAndGet();
-
-                    }));
+                                                  }));
 
         }
-
 
         return sub;
     }
 
     @Override
-    public void subscribeAll(Consumer<? super IN> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super IN> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
         List<StreamSubscription> subs = new ArrayList<>(operators.length);
         AtomicInteger completed = new AtomicInteger(0);
         AtomicInteger index = new AtomicInteger(0);
         ManyToOneConcurrentArrayQueue<IN> data = new ManyToOneConcurrentArrayQueue<IN>(1024 * operators.length);
-        AtomicBoolean wip= new AtomicBoolean(false);
+        AtomicBoolean wip = new AtomicBoolean(false);
 
-
-        for(int i=0;i<operators.length;i++){
+        for (int i = 0; i < operators.length; i++) {
             int current = i;
-            operators[current].subscribeAll(e-> {
-                        try {
-                            if(wip.compareAndSet(false,true)) {
-                                onNext.accept(e);
-                                data.drain(x->onNext.accept(x));
-                                wip.set(false);
-                            }else{
-                                data.offer(e);
-                            }
+            operators[current].subscribeAll(e -> {
+                                                try {
+                                                    if (wip.compareAndSet(false,
+                                                                          true)) {
+                                                        onNext.accept(e);
+                                                        data.drain(x -> onNext.accept(x));
+                                                        wip.set(false);
+                                                    } else {
+                                                        data.offer(e);
+                                                    }
 
-                        } catch (Throwable t) {
+                                                } catch (Throwable t) {
 
-                            onError.accept(t);
-                        }finally{
+                                                    onError.accept(t);
+                                                } finally {
 
-                        }
-                    }
-                    ,onError,()->{
+                                                }
+                                            },
+                                            onError,
+                                            () -> {
 
-                        if(completed.incrementAndGet()== operators.length){
+                                                if (completed.incrementAndGet() == operators.length) {
 
-                            data.drain(x->onNext.accept(x));
-                            onCompleteDs.run();
+                                                    data.drain(x -> onNext.accept(x));
+                                                    onCompleteDs.run();
 
-                        }
+                                                }
 
 
-                    });
+                                            });
         }
 
 

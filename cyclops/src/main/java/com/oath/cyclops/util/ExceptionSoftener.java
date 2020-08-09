@@ -1,5 +1,26 @@
 package com.oath.cyclops.util;
 
+import cyclops.control.Try.CheckedRunnable;
+import cyclops.function.checked.CheckedBiConsumer;
+import cyclops.function.checked.CheckedBiFunction;
+import cyclops.function.checked.CheckedBiPredicate;
+import cyclops.function.checked.CheckedBooleanSupplier;
+import cyclops.function.checked.CheckedConsumer;
+import cyclops.function.checked.CheckedDoubleConsumer;
+import cyclops.function.checked.CheckedDoubleFunction;
+import cyclops.function.checked.CheckedDoublePredicate;
+import cyclops.function.checked.CheckedDoubleSupplier;
+import cyclops.function.checked.CheckedFunction;
+import cyclops.function.checked.CheckedIntConsumer;
+import cyclops.function.checked.CheckedIntFunction;
+import cyclops.function.checked.CheckedIntPredicate;
+import cyclops.function.checked.CheckedIntSupplier;
+import cyclops.function.checked.CheckedLongConsumer;
+import cyclops.function.checked.CheckedLongFunction;
+import cyclops.function.checked.CheckedLongPredicate;
+import cyclops.function.checked.CheckedLongSupplier;
+import cyclops.function.checked.CheckedPredicate;
+import cyclops.function.checked.CheckedSupplier;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -21,15 +42,11 @@ import java.util.function.LongPredicate;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-
-
-import cyclops.control.Try.CheckedRunnable;
-import cyclops.function.checked.*;
 import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for softening exceptions
- *
+ * <p>
  * Use throw throwSoftenedException
  *
  * <pre>
@@ -37,7 +54,7 @@ import lombok.experimental.UtilityClass;
  *  throw ExceptionSoftener.throwSoftenedException(new IOException("hello"));
  * }
  * </pre>
- *
+ * <p>
  * Or soften lambda's and method references
  *
  * <pre>
@@ -51,10 +68,10 @@ import lombok.experimental.UtilityClass;
  * </pre>
  *
  * @author johnmcclean
- *
  */
 @UtilityClass
 public class ExceptionSoftener {
+
     /**
      * Soften a Runnable that throws a ChecekdException into a plain old Runnable
      *
@@ -65,16 +82,14 @@ public class ExceptionSoftener {
      * runnable.run() //thows IOException but doesn't need to declare it
      *
      * private void  run() throws IOException{
-    	 throw new IOException();
-       }
-    	ExceptionSoftener.softenRunnable(()->Thread.sleep(1000));
+     * throw new IOException();
+     * }
+     * ExceptionSoftener.softenRunnable(()->Thread.sleep(1000));
      * }
      * </pre>
      *
-     *
      * @param s Supplier with CheckedException
-     * @return Supplier that throws the same exception, but doesn't need to declare it as a
-     *  checked Exception
+     * @return Supplier that throws the same exception, but doesn't need to declare it as a checked Exception
      */
     public static Runnable softenRunnable(final CheckedRunnable s) {
         return () -> {
@@ -96,16 +111,14 @@ public class ExceptionSoftener {
      * supplier.getValue(); //thows IOException but doesn't need to declare it
      *
      * private String getValue() throws IOException{
-    	return "hello";
-       }
-
+     * return "hello";
+     * }
+     *
      * }
      * </pre>
      *
-     *
      * @param s Supplier with CheckedException
-     * @return Supplier that throws the same exception, but doesn't need to declare it as a
-     *  checked Exception
+     * @return Supplier that throws the same exception, but doesn't need to declare it as a checked Exception
      */
     public static <T> Supplier<T> softenSupplier(final CheckedSupplier<T> s) {
         return () -> {
@@ -127,16 +140,14 @@ public class ExceptionSoftener {
      * supplier.getValue(); //thows IOException but doesn't need to declare it
      *
      * public String call() throws IOException{
-    	return "hello";
-       }
-
+     * return "hello";
+     * }
+     *
      * }
      * </pre>
      *
-     *
      * @param s Callable with CheckedException
-     * @return Supplier that throws the same exception, but doesn't need to declare it as a
-     *  checked Exception
+     * @return Supplier that throws the same exception, but doesn't need to declare it as a checked Exception
      */
     public static <T> Supplier<T> softenCallable(final Callable<T> s) {
         return () -> {
@@ -149,21 +160,23 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a BooleanSuppler that throws a checked exception into one that still throws the exception, but doesn't need to declare it.
+     * Soften a BooleanSuppler that throws a checked exception into one that still throws the exception, but doesn't need to
+     * declare it.
      *
      * <pre>
      * {@code
-
-    	assertThat(ExceptionSoftener.softenBooleanSupplier(()->true).getAsBoolean(),equalTo(true));
-
-
-    	BooleanSupplier supplier = ExceptionSoftener.softenBooleanSupplier(()->{throw new IOException();});
-
-    	supplier.getValue() //throws IOException but doesn't need to declare it
-
-
+     *
+     * assertThat(ExceptionSoftener.softenBooleanSupplier(()->true).getAsBoolean(),equalTo(true));
+     *
+     *
+     * BooleanSupplier supplier = ExceptionSoftener.softenBooleanSupplier(()->{throw new IOException();});
+     *
+     * supplier.getValue() //throws IOException but doesn't need to declare it
+     *
+     *
      * }
      * </pre>
+     *
      * @param s CheckedBooleanSupplier to soften
      * @return Plain old BooleanSupplier
      */
@@ -178,8 +191,7 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedIntSupplier to an IntSupplier that doesn't need to declare any checked exceptions thrown
-     * e.g.
+     * Soften a CheckedIntSupplier to an IntSupplier that doesn't need to declare any checked exceptions thrown e.g.
      * <pre>
      * {@code
      *  IntSupplier supplier =   ExceptionSoftener.softenIntSupplier(()->{throw new IOException();})
@@ -206,8 +218,7 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedLongSupplier to an LongSupplier that doesn't need to declare any checked exceptions thrown
-     * e.g.
+     * Soften a CheckedLongSupplier to an LongSupplier that doesn't need to declare any checked exceptions thrown e.g.
      * <pre>
      * {@code
      *  LongSupplier supplier =   ExceptionSoftener.softenLongSupplier(()->{throw new IOException();})
@@ -234,8 +245,7 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedDoubleSupplier to an DoubleSupplier that doesn't need to declare any checked exceptions thrown
-     * e.g.
+     * Soften a CheckedDoubleSupplier to an DoubleSupplier that doesn't need to declare any checked exceptions thrown e.g.
      * <pre>
      * {@code
      *  DoubleSupplier supplier =   ExceptionSoftener.softenDoubleSupplier(()->{throw new IOException();})
@@ -262,15 +272,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedFunction that can throw Checked Exceptions to a standard Function that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedFunction that can throw Checked Exceptions to a standard Function that can also throw Checked Exceptions
+     * (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      * Data loaded = ExceptionSoftener.softenFunction(this::load).applyHKT(fileName);
-
-    	public Data load(String file) throws IOException
+     *
+     * public Data load(String file) throws IOException
      * </pre>
      *
      * @param fn CheckedFunction to be converted to a standard Function
@@ -287,15 +298,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedIntFunction that can throw Checked Exceptions to a standard IntFunction that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedIntFunction that can throw Checked Exceptions to a standard IntFunction that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  int loaded = ExceptionSoftener.softenFunction(this::load).applyHKT(id);
-
-    	public int load(int it) throws IOException
+     *
+     * public int load(int it) throws IOException
      * </pre>
      *
      * @param fn CheckedIntFunction to be converted to a standard IntFunction
@@ -312,15 +324,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedLongFunction that can throw Checked Exceptions to a standard LongFunction that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedLongFunction that can throw Checked Exceptions to a standard LongFunction that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  long loaded = ExceptionSoftener.softenFunction(this::load).applyHKT(id);
-
-    	public long load(long it) throws IOException
+     *
+     * public long load(long it) throws IOException
      * </pre>
      *
      * @param fn CheckedLongFunction to be converted to a standard LongFunction
@@ -337,15 +350,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedDoubleFunction that can throw Checked Exceptions to a standard DoubleFunction that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedDoubleFunction that can throw Checked Exceptions to a standard DoubleFunction that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  double loaded = ExceptionSoftener.softenFunction(this::load).applyHKT(id);
-
-    	public double load(double it) throws IOException
+     *
+     * public double load(double it) throws IOException
      * </pre>
      *
      * @param fn CheckedDoubleFunction to be converted to a standard DoubleFunction
@@ -363,26 +377,29 @@ public class ExceptionSoftener {
 
 
     /**
-     * 	Soften a CheckedBiFunction that can throw Checked Exceptions to a standard BiFunction that can also throw Checked Exceptions (without declaring them)
+     * Soften a CheckedBiFunction that can throw Checked Exceptions to a standard BiFunction that can also throw Checked
+     * Exceptions (without declaring them)
      *
-
+     *
      * <pre>
      * {@code
      *
-
-    	ExceptionSoftener.softenBiFunction(this::loadDir).applyHKT(".core","/tmp/dir");
+     *
+     * ExceptionSoftener.softenBiFunction(this::loadDir).applyHKT(".core","/tmp/dir");
      *
      *  public String loadDir(String fileExt,String dir) throws IOException
      *
      *  }
      *  </pre>
+     *
      * @param fn CheckedBiLongFunction to be converted to a standard BiFunction
      * @return BiFunction that can throw checked Exceptions
      */
     public static <T1, T2, R> BiFunction<T1, T2, R> softenBiFunction(final CheckedBiFunction<T1, T2, R> fn) {
         return (t1, t2) -> {
             try {
-                return fn.apply(t1, t2);
+                return fn.apply(t1,
+                                t2);
             } catch (final Throwable e) {
                 throw throwSoftenedException(e);
             }
@@ -390,15 +407,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedPredicate that can throw Checked Exceptions to a standard Predicate that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedPredicate that can throw Checked Exceptions to a standard Predicate that can also throw Checked Exceptions
+     * (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  boolean loaded = ExceptionSoftener.softenPredicate(this::exists).test(id);
-
-    	public boolean exists(Double id) throws IOException
+     *
+     * public boolean exists(Double id) throws IOException
      * </pre>
      *
      * @param fn CheckedPredicate to be converted to a standard Predicate
@@ -415,15 +433,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedDoublePredicate that can throw Checked Exceptions to a standard DoublePredicate that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedDoublePredicate that can throw Checked Exceptions to a standard DoublePredicate that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  boolean loaded = ExceptionSoftener.softenDoublePredicate(this::exists).test(id);
-
-    	public boolean exists(double id) throws IOException
+     *
+     * public boolean exists(double id) throws IOException
      * </pre>
      *
      * @param fn CheckedDoublePredicate to be converted to a standard DoublePredicate
@@ -440,15 +459,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedIntPredicate that can throw Checked Exceptions to a standard IntPredicate that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedIntPredicate that can throw Checked Exceptions to a standard IntPredicate that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  boolean loaded = ExceptionSoftener.softenIntPredicate(this::exists).test(id);
-
-    	public boolean exists(int id) throws IOException
+     *
+     * public boolean exists(int id) throws IOException
      * </pre>
      *
      * @param fn CheckedIntPredicate to be converted to a standard IntPredicate
@@ -465,15 +485,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedLongPredicate that can throw Checked Exceptions to a standard LongPredicate that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedLongPredicate that can throw Checked Exceptions to a standard LongPredicate that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  boolean loaded = ExceptionSoftener.softenLongPredicate(this::exists).test(id);
-
-    	public boolean exists(long id) throws IOException
+     *
+     * public boolean exists(long id) throws IOException
      * </pre>
      *
      * @param fn CheckedLongPredicate to be converted to a standard LongPredicate
@@ -490,15 +511,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedBiPredicate that can throw Checked Exceptions to a standard BiPredicate that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedBiPredicate that can throw Checked Exceptions to a standard BiPredicate that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  boolean loaded = ExceptionSoftener.softenBiPredicate(this::exists).test(id,"db");
-
-    	public boolean exists(int id, String context) throws IOException
+     *
+     * public boolean exists(int id, String context) throws IOException
      * </pre>
      *
      * @param fn CheckedBiPredicate to be converted to a standard BiPredicate
@@ -507,7 +529,8 @@ public class ExceptionSoftener {
     public static <T1, T2> BiPredicate<T1, T2> softenBiPredicate(final CheckedBiPredicate<T1, T2> fn) {
         return (t1, t2) -> {
             try {
-                return fn.test(t1, t2);
+                return fn.test(t1,
+                               t2);
             } catch (final Throwable e) {
                 throw throwSoftenedException(e);
             }
@@ -515,15 +538,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedConsumer that can throw Checked Exceptions to a standard Consumer that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedConsumer that can throw Checked Exceptions to a standard Consumer that can also throw Checked Exceptions
+     * (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  ExceptionSoftener.softenConsumer(this::save).accept(data);
-
-    	public void save(Data data) throws IOException
+     *
+     * public void save(Data data) throws IOException
      * </pre>
      *
      * @param fn CheckedConsumer to be converted to a standard Consumer
@@ -540,15 +564,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedDoubleConsumer that can throw Checked Exceptions to a standard DoubleConsumer that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedDoubleConsumer that can throw Checked Exceptions to a standard DoubleConsumer that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  ExceptionSoftener.softenDoubleConsumer(this::save).accept(data);
-
-    	public void save(double data) throws IOException
+     *
+     * public void save(double data) throws IOException
      * </pre>
      *
      * @param fn CheckedDoubleConsumer to be converted to a standard DoubleConsumer
@@ -565,15 +590,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedIntConsumer that can throw Checked Exceptions to a standard IntConsumer that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedIntConsumer that can throw Checked Exceptions to a standard IntConsumer that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  ExceptionSoftener.softenIntConsumer(this::save).accept(data);
-
-    	public void save(int data) throws IOException
+     *
+     * public void save(int data) throws IOException
      * </pre>
      *
      * @param fn CheckedIntConsumer to be converted to a standard IntConsumer
@@ -590,15 +616,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedLongConsumer that can throw Checked Exceptions to a standard LongConsumer that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedLongConsumer that can throw Checked Exceptions to a standard LongConsumer that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  ExceptionSoftener.softenLongConsumer(this::save).accept(data);
-
-    	public void save(long data) throws IOException
+     *
+     * public void save(long data) throws IOException
      * </pre>
      *
      * @param fn CheckedLongConsumer to be converted to a standard LongConsumer
@@ -615,15 +642,16 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Soften a CheckedBiConsumer that can throw Checked Exceptions to a standard BiConsumer that can also throw Checked Exceptions (without declaring them)
-     *
+     * Soften a CheckedBiConsumer that can throw Checked Exceptions to a standard BiConsumer that can also throw Checked
+     * Exceptions (without declaring them)
+     * <p>
      * e.g.
      *
      * <pre>
      * {@code
      *  ExceptionSoftener.softenBiConsumer(this::save).accept(data,System.currentTimeMillis());
-
-    	public void save(Data data,long timestamp) throws IOException
+     *
+     * public void save(Data data,long timestamp) throws IOException
      * </pre>
      *
      * @param fn CheckedBiConsumer to be converted to a standard BiConsumer
@@ -632,7 +660,8 @@ public class ExceptionSoftener {
     public static <T1, T2> BiConsumer<T1, T2> softenBiConsumer(final CheckedBiConsumer<T1, T2> fn) {
         return (t1, t2) -> {
             try {
-                fn.accept(t1, t2);
+                fn.accept(t1,
+                          t2);
             } catch (final Throwable e) {
                 throw throwSoftenedException(e);
             }
@@ -640,10 +669,10 @@ public class ExceptionSoftener {
     }
 
     /**
-     * Convert any throwable into an unchecked exception. The original exception will stay as is,
-     * this simply tricks the Java compiler into thinking the specified throwable is an unchecked exception.
-     * There is no need to wrap your checked Exceptions inside RuntimeExceptions to propagate them without having to declare them.
-     *
+     * Convert any throwable into an unchecked exception. The original exception will stay as is, this simply tricks the Java
+     * compiler into thinking the specified throwable is an unchecked exception. There is no need to wrap your checked Exceptions
+     * inside RuntimeExceptions to propagate them without having to declare them.
+     * <p>
      * e.g.
      *
      * <pre>
@@ -668,7 +697,7 @@ public class ExceptionSoftener {
      * @return
      */
     public static RuntimeException throwSoftenedException(final Throwable e) {
-        throw ExceptionSoftener.<RuntimeException> uncheck(e);
+        throw ExceptionSoftener.<RuntimeException>uncheck(e);
     }
 
     /**
@@ -677,23 +706,28 @@ public class ExceptionSoftener {
      * @param e Exception
      * @param p Predicate to check exception should be thrown or not
      */
-    public static <X extends Throwable> void throwIf(final X e, final Predicate<X> p) {
-        if (p.test(e))
-            throw ExceptionSoftener.<RuntimeException> uncheck(e);
+    public static <X extends Throwable> void throwIf(final X e,
+                                                     final Predicate<X> p) {
+        if (p.test(e)) {
+            throw ExceptionSoftener.<RuntimeException>uncheck(e);
+        }
     }
 
     /**
      * Throw the exception as upwards if the predicate holds, otherwise pass to the handler
      *
-     * @param e  Exception
-     * @param p Predicate to check exception should be thrown or not
+     * @param e       Exception
+     * @param p       Predicate to check exception should be thrown or not
      * @param handler Handles exceptions that should not be thrown
      */
-    public static <X extends Throwable> void throwOrHandle(final X e, final Predicate<X> p, final Consumer<X> handler) {
-        if (p.test(e))
-            throw ExceptionSoftener.<RuntimeException> uncheck(e);
-        else
+    public static <X extends Throwable> void throwOrHandle(final X e,
+                                                           final Predicate<X> p,
+                                                           final Consumer<X> handler) {
+        if (p.test(e)) {
+            throw ExceptionSoftener.<RuntimeException>uncheck(e);
+        } else {
             handler.accept(e);
+        }
     }
 
     @SuppressWarnings("unchecked")

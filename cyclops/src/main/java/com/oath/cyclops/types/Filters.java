@@ -3,18 +3,17 @@ package com.oath.cyclops.types;
 import java.util.function.Predicate;
 
 /**
- * Trait that represents any class with a single argument Filter method
- * Will coerce that method into accepting JDK 8 java.util.function.Predicates
- *
- * @author johnmcclean
+ * Trait that represents any class with a single argument Filter method Will coerce that method into accepting JDK 8
+ * java.util.function.Predicates
  *
  * @param <T> Type of this Filters
+ * @author johnmcclean
  */
 public interface Filters<T> {
 
     /**
      * Keep only elements for which the supplied predicates hold
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -25,7 +24,6 @@ public interface Filters<T> {
      *
      * }
      * </pre>
-     *
      *
      * @param predicate to filter elements by, retaining matches
      * @return Filters with elements removed where the predicate does not hold
@@ -50,7 +48,7 @@ public interface Filters<T> {
 
     /**
      * Remove any elements for which the predicate holds (inverse operation to filter)
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -61,7 +59,6 @@ public interface Filters<T> {
      *
      * }
      * </pre>
-     *
      *
      * @param predicate to filter elements by, retaining matches
      * @return Filters with elements removed where the predicate does not hold

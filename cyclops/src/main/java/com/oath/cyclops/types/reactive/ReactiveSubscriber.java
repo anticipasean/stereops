@@ -1,48 +1,41 @@
 package com.oath.cyclops.types.reactive;
 
+import com.oath.cyclops.internal.stream.spliterators.push.CapturingOperator;
+import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.Spouts;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import com.oath.cyclops.util.ExceptionSoftener;
-import com.oath.cyclops.internal.stream.spliterators.push.CapturingOperator;
-import cyclops.reactive.Spouts;
 import lombok.Getter;
+import lombok.val;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import cyclops.reactive.ReactiveSeq;
-
-import lombok.val;
-
 /**
  * A Subscriber for Observable type event driven Streams that implement backpressure via the reactive-streams API
-
- *
- * @author johnmcclean
  *
  * @param <T> Subscriber type
+ * @author johnmcclean
  */
 
 public class ReactiveSubscriber<T> implements Subscriber<T> {
 
 
     volatile boolean isOpen;
+    volatile boolean streamCreated = false;
+    ArrayList<T> buffer = new ArrayList<>();
+    volatile Throwable error = null;
+    volatile boolean complete = false;
     @Getter
     private volatile Subscription subscription;
+    private volatile CapturingOperator<T> action = null;
 
-    private volatile CapturingOperator<T> action=  null;
-
-
-
-
-
-
-    volatile boolean streamCreated=  false;
-    CapturingOperator<T> getAction(){
-        if(action==null && subscription!=null)
-             action = new CapturingOperator<T>(subscription);
-        else if(action==null)
+    CapturingOperator<T> getAction() {
+        if (action == null && subscription != null) {
+            action = new CapturingOperator<T>(subscription);
+        } else if (action == null) {
             action = new CapturingOperator<T>();
+        }
         return action;
     }
 
@@ -50,65 +43,63 @@ public class ReactiveSubscriber<T> implements Subscriber<T> {
      * <pre>
      *    {@code
      *           ReactiveSubscriber<Integer> sub = Spouts.reactiveSubscriber();
-
-                Flux.just(1,2,3).forEachAsync(sub);
-                sub.stream().forEach(System.out::println);
-
+     *
+     * Flux.just(1,2,3).forEachAsync(sub);
+     * sub.stream().forEach(System.out::println);
+     *
      *          //note JDK Stream based terminal operations may block the current thread
      *          //see ReactiveSeq#collectStream ReactiveSeq#foldAll for non-blocking alternatives
      *    }
      * </pre>
      *
-     * @return A push-based asychronous event driven Observable-style Stream that implements Backpressure via the reactive-streams API
+     * @return A push-based asychronous event driven Observable-style Stream that implements Backpressure via the reactive-streams
+     * API
      */
-    public ReactiveSeq<T> reactiveStream(){
+    public ReactiveSeq<T> reactiveStream() {
         streamCreated = true;
 
-
         ReactiveSeq<T> result = Spouts.reactiveStream(getAction());
-        if(complete)
+        if (complete) {
             return ReactiveSeq.fromIterable(buffer);
-        if(error!=null)
-            throw ExceptionSoftener.throwSoftenedException(error);
-        if(buffer.size()>0){
-            return Spouts.concat(Spouts.fromIterable(buffer),result);
         }
-
-
+        if (error != null) {
+            throw ExceptionSoftener.throwSoftenedException(error);
+        }
+        if (buffer.size() > 0) {
+            return Spouts.concat(Spouts.fromIterable(buffer),
+                                 result);
+        }
 
         return result;
     }
 
-
     @Override
     public void onSubscribe(final Subscription s) {
         Objects.requireNonNull(s);
-        if(streamCreated)
-              throw new IllegalStateException("Subscription passed after downstream Stream created. Subscribe with this Subscriber takeOne, then extract the Stream");
-
+        if (streamCreated) {
+            throw new IllegalStateException("Subscription passed after downstream Stream created. Subscribe with this Subscriber takeOne, then extract the Stream");
+        }
 
         this.subscription = s;
-        if(action!=null){
+        if (action != null) {
             action.setSubscription(s);
         }
 
 
     }
 
-    ArrayList<T> buffer = new ArrayList<>();
-    volatile Throwable error =null;
-    volatile boolean complete=false;
     @Override
     public void onNext(final T t) {
         Objects.requireNonNull(t);
-        if(subscription==null){
+        if (subscription == null) {
             buffer.add(t);
             return;
         }
 
         val cons = getAction().getAction();
-        if(cons!=null)
-              cons.accept(t);
+        if (cons != null) {
+            cons.accept(t);
+        }
 
 
     }
@@ -116,12 +107,14 @@ public class ReactiveSubscriber<T> implements Subscriber<T> {
     @Override
     public void onError(final Throwable t) {
         Objects.requireNonNull(t);
-        if(subscription==null)
-            error= t;
+        if (subscription == null) {
+            error = t;
+        }
 
         val cons = getAction().getError();
-        if(cons!=null)
-              cons.accept(t);
+        if (cons != null) {
+            cons.accept(t);
+        }
 
 
     }
@@ -129,20 +122,20 @@ public class ReactiveSubscriber<T> implements Subscriber<T> {
     @Override
     public void onComplete() {
 
-
-        complete=true;
+        complete = true;
         val run = getAction().getOnComplete();
 
-        if(run!=null)
+        if (run != null) {
             run.run();
-        else
+        } else {
             getAction().complete();
+        }
 
     }
+
     public boolean isInitialized() {
         return getAction().isInitialized();
     }
-
 
 
 }

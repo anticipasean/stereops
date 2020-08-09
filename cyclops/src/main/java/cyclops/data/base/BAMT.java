@@ -1,149 +1,213 @@
 package cyclops.data.base;
 
-import cyclops.control.Option;
-import cyclops.reactive.ReactiveSeq;
-import lombok.AllArgsConstructor;
-
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import static cyclops.data.base.BAMT.ArrayUtils.last;
 import static cyclops.data.base.BAMT.Two.two;
 
+import cyclops.control.Option;
+import cyclops.reactive.ReactiveSeq;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import lombok.AllArgsConstructor;
+
 public class BAMT<T> {
 
-    public interface NestedArray<T>{
+    public interface NestedArray<T> {
+
         static final int BITS_IN_INDEX = 5;
-        static final int SIZE = (int) StrictMath.pow(2, BITS_IN_INDEX);
+        static final int SIZE = (int) StrictMath.pow(2,
+                                                     BITS_IN_INDEX);
+
+        static int bitpos(int hash,
+                          int shift) {
+            return 1 << mask(hash,
+                             shift);
+        }
+
+        static int mask(int hash,
+                        int shift) {
+            return (hash >>> shift) & (SIZE - 1);
+        }
+
+        static int mask(int hash) {
+            return (hash) & (SIZE - 1);
+        }
 
         public NestedArray<T> append(ActiveTail<T> tail);
 
-        static int bitpos(int hash, int shift){
-            return 1 << mask(hash, shift);
-        }
-        static int mask(int hash, int shift){
-            return (hash >>> shift) & (SIZE-1);
-        }
-        static int mask(int hash){
-            return (hash) & (SIZE-1);
+        default <R> R match(Function<? super Zero<T>, ? extends R> zeroFn,
+                            Function<? super PopulatedArray<T>, ? extends R> popFn) {
+            return this instanceof Zero ? zeroFn.apply((Zero<T>) this) : popFn.apply((PopulatedArray<T>) this);
         }
 
-        default  <R> R match(Function<? super Zero<T>, ? extends R> zeroFn, Function<? super PopulatedArray<T>, ? extends R> popFn){
-            return this instanceof Zero ?  zeroFn.apply((Zero<T>)this) : popFn.apply((PopulatedArray<T>)this);
-        }
-        default Iterator<T> iterator(){
+        default Iterator<T> iterator() {
             return stream().iterator();
         }
 
         ReactiveSeq<T> stream();
-        public T getOrElseGet(int pos, Supplier<T> alt);
-        public T getOrElse(int pos, T alt);
+
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt);
+
+        public T getOrElse(int pos,
+                           T alt);
+
         public Option<T> get(int pos);
 
         public <R> NestedArray<R> map(Function<? super T, ? extends R> fn);
 
     }
-    public interface PopulatedArray<T> extends NestedArray<T>{
-        public T getOrElseGet(int pos, Supplier<T> alt);
-        public T getOrElse(int pos, T alt);
+
+    public interface PopulatedArray<T> extends NestedArray<T> {
+
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt);
+
+        public T getOrElse(int pos,
+                           T alt);
+
         public Option<T> get(int pos);
+
         public T[] getNestedArrayAt(int pos);
-        public PopulatedArray<T> set(int pos, T value);
+
+        public PopulatedArray<T> set(int pos,
+                                     T value);
 
     }
 
-    public static class ArrayUtils{
+    public static class ArrayUtils {
 
-        public static <T> T[] append(T[] array, T value) {
-            T[] newArray = (T[])new Object[array.length + 1];
-            System.arraycopy(array, 0, newArray, 0, array.length);
+        public static <T> T[] append(T[] array,
+                                     T value) {
+            T[] newArray = (T[]) new Object[array.length + 1];
+            System.arraycopy(array,
+                             0,
+                             newArray,
+                             0,
+                             array.length);
             newArray[array.length] = value;
             return newArray;
         }
-        public static <T> T[] drop(T[] array,int num) {
-            T[] newArray = (T[])new Object[array.length -num];
-            System.arraycopy(array, 0, newArray, 0, array.length-num);
+
+        public static <T> T[] drop(T[] array,
+                                   int num) {
+            T[] newArray = (T[]) new Object[array.length - num];
+            System.arraycopy(array,
+                             0,
+                             newArray,
+                             0,
+                             array.length - num);
 
             return newArray;
         }
-        public static Object[] append2(Object[][] array, Object value) {
+
+        public static Object[] append2(Object[][] array,
+                                       Object value) {
             Object[] newArray = new Object[array.length + 1];
-            System.arraycopy(array, 0, newArray, 0, array.length);
+            System.arraycopy(array,
+                             0,
+                             newArray,
+                             0,
+                             array.length);
             newArray[array.length] = value;
             return newArray;
         }
-        public static <T> T last(T[] array){
-            return array[array.length-1];
+
+        public static <T> T last(T[] array) {
+            return array[array.length - 1];
         }
     }
 
     @AllArgsConstructor
-    public static class ActiveTail<T> implements PopulatedArray<T>{
-        private final int bitShiftDepth =0;
+    public static class ActiveTail<T> implements PopulatedArray<T> {
+
+        private final int bitShiftDepth = 0;
         private final T[] array;
 
-        public <T> ActiveTail<T> tail(T[] array){
+        public static <T> ActiveTail<T> tail(T value) {
+            return new ActiveTail<>((T[]) new Object[]{value});
+        }
+
+        public static <T> ActiveTail<T> emptyTail() {
+            return new ActiveTail<>((T[]) new Object[0]);
+        }
+
+        public <T> ActiveTail<T> tail(T[] array) {
             return new ActiveTail<>(array);
-        }
-        public static <T> ActiveTail<T> tail(T value){
-            return new ActiveTail<>((T[])new Object[]{value});
-        }
-        public static <T> ActiveTail<T> emptyTail(){
-            return new ActiveTail<>((T[])new Object[0]);
         }
 
         public ActiveTail<T> append(T t) {
-            if(array.length<32){
-                return  tail(ArrayUtils.append(array,t));
+            if (array.length < 32) {
+                return tail(ArrayUtils.append(array,
+                                              t));
             }
             return this;
         }
-        public ActiveTail<T> drop(int num){
-            T[] newArray = (T[])new Object[array.length-num];
-            System.arraycopy(array, num, newArray, 0, newArray.length);
+
+        public ActiveTail<T> drop(int num) {
+            T[] newArray = (T[]) new Object[array.length - num];
+            System.arraycopy(array,
+                             num,
+                             newArray,
+                             0,
+                             newArray.length);
 
             return tail(newArray);
         }
-        public ActiveTail<T> dropRight(int num){
-            return tail(ArrayUtils.drop(array,num));
+
+        public ActiveTail<T> dropRight(int num) {
+            return tail(ArrayUtils.drop(array,
+                                        num));
         }
-        public ActiveTail<T> takeRight(int num){
-            T[] newArray = (T[])new Object[Math.min(num,array.length)];
-            System.arraycopy(array, array.length-newArray.length, newArray, 0, num);
+
+        public ActiveTail<T> takeRight(int num) {
+            T[] newArray = (T[]) new Object[Math.min(num,
+                                                     array.length)];
+            System.arraycopy(array,
+                             array.length - newArray.length,
+                             newArray,
+                             0,
+                             num);
 
             return tail(newArray);
         }
 
         @Override
         public <R> ActiveTail<R> map(Function<? super T, ? extends R> fn) {
-            R[] res = (R[])new Object[array.length];
-            for(int i=0;i<array.length;i++){
+            R[] res = (R[]) new Object[array.length];
+            for (int i = 0; i < array.length; i++) {
                 res[i] = fn.apply(array[i]);
             }
             return tail(res);
         }
+
         @Override
         public Option<T> get(int pos) {
             int indx = pos & 0x01f;
-            if(indx<array.length)
-                return Option.of((T)array[indx]);
+            if (indx < array.length) {
+                return Option.of((T) array[indx]);
+            }
             return Option.none();
         }
+
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             int indx = pos & 0x01f;
-            if(indx<array.length)
-                return (T)array[indx];
+            if (indx < array.length) {
+                return (T) array[indx];
+            }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             int indx = pos & 0x01f;
-            if(indx<array.length)
-                return (T)array[indx];
+            if (indx < array.length) {
+                return (T) array[indx];
+            }
             return alt.get();
         }
 
@@ -153,15 +217,18 @@ public class BAMT<T> {
         }
 
         @Override
-        public ActiveTail<T> set(int pos, T value) {
-            T[] updatedNodes =  Arrays.copyOf(array, array.length);
+        public ActiveTail<T> set(int pos,
+                                 T value) {
+            T[] updatedNodes = Arrays.copyOf(array,
+                                             array.length);
             updatedNodes[pos] = value;
             return new ActiveTail<>(updatedNodes);
         }
 
-        public int size(){
+        public int size() {
             return array.length;
         }
+
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
             return tail;
@@ -176,8 +243,8 @@ public class BAMT<T> {
     }
 
 
+    public static class Zero<T> implements NestedArray<T> {
 
-    public static class Zero<T> implements NestedArray<T>{
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
             return new One(tail.array);
@@ -189,37 +256,42 @@ public class BAMT<T> {
         }
 
 
-        public T getOrElseGet(int pos, Supplier<T> alt){
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             return alt.get();
         }
-        public T getOrElse(int pos, T alt){
+
+        public T getOrElse(int pos,
+                           T alt) {
             return alt;
         }
-        public Option<T> get(int pos){
+
+        public Option<T> get(int pos) {
             return Option.none();
         }
 
         @Override
         public <R> Zero<R> map(Function<? super T, ? extends R> fn) {
-            return (Zero<R>)this;
+            return (Zero<R>) this;
         }
     }
 
     @AllArgsConstructor
     public static class One<T> implements PopulatedArray<T> {
 
-        private final int bitShiftDepth =0;
+        private final int bitShiftDepth = 0;
         private final T[] array;
 
-        public static <T> One<T> one(T[] array){
+        public static <T> One<T> one(T[] array) {
             return new One<>(array);
         }
-        public static <T> One<T> one(T value){
-            return new One<>((T[])new Object[]{value});
+
+        public static <T> One<T> one(T value) {
+            return new One<>((T[]) new Object[]{value});
         }
 
         public NestedArray<T> append(ActiveTail<T> t) {
-            return two(new  Object[][]{array,t.array});
+            return two(new Object[][]{array, t.array});
         }
 
         @Override
@@ -231,32 +303,38 @@ public class BAMT<T> {
         @Override
         public Option<T> get(int pos) {
             int indx = pos & 0x01f;
-            if(indx<array.length)
-                return Option.of((T)array[indx]);
+            if (indx < array.length) {
+                return Option.of((T) array[indx]);
+            }
             return Option.none();
         }
 
         @Override
         public <R> One<R> map(Function<? super T, ? extends R> fn) {
-            R[] res = (R[])new Object[array.length];
-            for(int i=0;i<array.length;i++){
+            R[] res = (R[]) new Object[array.length];
+            for (int i = 0; i < array.length; i++) {
                 res[i] = fn.apply(array[i]);
             }
             return one(res);
         }
 
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             int indx = pos & 0x01f;
-            if(indx<array.length)
-                return (T)array[indx];
+            if (indx < array.length) {
+                return (T) array[indx];
+            }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             int indx = pos & 0x01f;
-            if(indx<array.length)
-                return (T)array[indx];
+            if (indx < array.length) {
+                return (T) array[indx];
+            }
             return alt.get();
         }
 
@@ -266,74 +344,87 @@ public class BAMT<T> {
         }
 
         @Override
-        public PopulatedArray<T> set(int pos, T t) {
-            Object[] updatedNodes = Arrays.copyOf(array, array.length);
+        public PopulatedArray<T> set(int pos,
+                                     T t) {
+            Object[] updatedNodes = Arrays.copyOf(array,
+                                                  array.length);
             updatedNodes[pos] = t;
             return new One(updatedNodes);
         }
 
 
     }
+
     @AllArgsConstructor
-    public static class Two<T> implements PopulatedArray<T>{
-        public static final int bitShiftDepth =5;
+    public static class Two<T> implements PopulatedArray<T> {
+
+        public static final int bitShiftDepth = 5;
         final Object[][] array;
 
-        public static <T> Two<T> two(Object[][] array){
+        public static <T> Two<T> two(Object[][] array) {
             return new Two<T>(array);
         }
 
         @Override
-        public PopulatedArray<T> set(int pos, T t) {
-            Object[][] updatedNodes = Arrays.copyOf(array, array.length);
-            int indx = NestedArray.mask(pos,bitShiftDepth);
+        public PopulatedArray<T> set(int pos,
+                                     T t) {
+            Object[][] updatedNodes = Arrays.copyOf(array,
+                                                    array.length);
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
             Object[] e = updatedNodes[indx];
-            Object[] newNode = Arrays.copyOf(e,e.length);
+            Object[] newNode = Arrays.copyOf(e,
+                                             e.length);
             updatedNodes[indx] = newNode;
-            newNode[NestedArray.mask(pos)]=t;
+            newNode[NestedArray.mask(pos)] = t;
             return two(updatedNodes);
 
         }
+
         @Override
         public <R> Two<R> map(Function<? super T, ? extends R> fn) {
             Object[][] res = new Object[array.length][];
-            for(int i=0;i<array.length;i++){
+            for (int i = 0; i < array.length; i++) {
                 Object[] nextA = array[i];
                 Object[] resA = new Object[nextA.length];
-                res[i]=resA;
-                for(int k=0;k<nextA.length;k++) {
-                        resA[k] = fn.apply((T) nextA[k]);
-                    }
+                res[i] = resA;
+                for (int k = 0; k < nextA.length; k++) {
+                    resA[k] = fn.apply((T) nextA[k]);
+                }
 
             }
-            return two((Object[][])res);
+            return two((Object[][]) res);
         }
 
         @Override
         public Option<T> get(int pos) {
             T[] local = getNestedArrayAt(pos);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return Option.of(local[indx]);
             }
             return Option.none();
         }
+
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             T[] local = getNestedArrayAt(pos);
 
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             T[] local = getNestedArrayAt(pos);
 
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt.get();
@@ -341,22 +432,26 @@ public class BAMT<T> {
 
         @Override
         public T[] getNestedArrayAt(int pos) {
-            int indx = NestedArray.mask(pos, bitShiftDepth);
-            if(indx<array.length)
-                return  (T[])array[indx];
-            return (T[])new Object[0];
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
+            if (indx < array.length) {
+                return (T[]) array[indx];
+            }
+            return (T[]) new Object[0];
 
         }
 
 
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
-            if(array.length<32){
-                Object[][] updatedNodes = Arrays.copyOf(array, array.length+1,Object[][].class);
-                updatedNodes[array.length]=tail.array;
+            if (array.length < 32) {
+                Object[][] updatedNodes = Arrays.copyOf(array,
+                                                        array.length + 1,
+                                                        Object[][].class);
+                updatedNodes[array.length] = tail.array;
                 return two(updatedNodes);
             }
-            return Three.three(new Object[][][]{array,new Object[][]{tail.array}});
+            return Three.three(new Object[][][]{array, new Object[][]{tail.array}});
 
 
         }
@@ -364,35 +459,44 @@ public class BAMT<T> {
         @Override
         public ReactiveSeq<T> stream() {
 
-            return ReactiveSeq.iterate(0, i->i+1)
-                                .take(array.length)
-                                .map(indx->array[indx])
-                                .flatMap(a-> ReactiveSeq.of((T[])a));
+            return ReactiveSeq.iterate(0,
+                                       i -> i + 1)
+                              .take(array.length)
+                              .map(indx -> array[indx])
+                              .flatMap(a -> ReactiveSeq.of((T[]) a));
         }
 
 
     }
+
     @AllArgsConstructor
-    public static class Three<T> implements PopulatedArray<T>{
+    public static class Three<T> implements PopulatedArray<T> {
+
         public static final int bitShiftDepth = 10;
         final Object[][][] array;
 
-        public static <T> Three<T> three(Object[][][] array){
+        public static <T> Three<T> three(Object[][][] array) {
             return new Three<T>(array);
         }
 
         @Override
-        public PopulatedArray<T> set(int pos, T t) {
-            Object[][][] updatedNodes = Arrays.copyOf(array, array.length);
-            int indx = NestedArray.mask(pos,bitShiftDepth);
+        public PopulatedArray<T> set(int pos,
+                                     T t) {
+            Object[][][] updatedNodes = Arrays.copyOf(array,
+                                                      array.length);
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
             Object[][] e = updatedNodes[indx];
-            Object[][] newNode = Arrays.copyOf(e,e.length);
+            Object[][] newNode = Arrays.copyOf(e,
+                                               e.length);
             updatedNodes[indx] = newNode;
-            int indx2 = NestedArray.mask(pos, Two.bitShiftDepth);
+            int indx2 = NestedArray.mask(pos,
+                                         Two.bitShiftDepth);
             Object[] f = e[indx2];
-            Object[] newNode2 = Arrays.copyOf(f,f.length);
-            newNode[indx2]=f;
-            f[NestedArray.mask(pos)]=t;
+            Object[] newNode2 = Arrays.copyOf(f,
+                                              f.length);
+            newNode[indx2] = f;
+            f[NestedArray.mask(pos)] = t;
             return three(updatedNodes);
 
         }
@@ -400,46 +504,50 @@ public class BAMT<T> {
         @Override
         public <R> Three<R> map(Function<? super T, ? extends R> fn) {
             Object[][][] res = new Object[array.length][][];
-            for(int i=0;i<array.length;i++){
+            for (int i = 0; i < array.length; i++) {
                 Object[][] nextA = array[i];
                 Object[][] resA = new Object[nextA.length][];
-                res[i]=resA;
-                for(int j=0;j<nextA.length;j++) {
+                res[i] = resA;
+                for (int j = 0; j < nextA.length; j++) {
                     Object[] nextB = nextA[j];
 
                     Object[] resB = new Object[nextB.length];
-                    resA[j]=resB;
-                    for(int k=0;k<nextB.length;k++) {
+                    resA[j] = resB;
+                    for (int k = 0; k < nextB.length; k++) {
                         resB[k] = fn.apply((T) nextB[k]);
                     }
                 }
             }
-            return three((Object[][][])res);
+            return three((Object[][][]) res);
         }
 
         @Override
         public Option<T> get(int pos) {
             T[] local = getNestedArrayAt(pos);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return Option.of(local[indx]);
             }
             return Option.none();
         }
+
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             T[] local = getNestedArrayAt(pos);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             T[] local = getNestedArrayAt(pos);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt.get();
@@ -447,49 +555,59 @@ public class BAMT<T> {
 
         @Override
         public T[] getNestedArrayAt(int pos) {
-            int indx = NestedArray.mask(pos, bitShiftDepth);
-            if(indx<array.length){
-               Object[][] twoArray = array[indx];
-               int indx2 = NestedArray.mask(pos, Two.bitShiftDepth);
-               if(indx2<twoArray.length){
-                   return  (T[])twoArray[indx2];
-               }
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
+            if (indx < array.length) {
+                Object[][] twoArray = array[indx];
+                int indx2 = NestedArray.mask(pos,
+                                             Two.bitShiftDepth);
+                if (indx2 < twoArray.length) {
+                    return (T[]) twoArray[indx2];
+                }
             }
 
-            return (T[])new Object[0];
+            return (T[]) new Object[0];
 
         }
 
 
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
-            if(last(array).length<32){
-                Object[][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length+1,Object[][].class);
+            if (last(array).length < 32) {
+                Object[][][] updatedNodes = Arrays.copyOf(array,
+                                                          array.length,
+                                                          Object[][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length + 1,
+                                                                      Object[][].class);
                 last(updatedNodes)[last(array).length] = tail.array;
                 return three(updatedNodes);
             }
-            if(array.length<32){
-                Object[][][] updatedNodes = Arrays.copyOf(array, array.length+1,Object[][][].class);
+            if (array.length < 32) {
+                Object[][][] updatedNodes = Arrays.copyOf(array,
+                                                          array.length + 1,
+                                                          Object[][][].class);
                 updatedNodes[array.length] = new Object[][]{tail.array};
                 return three(updatedNodes);
 
             }
-            return Four.four(new Object[][][][]{array,new Object[][][]{new Object[][]{tail.array}}});
+            return Four.four(new Object[][][][]{array, new Object[][][]{new Object[][]{tail.array}}});
 
         }
 
         @Override
         public ReactiveSeq<T> stream() {
 
-            return ReactiveSeq.iterate(0, i->i+1)
+            return ReactiveSeq.iterate(0,
+                                       i -> i + 1)
                               .take(array.length)
-                              .map(indx->array[indx])
-                              .flatMap(a->{
-                                  return ReactiveSeq.iterate(0, i->i+1)
+                              .map(indx -> array[indx])
+                              .flatMap(a -> {
+                                  return ReactiveSeq.iterate(0,
+                                                             i -> i + 1)
                                                     .take(a.length)
-                                                    .map(indx->a[indx])
-                                                    .flatMap(a2-> ReactiveSeq.of((T[])a2));
+                                                    .map(indx -> a[indx])
+                                                    .flatMap(a2 -> ReactiveSeq.of((T[]) a2));
                               });
 
         }
@@ -498,29 +616,38 @@ public class BAMT<T> {
     }
 
     @AllArgsConstructor
-    public static class Four<T> implements PopulatedArray<T>{
+    public static class Four<T> implements PopulatedArray<T> {
+
         public static final int bitShiftDepth = 15;
         final Object[][][][] array;
 
-        public static <T> Four<T> four(Object[][][][] array){
+        public static <T> Four<T> four(Object[][][][] array) {
             return new Four<T>(array);
         }
 
         @Override
-        public PopulatedArray<T> set(int pos, T t) {
-            Object[][][][] n1 = Arrays.copyOf(array, array.length);
-            int indx = NestedArray.mask(pos,bitShiftDepth);
+        public PopulatedArray<T> set(int pos,
+                                     T t) {
+            Object[][][][] n1 = Arrays.copyOf(array,
+                                              array.length);
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
             Object[][][] n2 = n1[indx];
-            Object[][][] newNode = Arrays.copyOf(n2,n2.length);
+            Object[][][] newNode = Arrays.copyOf(n2,
+                                                 n2.length);
             n1[indx] = newNode;
-            int indx2 = NestedArray.mask(pos, Three.bitShiftDepth);
+            int indx2 = NestedArray.mask(pos,
+                                         Three.bitShiftDepth);
             Object[][] n3 = n2[indx2];
-            Object[][] newNode2 = Arrays.copyOf(n3,n3.length);
-            int indx3 = NestedArray.mask(pos, Two.bitShiftDepth);
+            Object[][] newNode2 = Arrays.copyOf(n3,
+                                                n3.length);
+            int indx3 = NestedArray.mask(pos,
+                                         Two.bitShiftDepth);
             Object[] n4 = n3[indx3];
-            Object[] newNode3 = Arrays.copyOf(n3,n3.length);
-            newNode2[indx3]=n3;
-            n4[NestedArray.mask(pos)]=t;
+            Object[] newNode3 = Arrays.copyOf(n3,
+                                              n3.length);
+            newNode2[indx3] = n3;
+            n4[NestedArray.mask(pos)] = t;
             return four(n1);
 
         }
@@ -528,54 +655,62 @@ public class BAMT<T> {
         @Override
         public <R> Four<R> map(Function<? super T, ? extends R> fn) {
             Object[][][][] res = new Object[array.length][][][];
-            for(int i=0;i<array.length;i++){
+            for (int i = 0; i < array.length; i++) {
                 Object[][][] nextA = array[i];
                 Object[][][] resA = new Object[nextA.length][][];
-                res[i]=resA;
-                for(int j=0;j<nextA.length;j++) {
+                res[i] = resA;
+                for (int j = 0; j < nextA.length; j++) {
                     Object[][] nextB = nextA[j];
 
                     Object[][] resB = new Object[nextB.length][];
-                    resA[j]=resB;
-                    for(int k=0;k<nextB.length;k++) {
-                        Object[] nextC= nextB[k];
+                    resA[j] = resB;
+                    for (int k = 0; k < nextB.length; k++) {
+                        Object[] nextC = nextB[k];
 
                         Object[] resC = new Object[nextC.length];
-                        resB[k]=resC;
-                        for(int l=0;l<nextC.length;l++) {
+                        resB[k] = resC;
+                        for (int l = 0; l < nextC.length; l++) {
                             resC[l] = fn.apply((T) nextC[l]);
                         }
                     }
                 }
             }
-            return four((Object[][][][])res);
+            return four((Object[][][][]) res);
         }
+
         @Override
         public Option<T> get(int pos) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return Option.of(local[indx]);
             }
             return Option.none();
         }
+
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt.get();
@@ -585,21 +720,23 @@ public class BAMT<T> {
         @Override
         public T[] getNestedArrayAt(int pos) {
 
-
-            int indx = NestedArray.mask(pos, bitShiftDepth);
-            if(indx<array.length){
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
+            if (indx < array.length) {
                 Object[][][] twoArray = array[indx];
-                int indx2 = NestedArray.mask(pos, Three.bitShiftDepth);
-                if(indx2<twoArray.length){
-                    int indx3 = NestedArray.mask(pos, Two.bitShiftDepth);
+                int indx2 = NestedArray.mask(pos,
+                                             Three.bitShiftDepth);
+                if (indx2 < twoArray.length) {
+                    int indx3 = NestedArray.mask(pos,
+                                                 Two.bitShiftDepth);
                     Object[][] threeArray = twoArray[indx2];
-                    if(indx3<threeArray.length){
-                        return (T[])threeArray[indx3];
+                    if (indx3 < threeArray.length) {
+                        return (T[]) threeArray[indx3];
                     }
                 }
             }
 
-            return (T[])new Object[0];
+            return (T[]) new Object[0];
 
 
         }
@@ -607,164 +744,203 @@ public class BAMT<T> {
 
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
-            if(last(last(array)).length<32){
-                Object[][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length,Object[][][].class);
-                last(updatedNodes)[last(updatedNodes).length-1]=Arrays.copyOf(last(last(updatedNodes)), last(last(updatedNodes)).length+1,Object[][].class);
+            if (last(last(array)).length < 32) {
+                Object[][][][] updatedNodes = Arrays.copyOf(array,
+                                                            array.length,
+                                                            Object[][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length,
+                                                                      Object[][][].class);
+                last(updatedNodes)[last(updatedNodes).length - 1] = Arrays.copyOf(last(last(updatedNodes)),
+                                                                                  last(last(updatedNodes)).length + 1,
+                                                                                  Object[][].class);
                 last(last(updatedNodes))[last(last(array)).length] = tail.array;
                 return four(updatedNodes);
 
             }
-            if(last(array).length<32){
-                Object[][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length+1,Object[][][].class);
+            if (last(array).length < 32) {
+                Object[][][][] updatedNodes = Arrays.copyOf(array,
+                                                            array.length,
+                                                            Object[][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length + 1,
+                                                                      Object[][][].class);
                 last(updatedNodes)[last(array).length] = new Object[][]{tail.array};
                 return four(updatedNodes);
             }
-            if(array.length<32){
-                Object[][][][] updatedNodes = Arrays.copyOf(array, array.length+1,Object[][][][].class);
+            if (array.length < 32) {
+                Object[][][][] updatedNodes = Arrays.copyOf(array,
+                                                            array.length + 1,
+                                                            Object[][][][].class);
                 updatedNodes[array.length] = new Object[][][]{new Object[][]{tail.array}};
                 return four(updatedNodes);
 
 
-
             }
-            return Five.five(new Object[][][][][]{array,new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}}});
+            return Five.five(new Object[][][][][]{array, new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}}});
         }
 
         @Override
         public ReactiveSeq<T> stream() {
-            return ReactiveSeq.iterate(0, i->i+1)
-                    .take(array.length)
-                    .map(indx->array[indx])
-                    .flatMap(a->{
-                        return ReactiveSeq.iterate(0, i->i+1)
-                                .take(a.length)
-                                .map(indx->a[indx])
-                                .flatMap(a2->{
-                                    return ReactiveSeq.iterate(0, i->i+1)
-                                            .take(a2.length)
-                                            .map(indx->a2[indx])
-                                            .flatMap(a3-> ReactiveSeq.of((T[])a3));
-                                });
-                    });
+            return ReactiveSeq.iterate(0,
+                                       i -> i + 1)
+                              .take(array.length)
+                              .map(indx -> array[indx])
+                              .flatMap(a -> {
+                                  return ReactiveSeq.iterate(0,
+                                                             i -> i + 1)
+                                                    .take(a.length)
+                                                    .map(indx -> a[indx])
+                                                    .flatMap(a2 -> {
+                                                        return ReactiveSeq.iterate(0,
+                                                                                   i -> i + 1)
+                                                                          .take(a2.length)
+                                                                          .map(indx -> a2[indx])
+                                                                          .flatMap(a3 -> ReactiveSeq.of((T[]) a3));
+                                                    });
+                              });
         }
 
 
     }
+
     @AllArgsConstructor
-    public static class Five<T> implements PopulatedArray<T>{
+    public static class Five<T> implements PopulatedArray<T> {
+
         public static final int bitShiftDepth = 20;
         final Object[][][][][] array;
 
-        public static <T> Five<T> five(Object[][][][][] array){
+        public static <T> Five<T> five(Object[][][][][] array) {
             return new Five<T>(array);
         }
 
         @Override
-        public PopulatedArray<T> set(int pos, T t) {
-            Object[][][][][] n1 = Arrays.copyOf(array, array.length);
-            int indx = NestedArray.mask(pos,bitShiftDepth);
+        public PopulatedArray<T> set(int pos,
+                                     T t) {
+            Object[][][][][] n1 = Arrays.copyOf(array,
+                                                array.length);
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
             Object[][][][] n2 = n1[indx];
-            Object[][][][] newNode = Arrays.copyOf(n2,n2.length);
+            Object[][][][] newNode = Arrays.copyOf(n2,
+                                                   n2.length);
             n1[indx] = newNode;
-            int indx2 = NestedArray.mask(pos, Four.bitShiftDepth);
+            int indx2 = NestedArray.mask(pos,
+                                         Four.bitShiftDepth);
             Object[][][] n3 = n2[indx2];
-            Object[][][] newNode2 = Arrays.copyOf(n3,n3.length);
-            int indx3 = NestedArray.mask(pos, Three.bitShiftDepth);
+            Object[][][] newNode2 = Arrays.copyOf(n3,
+                                                  n3.length);
+            int indx3 = NestedArray.mask(pos,
+                                         Three.bitShiftDepth);
             Object[][] n4 = n3[indx3];
-            Object[][] newNode3 = Arrays.copyOf(n3,n3.length);
-            int indx4 = NestedArray.mask(pos, Two.bitShiftDepth);
+            Object[][] newNode3 = Arrays.copyOf(n3,
+                                                n3.length);
+            int indx4 = NestedArray.mask(pos,
+                                         Two.bitShiftDepth);
             Object[] n5 = n4[indx4];
-            Object[] newNode4 = Arrays.copyOf(n4,n4.length);
-            newNode3[indx4]=n4;
-            n5[NestedArray.mask(pos)]=t;
+            Object[] newNode4 = Arrays.copyOf(n4,
+                                              n4.length);
+            newNode3[indx4] = n4;
+            n5[NestedArray.mask(pos)] = t;
             return five(n1);
 
         }
+
         @Override
         public <R> Five<R> map(Function<? super T, ? extends R> fn) {
             Object[][][][][] res = new Object[array.length][][][][];
-            for(int i=0;i<array.length;i++){
+            for (int i = 0; i < array.length; i++) {
                 Object[][][][] nextA = array[i];
                 Object[][][][] resA = new Object[nextA.length][][][];
-                res[i]=resA;
-                for(int j=0;j<nextA.length;j++) {
+                res[i] = resA;
+                for (int j = 0; j < nextA.length; j++) {
                     Object[][][] nextB = nextA[j];
 
                     Object[][][] resB = new Object[nextB.length][][];
-                    resA[j]=resB;
-                    for(int k=0;k<nextB.length;k++) {
-                        Object[][] nextC= nextB[k];
+                    resA[j] = resB;
+                    for (int k = 0; k < nextB.length; k++) {
+                        Object[][] nextC = nextB[k];
 
                         Object[][] resC = new Object[nextC.length][];
-                        resB[k]=resC;
-                        for(int l=0;l<nextC.length;l++) {
-                            Object[] nextD= nextC[l];
+                        resB[k] = resC;
+                        for (int l = 0; l < nextC.length; l++) {
+                            Object[] nextD = nextC[l];
 
                             Object[] resD = new Object[nextD.length];
-                            resC[l]=resD;
-                            for(int m=0;m<nextD.length;m++) {
+                            resC[l] = resD;
+                            for (int m = 0; m < nextD.length; m++) {
                                 resD[m] = fn.apply((T) nextD[m]);
                             }
                         }
                     }
                 }
             }
-            return five((Object[][][][][])res);
+            return five((Object[][][][][]) res);
         }
+
         @Override
         public Option<T> get(int pos) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return Option.of(local[indx]);
             }
             return Option.none();
         }
+
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt.get();
         }
+
         @Override
         public T[] getNestedArrayAt(int pos) {
 
-
-            int indx = NestedArray.mask(pos, bitShiftDepth);
-            if(indx<array.length){
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
+            if (indx < array.length) {
                 Object[][][][] twoArray = array[indx];
-                int indx2 = NestedArray.mask(pos, Four.bitShiftDepth);
-                if(indx2<twoArray.length){
-                    int indx3 = NestedArray.mask(pos, Three.bitShiftDepth);
+                int indx2 = NestedArray.mask(pos,
+                                             Four.bitShiftDepth);
+                if (indx2 < twoArray.length) {
+                    int indx3 = NestedArray.mask(pos,
+                                                 Three.bitShiftDepth);
                     Object[][][] threeArray = twoArray[indx2];
-                    if(indx3<threeArray.length){
-                        int indx4 = NestedArray.mask(pos, Two.bitShiftDepth);
+                    if (indx3 < threeArray.length) {
+                        int indx4 = NestedArray.mask(pos,
+                                                     Two.bitShiftDepth);
                         Object[][] fourArray = threeArray[indx3];
-                        if(indx4<fourArray.length) {
+                        if (indx4 < fourArray.length) {
                             return (T[]) fourArray[indx4];
                         }
                     }
                 }
             }
 
-            return (T[])new Object[0];
+            return (T[]) new Object[0];
 
 
         }
@@ -772,123 +948,163 @@ public class BAMT<T> {
 
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
-            if(last(last(last(array))).length<32){
-                Object[][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length,Object[][][][].class);
-                last(updatedNodes)[last(updatedNodes).length-1]=Arrays.copyOf(last(last(updatedNodes)), last(last(updatedNodes)).length,Object[][][].class);
-                last(last(updatedNodes))[last(last(updatedNodes)).length-1]=Arrays.copyOf(last(last(last(updatedNodes))), last(last(last(updatedNodes))).length+1,Object[][].class);
+            if (last(last(last(array))).length < 32) {
+                Object[][][][][] updatedNodes = Arrays.copyOf(array,
+                                                              array.length,
+                                                              Object[][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length,
+                                                                      Object[][][][].class);
+                last(updatedNodes)[last(updatedNodes).length - 1] = Arrays.copyOf(last(last(updatedNodes)),
+                                                                                  last(last(updatedNodes)).length,
+                                                                                  Object[][][].class);
+                last(last(updatedNodes))[last(last(updatedNodes)).length - 1] = Arrays.copyOf(last(last(last(updatedNodes))),
+                                                                                              last(last(last(updatedNodes))).length
+                                                                                                  + 1,
+                                                                                              Object[][].class);
                 last(last(last(updatedNodes)))[last(last(last(array))).length] = tail.array;
                 return five(updatedNodes);
             }
-            if(last(last(array)).length<32){
-                Object[][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length,Object[][][][].class);
-                last(updatedNodes)[last(updatedNodes).length-1]=Arrays.copyOf(last(last(updatedNodes)), last(last(updatedNodes)).length+1,Object[][][].class);
+            if (last(last(array)).length < 32) {
+                Object[][][][][] updatedNodes = Arrays.copyOf(array,
+                                                              array.length,
+                                                              Object[][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length,
+                                                                      Object[][][][].class);
+                last(updatedNodes)[last(updatedNodes).length - 1] = Arrays.copyOf(last(last(updatedNodes)),
+                                                                                  last(last(updatedNodes)).length + 1,
+                                                                                  Object[][][].class);
                 last(last(updatedNodes))[last(last(array)).length] = new Object[][]{tail.array};
                 return five(updatedNodes);
 
             }
-            if(last(array).length<32){
-                Object[][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length+1,Object[][][][].class);
+            if (last(array).length < 32) {
+                Object[][][][][] updatedNodes = Arrays.copyOf(array,
+                                                              array.length,
+                                                              Object[][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length + 1,
+                                                                      Object[][][][].class);
                 last(updatedNodes)[last(array).length] = new Object[][][]{new Object[][]{tail.array}};
                 return five(updatedNodes);
 
             }
-            if(array.length<32){
-                Object[][][][][] updatedNodes = Arrays.copyOf(array, array.length+1,Object[][][][][].class);
+            if (array.length < 32) {
+                Object[][][][][] updatedNodes = Arrays.copyOf(array,
+                                                              array.length + 1,
+                                                              Object[][][][][].class);
                 updatedNodes[array.length] = new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}};
                 return five(updatedNodes);
             }
-            return Six.six(new Object[][][][][][]{array,new Object[][][][][]{new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}}}});
+            return Six.six(new Object[][][][][][]{array,
+                new Object[][][][][]{new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}}}});
         }
 
         @Override
         public ReactiveSeq<T> stream() {
 
-            return ReactiveSeq.iterate(0, i->i+1)
-                    .take(array.length)
-                    .map(indx->array[indx])
-                    .flatMap(a->{
-                        return ReactiveSeq.iterate(0, i->i+1)
-                                .take(a.length)
-                                .map(indx->a[indx])
-                                .flatMap(a2->{
-                                    return ReactiveSeq.iterate(0, i->i+1)
-                                            .take(a2.length)
-                                            .map(indx->a2[indx])
-                                            .flatMap(a3->{
-                                                return ReactiveSeq.iterate(0, i->i+1)
-                                                .take(a3.length)
-                                                .map(indx->a3[indx])
-                                                .flatMap(a4-> ReactiveSeq.of((T[])a4));
-                                            });
-                                });
-                    });
+            return ReactiveSeq.iterate(0,
+                                       i -> i + 1)
+                              .take(array.length)
+                              .map(indx -> array[indx])
+                              .flatMap(a -> {
+                                  return ReactiveSeq.iterate(0,
+                                                             i -> i + 1)
+                                                    .take(a.length)
+                                                    .map(indx -> a[indx])
+                                                    .flatMap(a2 -> {
+                                                        return ReactiveSeq.iterate(0,
+                                                                                   i -> i + 1)
+                                                                          .take(a2.length)
+                                                                          .map(indx -> a2[indx])
+                                                                          .flatMap(a3 -> {
+                                                                              return ReactiveSeq.iterate(0,
+                                                                                                         i -> i + 1)
+                                                                                                .take(a3.length)
+                                                                                                .map(indx -> a3[indx])
+                                                                                                .flatMap(a4 -> ReactiveSeq.of((T[]) a4));
+                                                                          });
+                                                    });
+                              });
 
         }
 
     }
+
     @AllArgsConstructor
-    public static class Six<T> implements PopulatedArray<T>{
+    public static class Six<T> implements PopulatedArray<T> {
+
         public static final int bitShiftDepth = 25;
         final Object[][][][][][] array;
 
-        public static <T> Six<T> six(Object[][][][][][] array){
+        public static <T> Six<T> six(Object[][][][][][] array) {
             return new Six<T>(array);
         }
 
         @Override
-        public PopulatedArray<T> set(int pos, T t) {
-            Object[][][][][][] n1 = Arrays.copyOf(array, array.length);
-            int indx = NestedArray.mask(pos,bitShiftDepth);
+        public PopulatedArray<T> set(int pos,
+                                     T t) {
+            Object[][][][][][] n1 = Arrays.copyOf(array,
+                                                  array.length);
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
             Object[][][][][] n2 = n1[indx];
-            Object[][][][][] newNode = Arrays.copyOf(n2,n2.length);
+            Object[][][][][] newNode = Arrays.copyOf(n2,
+                                                     n2.length);
             n1[indx] = newNode;
-            int indx2 = NestedArray.mask(pos, Five.bitShiftDepth);
+            int indx2 = NestedArray.mask(pos,
+                                         Five.bitShiftDepth);
             Object[][][][] n3 = n2[indx2];
-            Object[][][][] newNode2 = Arrays.copyOf(n3,n3.length);
-            int indx3 = NestedArray.mask(pos, Four.bitShiftDepth);
+            Object[][][][] newNode2 = Arrays.copyOf(n3,
+                                                    n3.length);
+            int indx3 = NestedArray.mask(pos,
+                                         Four.bitShiftDepth);
             Object[][][] n4 = n3[indx3];
-            Object[][][] newNode3 = Arrays.copyOf(n3,n3.length);
-            int indx4 = NestedArray.mask(pos, Three.bitShiftDepth);
+            Object[][][] newNode3 = Arrays.copyOf(n3,
+                                                  n3.length);
+            int indx4 = NestedArray.mask(pos,
+                                         Three.bitShiftDepth);
             Object[][] n5 = n4[indx4];
-            int indx5 = NestedArray.mask(pos, Two.bitShiftDepth);
+            int indx5 = NestedArray.mask(pos,
+                                         Two.bitShiftDepth);
             Object[] n6 = n5[indx5];
-            Object[] newNode4 = Arrays.copyOf(n4,n4.length);
-            newNode4[indx5]=n4;
-            n6[NestedArray.mask(pos)]=t;
+            Object[] newNode4 = Arrays.copyOf(n4,
+                                              n4.length);
+            newNode4[indx5] = n4;
+            n6[NestedArray.mask(pos)] = t;
             return six(n1);
 
         }
+
         @Override
         public <R> Six<R> map(Function<? super T, ? extends R> fn) {
             Object[][][][][][] res = new Object[array.length][][][][][];
-            for(int i=0;i<array.length;i++){
+            for (int i = 0; i < array.length; i++) {
                 Object[][][][][] nextA = array[i];
                 Object[][][][][] resA = new Object[nextA.length][][][][];
-                res[i]=resA;
-                for(int j=0;j<nextA.length;j++) {
+                res[i] = resA;
+                for (int j = 0; j < nextA.length; j++) {
                     Object[][][][] nextB = nextA[j];
 
                     Object[][][][] resB = new Object[nextB.length][][][];
-                    resA[j]=resB;
-                    for(int k=0;k<nextB.length;k++) {
-                        Object[][][] nextC= nextB[k];
+                    resA[j] = resB;
+                    for (int k = 0; k < nextB.length; k++) {
+                        Object[][][] nextC = nextB[k];
 
                         Object[][][] resC = new Object[nextC.length][][];
-                        resB[k]=resC;
-                        for(int l=0;l<nextC.length;l++) {
-                            Object[][] nextD= nextC[l];
+                        resB[k] = resC;
+                        for (int l = 0; l < nextC.length; l++) {
+                            Object[][] nextD = nextC[l];
 
                             Object[][] resD = new Object[nextD.length][];
-                            resC[l]=resD;
-                            for(int m=0;m<nextD.length;m++) {
-                                Object[] nextE= nextD[m];
+                            resC[l] = resD;
+                            for (int m = 0; m < nextD.length; m++) {
+                                Object[] nextE = nextD[m];
 
                                 Object[] resE = new Object[nextE.length];
-                                resD[m]=resE;
-                                for(int n=0;n<nextE.length;n++) {
+                                resD[m] = resE;
+                                for (int n = 0; n < nextE.length; n++) {
                                     resE[n] = fn.apply((T) nextE[n]);
                                 }
                             }
@@ -896,35 +1112,42 @@ public class BAMT<T> {
                     }
                 }
             }
-            return six((Object[][][][][][])res);
+            return six((Object[][][][][][]) res);
         }
 
         @Override
         public Option<T> get(int pos) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return Option.of(local[indx]);
             }
             return Option.none();
         }
+
         @Override
-        public T getOrElse(int pos, T alt) {
+        public T getOrElse(int pos,
+                           T alt) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt;
         }
+
         @Override
-        public T getOrElseGet(int pos, Supplier<T> alt) {
+        public T getOrElseGet(int pos,
+                              Supplier<T> alt) {
             T[] local = getNestedArrayAt(pos);
-            int resolved = NestedArray.bitpos(pos,bitShiftDepth);
+            int resolved = NestedArray.bitpos(pos,
+                                              bitShiftDepth);
             int indx = pos & 0x01f;
-            if(indx<local.length){
+            if (indx < local.length) {
                 return local[indx];
             }
             return alt.get();
@@ -933,28 +1156,33 @@ public class BAMT<T> {
         @Override
         public T[] getNestedArrayAt(int pos) {
 
-
-            int indx = NestedArray.mask(pos, bitShiftDepth);
-            if(indx<array.length){
+            int indx = NestedArray.mask(pos,
+                                        bitShiftDepth);
+            if (indx < array.length) {
                 Object[][][][][] twoArray = array[indx];
-                int indx2 = NestedArray.mask(pos, Five.bitShiftDepth);
-                if(indx2<twoArray.length){
-                    int indx3 = NestedArray.mask(pos, Four.bitShiftDepth);
+                int indx2 = NestedArray.mask(pos,
+                                             Five.bitShiftDepth);
+                if (indx2 < twoArray.length) {
+                    int indx3 = NestedArray.mask(pos,
+                                                 Four.bitShiftDepth);
                     Object[][][][] threeArray = twoArray[indx2];
-                    if(indx3<threeArray.length){
-                        int indx4 = NestedArray.mask(pos, Three.bitShiftDepth);
+                    if (indx3 < threeArray.length) {
+                        int indx4 = NestedArray.mask(pos,
+                                                     Three.bitShiftDepth);
                         Object[][][] fourArray = threeArray[indx3];
-                        if(indx4<fourArray.length) {
-                            int indx5 = NestedArray.mask(pos, Two.bitShiftDepth);
+                        if (indx4 < fourArray.length) {
+                            int indx5 = NestedArray.mask(pos,
+                                                         Two.bitShiftDepth);
                             Object[][] fiveArray = fourArray[indx4];
-                            if(indx5<fiveArray.length)
+                            if (indx5 < fiveArray.length) {
                                 return (T[]) fiveArray[indx5];
+                            }
                         }
                     }
                 }
             }
 
-            return (T[])new Object[0];
+            return (T[]) new Object[0];
 
 
         }
@@ -962,42 +1190,75 @@ public class BAMT<T> {
 
         @Override
         public NestedArray<T> append(ActiveTail<T> tail) {
-            if(last(last(last(last(array)))).length<32){
-                Object[][][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length,Object[][][][][].class);
-                last(updatedNodes)[last(updatedNodes).length-1]=Arrays.copyOf(last(last(updatedNodes)), last(last(updatedNodes)).length,Object[][][][].class);
-                last(last(updatedNodes))[last(last(updatedNodes)).length-1]=Arrays.copyOf(last(last(last(updatedNodes))), last(last(last(updatedNodes))).length,Object[][][].class);
-                last(last(last(updatedNodes)))[last(last(last(updatedNodes))).length-1]=Arrays.copyOf(last(last(last(last(updatedNodes)))), last(last(last(last(updatedNodes)))).length+1,Object[][].class);
+            if (last(last(last(last(array)))).length < 32) {
+                Object[][][][][][] updatedNodes = Arrays.copyOf(array,
+                                                                array.length,
+                                                                Object[][][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length,
+                                                                      Object[][][][][].class);
+                last(updatedNodes)[last(updatedNodes).length - 1] = Arrays.copyOf(last(last(updatedNodes)),
+                                                                                  last(last(updatedNodes)).length,
+                                                                                  Object[][][][].class);
+                last(last(updatedNodes))[last(last(updatedNodes)).length - 1] = Arrays.copyOf(last(last(last(updatedNodes))),
+                                                                                              last(last(last(updatedNodes))).length,
+                                                                                              Object[][][].class);
+                last(last(last(updatedNodes)))[last(last(last(updatedNodes))).length
+                    - 1] = Arrays.copyOf(last(last(last(last(updatedNodes)))),
+                                         last(last(last(last(updatedNodes)))).length + 1,
+                                         Object[][].class);
                 last(last(last(last(updatedNodes))))[last(last(last(last(array)))).length] = tail.array;
                 return six(updatedNodes);
             }
-            if(last(last(last(array))).length<32){
-                Object[][][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length,Object[][][][][].class);
-                last(updatedNodes)[last(updatedNodes).length-1]=Arrays.copyOf(last(last(updatedNodes)), last(last(updatedNodes)).length,Object[][][][].class);
-                last(last(updatedNodes))[last(last(updatedNodes)).length-1]=Arrays.copyOf(last(last(last(updatedNodes))), last(last(last(updatedNodes))).length+1,Object[][][].class);
+            if (last(last(last(array))).length < 32) {
+                Object[][][][][][] updatedNodes = Arrays.copyOf(array,
+                                                                array.length,
+                                                                Object[][][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length,
+                                                                      Object[][][][][].class);
+                last(updatedNodes)[last(updatedNodes).length - 1] = Arrays.copyOf(last(last(updatedNodes)),
+                                                                                  last(last(updatedNodes)).length,
+                                                                                  Object[][][][].class);
+                last(last(updatedNodes))[last(last(updatedNodes)).length - 1] = Arrays.copyOf(last(last(last(updatedNodes))),
+                                                                                              last(last(last(updatedNodes))).length
+                                                                                                  + 1,
+                                                                                              Object[][][].class);
                 last(last(last(updatedNodes)))[last(last(last(array))).length] = new Object[][]{tail.array};
                 return six(updatedNodes);
 
             }
-            if(last(last(array)).length<32){
-                Object[][][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length,Object[][][][][].class);
-                last(updatedNodes)[last(updatedNodes).length-1]=Arrays.copyOf(last(last(updatedNodes)), last(last(updatedNodes)).length+1,Object[][][][].class);
+            if (last(last(array)).length < 32) {
+                Object[][][][][][] updatedNodes = Arrays.copyOf(array,
+                                                                array.length,
+                                                                Object[][][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length,
+                                                                      Object[][][][][].class);
+                last(updatedNodes)[last(updatedNodes).length - 1] = Arrays.copyOf(last(last(updatedNodes)),
+                                                                                  last(last(updatedNodes)).length + 1,
+                                                                                  Object[][][][].class);
                 last(last(updatedNodes))[last(last(array)).length] = new Object[][][]{new Object[][]{tail.array}};
                 return six(updatedNodes);
 
             }
-            if(last(array).length<32){
-                Object[][][][][][] updatedNodes = Arrays.copyOf(array, array.length,Object[][][][][][].class);
-                updatedNodes[updatedNodes.length-1]=Arrays.copyOf(last(updatedNodes), last(updatedNodes).length+1,Object[][][][][].class);
+            if (last(array).length < 32) {
+                Object[][][][][][] updatedNodes = Arrays.copyOf(array,
+                                                                array.length,
+                                                                Object[][][][][][].class);
+                updatedNodes[updatedNodes.length - 1] = Arrays.copyOf(last(updatedNodes),
+                                                                      last(updatedNodes).length + 1,
+                                                                      Object[][][][][].class);
                 last(updatedNodes)[last(array).length] = new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}};
                 return six(updatedNodes);
 
             }
-            if(array.length<32){
-                Object[][][][][][] updatedNodes = Arrays.copyOf(array, array.length+1,Object[][][][][][].class);
-                updatedNodes[array.length] = new Object[][][][][]{new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}}};
+            if (array.length < 32) {
+                Object[][][][][][] updatedNodes = Arrays.copyOf(array,
+                                                                array.length + 1,
+                                                                Object[][][][][][].class);
+                updatedNodes[array.length] = new Object[][][][][]{
+                    new Object[][][][]{new Object[][][]{new Object[][]{tail.array}}}};
                 return six(updatedNodes);
             }
             return this; //BAMT is full
@@ -1006,30 +1267,37 @@ public class BAMT<T> {
         @Override
         public ReactiveSeq<T> stream() {
 
-            return ReactiveSeq.iterate(0, i->i+1)
-                    .take(array.length)
-                    .map(indx->array[indx])
-                    .flatMap(a->{
-                        return ReactiveSeq.iterate(0, i->i+1)
-                                .take(a.length)
-                                .map(indx->a[indx])
-                                .flatMap(a2->{
-                                    return ReactiveSeq.iterate(0, i->i+1)
-                                            .take(a2.length)
-                                            .map(indx->a2[indx])
-                                            .flatMap(a3->{
-                                                return ReactiveSeq.iterate(0, i->i+1)
-                                                        .take(a3.length)
-                                                        .map(indx->a3[indx])
-                                                        .flatMap(a4->{
-                                                            return ReactiveSeq.iterate(0, i->i+1)
-                                                                              .take(a4.length)
-                                                                              .map(indx->a4[indx])
-                                                                              .flatMap(a5-> ReactiveSeq.of((T[])a5));
-                                                        });
-                                            });
-                                });
-                    });
+            return ReactiveSeq.iterate(0,
+                                       i -> i + 1)
+                              .take(array.length)
+                              .map(indx -> array[indx])
+                              .flatMap(a -> {
+                                  return ReactiveSeq.iterate(0,
+                                                             i -> i + 1)
+                                                    .take(a.length)
+                                                    .map(indx -> a[indx])
+                                                    .flatMap(a2 -> {
+                                                        return ReactiveSeq.iterate(0,
+                                                                                   i -> i + 1)
+                                                                          .take(a2.length)
+                                                                          .map(indx -> a2[indx])
+                                                                          .flatMap(a3 -> {
+                                                                              return ReactiveSeq.iterate(0,
+                                                                                                         i -> i + 1)
+                                                                                                .take(a3.length)
+                                                                                                .map(indx -> a3[indx])
+                                                                                                .flatMap(a4 -> {
+                                                                                                    return ReactiveSeq.iterate(0,
+                                                                                                                               i ->
+                                                                                                                                   i
+                                                                                                                                       + 1)
+                                                                                                                      .take(a4.length)
+                                                                                                                      .map(indx -> a4[indx])
+                                                                                                                      .flatMap(a5 -> ReactiveSeq.of((T[]) a5));
+                                                                                                });
+                                                                          });
+                                                    });
+                              });
 
         }
 

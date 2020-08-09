@@ -2,12 +2,11 @@ package com.oath.cyclops.async.wait;
 
 /**
  * Will try to access the queue once, and return the result directly from the Queue
- *
+ * <p>
  * Effectively the same as calling queue.take() / queue.offer(T val)
  *
- * @author johnmcclean
- *
  * @param <T> Data type of elements in async.Queue
+ * @author johnmcclean
  */
 public class DirectWaitStrategy<T> implements WaitStrategy<T> {
 

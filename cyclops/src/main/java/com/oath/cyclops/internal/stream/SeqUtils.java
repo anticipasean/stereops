@@ -1,5 +1,6 @@
 package com.oath.cyclops.internal.stream;
 
+import cyclops.companion.Streamable;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,16 +12,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import cyclops.companion.Streamable;
-
 public class SeqUtils {
+
     /**
      * Reverse a Stream
      *
      * <pre>
      * {@code
      * assertThat(StreamUtils.reverse(Stream.of(1,2,3)).collect(CyclopsCollectors.toList())
-    			,equalTo(Arrays.asList(3,2,1)));
+     * ,equalTo(Arrays.asList(3,2,1)));
      * }
      * </pre>
      *
@@ -36,12 +36,12 @@ public class SeqUtils {
      * <pre>
      * {@code
      * StreamUtils.reversedStream(asList(1,2,3))
-    			.map(i->i*100)
-    			.forEach(System.out::println);
-
-
-    	assertThat(StreamUtils.reversedStream(Arrays.asList(1,2,3)).collect(CyclopsCollectors.toList())
-    			,equalTo(Arrays.asList(3,2,1)));
+     * .map(i->i*100)
+     * .forEach(System.out::println);
+     *
+     *
+     * assertThat(StreamUtils.reversedStream(Arrays.asList(1,2,3)).collect(CyclopsCollectors.toList())
+     * ,equalTo(Arrays.asList(3,2,1)));
      *
      * }
      * </pre>
@@ -50,8 +50,7 @@ public class SeqUtils {
      * @return Reversed Stream
      */
     public static <U> Stream<U> reversedStream(final List<U> list) {
-        return new ReversedIterator<>(
-                                      list).stream();
+        return new ReversedIterator<>(list).stream();
     }
 
     /**
@@ -60,70 +59,89 @@ public class SeqUtils {
      * <pre>
      * {@code
      * assertThat(StreamUtils.cycle(3,Streamable.of(1,2,2))
-    							.collect(CyclopsCollectors.toList()),
-    								equalTo(Arrays.asList(1,2,2,1,2,2,1,2,2)));
+     * .collect(CyclopsCollectors.toList()),
+     * equalTo(Arrays.asList(1,2,2,1,2,2,1,2,2)));
      * }
      * </pre>
+     *
      * @param s Streamable to cycle
      * @return New cycling stream
      */
-    public static <U> Stream<U> cycle(final int times, final Streamable<U> s) {
-        return Stream.iterate(s.stream(), s1 -> s.stream())
+    public static <U> Stream<U> cycle(final int times,
+                                      final Streamable<U> s) {
+        return Stream.iterate(s.stream(),
+                              s1 -> s.stream())
                      .limit(times)
                      .flatMap(Function.identity());
     }
 
     /**
-      * Projects an immutable toX of this stream. Initial iteration over the toX is not thread safe
-      * (can't be performed by multiple threads concurrently) subsequent iterations are.
-      *
-      * @return An immutable toX of this stream.
-      */
+     * Projects an immutable toX of this stream. Initial iteration over the toX is not thread safe (can't be performed by multiple
+     * threads concurrently) subsequent iterations are.
+     *
+     * @return An immutable toX of this stream.
+     */
     public static final <A> Collection<A> toLazyCollection(final Stream<A> stream) {
         return toLazyCollection(stream.iterator());
     }
 
     public static final <A> Collection<A> toLazyCollection(final Iterator<A> iterator) {
-        return toLazyCollection(iterator, false);
+        return toLazyCollection(iterator,
+                                false);
     }
 
     /**
-     * Lazily constructs a Collection from specified Stream. Collections iterator may be safely used
-     * concurrently by multiple threads.
-    */
+     * Lazily constructs a Collection from specified Stream. Collections iterator may be safely used concurrently by multiple
+     * threads.
+     */
     public static final <A> Collection<A> toConcurrentLazyCollection(final Stream<A> stream) {
         return toConcurrentLazyCollection(stream.iterator());
     }
 
     public static final <A> Collection<A> toConcurrentLazyCollection(final Iterator<A> iterator) {
-        return toLazyCollection(iterator, true);
+        return toLazyCollection(iterator,
+                                true);
     }
 
-    private static final <A> Collection<A> toLazyCollection(final Iterator<A> iterator, final boolean concurrent) {
-        return createLazyCollection(iterator, concurrent);
+    private static final <A> Collection<A> toLazyCollection(final Iterator<A> iterator,
+                                                            final boolean concurrent) {
+        return createLazyCollection(iterator,
+                                    concurrent);
 
     }
 
-    private static final <A> Collection<A> createLazyCollection(final Iterator<A> iterator, final boolean concurrent) {
+    private static final <A> Collection<A> createLazyCollection(final Iterator<A> iterator,
+                                                                final boolean concurrent) {
         return new AbstractCollection<A>() {
+
+            List<A> data = new ArrayList<>();
+            volatile boolean complete = false;
+            Object lock = new Object();
+            ReentrantLock rlock = new ReentrantLock();
 
             @Override
             public boolean equals(final Object o) {
-                if (o == null)
+                if (o == null) {
                     return false;
-                if (!(o instanceof Collection))
+                }
+                if (!(o instanceof Collection)) {
                     return false;
+                }
                 final Collection<A> c = (Collection) o;
                 final Iterator<A> it1 = iterator();
                 final Iterator<A> it2 = c.iterator();
                 while (it1.hasNext()) {
-                    if (!it2.hasNext())
+                    if (!it2.hasNext()) {
                         return false;
-                    if (!Objects.equals(it1.next(), it2.next()))
+                    }
+                    if (!Objects.equals(it1.next(),
+                                        it2.next())) {
                         return false;
+                    }
                 }
-                if (it2.hasNext())
+                if (it2.hasNext()) {
                     return false;
+                }
                 return true;
             }
 
@@ -137,17 +155,11 @@ public class SeqUtils {
                 return Objects.hashCode(arrayList.toArray());
             }
 
-            List<A> data = new ArrayList<>();
-
-            volatile boolean complete = false;
-
-            Object lock = new Object();
-            ReentrantLock rlock = new ReentrantLock();
-
             @Override
             public Iterator<A> iterator() {
-                if (complete)
+                if (complete) {
                     return data.iterator();
+                }
                 return new Iterator<A>() {
                     int current = -1;
 
@@ -164,7 +176,6 @@ public class SeqUtils {
                                 final boolean result = iterator.hasNext();
                                 complete = !result;
 
-
                                 return result;
                             }
                             if (current + 1 < data.size()) {
@@ -173,8 +184,9 @@ public class SeqUtils {
                             }
                             return false;
                         } finally {
-                            if (concurrent)
+                            if (concurrent) {
                                 rlock.unlock();
+                            }
                         }
                     }
 
@@ -187,8 +199,9 @@ public class SeqUtils {
                         }
                         try {
                             if (current < data.size() && !complete) {
-                                if (iterator.hasNext())
+                                if (iterator.hasNext()) {
                                     data.add(iterator.next());
+                                }
 
                                 return data.get(++current);
                             }
@@ -196,8 +209,9 @@ public class SeqUtils {
                             return data.get(current);
                         } finally {
 
-                            if (concurrent)
+                            if (concurrent) {
                                 rlock.unlock();
+                            }
                         }
 
                     }
@@ -208,11 +222,13 @@ public class SeqUtils {
 
             @Override
             public int size() {
-                if (complete)
+                if (complete) {
                     return data.size();
+                }
                 final Iterator it = iterator();
-                while (it.hasNext())
+                while (it.hasNext()) {
                     it.next();
+                }
 
                 return data.size();
             }

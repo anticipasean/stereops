@@ -3,7 +3,6 @@ package com.oath.cyclops.internal.stream.spliterators;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,20 +10,24 @@ import lombok.Setter;
 public class ReversingArraySpliterator<T> implements Spliterator<T>, ReversableSpliterator<T> {
 
     private final Object[] array;
+    int index = 0;
     private int max;
     private int start;
     @Getter
     @Setter
     private boolean reverse;
 
-    int index = 0;
-
-    public ReversingArraySpliterator(Object[] array,int start,int max,boolean reverse) {
+    public ReversingArraySpliterator(Object[] array,
+                                     int start,
+                                     int max,
+                                     boolean reverse) {
         this.array = array;
-        this.reverse=reverse;
+        this.reverse = reverse;
 
-        this.max = Math.min(array.length,max);
-        this.start= Math.max(0,start);
+        this.max = Math.min(array.length,
+                            max);
+        this.start = Math.max(0,
+                              start);
         this.index = calcIndex();
     }
 
@@ -40,14 +43,17 @@ public class ReversingArraySpliterator<T> implements Spliterator<T>, ReversableS
 
     @Override
     public ReversingArraySpliterator<T> invert() {
-        return new ReversingArraySpliterator<T>(array,start,max,!reverse);
+        return new ReversingArraySpliterator<T>(array,
+                                                start,
+                                                max,
+                                                !reverse);
 
     }
 
     private int calcIndex() {
-        if(isReverse()) {
+        if (isReverse()) {
             return max - 1;
-        }else{
+        } else {
             return start;
         }
     }
@@ -59,12 +65,12 @@ public class ReversingArraySpliterator<T> implements Spliterator<T>, ReversableS
         int index = this.index; //local index for replayability
 
         if (!reverse) {
-            for (;index < max && index > -1;) {
+            for (; index < max && index > -1; ) {
                 action.accept((T) array[index++]);
 
             }
         } else {
-            for (;index > (start-1) & index < max;) {
+            for (; index > (start - 1) & index < max; ) {
                 action.accept((T) array[index--]);
 
             }
@@ -76,15 +82,13 @@ public class ReversingArraySpliterator<T> implements Spliterator<T>, ReversableS
     public boolean tryAdvance(final Consumer<? super T> action) {
         Objects.requireNonNull(action);
 
-
-
         if (!reverse) {
             if (index < max && index > -1) {
                 action.accept((T) array[index++]);
                 return true;
             }
         } else {
-            if (index > (start-1) & index < max) {
+            if (index > (start - 1) & index < max) {
                 action.accept((T) array[index--]);
                 return true;
             }
@@ -102,8 +106,10 @@ public class ReversingArraySpliterator<T> implements Spliterator<T>, ReversableS
     @Override
     public ReversableSpliterator<T> copy() {
 
-        return new ReversingArraySpliterator<T>(
-                                                array, start,max,reverse);
+        return new ReversingArraySpliterator<T>(array,
+                                                start,
+                                                max,
+                                                reverse);
     }
 
 

@@ -8,24 +8,27 @@ import org.reactivestreams.tck.TestEnvironment;
 import org.testng.annotations.Test;
 
 @Test
-public class FilterIterableTckPublisherTest extends PublisherVerification<Long>{
+public class FilterIterableTckPublisherTest extends PublisherVerification<Long> {
 
-	public FilterIterableTckPublisherTest(){
-		  super(new TestEnvironment(300L));
-	}
+    public FilterIterableTckPublisherTest() {
+        super(new TestEnvironment(300L));
+    }
 
 
-	@Override
-	public Publisher<Long> createPublisher(long elements) {
-		return Spouts.fromIterable(LazySeq.fill(Math.min(elements,10_000),10l)).filter(i->true);
+    @Override
+    public Publisher<Long> createPublisher(long elements) {
+        return Spouts.fromIterable(LazySeq.fill(Math.min(elements,
+                                                         10_000),
+                                                10l))
+                     .filter(i -> true);
 
-	}
+    }
 
-	@Override
-	public Publisher<Long> createFailedPublisher() {
-		return null; //not possible to forEachAsync to failed Stream
+    @Override
+    public Publisher<Long> createFailedPublisher() {
+        return null; //not possible to forEachAsync to failed Stream
 
-	}
+    }
 
 
 }
