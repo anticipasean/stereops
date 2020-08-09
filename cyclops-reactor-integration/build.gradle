@@ -26,8 +26,8 @@ dependencies {
     compileClasspath project(':cyclops-futurestream')
     implementation project(':cyclops-reactive-collections')
     compileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
-    testCompileClasspath project(':cyclops-anym').sourceSets.test.output
-    testCompileClasspath project(':cyclops').sourceSets.test.output
+    testCompileClasspath project(':cyclops-anym')
+    testCompileClasspath project(':cyclops')
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     testImplementation project(':cyclops')
