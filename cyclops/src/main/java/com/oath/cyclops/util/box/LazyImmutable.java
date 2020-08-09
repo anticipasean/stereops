@@ -1,13 +1,8 @@
 package com.oath.cyclops.util.box;
 
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.Zippable;
 import com.oath.cyclops.types.foldable.To;
+import com.oath.cyclops.types.functor.Transformable;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.control.Trampoline;
-import lombok.ToString;
-import org.reactivestreams.Subscriber;
-
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -15,48 +10,38 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import lombok.ToString;
 
 /**
- * A class that represents an 'immutable' value that is generated inside a lambda
- * expression, but is accessible outside it
- *
- * It will only allow it's value to be set once. Unfortunately the compiler won't be
- * able to tell if setOnce is called more than once
- *
+ * A class that represents an 'immutable' value that is generated inside a lambda expression, but is accessible outside it
+ * <p>
+ * It will only allow it's value to be set once. Unfortunately the compiler won't be able to tell if setOnce is called more than
+ * once
+ * <p>
  * example usage
  *
  * <pre>
  * {@code
  * public static <T> Supplier<T> memoiseSupplier(Supplier<T> s){
-		LazyImmutable<T> maybe = LazyImmutable.def();
-		return () -> maybe.computeIfAbsent(s);
-	}
+ * LazyImmutable<T> maybe = LazyImmutable.def();
+ * return () -> maybe.computeIfAbsent(s);
+ * }
  * }</pre>
- *
- * Has transform and flatMap methods, but is not a Monad (see example usage above for why, it is the initial mutation that is valuable).
- *
- * @author johnmcclean
+ * <p>
+ * Has transform and flatMap methods, but is not a Monad (see example usage above for why, it is the initial mutation that is
+ * valuable).
  *
  * @param <T>
+ * @author johnmcclean
  */
 @ToString
-public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consumer<T>, Transformable<T>, Iterable<T> {
+public class LazyImmutable<T> implements To<LazyImmutable<T>>, Supplier<T>, Consumer<T>, Transformable<T>, Iterable<T> {
+
     private final static Object UNSET = new Object();
-    private final AtomicReference value = new AtomicReference<>(
-                                                                UNSET);
-    private final AtomicBoolean set = new AtomicBoolean(
-                                                        false);
+    private final AtomicReference value = new AtomicReference<>(UNSET);
+    private final AtomicBoolean set = new AtomicBoolean(false);
 
     public LazyImmutable() {
-    }
-
-
-  /**
-     * @return Current value
-     */
-    @Override
-    public T get() {
-        return (T) value.get();
     }
 
     /**
@@ -86,8 +71,16 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
     }
 
     /**
-     * Map the value stored in this Immutable Closed Value from one Value to another
-     * If this is an unitiatilised ImmutableClosedValue, an uninitialised closed value will be returned instead
+     * @return Current value
+     */
+    @Override
+    public T get() {
+        return (T) value.get();
+    }
+
+    /**
+     * Map the value stored in this Immutable Closed Value from one Value to another If this is an unitiatilised
+     * ImmutableClosedValue, an uninitialised closed value will be returned instead
      *
      * @param fn Mapper function
      * @return new ImmutableClosedValue with new mapped value
@@ -95,40 +88,40 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
     @Override
     public <R> LazyImmutable<R> map(final Function<? super T, ? extends R> fn) {
         final T val = get();
-        if (val == UNSET)
+        if (val == UNSET) {
             return (LazyImmutable<R>) this;
-        else
+        } else {
             return LazyImmutable.of(fn.apply(val));
+        }
     }
 
 
-
     /**
-     * FlatMap the value stored in Immutable Closed Value from one Value to another
-     *  If this is an unitiatilised ImmutableClosedValue, an uninitialised closed value will be returned instead
+     * FlatMap the value stored in Immutable Closed Value from one Value to another If this is an unitiatilised
+     * ImmutableClosedValue, an uninitialised closed value will be returned instead
      *
-     * @param fn  Flat Mapper function
+     * @param fn Flat Mapper function
      * @return new ImmutableClosedValue with new mapped value
      */
     public <R> LazyImmutable<? extends R> flatMap(final Function<? super T, ? extends LazyImmutable<? extends R>> fn) {
 
         final T val = get();
-        if (val == UNSET)
+        if (val == UNSET) {
             return (LazyImmutable<R>) this;
-        else
+        } else {
             return fn.apply(val);
+        }
     }
 
     /**
-     *
-     * Set the value of this ImmutableClosedValue
-     * If it has already been set will throw an exception
+     * Set the value of this ImmutableClosedValue If it has already been set will throw an exception
      *
      * @param val Value to set to
      * @return Current set Value
      */
     public LazyImmutable<T> setOnce(final T val) {
-        this.value.compareAndSet(UNSET, val);
+        this.value.compareAndSet(UNSET,
+                                 val);
         set.set(true);
         return this;
 
@@ -136,7 +129,8 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
 
     private T setOnceFromSupplier(final Supplier<T> lazy) {
 
-        this.value.compareAndSet(UNSET, lazy.get());
+        this.value.compareAndSet(UNSET,
+                                 lazy.get());
         return (T) this.value.get();
 
     }
@@ -149,8 +143,9 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
      */
     public T computeIfAbsent(final Supplier<T> lazy) {
         final T val = get();
-        if (val == UNSET)
+        if (val == UNSET) {
             return setOnceFromSupplier(lazy);
+        }
 
         return val;
 
@@ -189,7 +184,6 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
     }
 
 
-
     /* (non-Javadoc)
      * @see com.oath.cyclops.lambda.monads.Transformable#peek(java.util.function.Consumer)
      */
@@ -198,7 +192,6 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
 
         return (LazyImmutable<T>) Transformable.super.peek(c);
     }
-
 
 
     /* (non-Javadoc)
@@ -215,9 +208,11 @@ public class LazyImmutable<T> implements To<LazyImmutable<T>>,Supplier<T>, Consu
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof LazyImmutable))
+        if (!(obj instanceof LazyImmutable)) {
             return false;
-        return Objects.equals(this.value.get(), ((LazyImmutable) obj).value.get());
+        }
+        return Objects.equals(this.value.get(),
+                              ((LazyImmutable) obj).value.get());
     }
 
 }

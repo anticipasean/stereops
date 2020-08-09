@@ -1,19 +1,19 @@
 package com.oath.cyclops.internal.stream.operators;
 
+import cyclops.companion.Streams;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
-
-import cyclops.companion.Streams;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DebounceOperator<T> {
 
+    private final static Object DEBOUNCED = new Object();
     private final Stream<T> stream;
 
-    public Stream<T> debounce(final long time, final TimeUnit t) {
+    public Stream<T> debounce(final long time,
+                              final TimeUnit t) {
         final Iterator<T> it = stream.iterator();
         final long timeNanos = t.toNanos(time);
         return Streams.stream(new Iterator<T>() {
@@ -39,17 +39,16 @@ public class DebounceOperator<T> {
                 }
 
                 last = System.nanoTime();
-                if (it.hasNext())
+                if (it.hasNext()) {
                     return nextValue;
-                else if (elapsedNanos <= 0)
+                } else if (elapsedNanos <= 0) {
                     return nextValue;
-                else
+                } else {
                     return (T) DEBOUNCED;
+                }
             }
 
         })
-                          .filter(i -> i != DEBOUNCED);
+                      .filter(i -> i != DEBOUNCED);
     }
-
-    private final static Object DEBOUNCED = new Object();
 }

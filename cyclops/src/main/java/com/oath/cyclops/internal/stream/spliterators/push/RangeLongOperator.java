@@ -14,7 +14,8 @@ public class RangeLongOperator implements Operator<Long> {
     final long start;
     final long end;
 
-    public RangeLongOperator(long start, long end){
+    public RangeLongOperator(long start,
+                             long end) {
         this.start = start;
         this.end = end;
 
@@ -22,13 +23,15 @@ public class RangeLongOperator implements Operator<Long> {
 
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super Long> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super Long> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         long[] index = {start};
         AtomicBoolean completed = new AtomicBoolean(false);
-        StreamSubscription sub = new StreamSubscription(){
-            LongConsumer work = n->{
+        StreamSubscription sub = new StreamSubscription() {
+            LongConsumer work = n -> {
 
-                if(requested.get()==Long.MAX_VALUE) {
+                if (requested.get() == Long.MAX_VALUE) {
                     pushAll();
                 }
                 long reqs = n;
@@ -36,8 +39,9 @@ public class RangeLongOperator implements Operator<Long> {
                 do {
 
                     while (delivered < reqs && index[0] < end) {
-                        if (!isOpen)
+                        if (!isOpen) {
                             return;
+                        }
                         try {
 
                             ((Consumer) onNext).accept(index[0]++);
@@ -58,37 +62,41 @@ public class RangeLongOperator implements Operator<Long> {
 
                     }
                     reqs = requested.get();
-                    if(reqs==delivered) {
-                        reqs = requested.accumulateAndGet(delivered, (a, b) -> a - b);
-                        if(reqs==0)
+                    if (reqs == delivered) {
+                        reqs = requested.accumulateAndGet(delivered,
+                                                          (a, b) -> a - b);
+                        if (reqs == 0) {
                             return;
-                        delivered=0;
+                        }
+                        delivered = 0;
                     }
-                }while(true);
+                } while (true);
             };
 
             @Override
             public void request(long n) {
-                if(n<=0) {
+                if (n <= 0) {
                     onError.accept(new IllegalArgumentException("3.9 While the Subscription is not cancelled, Subscription.request(long n) MUST throw a java.lang.IllegalArgumentException if the argument is <= 0."));
                     return;
                 }
-                singleActiveRequest(n, work );
+                singleActiveRequest(n,
+                                    work);
             }
 
             private void pushAll() {
-                for(;index[0]<end;index[0]++){
+                for (; index[0] < end; index[0]++) {
 
                     try {
-                        if(isOpen)
+                        if (isOpen) {
                             ((Consumer) onNext).accept(index[0]);
-                        else
+                        } else {
                             break;
-                    }catch(Throwable t){
+                        }
+                    } catch (Throwable t) {
                         onError.accept(t);
                     }
                 }
-                if(index[0]==end){
+                if (index[0] == end) {
                     if (!completed.get()) {
                         completed.set(true);
                         onComplete.run();
@@ -112,12 +120,14 @@ public class RangeLongOperator implements Operator<Long> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super Long> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super Long> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
 
-        for(long i=start;i<end;i++){
+        for (long i = start; i < end; i++) {
             try {
                 ((Consumer) onNext).accept(i);
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 onError.accept(t);
             }
         }

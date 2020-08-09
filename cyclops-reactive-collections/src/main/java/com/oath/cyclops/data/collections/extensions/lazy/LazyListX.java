@@ -2,25 +2,27 @@ package com.oath.cyclops.data.collections.extensions.lazy;
 
 
 import com.oath.cyclops.types.foldable.Evaluation;
-import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.ReactiveSeq;
-
-import java.util.*;
+import cyclops.reactive.collections.mutable.ListX;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 
 /**
- * An extended List type {@see java.util.List}
- * Extended List operations execute lazily e.g.
+ * An extended List type {@see java.util.List} Extended List operations execute lazily e.g.
  * <pre>
  * {@code
  *    StreamX<Integer> q = StreamX.of(1,2,3)
  *                                      .map(i->i*2);
  * }
  * </pre>
- * The map operation above is not executed immediately. It will only be executed when (if) the data inside the
- * queue is accessed. This allows lazy operations to be chained and executed more efficiently e.g.
+ * The map operation above is not executed immediately. It will only be executed when (if) the data inside the queue is accessed.
+ * This allows lazy operations to be chained and executed more efficiently e.g.
  *
  * <pre>
  * {@code
@@ -29,35 +31,52 @@ import java.util.stream.Collector;
  *                                      .filter(i->i<5);
  * }
  * </pre>
- *
+ * <p>
  * The operation above is more efficient than the equivalent operation with a ListX.
  *
- * @author johnmcclean
- *
  * @param <T> the type of elements held in this toX
+ * @author johnmcclean
  */
-public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements ListX<T> {
+public class LazyListX<T> extends AbstractLazyCollection<T, List<T>> implements ListX<T> {
 
 
-    public LazyListX(List<T> list, ReactiveSeq<T> seq, Collector<T, ?, List<T>> collector, Evaluation strict) {
+    public LazyListX(List<T> list,
+                     ReactiveSeq<T> seq,
+                     Collector<T, ?, List<T>> collector,
+                     Evaluation strict) {
 
-        super(list, seq, collector,strict,r->{
-            CompletableListX<T> res = new CompletableListX<>();
-            r.forEachAsync(l->res.complete(l));
-            return res.asListX();
-        });
+        super(list,
+              seq,
+              collector,
+              strict,
+              r -> {
+                  CompletableListX<T> res = new CompletableListX<>();
+                  r.forEachAsync(l -> res.complete(l));
+                  return res.asListX();
+              });
 
 
     }
-    public LazyListX(List<T> list, ReactiveSeq<T> seq, Collector<T, ?, List<T>> collector) {
-       this(list, seq, collector, Evaluation.LAZY);
+
+    public LazyListX(List<T> list,
+                     ReactiveSeq<T> seq,
+                     Collector<T, ?, List<T>> collector) {
+        this(list,
+             seq,
+             collector,
+             Evaluation.LAZY);
 
     }
 
     @Override
-    public LazyListX<T> withCollector(Collector<T, ?, List<T>> collector){
-        return (LazyListX)new LazyListX<T>(this.getList(),this.getSeq().get(),collector, evaluation());
+    public LazyListX<T> withCollector(Collector<T, ?, List<T>> collector) {
+        return new LazyListX<T>(this.getList(),
+                                this.getSeq()
+                                    .get(),
+                                collector,
+                                evaluation());
     }
+
     //@Override
     public ListX<T> materialize() {
         get();
@@ -65,29 +84,39 @@ public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements L
     }
 
     @Override
-    public T getOrElse(int index, T value) {
+    public T getOrElse(int index,
+                       T value) {
         List<T> x = get();
-        if(index>x.size())
+        if (index > x.size()) {
             return value;
+        }
         return x.get(index);
     }
 
     @Override
-    public T getOrElseGet(int index, Supplier<? extends T> supplier) {
+    public T getOrElseGet(int index,
+                          Supplier<? extends T> supplier) {
         List<T> x = get();
-        if(index>x.size())
+        if (index > x.size()) {
             return supplier.get();
+        }
         return x.get(index);
     }
 
     @Override
     public ListX<T> lazy() {
-        return new LazyListX<T>(getList(),getSeq().get(),getCollectorInternal(), Evaluation.LAZY) ;
+        return new LazyListX<T>(getList(),
+                                getSeq().get(),
+                                getCollectorInternal(),
+                                Evaluation.LAZY);
     }
 
     @Override
     public ListX<T> eager() {
-        return new LazyListX<T>(getList(),getSeq().get(),getCollectorInternal(),Evaluation.EAGER) ;
+        return new LazyListX<T>(getList(),
+                                getSeq().get(),
+                                getCollectorInternal(),
+                                Evaluation.EAGER);
     }
 
     @Override
@@ -102,7 +131,7 @@ public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements L
 
     @Override
     public <T1> Collector<T1, ?, List<T1>> getCollector() {
-        return (Collector)super.getCollectorInternal();
+        return (Collector) super.getCollectorInternal();
     }
 
     @Override
@@ -116,8 +145,10 @@ public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements L
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return get().addAll(index,c);
+    public boolean addAll(int index,
+                          Collection<? extends T> c) {
+        return get().addAll(index,
+                            c);
     }
 
     @Override
@@ -126,13 +157,17 @@ public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements L
     }
 
     @Override
-    public T set(int index, T element) {
-        return get().set(index,element);
+    public T set(int index,
+                 T element) {
+        return get().set(index,
+                         element);
     }
 
     @Override
-    public void add(int index, T element) {
-        get().add(index,element);
+    public void add(int index,
+                    T element) {
+        get().add(index,
+                  element);
     }
 
     @Override
@@ -159,14 +194,14 @@ public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements L
     public ListIterator<T> listIterator(int index) {
         return get().listIterator(index);
     }
+
     @Override
-    public ListX<T> subList(final int fromIndex, final int toIndex) {
-        List<T> list = get().subList(fromIndex, toIndex);
-      return from(list);
+    public ListX<T> subList(final int fromIndex,
+                            final int toIndex) {
+        List<T> list = get().subList(fromIndex,
+                                     toIndex);
+        return from(list);
     }
-
-
-
 
 
     @Override
@@ -176,13 +211,20 @@ public class LazyListX<T> extends AbstractLazyCollection<T,List<T>> implements L
 
     @Override
     public <X> LazyListX<X> fromStream(ReactiveSeq<X> stream) {
-        return new LazyListX<X>((List) getList(), ReactiveSeq.fromStream(stream), (Collector) this.getCollectorInternal(),this.evaluation());
+        return new LazyListX<X>((List) getList(),
+                                ReactiveSeq.fromStream(stream),
+                                (Collector) this.getCollectorInternal(),
+                                this.evaluation());
     }
 
     @Override
     public <T1> LazyListX<T1> from(Iterable<T1> c) {
-       if(c instanceof List)
-            return new LazyListX<T1>((List)c,null,(Collector)this.getCollectorInternal(),this.evaluation());
+        if (c instanceof List) {
+            return new LazyListX<T1>((List) c,
+                                     null,
+                                     (Collector) this.getCollectorInternal(),
+                                     this.evaluation());
+        }
         return fromStream(ReactiveSeq.fromIterable(c));
     }
 

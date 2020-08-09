@@ -1,27 +1,22 @@
 package cyclops.companion;
 
-import cyclops.control.Either;
 import com.oath.cyclops.async.adapters.Adapter;
 import com.oath.cyclops.async.adapters.Queue;
 import com.oath.cyclops.async.adapters.Topic;
-
-
+import cyclops.control.Either;
 import java.util.concurrent.BlockingQueue;
 
 /**
  * This class contains static methods for Structural Pattern matching
  *
  * @author johnmcclean
- *
  */
 public interface Eithers {
 
 
-
-
     /**
-     * Create a Pattern Matcher on cyclops2-react adapter type (note this will only fold
-     * on known types within the cyclops2-react library)
+     * Create a Pattern Matcher on cyclops2-react adapter type (note this will only fold on known types within the cyclops2-react
+     * library)
      *
      * <pre>
      * {@code
@@ -29,7 +24,7 @@ public interface Eithers {
      *                                              .build();
      *
      *     String result =   Xors.adapter(adapter)
-                                       .visit(queue->"we have a queue",topic->"we have a topic");
+     * .visit(queue->"we have a queue",topic->"we have a topic");
      *
      *    //"we have a queue"
      * }
@@ -43,21 +38,19 @@ public interface Eithers {
     }
 
 
-
-
     /**
      * Pattern matching on the blocking / non-blocking nature of a Queue
      *
      * <pre>
      * {@code
      *  Eithers.blocking(new ManyToManyConcurrentArrayQueue(10))
-                  .visit(c->"blocking", c->"not")
-         //"not"
-
-
-       Eithers.blocking(new LinkedBlockingQueue(10))
-                 .visit(c->"blocking", c->"not")
-        //"blocking
+     * .visit(c->"blocking", c->"not")
+     * //"not"
+     *
+     *
+     * Eithers.blocking(new LinkedBlockingQueue(10))
+     * .visit(c->"blocking", c->"not")
+     * //"blocking
      *
      * }
      * </pre>
@@ -68,6 +61,6 @@ public interface Eithers {
     public static <T> Either<BlockingQueue<T>, java.util.Queue<T>> blocking(final java.util.Queue<T> queue) {
 
         return queue instanceof BlockingQueue ? Either.<BlockingQueue<T>, java.util.Queue<T>>left((BlockingQueue) queue)
-                : Either.<BlockingQueue<T>, java.util.Queue<T>>right(queue);
+            : Either.<BlockingQueue<T>, java.util.Queue<T>>right(queue);
     }
 }

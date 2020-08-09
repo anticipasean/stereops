@@ -5,9 +5,8 @@ import java.util.function.Supplier;
 /**
  * Represents a container that may be zero
  *
- * @author johnmcclean
- *
  * @param <T> container type
+ * @author johnmcclean
  */
 public interface OnEmpty<T> {
 
@@ -26,7 +25,6 @@ public interface OnEmpty<T> {
      * @return New Container with value if this is zero, otherwise this container
      */
     OnEmpty<T> onEmptyGet(Supplier<? extends T> supplier);
-
 
 
 }

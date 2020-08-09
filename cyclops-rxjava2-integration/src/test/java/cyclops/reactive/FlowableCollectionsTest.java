@@ -1,6 +1,10 @@
 package cyclops.reactive;
 
-import com.oath.cyclops.types.persistent.PersistentMap;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.OrderedSetX;
@@ -14,285 +18,280 @@ import cyclops.reactive.collections.mutable.SetX;
 import cyclops.reactive.collections.mutable.SortedSetX;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 public class FlowableCollectionsTest {
 
     Executor ex = Executors.newFixedThreadPool(1);
     AtomicBoolean complete;
-    Flowable<Integer> async ;
+    Flowable<Integer> async;
 
     @Before
-    public void setup(){
+    public void setup() {
         complete = new AtomicBoolean(false);
-        async =  Flowable.fromPublisher(Spouts.reactive(Stream.of(100,100,100), ex))
-            .map(i->{
-                Thread.sleep(500);
-                return i;
-            })
-            .doOnComplete(()->complete.set(true));
+        async = Flowable.fromPublisher(Spouts.reactive(Stream.of(100,
+                                                                 100,
+                                                                 100),
+                                                       ex))
+                        .map(i -> {
+                            Thread.sleep(500);
+                            return i;
+                        })
+                        .doOnComplete(() -> complete.set(true));
     }
-    @Test
-    public void listX(){
 
+    @Test
+    public void listX() {
 
         System.out.println("Initializing!");
         ListX<Integer> asyncList = FlowableCollections.listX(async)
-            .map(i->i+1);
-
+                                                      .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.get(0);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void listX2(){
 
-        FlowableCollections.listX(Flowable.interval(1, TimeUnit.SECONDS, Schedulers.io()).doOnNext(System.out::println).take(2)
-            .doOnComplete(()->complete.set(true)));
+    @Test
+    public void listX2() {
+
+        FlowableCollections.listX(Flowable.interval(1,
+                                                    TimeUnit.SECONDS,
+                                                    Schedulers.io())
+                                          .doOnNext(System.out::println)
+                                          .take(2)
+                                          .doOnComplete(() -> complete.set(true)));
 
         System.out.println("Blocked? " + complete.get());
         assertFalse(complete.get());
-        while(!complete.get()){
+        while (!complete.get()) {
 
         }
         assertTrue(complete.get());
     }
-    @Test
-    public void queueX(){
 
+    @Test
+    public void queueX() {
 
         System.out.println("Initializing!");
         QueueX<Integer> asyncList = FlowableCollections.queueX(async)
-            .map(i->i+1);
-
+                                                       .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void setX(){
 
+    @Test
+    public void setX() {
 
         System.out.println("Initializing!");
         SetX<Integer> asyncList = FlowableCollections.setX(async)
-                                         .map(i->i+1);
-
+                                                     .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void sortedSetX(){
 
+    @Test
+    public void sortedSetX() {
 
         System.out.println("Initializing!");
         SortedSetX<Integer> asyncList = FlowableCollections.sortedSetX(async)
-                                                           .map(i->i+1);
-
+                                                           .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void dequeX(){
 
+    @Test
+    public void dequeX() {
 
         System.out.println("Initializing!");
         DequeX<Integer> asyncList = FlowableCollections.dequeX(async)
-            .map(i->i+1);
-
+                                                       .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void linkedListX(){
 
+    @Test
+    public void linkedListX() {
 
         System.out.println("Initializing!");
         LinkedListX<Integer> asyncList = FlowableCollections.linkedListX(async)
-                                                            .map(i->i+1);
-
+                                                            .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
+        int value = asyncList.getOrElse(0,
+                                        -1);
 
-        int value = asyncList.getOrElse(0,-1);
-
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void vectorX(){
 
+    @Test
+    public void vectorX() {
 
         System.out.println("Initializing!");
         VectorX<Integer> asyncList = FlowableCollections.vectorX(async)
-            .map(i->i+1);
-
+                                                        .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
+        int value = asyncList.getOrElse(0,
+                                        -1);
 
-        int value = asyncList.getOrElse(0,-1);
-
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void persistentQueueX(){
 
+    @Test
+    public void persistentQueueX() {
 
         System.out.println("Initializing!");
         PersistentQueueX<Integer> asyncList = FlowableCollections.persistentQueueX(async)
-            .map(i->i+1);
-
+                                                                 .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void persistentSetX(){
 
+    @Test
+    public void persistentSetX() {
 
         System.out.println("Initializing!");
         PersistentSetX<Integer> asyncList = FlowableCollections.persistentSetX(async)
-            .map(i->i+1);
-
+                                                               .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void orderedSetX(){
 
+    @Test
+    public void orderedSetX() {
 
         System.out.println("Initializing!");
         OrderedSetX<Integer> asyncList = FlowableCollections.orderedSetX(async)
-            .map(i->i+1);
-
+                                                            .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());
     }
-    @Test
-    public void bagX(){
 
+    @Test
+    public void bagX() {
 
         System.out.println("Initializing!");
         BagX<Integer> asyncList = FlowableCollections.bagX(async)
-            .map(i->i+1);
-
+                                                     .map(i -> i + 1);
 
         boolean blocked = complete.get();
         System.out.println("Blocked? " + blocked);
         assertFalse(complete.get());
 
-
         int value = asyncList.firstValue(-1);
 
-        System.out.println("First value is "  + value);
-        assertThat(value,equalTo(101));
+        System.out.println("First value is " + value);
+        assertThat(value,
+                   equalTo(101));
 
         System.out.println("Blocked? " + complete.get());
         assertTrue(complete.get());

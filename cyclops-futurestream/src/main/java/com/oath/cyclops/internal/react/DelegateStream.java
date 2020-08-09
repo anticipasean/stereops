@@ -20,11 +20,11 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DelegateStream<T> implements Stream<T> {
+
     private final Stream<T> delegate;
 
     @Override
@@ -163,8 +163,10 @@ public class DelegateStream<T> implements Stream<T> {
     }
 
     @Override
-    public T reduce(final T identity, final BinaryOperator<T> accumulator) {
-        return delegate.reduce(identity, accumulator);
+    public T reduce(final T identity,
+                    final BinaryOperator<T> accumulator) {
+        return delegate.reduce(identity,
+                               accumulator);
     }
 
     @Override
@@ -173,13 +175,21 @@ public class DelegateStream<T> implements Stream<T> {
     }
 
     @Override
-    public <U> U reduce(final U identity, final BiFunction<U, ? super T, U> accumulator, final BinaryOperator<U> combiner) {
-        return delegate.reduce(identity, accumulator, combiner);
+    public <U> U reduce(final U identity,
+                        final BiFunction<U, ? super T, U> accumulator,
+                        final BinaryOperator<U> combiner) {
+        return delegate.reduce(identity,
+                               accumulator,
+                               combiner);
     }
 
     @Override
-    public <R> R collect(final Supplier<R> supplier, final BiConsumer<R, ? super T> accumulator, final BiConsumer<R, R> combiner) {
-        return delegate.collect(supplier, accumulator, combiner);
+    public <R> R collect(final Supplier<R> supplier,
+                         final BiConsumer<R, ? super T> accumulator,
+                         final BiConsumer<R, R> combiner) {
+        return delegate.collect(supplier,
+                                accumulator,
+                                combiner);
     }
 
     @Override

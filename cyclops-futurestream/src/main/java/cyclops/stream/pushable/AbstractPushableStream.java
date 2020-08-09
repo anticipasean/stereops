@@ -1,17 +1,19 @@
 package cyclops.stream.pushable;
 
+import com.oath.cyclops.async.adapters.Adapter;
+import cyclops.data.tuple.Tuple2;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import cyclops.data.tuple.Tuple2;
-
-import com.oath.cyclops.async.adapters.Adapter;
-
 public abstract class AbstractPushableStream<T, X extends Adapter<T>, R extends Stream<T>> extends Tuple2<X, R> {
 
-    public AbstractPushableStream(final X v1, final R v2) {
-        super(v1, v2);
+    private static final long serialVersionUID = 1L;
+
+    public AbstractPushableStream(final X v1,
+                                  final R v2) {
+        super(v1,
+              v2);
     }
 
     public X getInput() {
@@ -23,7 +25,8 @@ public abstract class AbstractPushableStream<T, X extends Adapter<T>, R extends 
     }
 
     public <U> U fold(final BiFunction<? super X, ? super R, ? extends U> visitor) {
-        return visitor.apply(_1(), _2());
+        return visitor.apply(_1(),
+                             _2());
     }
 
     public void peekStream(final Consumer<? super R> consumer) {
@@ -33,7 +36,5 @@ public abstract class AbstractPushableStream<T, X extends Adapter<T>, R extends 
     public void peekInput(final Consumer<? super X> consumer) {
         consumer.accept(_1());
     }
-
-    private static final long serialVersionUID = 1L;
 
 }

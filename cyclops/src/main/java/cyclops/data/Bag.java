@@ -1,56 +1,61 @@
 package cyclops.data;
 
+import com.oath.cyclops.hkt.DataWitness.bag;
 import com.oath.cyclops.hkt.Higher;
 import com.oath.cyclops.types.persistent.PersistentBag;
-import com.oath.cyclops.hkt.DataWitness.bag;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import org.reactivestreams.Publisher;
-
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import org.reactivestreams.Publisher;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Bag<T> implements ImmutableSet<T>,
-                                PersistentBag<T>,
-                                Higher<bag,T>,
-                                Serializable {
+public final class Bag<T> implements ImmutableSet<T>, PersistentBag<T>, Higher<bag, T>, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final HashMap<T,Integer> map;
+    private final HashMap<T, Integer> map;
     private final int size;
 
     public static <T> Bag<T> empty() {
-        return new Bag<>(HashMap.empty(), 0);
+        return new Bag<>(HashMap.empty(),
+                         0);
     }
 
     public static <T> Bag<T> singleton(T value) {
         return Bag.<T>empty().plus(value);
     }
-    public static <T> Bag<T> of(T... values){
+
+    public static <T> Bag<T> of(T... values) {
         Bag<T> res = empty();
-        for(T next : values){
+        for (T next : values) {
             res = res.plus(next);
         }
         return res;
     }
 
-    public static <T> Bag<T> fromStream(Stream<T> values){
-        return ReactiveSeq.fromStream(values).foldLeft(empty(),(a,b)->a.plus(b));
+    public static <T> Bag<T> fromStream(Stream<T> values) {
+        return ReactiveSeq.fromStream(values)
+                          .foldLeft(empty(),
+                                    (a, b) -> a.plus(b));
     }
-    public static <T> Bag<T> fromIterable(Iterable<? extends T> values){
-        return ReactiveSeq.fromIterable(values).foldLeft(empty(),(a,b)->a.plus(b));
+
+    public static <T> Bag<T> fromIterable(Iterable<? extends T> values) {
+        return ReactiveSeq.fromIterable(values)
+                          .foldLeft(empty(),
+                                    (a, b) -> a.plus(b));
     }
 
 
-    public int instances(T type){
-        return map.getOrElse(type,0);
+    public int instances(T type) {
+        return map.getOrElse(type,
+                             0);
     }
+
     public int size() {
         return size;
     }
@@ -72,7 +77,7 @@ public final class Bag<T> implements ImmutableSet<T>,
 
     @Override
     public <R> Bag<R> flatMap(Function<? super T, ? extends ImmutableSet<? extends R>> fn) {
-        return fromStream(stream().flatMap(fn.andThen(s->s.stream())));
+        return fromStream(stream().flatMap(fn.andThen(s -> s.stream())));
     }
 
     @Override
@@ -82,12 +87,14 @@ public final class Bag<T> implements ImmutableSet<T>,
 
     @Override
     public <R> Bag<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-      return fromStream(stream().mergeMap(fn));
+        return fromStream(stream().mergeMap(fn));
     }
 
     @Override
-    public <R> Bag<R> mergeMap(int maxConcurecy, Function<? super T, ? extends Publisher<? extends R>> fn) {
-      return fromStream(stream().mergeMap(maxConcurecy,fn));
+    public <R> Bag<R> mergeMap(int maxConcurecy,
+                               Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return fromStream(stream().mergeMap(maxConcurecy,
+                                            fn));
     }
 
     @Override
@@ -106,51 +113,60 @@ public final class Bag<T> implements ImmutableSet<T>,
     }
 
 
-
     @Override
     public boolean containsValue(final T e) {
-        return map.get(e).isPresent();
+        return map.get(e)
+                  .isPresent();
     }
 
     public Bag<T> plus(final T value) {
-        return new Bag<>(map.put(value, map.get(value).orElse(0)+1), size+1);
+        return new Bag<>(map.put(value,
+                                 map.get(value)
+                                    .orElse(0) + 1),
+                         size + 1);
     }
 
     @Override
     public Bag<T> plusAll(Iterable<? extends T> list) {
         Bag<T> res = this;
-        for(T next : list){
+        for (T next : list) {
             res = res.plus(next);
         }
         return res;
     }
 
 
-
     @Override
     public Bag<T> removeAll(Iterable<? extends T> list) {
         Bag<T> res = this;
-        for(T next : list){
+        for (T next : list) {
             res = res.removeValue(next);
         }
         return res;
     }
 
 
-
     @Override
     public Bag<T> removeValue(final T value) {
-        int n = map.get(value).orElse(0);
-        if(n==0)
+        int n = map.get(value)
+                   .orElse(0);
+        if (n == 0) {
             return this;
-        if(n==1)
-            return new Bag<>(map.remove(value), size-1);
+        }
+        if (n == 1) {
+            return new Bag<>(map.remove(value),
+                             size - 1);
+        }
 
-        return new Bag<>(map.put(value, n-1), size-1);
+        return new Bag<>(map.put(value,
+                                 n - 1),
+                         size - 1);
     }
 
-    public ReactiveSeq<T> stream(){
-        return ReactiveSeq.fromIterable(()->map.iterator()).flatMap(t-> ReactiveSeq.of(t._1()).cycle(t._2()));
+    public ReactiveSeq<T> stream() {
+        return ReactiveSeq.fromIterable(() -> map.iterator())
+                          .flatMap(t -> ReactiveSeq.of(t._1())
+                                                   .cycle(t._2()));
     }
 
 
@@ -161,14 +177,17 @@ public final class Bag<T> implements ImmutableSet<T>,
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null)
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
             return false;
-        if(o instanceof ImmutableSet) {
+        }
+        if (o instanceof ImmutableSet) {
             ImmutableSet bag = (ImmutableSet) o;
             return equalToIteration(bag);
         }
-        if(o instanceof PersistentBag) {
+        if (o instanceof PersistentBag) {
             PersistentBag bag = (PersistentBag) o;
             return equalToIteration(bag);
         }
@@ -177,7 +196,8 @@ public final class Bag<T> implements ImmutableSet<T>,
 
     @Override
     public int hashCode() {
-        return Objects.hash(map, size);
+        return Objects.hash(map,
+                            size);
     }
 
     @Override

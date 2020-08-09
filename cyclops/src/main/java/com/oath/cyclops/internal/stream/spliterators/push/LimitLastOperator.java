@@ -8,27 +8,31 @@ import java.util.function.Consumer;
 /**
  * Created by johnmcclean on 12/01/2017.
  */
-public class LimitLastOperator<T,R> extends BaseOperator<T,T> {
+public class LimitLastOperator<T, R> extends BaseOperator<T, T> {
 
 
-     final int limit;
+    final int limit;
 
-    public LimitLastOperator(Operator<T> source, int limit){
+    public LimitLastOperator(Operator<T> source,
+                             int limit) {
         super(source);
         this.limit = limit;
 
     }
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
-        final Deque<T> buffer = limit < 1_000 ? new ArrayDeque<T>(limit) : new LinkedList<>() ;
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
+        final Deque<T> buffer = limit < 1_000 ? new ArrayDeque<T>(limit) : new LinkedList<>();
         StreamSubscription upstream[] = {null};
-        Runnable[] thunk = {()->{}};
-        StreamSubscription result = new StreamSubscription(){
+        Runnable[] thunk = {() -> {
+        }};
+        StreamSubscription result = new StreamSubscription() {
             @Override
             public void request(long n) {
                 super.request(n);
-                upstream[0].request(n );
+                upstream[0].request(n);
                 thunk[0].run();
 
             }
@@ -39,47 +43,54 @@ public class LimitLastOperator<T,R> extends BaseOperator<T,T> {
                 super.cancel();
             }
         };
-        upstream[0] = source.subscribe(e-> {
-                    if (buffer.size() == limit) {
-                        buffer.poll();
-                    }
-                    request( upstream,1l);
+        upstream[0] = source.subscribe(e -> {
+                                           if (buffer.size() == limit) {
+                                               buffer.poll();
+                                           }
+                                           request(upstream,
+                                                   1l);
 
-                    buffer.offer(e);
-                }
-                ,onError,()->{
-                 thunk[0] = ()->{
-                    while(buffer.size()>0){
-                        if(result.isActive())
-                            onNext.accept(buffer.poll());
-                        else
-                            return;
-                        result.requested.decrementAndGet();
-                    }
-                    onComplete.run();
-                 };
+                                           buffer.offer(e);
+                                       },
+                                       onError,
+                                       () -> {
+                                           thunk[0] = () -> {
+                                               while (buffer.size() > 0) {
+                                                   if (result.isActive()) {
+                                                       onNext.accept(buffer.poll());
+                                                   } else {
+                                                       return;
+                                                   }
+                                                   result.requested.decrementAndGet();
+                                               }
+                                               onComplete.run();
+                                           };
 
-                 thunk[0].run();
-                });
+                                           thunk[0].run();
+                                       });
         return result;
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
 
         final ArrayDeque<T> buffer = new ArrayDeque<T>(limit);
 
-        source.subscribeAll(e-> {
-                    if (buffer.size() == limit) {
-                        buffer.poll();
-                    }
-                    buffer.offer(e);
-                }
-                ,onError,()->{
-                    for(T next : buffer)
-                        onNext.accept(next);
+        source.subscribeAll(e -> {
+                                if (buffer.size() == limit) {
+                                    buffer.poll();
+                                }
+                                buffer.offer(e);
+                            },
+                            onError,
+                            () -> {
+                                for (T next : buffer) {
+                                    onNext.accept(next);
+                                }
 
-                    onCompleteDs.run();
-                });
+                                onCompleteDs.run();
+                            });
     }
 }

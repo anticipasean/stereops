@@ -1,10 +1,9 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
+import java.util.function.Consumer;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-
-import java.util.function.Consumer;
 
 /**
  * Created by johnmcclean on 12/01/2017.
@@ -14,24 +13,27 @@ public class PublisherToOperator<T> implements Operator<T> {
 
     final Publisher<T> split;
 
-    boolean closed= false;
+    boolean closed = false;
 
-    public PublisherToOperator(Publisher<? super T> split){
-         this.split = (Publisher<T>)split;
+    public PublisherToOperator(Publisher<? super T> split) {
+        this.split = (Publisher<T>) split;
 
 
     }
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         Subscription[] sArray = {null};
-        StreamSubscription sub = new StreamSubscription(){
+        StreamSubscription sub = new StreamSubscription() {
 
             @Override
             public void request(long n) {
 
-                if (sArray[0] != null)
+                if (sArray[0] != null) {
                     sArray[0].request(n);
+                }
 
 
             }
@@ -40,79 +42,79 @@ public class PublisherToOperator<T> implements Operator<T> {
             public void cancel() {
                 super.cancel();
                 closed = true;
-                if(sArray[0]!=null)
+                if (sArray[0] != null) {
                     sArray[0].cancel();
+                }
             }
         };
 
-            split.subscribe(new Subscriber<T>() {
-                @Override
-                public void onSubscribe(Subscription s) {
-                    sArray[0] = s;
+        split.subscribe(new Subscriber<T>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                sArray[0] = s;
 
-                    if (sub.isActive()) {
-                       s.request(1l);
+                if (sub.isActive()) {
+                    s.request(1l);
 
-                    }else if(!sub.isOpen){
-                        s.cancel();
-                    }
-
+                } else if (!sub.isOpen) {
+                    s.cancel();
                 }
 
-                @Override
-                public void onNext(T t) {
-                   onNext.accept(t);
-                   sub.requested.decrementAndGet();
+            }
 
-                }
+            @Override
+            public void onNext(T t) {
+                onNext.accept(t);
+                sub.requested.decrementAndGet();
 
-                @Override
-                public void onError(Throwable t) {
-                    onError.accept(t);
-                }
+            }
 
-                @Override
-                public void onComplete() {
-                    onComplete.run();
-                    closed = true;
-                }
-            });
+            @Override
+            public void onError(Throwable t) {
+                onError.accept(t);
+            }
 
+            @Override
+            public void onComplete() {
+                onComplete.run();
+                closed = true;
+            }
+        });
 
         return sub;
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
 
-            split.subscribe(new Subscriber<T>() {
-                @Override
-                public void onSubscribe(Subscription s) {
-                    s.request(Long.MAX_VALUE);
+        split.subscribe(new Subscriber<T>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                s.request(Long.MAX_VALUE);
 
-                }
+            }
 
-                @Override
-                public void onNext(T t) {
+            @Override
+            public void onNext(T t) {
 
-                        onNext.accept(t);
-
-
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    onError.accept(t);
-                }
-
-                @Override
-                public void onComplete() {
-                    onCompleteDs.run();
-                    closed = true;
-                }
-            });
+                onNext.accept(t);
 
 
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                onError.accept(t);
+            }
+
+            @Override
+            public void onComplete() {
+                onCompleteDs.run();
+                closed = true;
+            }
+        });
 
 
     }

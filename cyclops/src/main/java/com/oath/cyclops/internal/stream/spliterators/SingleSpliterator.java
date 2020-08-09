@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 public class SingleSpliterator<T> implements Spliterator<T>, CopyableSpliterator<T> {
 
     private final T in;
-
+    private boolean closed = false;
 
     public SingleSpliterator(T in) {
         this.in = in;
@@ -24,17 +24,15 @@ public class SingleSpliterator<T> implements Spliterator<T>, CopyableSpliterator
         return IMMUTABLE;
     }
 
-
-
-    private boolean closed = false;
     @Override
     public boolean tryAdvance(final Consumer<? super T> action) {
-        if(closed)
+        if (closed) {
             return false;
+        }
 
         action.accept(in);
 
-        return closed =true;
+        return closed = true;
 
     }
 

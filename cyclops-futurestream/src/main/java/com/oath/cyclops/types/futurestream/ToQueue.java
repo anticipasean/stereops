@@ -1,20 +1,18 @@
 package com.oath.cyclops.types.futurestream;
 
+import com.oath.cyclops.async.adapters.Queue;
+import com.oath.cyclops.async.adapters.QueueFactory;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.QueueFactory;
-
 /**
- *
  * interface that defines the conversion of an object to a queue
  *
- * @author johnmcclean
- *
  * @param <U> Data type
+ * @author johnmcclean
  */
 public interface ToQueue<U> {
+
     /**
      * @return Data in a queue
      */
@@ -23,10 +21,11 @@ public interface ToQueue<U> {
     /**
      * Sharded data in queues
      *
-     * @param shards Map of Queues sharded by key K
+     * @param shards  Map of Queues sharded by key K
      * @param sharder Sharder function
      */
-    abstract <K> void toQueue(Map<K, Queue<U>> shards, Function<? super U, ? extends K> sharder);
+    abstract <K> void toQueue(Map<K, Queue<U>> shards,
+                              Function<? super U, ? extends K> sharder);
 
     /**
      * @return Factory for creating Queues to be populated

@@ -10,40 +10,60 @@ import cyclops.control.Eval;
 
 public class EvalSerializer extends ReferenceTypeSerializer<Eval<?>> {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
-  protected EvalSerializer(ReferenceType fullType, boolean staticTyping,
-                           TypeSerializer vts, JsonSerializer<Object> ser)
-  {
-    super(fullType, staticTyping, vts, ser);
-  }
+    protected EvalSerializer(ReferenceType fullType,
+                             boolean staticTyping,
+                             TypeSerializer vts,
+                             JsonSerializer<Object> ser) {
+        super(fullType,
+              staticTyping,
+              vts,
+              ser);
+    }
 
-  protected EvalSerializer(EvalSerializer base, BeanProperty property,
-                           TypeSerializer vts, JsonSerializer<?> valueSer, NameTransformer unwrapper,
-                           Object suppressableValue, boolean suppressNulls)
-  {
-    super(base, property, vts, valueSer, unwrapper,
-      suppressableValue, suppressNulls);
-  }
+    protected EvalSerializer(EvalSerializer base,
+                             BeanProperty property,
+                             TypeSerializer vts,
+                             JsonSerializer<?> valueSer,
+                             NameTransformer unwrapper,
+                             Object suppressableValue,
+                             boolean suppressNulls) {
+        super(base,
+              property,
+              vts,
+              valueSer,
+              unwrapper,
+              suppressableValue,
+              suppressNulls);
+    }
 
-  @Override
-  protected ReferenceTypeSerializer<Eval<?>> withResolved(BeanProperty prop,
-                                                            TypeSerializer vts, JsonSerializer<?> valueSer,
-                                                            NameTransformer unwrapper)
-  {
-    return new EvalSerializer(this, prop, vts, valueSer, unwrapper,
-      _suppressableValue, _suppressNulls);
-  }
+    @Override
+    protected ReferenceTypeSerializer<Eval<?>> withResolved(BeanProperty prop,
+                                                            TypeSerializer vts,
+                                                            JsonSerializer<?> valueSer,
+                                                            NameTransformer unwrapper) {
+        return new EvalSerializer(this,
+                                  prop,
+                                  vts,
+                                  valueSer,
+                                  unwrapper,
+                                  _suppressableValue,
+                                  _suppressNulls);
+    }
 
-  @Override
-  public ReferenceTypeSerializer<Eval<?>> withContentInclusion(Object suppressableValue,
-                                                                   boolean suppressNulls)
-  {
-    return new EvalSerializer(this, _property, _valueTypeSerializer,
-      _valueSerializer, _unwrapper,
-      suppressableValue, suppressNulls);
-  }
+    @Override
+    public ReferenceTypeSerializer<Eval<?>> withContentInclusion(Object suppressableValue,
+                                                                 boolean suppressNulls) {
+        return new EvalSerializer(this,
+                                  _property,
+                                  _valueTypeSerializer,
+                                  _valueSerializer,
+                                  _unwrapper,
+                                  suppressableValue,
+                                  suppressNulls);
+    }
 
     /*
     /**********************************************************
@@ -51,19 +71,19 @@ public class EvalSerializer extends ReferenceTypeSerializer<Eval<?>> {
     /**********************************************************
      */
 
-  @Override
-  protected boolean _isValuePresent(Eval<?> value) {
-    return value.isPresent();
-  }
+    @Override
+    protected boolean _isValuePresent(Eval<?> value) {
+        return value.isPresent();
+    }
 
-  @Override
-  protected Object _getReferenced(Eval<?> value) {
-    return value.orElse(null);
-  }
+    @Override
+    protected Object _getReferenced(Eval<?> value) {
+        return value.orElse(null);
+    }
 
-  @Override
-  protected Object _getReferencedIfPresent(Eval<?> value) {
-    return  value.orElse(null);
-  }
+    @Override
+    protected Object _getReferencedIfPresent(Eval<?> value) {
+        return value.orElse(null);
+    }
 
 }

@@ -5,7 +5,6 @@ import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +18,15 @@ public class ReversingListSpliterator<T> implements Spliterator<T>, ReversableSp
     @Setter
     private boolean reverse = false;
 
-    public ReversingListSpliterator(final List<T> elements, final boolean reverse) {
+    public ReversingListSpliterator(final List<T> elements,
+                                    final boolean reverse) {
         this.list = elements;
         this.reverse = reverse;
-        if(reverse)
+        if (reverse) {
             this.it = elements.listIterator(list.size());
-        else
+        } else {
             this.it = elements.listIterator();
+        }
 
     }
 
@@ -38,8 +39,8 @@ public class ReversingListSpliterator<T> implements Spliterator<T>, ReversableSp
 
     @Override
     public ReversableSpliterator copy() {
-        return new ReversingListSpliterator(
-                                            list, reverse);
+        return new ReversingListSpliterator(list,
+                                            reverse);
 
     }
 

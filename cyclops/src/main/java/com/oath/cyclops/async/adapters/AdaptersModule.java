@@ -6,8 +6,6 @@ import com.oath.cyclops.types.futurestream.Continuation;
 import com.oath.cyclops.util.ExceptionSoftener;
 import cyclops.control.Option;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AllArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -22,11 +20,13 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
 
 
 public interface AdaptersModule {
 
     static class StreamOfContinuations implements ContinuationStrategy {
+
         private final Queue<?> queue;
         private List<Continuation> continuation = new ArrayList<>();
 
@@ -40,28 +40,29 @@ public interface AdaptersModule {
 
         }
 
-        public boolean isBlocking(){
+        public boolean isBlocking() {
             return true;
         }
+
         @Override
         public void handleContinuation() {
 
             continuation = ReactiveSeq.fromIterable(continuation)
-                              .concatMap(c -> {
-                                  try {
-                                      Continuation next = c.proceed();
-                                      if(next instanceof Continuation.EmptyRunnableContinuation) {
-                                                     ((Continuation.EmptyRunnableContinuation)next).run();
-                                                        return Option.some(next);
-                                      }
+                                      .concatMap(c -> {
+                                          try {
+                                              Continuation next = c.proceed();
+                                              if (next instanceof Continuation.EmptyRunnableContinuation) {
+                                                  ((Continuation.EmptyRunnableContinuation) next).run();
+                                                  return Option.some(next);
+                                              }
 
-                                      return Option.some(next);
-                                  } catch (final Queue.ClosedQueueException e) {
-                                      return Option.none();
-                                  }
+                                              return Option.some(next);
+                                          } catch (final Queue.ClosedQueueException e) {
+                                              return Option.none();
+                                          }
 
-                              })
-                              .toList();
+                                      })
+                                      .toList();
 
             if (continuation.size() == 0) {
 
@@ -73,8 +74,8 @@ public interface AdaptersModule {
     }
 
 
-
     static class SingleContinuation implements ContinuationStrategy {
+
         private final Queue<?> queue;
         private volatile Continuation continuation = null;
 
@@ -238,7 +239,9 @@ public interface AdaptersModule {
         }
 
         @Override
-        public boolean offer(final Object e, final long timeout, final TimeUnit unit) throws InterruptedException {
+        public boolean offer(final Object e,
+                             final long timeout,
+                             final TimeUnit unit) throws InterruptedException {
             return offer(e);
         }
 
@@ -249,7 +252,8 @@ public interface AdaptersModule {
         }
 
         @Override
-        public Object poll(final long timeout, final TimeUnit unit) throws InterruptedException {
+        public Object poll(final long timeout,
+                           final TimeUnit unit) throws InterruptedException {
 
             return poll();
         }
@@ -267,7 +271,8 @@ public interface AdaptersModule {
         }
 
         @Override
-        public int drainTo(final Collection c, final int maxElements) {
+        public int drainTo(final Collection c,
+                           final int maxElements) {
 
             return 0;
         }
@@ -275,14 +280,20 @@ public interface AdaptersModule {
     }
 
     static class ClosingSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements Spliterator<T> {
-        private long estimate;
+
         final Supplier<T> s;
+        final AtomicBoolean closed;
         private final Continueable subscription;
         private final Queue queue;
+        List<T> ancillaryData = null;
+        private long estimate;
 
-
-        public ClosingSpliterator(final long estimate, final Supplier<T> s, final Continueable subscription, final Queue queue) {
-            super(estimate,IMMUTABLE);
+        public ClosingSpliterator(final long estimate,
+                                  final Supplier<T> s,
+                                  final Continueable subscription,
+                                  final Queue queue) {
+            super(estimate,
+                  IMMUTABLE);
             this.estimate = estimate;
             this.s = s;
             this.subscription = subscription;
@@ -290,24 +301,33 @@ public interface AdaptersModule {
             this.subscription.addQueue(queue);
             this.closed = new AtomicBoolean(false);
         }
-        public ClosingSpliterator(final long estimate, final Supplier<T> s, final Continueable subscription, final Queue queue,AtomicBoolean closed) {
-            super(estimate,IMMUTABLE);
+
+        public ClosingSpliterator(final long estimate,
+                                  final Supplier<T> s,
+                                  final Continueable subscription,
+                                  final Queue queue,
+                                  AtomicBoolean closed) {
+            super(estimate,
+                  IMMUTABLE);
             this.estimate = estimate;
             this.s = s;
             this.subscription = subscription;
             this.queue = queue;
             this.subscription.addQueue(queue);
-            this.closed =closed;
+            this.closed = closed;
 
         }
 
-        public ClosingSpliterator(final long estimate, final Supplier<T> s, final Continueable subscription) {
-            super(estimate,IMMUTABLE);
+        public ClosingSpliterator(final long estimate,
+                                  final Supplier<T> s,
+                                  final Continueable subscription) {
+            super(estimate,
+                  IMMUTABLE);
             this.estimate = estimate;
             this.s = s;
             this.subscription = subscription;
             this.queue = null;
-            this.closed =  new AtomicBoolean(false);
+            this.closed = new AtomicBoolean(false);
 
         }
 
@@ -320,19 +340,19 @@ public interface AdaptersModule {
         public int characteristics() {
             return IMMUTABLE;
         }
-       final AtomicBoolean closed ;
 
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
 
             super.forEachRemaining(action);
         }
-        List<T> ancillaryData = null;
+
         @Override
         public boolean tryAdvance(final Consumer<? super T> action) {
             Objects.requireNonNull(action);
-            if(ancillaryData!=null)
+            if (ancillaryData != null) {
                 return tryAncillary(action);
+            }
             boolean timeoutRetry = false;
 
             do {
@@ -354,33 +374,33 @@ public interface AdaptersModule {
 
                     closed.set(true);
                     return false;
-                }catch(Queue.QueueTimeoutException e){
-                    timeoutRetry =true;
-                } catch(Queue.Error e){
+                } catch (Queue.QueueTimeoutException e) {
+                    timeoutRetry = true;
+                } catch (Queue.Error e) {
                     throw ExceptionSoftener.throwSoftenedException(e.t);
 
-                } catch(final Exception e) {
-
+                } catch (final Exception e) {
 
                     closed.set(true);
                     return false;
                 } finally {
 
                 }
-            }while(timeoutRetry);
-           // closed.set(true);
+            } while (timeoutRetry);
+            // closed.set(true);
             return false;
 
         }
 
         private boolean tryAncillary(Consumer<? super T> action) {
-            if(ancillaryData.size()==0) {
+            if (ancillaryData.size() == 0) {
                 closed.set(true);
                 return false;
             }
             action.accept(ancillaryData.remove(0));
-            if(ancillaryData.size()>0)
+            if (ancillaryData.size() > 0) {
                 return true;
+            }
 
             closed.set(true);
             return false;
@@ -389,11 +409,13 @@ public interface AdaptersModule {
         @Override
         public Spliterator<T> trySplit() {
 
-            return new ClosingSpliterator<T>(
-                    estimate >>>= 1, s, subscription, queue,closed);
+            return new ClosingSpliterator<T>(estimate >>>= 1,
+                                             s,
+                                             subscription,
+                                             queue,
+                                             closed);
 
         }
-
 
 
     }

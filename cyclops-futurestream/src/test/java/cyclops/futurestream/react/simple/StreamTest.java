@@ -4,55 +4,53 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import cyclops.futurestream.SimpleReact;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
-
 import org.junit.Test;
-
-import cyclops.futurestream.SimpleReact;
 
 public class StreamTest {
 
 
+    @Test
+    public void testStreamFrom() throws InterruptedException, ExecutionException {
 
-	@Test
-	public void testStreamFrom() throws InterruptedException,
-			ExecutionException {
+        List<String> strings = new SimpleReact().<String>fromStream(new SimpleReact().<Integer>ofAsync(() -> 1,
+                                                                                                       () -> 2,
+                                                                                                       () -> 3).with(it -> "*"
+            + it)
+                                                                                                               .stream()).then(it ->
+                                                                                                                                   it
+                                                                                                                                       + "*")
+                                                                                                                         .block();
 
+        assertThat(strings.size(),
+                   is(3));
 
-		List<String> strings = new SimpleReact()
-								.<String>fromStream(new SimpleReact()
-												.<Integer> ofAsync(() -> 1, () -> 2, () -> 3)
-												.with(it -> "*" + it).stream())
-								.then(it ->  it + "*")
-								.block();
+        assertThat(strings,
+                   hasItem("*1*"));
 
-		assertThat(strings.size(), is(3));
+    }
 
+    @Test
+    public void testStreamOf() throws InterruptedException, ExecutionException {
 
-		assertThat(strings,hasItem("*1*"));
+        Stream<CompletableFuture<String>> stream = new SimpleReact().<Integer>ofAsync(() -> 1,
+                                                                                      () -> 2,
+                                                                                      () -> 3).then(it -> "*" + it)
+                                                                                              .streamCompletableFutures();
 
-	}
-	@Test
-	public void testStreamOf() throws InterruptedException,
-			ExecutionException {
+        List<String> strings = new SimpleReact().<String>fromStream(stream).then(it -> it + "*")
+                                                                           .block();
 
-		Stream<CompletableFuture<String>> stream = new SimpleReact()
-													.<Integer> ofAsync(() -> 1, () -> 2, () -> 3)
-													.then(it -> "*" + it).streamCompletableFutures();
+        assertThat(strings.size(),
+                   is(3));
 
-		List<String> strings = new SimpleReact()
-								.<String>fromStream(stream)
-								.then(it ->  it + "*")
-								.block();
+        assertThat(strings,
+                   hasItem("*1*"));
 
-		assertThat(strings.size(), is(3));
-
-
-		assertThat(strings,hasItem("*1*"));
-
-	}
+    }
 
 }

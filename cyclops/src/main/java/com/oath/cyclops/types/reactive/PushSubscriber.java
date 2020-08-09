@@ -4,18 +4,9 @@ package com.oath.cyclops.types.reactive;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-public interface PushSubscriber<T>{
-    public void onNext(T t);
+public interface PushSubscriber<T> {
 
-
-    public void onError(Throwable t);
-
-
-    public void onComplete();
-
-    boolean isInitialized();
-
-    static <T> PushSubscriber<T> of(Subscriber<T> sub){
+    static <T> PushSubscriber<T> of(Subscriber<T> sub) {
         sub.onSubscribe(new Subscription() {
             @Override
             public void request(long n) {
@@ -49,7 +40,16 @@ public interface PushSubscriber<T>{
             }
         };
     }
-    default Subscriber<T> asSubscriber(){
+
+    public void onNext(T t);
+
+    public void onError(Throwable t);
+
+    public void onComplete();
+
+    boolean isInitialized();
+
+    default Subscriber<T> asSubscriber() {
 
         return new Subscriber<T>() {
             @Override

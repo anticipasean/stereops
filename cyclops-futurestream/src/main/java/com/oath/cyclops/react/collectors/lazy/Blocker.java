@@ -1,5 +1,10 @@
 package com.oath.cyclops.react.collectors.lazy;
 
+import com.oath.cyclops.react.Status;
+import com.oath.cyclops.util.SimpleTimer;
+import com.oath.cyclops.util.ThrowsSoftened;
+import cyclops.reactive.collections.immutable.LinkedListX;
+import cyclops.reactive.collections.mutable.ListX;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -10,13 +15,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.mutable.ListX;
-import com.oath.cyclops.react.Status;
-import com.oath.cyclops.util.SimpleTimer;
-import com.oath.cyclops.util.ThrowsSoftened;
-
 import lombok.AllArgsConstructor;
 
 
@@ -35,19 +33,22 @@ public class Blocker<U> {
     private final Queue<U> currentResults = new ConcurrentLinkedQueue<U>();
 
     @SuppressWarnings("unchecked")
-    @ThrowsSoftened({ InterruptedException.class, ExecutionException.class })
+    @ThrowsSoftened({InterruptedException.class, ExecutionException.class})
     public ListX<U> block(final Predicate<Status<U>> breakout) {
-
 
         return nonBlocking(breakout).join();
 
     }
+
     public CompletableFuture<ListX<U>> nonBlocking(final Predicate<Status<U>> breakout) {
 
-        if (lastActive.size() == 0)
+        if (lastActive.size() == 0) {
             return CompletableFuture.completedFuture(ListX.empty());
+        }
         lastActive.forEach(f -> f.whenComplete((result, ex) -> {
-            testBreakoutConditionsBeforeUnblockingCurrentThread(breakout, result, (Throwable) ex);
+            testBreakoutConditionsBeforeUnblockingCurrentThread(breakout,
+                                                                result,
+                                                                (Throwable) ex);
         }));
 
         return promise.thenApply(ListX::fromIterable);
@@ -62,24 +63,30 @@ public class Blocker<U> {
             completed.incrementAndGet();
         }
 
-        return new Status(
-                          completed.get(), errors.get(), lastActive.size(), timer.getElapsedNanoseconds(), LinkedListX.fromIterable(currentResults));
+        return new Status(completed.get(),
+                          errors.get(),
+                          lastActive.size(),
+                          timer.getElapsedNanoseconds(),
+                          LinkedListX.fromIterable(currentResults));
 
     }
 
-    private void testBreakoutConditionsBeforeUnblockingCurrentThread(final Predicate<Status<U>> breakout, final Object result, final Throwable ex) {
+    private void testBreakoutConditionsBeforeUnblockingCurrentThread(final Predicate<Status<U>> breakout,
+                                                                     final Object result,
+                                                                     final Throwable ex) {
 
-        if (result != null)
+        if (result != null) {
             currentResults.add((U) result);
+        }
 
         final Status status = buildStatus(ex); //new results may be added after status object is created
         if (ex != null) {
             errorHandler.ifPresent((handler) -> handler.accept(((Exception) ex).getCause()));
         }
 
-        if (breakoutConditionsMet(breakout, status) || allResultsReturned(status.getCompleted() + status.getErrors())) {
-            promise.complete(new LinkedList<U>(
-                                               currentResults));
+        if (breakoutConditionsMet(breakout,
+                                  status) || allResultsReturned(status.getCompleted() + status.getErrors())) {
+            promise.complete(new LinkedList<U>(currentResults));
         }
     }
 
@@ -87,7 +94,8 @@ public class Blocker<U> {
         return localComplete == lastActive.size();
     }
 
-    private boolean breakoutConditionsMet(final Predicate<Status<U>> breakout, final Status status) {
+    private boolean breakoutConditionsMet(final Predicate<Status<U>> breakout,
+                                          final Status status) {
         return breakout.test(status);
     }
 

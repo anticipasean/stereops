@@ -24,8 +24,7 @@ public class UncurryConsumer extends Curry {
                                           .accept(t1);
     }
 
-    public static <T1, T2, T3, T4, T5> Consumer5<T1, T2, T3, T4, T5> uncurryC5(
-            final Function<T5, Function<T4, Function<T3, Function<T2, Consumer<T1>>>>> quintCon) {
+    public static <T1, T2, T3, T4, T5> Consumer5<T1, T2, T3, T4, T5> uncurryC5(final Function<T5, Function<T4, Function<T3, Function<T2, Consumer<T1>>>>> quintCon) {
         return (t1, t2, t3, t4, t5) -> quintCon.apply(t5)
                                                .apply(t4)
                                                .apply(t3)

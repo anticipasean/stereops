@@ -1,16 +1,14 @@
 package com.oath.cyclops.react.collectors.lazy;
 
+import com.oath.cyclops.internal.react.async.future.FastFuture;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import com.oath.cyclops.internal.react.async.future.FastFuture;
 
 /**
  * Interface that defines the rules for Collecting results from Infinite SimpleReact Streams
  *
  * @author johnmcclean
- *
  */
 public interface LazyResultConsumer<T> extends Consumer<FastFuture<T>> {
 

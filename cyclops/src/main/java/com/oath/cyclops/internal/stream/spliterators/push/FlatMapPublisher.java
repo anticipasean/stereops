@@ -2,7 +2,6 @@ package com.oath.cyclops.internal.stream.spliterators.push;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
-
 import org.reactivestreams.Publisher;
 
 
@@ -23,7 +22,9 @@ public class FlatMapPublisher<T, R> extends BaseOperator<T, R> {
     }
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super R> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super R> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         StreamSubscription sub[] = new StreamSubscription[1];
         ConcurrentFlatMapper<T, R>[] ref = new ConcurrentFlatMapper[1];
         StreamSubscription res = new StreamSubscription() {
@@ -46,30 +47,39 @@ public class FlatMapPublisher<T, R> extends BaseOperator<T, R> {
 
             }
         };
-       sub[0] = source.subscribe(
-                 n -> ref[0].onNext(n),
-                e -> {if(ref[0]!=null)
-                        ref[0].onError(e);
-                else  onError.accept(e);},
-               () -> {
-                   if (ref[0] != null)
-                       ref[0].onComplete();
-                   else
-                       onComplete.run();
-               });
-        ref[0] = new ConcurrentFlatMapper<T, R>(sub[0], onNext, onError, onComplete,
-                mapper,
-                maxConcurrency);
-
-
+        sub[0] = source.subscribe(n -> ref[0].onNext(n),
+                                  e -> {
+                                      if (ref[0] != null) {
+                                          ref[0].onError(e);
+                                      } else {
+                                          onError.accept(e);
+                                      }
+                                  },
+                                  () -> {
+                                      if (ref[0] != null) {
+                                          ref[0].onComplete();
+                                      } else {
+                                          onComplete.run();
+                                      }
+                                  });
+        ref[0] = new ConcurrentFlatMapper<T, R>(sub[0],
+                                                onNext,
+                                                onError,
+                                                onComplete,
+                                                mapper,
+                                                maxConcurrency);
 
         sub[0].request(maxConcurrency);
         return res;
     }
 
     @Override
-    public void subscribeAll(Consumer<? super R> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
-            subscribe(onNext,onError,onComplete).request(Long.MAX_VALUE);
+    public void subscribeAll(Consumer<? super R> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onComplete) {
+        subscribe(onNext,
+                  onError,
+                  onComplete).request(Long.MAX_VALUE);
     }
 
 }

@@ -1,19 +1,21 @@
 package com.oath.cyclops.internal.react.stream;
 
+import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
+import com.oath.cyclops.react.async.subscription.Continueable;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import com.oath.cyclops.react.async.subscription.Continueable;
-import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
-
 public class InfiniteClosingSpliteratorFromSupplier<T> implements Spliterator<T> {
-    private long estimate;
+
     final Supplier<T> it;
     private final Continueable subscription;
+    private long estimate;
 
-    public InfiniteClosingSpliteratorFromSupplier(final long estimate, final Supplier<T> it, final Continueable subscription) {
+    public InfiniteClosingSpliteratorFromSupplier(final long estimate,
+                                                  final Supplier<T> it,
+                                                  final Continueable subscription) {
         this.estimate = estimate;
         this.it = it;
         this.subscription = subscription;
@@ -37,8 +39,9 @@ public class InfiniteClosingSpliteratorFromSupplier<T> implements Spliterator<T>
         try {
 
             action.accept(it.get());
-            if (subscription.closed())
+            if (subscription.closed()) {
                 return false;
+            }
             return true;
         } catch (final ClosedQueueException e) {
             return false;
@@ -51,8 +54,9 @@ public class InfiniteClosingSpliteratorFromSupplier<T> implements Spliterator<T>
     @Override
     public Spliterator<T> trySplit() {
 
-        return new InfiniteClosingSpliteratorFromSupplier(
-                                                          estimate >>>= 1, it, subscription);
+        return new InfiniteClosingSpliteratorFromSupplier(estimate >>>= 1,
+                                                          it,
+                                                          subscription);
     }
 
 }

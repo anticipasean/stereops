@@ -1,27 +1,30 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
+import java.util.function.Consumer;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-
-import java.util.function.Consumer;
 
 /**
  * Created by johnmcclean on 17/01/2017.
  */
 public class SubscriberSource<T> implements Operator<T>, Subscriber<T> {
+
     Subscription s;
     Consumer<? super T> onNext;
     Consumer<? super Throwable> onError;
     Runnable onComplete;
+
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         this.onNext = onNext;
         this.onError = onError;
         this.onComplete = onComplete;
-        return new StreamSubscription(){
+        return new StreamSubscription() {
             @Override
-            public void request(long n)
-            {   s.request(n);
+            public void request(long n) {
+                s.request(n);
                 super.request(n);
             }
 
@@ -34,17 +37,18 @@ public class SubscriberSource<T> implements Operator<T>, Subscriber<T> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onComplete) {
 
     }
 
     @Override
     public void onSubscribe(Subscription s) {
-        if(this.s==null) {
+        if (this.s == null) {
             this.s = s;
             s.request(1l);
-        }
-        else{
+        } else {
             s.cancel();
         }
 
@@ -52,16 +56,18 @@ public class SubscriberSource<T> implements Operator<T>, Subscriber<T> {
 
     @Override
     public void onNext(T t) {
-        if(t==null)
+        if (t == null) {
             throw new NullPointerException();
-          this.onNext.accept(t);
+        }
+        this.onNext.accept(t);
     }
 
     @Override
     public void onError(Throwable t) {
-        if(t==null)
+        if (t == null) {
             throw new NullPointerException();
-          this.onError.accept(t);
+        }
+        this.onError.accept(t);
     }
 
     @Override

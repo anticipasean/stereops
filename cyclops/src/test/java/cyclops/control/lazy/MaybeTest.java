@@ -8,14 +8,22 @@ public class MaybeTest {
     @Test
     public void flatMap() {
         Maybe.of(10)
-             .flatMap(i -> { System.out.println("Not maybe!"); return  Maybe.of(15);})
-             .map(i -> { System.out.println("Not maybe!"); return  Maybe.of(15);})
+             .flatMap(i -> {
+                 System.out.println("Not maybe!");
+                 return Maybe.of(15);
+             })
+             .map(i -> {
+                 System.out.println("Not maybe!");
+                 return Maybe.of(15);
+             })
              .map(i -> Maybe.of(20));
 
     }
-     @Test
+
+    @Test
     public void odd() {
-        System.out.println(even(Maybe.just(200000)).toOptional().get());
+        System.out.println(even(Maybe.just(200000)).toOptional()
+                                                   .get());
     }
 
     public Maybe<String> odd(Maybe<Integer> n) {

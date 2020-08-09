@@ -1,50 +1,53 @@
 package com.oath.cyclops.internal.stream.spliterators;
 
 
-
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 
 public class OnEmptySpliterator<T> extends Spliterators.AbstractSpliterator<T> implements CopyableSpliterator<T> {
+
     private final Spliterator<T> source;
     private final T value;
-    private boolean found=false;
-    private boolean sent=false;
+    private boolean found = false;
+    private boolean sent = false;
 
 
-    public OnEmptySpliterator(Spliterator<T> source, T value) {
-        super(source.estimateSize(), source.characteristics() & Spliterator.ORDERED);
+    public OnEmptySpliterator(Spliterator<T> source,
+                              T value) {
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
         this.source = source;
         this.value = value;
     }
 
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
-        source.forEachRemaining(e->{
-            found =true;
+        source.forEachRemaining(e -> {
+            found = true;
             action.accept(e);
         });
-        if(!found) {
+        if (!found) {
             action.accept(value);
-            sent =true;
+            sent = true;
         }
     }
 
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
-        if(sent)
+        if (sent) {
             return false;
-        if(found)
+        }
+        if (found) {
             return source.tryAdvance(action);
-        else{
-            boolean result = source.tryAdvance(e->{
-                found =true;
+        } else {
+            boolean result = source.tryAdvance(e -> {
+                found = true;
                 action.accept(e);
             });
-            if(!found){
+            if (!found) {
 
-                sent =true;
+                sent = true;
                 action.accept(value);
             }
             return result;
@@ -55,6 +58,7 @@ public class OnEmptySpliterator<T> extends Spliterators.AbstractSpliterator<T> i
 
     @Override
     public Spliterator<T> copy() {
-        return new OnEmptySpliterator<T>(CopyableSpliterator.copy(source),value);
+        return new OnEmptySpliterator<T>(CopyableSpliterator.copy(source),
+                                         value);
     }
 }

@@ -6,9 +6,8 @@ import java.util.function.Consumer;
 
 public class FillSpliterator<T> implements Spliterator<T> {
 
-    private final T value;
-
     private static final int characteristics = IMMUTABLE & SIZED;
+    private final T value;
 
     public FillSpliterator(T value) {
         super();
@@ -26,13 +25,12 @@ public class FillSpliterator<T> implements Spliterator<T> {
     }
 
 
-
     @Override
     public boolean tryAdvance(final Consumer<? super T> action) {
 
         action.accept(value);
 
-       return true;
+        return true;
 
     }
 

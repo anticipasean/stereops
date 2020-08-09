@@ -9,79 +9,88 @@ import cyclops.monads.Rx2Witness.observable;
 import cyclops.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
-import io.reactivex.*;
-import lombok.experimental.UtilityClass;
-import org.reactivestreams.Publisher;
-
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.experimental.UtilityClass;
+import org.reactivestreams.Publisher;
 
 
 /**
  * Companion class for working with RxJava Observable types
  *
  * @author johnmcclean
- *
  */
 @UtilityClass
 public class Observables {
 
 
-
-
-    public static  <T,R> Observable<R> tailRec(T initial, Function<? super T, ? extends Observable<? extends Either<T, R>>> fn) {
+    public static <T, R> Observable<R> tailRec(T initial,
+                                               Function<? super T, ? extends Observable<? extends Either<T, R>>> fn) {
         Observable<Either<T, R>> next = Observable.just(Either.left(initial));
 
         boolean newValue[] = {true};
-        for(;;){
+        for (; ; ) {
 
             next = next.flatMap(e -> e.fold(s -> {
-                        newValue[0]=true;
-                        return fn.apply(s); },
-                    p -> {
-                        newValue[0]=false;
-                        return Observable.just(e);
-                    }));
-            if(!newValue[0])
+                                                newValue[0] = true;
+                                                return fn.apply(s);
+                                            },
+                                            p -> {
+                                                newValue[0] = false;
+                                                return Observable.just(e);
+                                            }));
+            if (!newValue[0]) {
                 break;
+            }
 
         }
 
-        return next.filter(Either::isRight).map(e->e.orElse(null));
+        return next.filter(Either::isRight)
+                   .map(e -> e.orElse(null));
     }
 
     public static <T> Observable<T> narrow(Observable<? extends T> observable) {
-        return (Observable<T>)observable;
+        return (Observable<T>) observable;
     }
 
-    public static  <T> Observable<T> observableFrom(ReactiveSeq<T> stream){
-        return stream.fold(sync->fromStream(stream),
-                rs->observable(stream),
-                async->Observable.create(new ObservableOnSubscribe<T>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<T> rxSubscriber) throws Exception {
+    public static <T> Observable<T> observableFrom(ReactiveSeq<T> stream) {
+        return stream.fold(sync -> fromStream(stream),
+                           rs -> observable(stream),
+                           async -> Observable.create(new ObservableOnSubscribe<T>() {
+                               @Override
+                               public void subscribe(ObservableEmitter<T> rxSubscriber) throws Exception {
 
-                        stream.forEach(rxSubscriber::onNext,rxSubscriber::onError,rxSubscriber::onComplete);
-                    }
+                                   stream.forEach(rxSubscriber::onNext,
+                                                  rxSubscriber::onError,
+                                                  rxSubscriber::onComplete);
+                               }
 
-        }));
+                           }));
 
 
     }
-    public static  <T> Observable<T> fromStream(Stream<T> s){
 
-        if(s instanceof  ReactiveSeq) {
-            ReactiveSeq<T> stream = (ReactiveSeq<T>)s;
+    public static <T> Observable<T> fromStream(Stream<T> s) {
+
+        if (s instanceof ReactiveSeq) {
+            ReactiveSeq<T> stream = (ReactiveSeq<T>) s;
             return stream.fold(sync -> Observable.fromIterable(stream),
-                    rs -> observable(stream),
-                    async -> Observable.create(new ObservableOnSubscribe<T>() {
-                        @Override
-                        public void subscribe(ObservableEmitter<T> rxSubscriber) throws Exception {
+                               rs -> observable(stream),
+                               async -> Observable.create(new ObservableOnSubscribe<T>() {
+                                   @Override
+                                   public void subscribe(ObservableEmitter<T> rxSubscriber) throws Exception {
 
-                            stream.forEach(rxSubscriber::onNext,rxSubscriber::onError,rxSubscriber::onComplete);
-                        }
-                    }));
+                                       stream.forEach(rxSubscriber::onNext,
+                                                      rxSubscriber::onError,
+                                                      rxSubscriber::onComplete);
+                                   }
+                               }));
         }
         return Observable.fromIterable(ReactiveSeq.fromStream(s));
     }
@@ -103,11 +112,13 @@ public class Observables {
      * @return ReactiveSeq
      */
     public static <T> ReactiveSeq<T> connectToReactiveSeq(Observable<T> observable) {
-        return Spouts.async(s->{
-           observable.subscribe(s::onNext,e->{
-               s.onError(e);
-               s.onComplete();
-           },s::onComplete);
+        return Spouts.async(s -> {
+            observable.subscribe(s::onNext,
+                                 e -> {
+                                     s.onError(e);
+                                     s.onComplete();
+                                 },
+                                 s::onComplete);
 
         });
 
@@ -121,15 +132,9 @@ public class Observables {
      * @return Observable
      */
     public static <T> Observable<T> observable(Publisher<T> publisher) {
-        return Flowable.fromPublisher(publisher).toObservable();
+        return Flowable.fromPublisher(publisher)
+                       .toObservable();
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -149,33 +154,34 @@ public class Observables {
      * @param obs Observable to wrap inside an AnyM
      * @return AnyMSeq wrapping an Observable
      */
-    public static <T> AnyMSeq<observable,T> anyM(Observable<T> obs) {
-        return AnyM.ofSeq(ObservableReactiveSeq.reactiveSeq(obs), observable.INSTANCE);
+    public static <T> AnyMSeq<observable, T> anyM(Observable<T> obs) {
+        return AnyM.ofSeq(ObservableReactiveSeq.reactiveSeq(obs),
+                          observable.INSTANCE);
     }
 
     /**
-     * Perform a For Comprehension over a Observable, accepting 3 generating functions.
-     * This results in a four level nested internal iteration over the provided Observables.
+     * Perform a For Comprehension over a Observable, accepting 3 generating functions. This results in a four level nested
+     * internal iteration over the provided Observables.
      *
-     *  <pre>
+     * <pre>
      * {@code
      *
      *   import static com.oath.cyclops.reactor.Observables.forEach4;
      *
-    forEach4(Observable.range(1,10),
-    a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
-    (a,b) -> Maybe.<Integer>of(a+b),
-    (a,b,c) -> Mono.<Integer>just(a+b+c),
-    Tuple::tuple)
+     * forEach4(Observable.range(1,10),
+     * a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
+     * (a,b) -> Maybe.<Integer>of(a+b),
+     * (a,b,c) -> Mono.<Integer>just(a+b+c),
+     * Tuple::tuple)
      *
      * }
      * </pre>
      *
-     * @param value1 top level Observable
-     * @param value2 Nested Observable
-     * @param value3 Nested Observable
-     * @param value4 Nested Observable
-     * @param yieldingFunction  Generates a result per combination
+     * @param value1           top level Observable
+     * @param value2           Nested Observable
+     * @param value3           Nested Observable
+     * @param value4           Nested Observable
+     * @param yieldingFunction Generates a result per combination
      * @return Observable with an element per combination of nested Observables generated by the yielding function
      */
     public static <T1, T2, T3, R1, R2, R3, R> Observable<R> forEach4(Observable<? extends T1> value1,
@@ -184,15 +190,20 @@ public class Observables {
                                                                      Function3<? super T1, ? super R1, ? super R2, ? extends Observable<R3>> value4,
                                                                      Function4<? super T1, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
 
-
         return value1.flatMap(in -> {
 
             Observable<R1> a = value2.apply(in);
             return a.flatMap(ina -> {
-                Observable<R2> b = value3.apply(in,ina);
+                Observable<R2> b = value3.apply(in,
+                                                ina);
                 return b.flatMap(inb -> {
-                    Observable<R3> c = value4.apply(in,ina,inb);
-                    return c.map(in2 -> yieldingFunction.apply(in, ina, inb, in2));
+                    Observable<R3> c = value4.apply(in,
+                                                    ina,
+                                                    inb);
+                    return c.map(in2 -> yieldingFunction.apply(in,
+                                                               ina,
+                                                               inb,
+                                                               in2));
                 });
 
             });
@@ -203,28 +214,28 @@ public class Observables {
     }
 
     /**
-     * Perform a For Comprehension over a Observable, accepting 3 generating functions.
-     * This results in a four level nested internal iteration over the provided Observables.
+     * Perform a For Comprehension over a Observable, accepting 3 generating functions. This results in a four level nested
+     * internal iteration over the provided Observables.
      * <pre>
      * {@code
      *
      *  import static com.oath.cyclops.reactor.Observables.forEach4;
      *
      *  forEach4(Observable.range(1,10),
-    a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
-    (a,b) -> Maybe.<Integer>just(a+b),
-    (a,b,c) -> Mono.<Integer>just(a+b+c),
-    (a,b,c,d) -> a+b+c+d <100,
-    Tuple::tuple);
+     * a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
+     * (a,b) -> Maybe.<Integer>just(a+b),
+     * (a,b,c) -> Mono.<Integer>just(a+b+c),
+     * (a,b,c,d) -> a+b+c+d <100,
+     * Tuple::tuple);
      *
      * }
      * </pre>
      *
-     * @param value1 top level Observable
-     * @param value2 Nested Observable
-     * @param value3 Nested Observable
-     * @param value4 Nested Observable
-     * @param filterFunction A filtering function, keeps values where the predicate holds
+     * @param value1           top level Observable
+     * @param value2           Nested Observable
+     * @param value3           Nested Observable
+     * @param value4           Nested Observable
+     * @param filterFunction   A filtering function, keeps values where the predicate holds
      * @param yieldingFunction Generates a result per combination
      * @return Observable with an element per combination of nested Observables generated by the yielding function
      */
@@ -239,11 +250,20 @@ public class Observables {
 
             Observable<R1> a = value2.apply(in);
             return a.flatMap(ina -> {
-                Observable<R2> b = value3.apply(in,ina);
+                Observable<R2> b = value3.apply(in,
+                                                ina);
                 return b.flatMap(inb -> {
-                    Observable<R3> c = value4.apply(in,ina,inb);
-                    return c.filter(in2->filterFunction.apply(in,ina,inb,in2))
-                            .map(in2 -> yieldingFunction.apply(in, ina, inb, in2));
+                    Observable<R3> c = value4.apply(in,
+                                                    ina,
+                                                    inb);
+                    return c.filter(in2 -> filterFunction.apply(in,
+                                                                ina,
+                                                                inb,
+                                                                in2))
+                            .map(in2 -> yieldingFunction.apply(in,
+                                                               ina,
+                                                               inb,
+                                                               in2));
                 });
 
             });
@@ -252,8 +272,8 @@ public class Observables {
     }
 
     /**
-     * Perform a For Comprehension over a Observable, accepting 2 generating functions.
-     * This results in a three level nested internal iteration over the provided Observables.
+     * Perform a For Comprehension over a Observable, accepting 2 generating functions. This results in a three level nested
+     * internal iteration over the provided Observables.
      *
      * <pre>
      * {@code
@@ -261,17 +281,16 @@ public class Observables {
      * import static com.oath.cyclops.reactor.Observables.forEach;
      *
      * forEach(Observable.range(1,10),
-    a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
-    (a,b) -> Maybe.<Integer>of(a+b),
-    Tuple::tuple);
+     * a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
+     * (a,b) -> Maybe.<Integer>of(a+b),
+     * Tuple::tuple);
      *
      * }
      * </pre>
      *
-     *
-     * @param value1 top level Observable
-     * @param value2 Nested Observable
-     * @param value3 Nested Observable
+     * @param value1           top level Observable
+     * @param value2           Nested Observable
+     * @param value3           Nested Observable
      * @param yieldingFunction Generates a result per combination
      * @return Observable with an element per combination of nested Observables generated by the yielding function
      */
@@ -284,34 +303,38 @@ public class Observables {
 
             Observable<R1> a = value2.apply(in);
             return a.flatMap(ina -> {
-                Observable<R2> b = value3.apply(in, ina);
-                return b.map(in2 -> yieldingFunction.apply(in, ina, in2));
+                Observable<R2> b = value3.apply(in,
+                                                ina);
+                return b.map(in2 -> yieldingFunction.apply(in,
+                                                           ina,
+                                                           in2));
             });
 
 
         });
 
     }
+
     /**
-     * Perform a For Comprehension over a Observable, accepting 2 generating functions.
-     * This results in a three level nested internal iteration over the provided Observables.
+     * Perform a For Comprehension over a Observable, accepting 2 generating functions. This results in a three level nested
+     * internal iteration over the provided Observables.
      * <pre>
      * {@code
      *
      * import static com.oath.cyclops.reactor.Observables.forEach;
      *
      * forEach(Observable.range(1,10),
-    a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
-    (a,b) -> Maybe.<Integer>of(a+b),
-    (a,b,c) ->a+b+c<10,
-    Tuple::tuple).toListX();
+     * a-> ReactiveSeq.iterate(a,i->i+1).limit(10),
+     * (a,b) -> Maybe.<Integer>of(a+b),
+     * (a,b,c) ->a+b+c<10,
+     * Tuple::tuple).toListX();
      * }
      * </pre>
      *
-     * @param value1 top level Observable
-     * @param value2 Nested Observable
-     * @param value3 Nested Observable
-     * @param filterFunction A filtering function, keeps values where the predicate holds
+     * @param value1           top level Observable
+     * @param value2           Nested Observable
+     * @param value3           Nested Observable
+     * @param filterFunction   A filtering function, keeps values where the predicate holds
      * @param yieldingFunction Generates a result per combination
      * @return
      */
@@ -325,11 +348,15 @@ public class Observables {
 
             Observable<R1> a = value2.apply(in);
             return a.flatMap(ina -> {
-                Observable<R2> b = value3.apply(in,ina);
-                return b.filter(in2->filterFunction.apply(in,ina,in2))
-                        .map(in2 -> yieldingFunction.apply(in, ina, in2));
+                Observable<R2> b = value3.apply(in,
+                                                ina);
+                return b.filter(in2 -> filterFunction.apply(in,
+                                                            ina,
+                                                            in2))
+                        .map(in2 -> yieldingFunction.apply(in,
+                                                           ina,
+                                                           in2));
             });
-
 
 
         });
@@ -337,66 +364,66 @@ public class Observables {
     }
 
     /**
-     * Perform a For Comprehension over a Observable, accepting an additonal generating function.
-     * This results in a two level nested internal iteration over the provided Observables.
+     * Perform a For Comprehension over a Observable, accepting an additonal generating function. This results in a two level
+     * nested internal iteration over the provided Observables.
      *
      * <pre>
      * {@code
      *
      *  import static com.oath.cyclops.reactor.Observables.forEach;
      *  forEach(Observable.range(1, 10), i -> Observable.range(i, 10), Tuple::tuple)
-    .subscribe(System.out::println);
-
-    //(1, 1)
-    (1, 2)
-    (1, 3)
-    (1, 4)
-    ...
+     * .subscribe(System.out::println);
+     *
+     * //(1, 1)
+     * (1, 2)
+     * (1, 3)
+     * (1, 4)
+     * ...
      *
      * }</pre>
      *
-     * @param value1 top level Observable
-     * @param value2 Nested Observable
+     * @param value1           top level Observable
+     * @param value2           Nested Observable
      * @param yieldingFunction Generates a result per combination
      * @return
      */
-    public static <T, R1, R> Observable<R> forEach(Observable<? extends T> value1, Function<? super T, Observable<R1>> value2,
+    public static <T, R1, R> Observable<R> forEach(Observable<? extends T> value1,
+                                                   Function<? super T, Observable<R1>> value2,
                                                    BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
 
         return value1.flatMap(in -> {
 
             Observable<R1> a = value2.apply(in);
-            return a.map(in2 -> yieldingFunction.apply(in,  in2));
+            return a.map(in2 -> yieldingFunction.apply(in,
+                                                       in2));
         });
 
     }
 
     /**
-     *
      * <pre>
      * {@code
      *
      *   import static com.oath.cyclops.reactor.Observables.forEach;
      *
      *   forEach(Observable.range(1, 10), i -> Observable.range(i, 10),(a,b) -> a>2 && b<10,Tuple::tuple)
-    .subscribe(System.out::println);
-
-    //(3, 3)
-    (3, 4)
-    (3, 5)
-    (3, 6)
-    (3, 7)
-    (3, 8)
-    (3, 9)
-    ...
-
+     * .subscribe(System.out::println);
+     *
+     * //(3, 3)
+     * (3, 4)
+     * (3, 5)
+     * (3, 6)
+     * (3, 7)
+     * (3, 8)
+     * (3, 9)
+     * ...
+     *
      *
      * }</pre>
      *
-     *
-     * @param value1 top level Observable
-     * @param value2 Nested Observable
-     * @param filterFunction A filtering function, keeps values where the predicate holds
+     * @param value1           top level Observable
+     * @param value2           Nested Observable
+     * @param filterFunction   A filtering function, keeps values where the predicate holds
      * @param yieldingFunction Generates a result per combination
      * @return
      */
@@ -408,8 +435,10 @@ public class Observables {
         return value1.flatMap(in -> {
 
             Observable<R1> a = value2.apply(in);
-            return a.filter(in2->filterFunction.apply(in,in2))
-                    .map(in2 -> yieldingFunction.apply(in,  in2));
+            return a.filter(in2 -> filterFunction.apply(in,
+                                                        in2))
+                    .map(in2 -> yieldingFunction.apply(in,
+                                                       in2));
         });
 
     }

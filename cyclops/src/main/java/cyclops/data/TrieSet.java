@@ -1,13 +1,13 @@
 package cyclops.data;
 
 
+import com.oath.cyclops.hkt.DataWitness.trieSet;
+import com.oath.cyclops.hkt.Higher;
 import com.oath.cyclops.types.persistent.PersistentCollection;
 import com.oath.cyclops.types.persistent.PersistentSet;
-import com.oath.cyclops.hkt.Higher;
-
 import cyclops.control.Option;
-import com.oath.cyclops.hkt.DataWitness.trieSet;
 import cyclops.data.base.HashedPatriciaTrie;
+import cyclops.data.base.HashedPatriciaTrie.Node;
 import cyclops.data.tuple.Tuple;
 import cyclops.data.tuple.Tuple2;
 import cyclops.data.tuple.Tuple3;
@@ -17,88 +17,143 @@ import cyclops.function.Function4;
 import cyclops.function.Monoid;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import org.reactivestreams.Publisher;
-
 import java.io.Serializable;
-import java.util.*;
-import java.util.function.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.reactivestreams.Publisher;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public final class TrieSet<T> implements ImmutableSet<T>,
-                                         Higher<trieSet,T>,
-                                         Serializable{
+public final class TrieSet<T> implements ImmutableSet<T>, Higher<trieSet, T>, Serializable {
+
     private static final long serialVersionUID = 1L;
-    private final HashedPatriciaTrie.Node<T,T> map;
-    public static <T> TrieSet<T> empty(){
-        return new TrieSet<T>( HashedPatriciaTrie.empty());
+    private final HashedPatriciaTrie.Node<T, T> map;
+
+    private TrieSet(Node<T, T> map) {
+        this.map = map;
+    }
+
+    public static <T> TrieSet<T> empty() {
+        return new TrieSet<T>(HashedPatriciaTrie.empty());
     }
 
     static <T> Collector<T, Set<T>, TrieSet<T>> collector() {
-        Collector<T, ?, Set<T>> c  = Collectors.toSet();
-        return Collectors.<T, Set<T>, Iterable<T>,TrieSet<T>>collectingAndThen((Collector)c,TrieSet::fromIterable);
-    }
-    static <U, T> TrieSet<T> unfold(final U seed, final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
-        return fromStream(ReactiveSeq.unfold(seed,unfolder));
+        Collector<T, ?, Set<T>> c = Collectors.toSet();
+        return Collectors.<T, Set<T>, Iterable<T>, TrieSet<T>>collectingAndThen((Collector) c,
+                                                                                TrieSet::fromIterable);
     }
 
-    static <T> TrieSet<T> iterate(final T seed, Predicate<? super T> pred, final UnaryOperator<T> f) {
-        return fromStream(ReactiveSeq.iterate(seed,pred,f));
+    static <U, T> TrieSet<T> unfold(final U seed,
+                                    final Function<? super U, Option<Tuple2<T, U>>> unfolder) {
+        return fromStream(ReactiveSeq.unfold(seed,
+                                             unfolder));
+    }
+
+    static <T> TrieSet<T> iterate(final T seed,
+                                  Predicate<? super T> pred,
+                                  final UnaryOperator<T> f) {
+        return fromStream(ReactiveSeq.iterate(seed,
+                                              pred,
+                                              f));
 
     }
-    static <T> TrieSet<T> iterate(final T seed, final UnaryOperator<T> f,int max) {
-        return fromStream(ReactiveSeq.iterate(seed,f).limit(max));
+
+    static <T> TrieSet<T> iterate(final T seed,
+                                  final UnaryOperator<T> f,
+                                  int max) {
+        return fromStream(ReactiveSeq.iterate(seed,
+                                              f)
+                                     .limit(max));
 
     }
 
     static <T, U> Tuple2<TrieSet<T>, TrieSet<U>> unzip(final TrieSet<Tuple2<T, U>> sequence) {
-        return ReactiveSeq.unzip(sequence.stream()).transform((a, b)-> Tuple.tuple(fromStream(a),fromStream(b)));
+        return ReactiveSeq.unzip(sequence.stream())
+                          .transform((a, b) -> Tuple.tuple(fromStream(a),
+                                                           fromStream(b)));
     }
-    static <T> TrieSet<T> generate(Supplier<T> s, int max){
-        return fromStream(ReactiveSeq.generate(s).limit(max));
+
+    static <T> TrieSet<T> generate(Supplier<T> s,
+                                   int max) {
+        return fromStream(ReactiveSeq.generate(s)
+                                     .limit(max));
     }
+
     @Deprecated
-    static <T> TrieSet<T> generate(Generator<T> s){
+    static <T> TrieSet<T> generate(Generator<T> s) {
         return fromStream(ReactiveSeq.generate(s));
     }
-    static TrieSet<Integer> range(final int start, final int end) {
-        return TrieSet.fromStream(ReactiveSeq.range(start,end));
 
-    }
-    static TrieSet<Integer> range(final int start, final int step, final int end) {
-        return TrieSet.fromStream(ReactiveSeq.range(start,step,end));
-
-    }
-    static TrieSet<Long> rangeLong(final long start, final long step, final long end) {
-        return TrieSet.fromStream(ReactiveSeq.rangeLong(start,step,end));
-    }
-
-
-    static TrieSet<Long> rangeLong(final long start, final long end) {
-        return TrieSet.fromStream(ReactiveSeq.rangeLong(start, end));
+    static TrieSet<Integer> range(final int start,
+                                  final int end) {
+        return TrieSet.fromStream(ReactiveSeq.range(start,
+                                                    end));
 
     }
 
-    public static <T> TrieSet<T> of(T... values){
+    static TrieSet<Integer> range(final int start,
+                                  final int step,
+                                  final int end) {
+        return TrieSet.fromStream(ReactiveSeq.range(start,
+                                                    step,
+                                                    end));
+
+    }
+
+    static TrieSet<Long> rangeLong(final long start,
+                                   final long step,
+                                   final long end) {
+        return TrieSet.fromStream(ReactiveSeq.rangeLong(start,
+                                                        step,
+                                                        end));
+    }
+
+
+    static TrieSet<Long> rangeLong(final long start,
+                                   final long end) {
+        return TrieSet.fromStream(ReactiveSeq.rangeLong(start,
+                                                        end));
+
+    }
+
+    public static <T> TrieSet<T> of(T... values) {
         HashedPatriciaTrie.Node<T, T> tree = HashedPatriciaTrie.empty();
-        for(T value : values){
-            tree = tree.put(value.hashCode(),value,value);
+        for (T value : values) {
+            tree = tree.put(value.hashCode(),
+                            value,
+                            value);
         }
         return new TrieSet<>(tree);
     }
-    public static <T> TrieSet<T> fromStream(Stream<T> stream){
-        return ReactiveSeq.fromStream(stream).foldLeft(empty(),(m,t2)->m.plus(t2));
-    }
-    public static <T> TrieSet<T> fromIterable(Iterable<T> it){
-        return ReactiveSeq.fromIterable(it).foldLeft(empty(),(m, t2)->m.plus(t2));
+
+    public static <T> TrieSet<T> fromStream(Stream<T> stream) {
+        return ReactiveSeq.fromStream(stream)
+                          .foldLeft(empty(),
+                                    (m, t2) -> m.plus(t2));
     }
 
-    public boolean containsValue(T value){
-        return map.get(value.hashCode(),value).isPresent();
+    public static <T> TrieSet<T> fromIterable(Iterable<T> it) {
+        return ReactiveSeq.fromIterable(it)
+                          .foldLeft(empty(),
+                                    (m, t2) -> m.plus(t2));
+    }
+
+    public boolean containsValue(T value) {
+        return map.get(value.hashCode(),
+                       value)
+                  .isPresent();
     }
 
     @Override
@@ -113,7 +168,8 @@ public final class TrieSet<T> implements ImmutableSet<T>,
 
     @Override
     public TrieSet<T> removeValue(T value) {
-        return fromStream(stream().filter(i->!Objects.equals(i,value)));
+        return fromStream(stream().filter(i -> !Objects.equals(i,
+                                                               value)));
     }
 
     @Override
@@ -138,15 +194,17 @@ public final class TrieSet<T> implements ImmutableSet<T>,
 
     @Override
     public <R> TrieSet<R> mergeMap(Function<? super T, ? extends Publisher<? extends R>> fn) {
-      return fromStream(stream().mergeMap(fn));
+        return fromStream(stream().mergeMap(fn));
     }
 
     @Override
-    public <R> TrieSet<R> mergeMap(int maxConcurecy, Function<? super T, ? extends Publisher<? extends R>> fn) {
-      return fromStream(stream().mergeMap(maxConcurecy,fn));
+    public <R> TrieSet<R> mergeMap(int maxConcurecy,
+                                   Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return fromStream(stream().mergeMap(maxConcurecy,
+                                            fn));
     }
 
-  @Override
+    @Override
     public TrieSet<T> filter(Predicate<? super T> predicate) {
         return fromStream(stream().filter(predicate));
     }
@@ -157,11 +215,15 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
 
-    public TrieSet<T> plus(T value){
-        return new TrieSet<>(map.put(value.hashCode(),value,value));
+    public TrieSet<T> plus(T value) {
+        return new TrieSet<>(map.put(value.hashCode(),
+                                     value,
+                                     value));
     }
-    public TrieSet<T> remove(T value){
-        return new TrieSet<>(map.minus(value.hashCode(),value));
+
+    public TrieSet<T> remove(T value) {
+        return new TrieSet<>(map.minus(value.hashCode(),
+                                       value));
     }
 
     @Override
@@ -171,66 +233,81 @@ public final class TrieSet<T> implements ImmutableSet<T>,
 
     @Override
     public ReactiveSeq<T> stream() {
-        return map.stream().map(t->t._1());
+        return map.stream()
+                  .map(t -> t._1());
     }
 
     @Override
     public Iterator<T> iterator() {
         return stream().iterator();
     }
+
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof PersistentSet) || o==null)
+        if (!(o instanceof PersistentSet) || o == null) {
             return false;
-        PersistentSet s = (PersistentSet)o;
-        for(T next : this){
-            if(!s.containsValue(next))
-                return false;
         }
-        return size()==s.size();
+        PersistentSet s = (PersistentSet) o;
+        for (T next : this) {
+            if (!s.containsValue(next)) {
+                return false;
+            }
+        }
+        return size() == s.size();
     }
 
     @Override
     public int hashCode() {
         int hashCode = 1;
-        for (T e : this)
-            hashCode = 31*hashCode + (e==null ? 0 : e.hashCode());
+        for (T e : this) {
+            hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+        }
         return hashCode;
     }
 
     @Override
-    public String toString(){
-        return stream().join(", ","[","]");
+    public String toString() {
+        return stream().join(", ",
+                             "[",
+                             "]");
     }
 
     public TrieSet<T> take(final long n) {
-        return (TrieSet<T>)ImmutableSet.super.take(n);
+        return (TrieSet<T>) ImmutableSet.super.take(n);
 
     }
+
     public TrieSet<T> takeWhile(Predicate<? super T> p) {
-        return (TrieSet<T>)ImmutableSet.super.takeWhile(p);
+        return (TrieSet<T>) ImmutableSet.super.takeWhile(p);
     }
+
     public TrieSet<T> dropWhile(Predicate<? super T> p) {
-        return (TrieSet<T>)ImmutableSet.super.dropWhile(p);
+        return (TrieSet<T>) ImmutableSet.super.dropWhile(p);
     }
+
     public TrieSet<T> drop(final long num) {
-        return (TrieSet<T>)ImmutableSet.super.drop(num);
+        return (TrieSet<T>) ImmutableSet.super.drop(num);
     }
+
     public TrieSet<T> reverse() {
-        return (TrieSet<T>)ImmutableSet.super.reverse();
+        return (TrieSet<T>) ImmutableSet.super.reverse();
     }
-    public Tuple2<TrieSet<T>,TrieSet<T>> duplicate(){
-        return Tuple.tuple(this,this);
+
+    public Tuple2<TrieSet<T>, TrieSet<T>> duplicate() {
+        return Tuple.tuple(this,
+                           this);
     }
+
     public <R1, R2> Tuple2<TrieSet<R1>, TrieSet<R2>> unzip(Function<? super T, Tuple2<? extends R1, ? extends R2>> fn) {
-        Tuple2<TrieSet<R1>, TrieSet<Tuple2<? extends R1, ? extends R2>>> x = map(fn).duplicate().map1(s -> s.map(Tuple2::_1));
+        Tuple2<TrieSet<R1>, TrieSet<Tuple2<? extends R1, ? extends R2>>> x = map(fn).duplicate()
+                                                                                    .map1(s -> s.map(Tuple2::_1));
         return x.map2(s -> s.map(Tuple2::_2));
     }
 
 
     @Override
     public TrieSet<T> removeFirst(Predicate<? super T> pred) {
-        return (TrieSet<T>)ImmutableSet.super.removeFirst(pred);
+        return (TrieSet<T>) ImmutableSet.super.removeFirst(pred);
     }
 
 
@@ -241,126 +318,148 @@ public final class TrieSet<T> implements ImmutableSet<T>,
 
     public TrieSet<T> appendAll(Iterable<? extends T> it) {
         TrieSet<T> s = this;
-        for(T next : it){
-            s= s.add(next);
+        for (T next : it) {
+            s = s.add(next);
         }
         return s;
 
 
     }
-    public <R> R foldLeft(R zero, BiFunction<R, ? super T, R> f){
-        R acc= zero;
-        for(T next : this){
-            acc= f.apply(acc,next);
+
+    public <R> R foldLeft(R zero,
+                          BiFunction<R, ? super T, R> f) {
+        R acc = zero;
+        for (T next : this) {
+            acc = f.apply(acc,
+                          next);
         }
         return acc;
     }
 
     @Override
     public <U> TrieSet<U> ofType(Class<? extends U> type) {
-        return (TrieSet<U>)ImmutableSet.super.ofType(type);
+        return (TrieSet<U>) ImmutableSet.super.ofType(type);
     }
 
     @Override
     public TrieSet<T> filterNot(Predicate<? super T> predicate) {
-        return (TrieSet<T>)ImmutableSet.super.filterNot(predicate);
+        return (TrieSet<T>) ImmutableSet.super.filterNot(predicate);
     }
 
     @Override
     public TrieSet<T> notNull() {
-        return (TrieSet<T>)ImmutableSet.super.notNull();
+        return (TrieSet<T>) ImmutableSet.super.notNull();
     }
 
     @Override
     public TrieSet<T> peek(Consumer<? super T> c) {
-        return (TrieSet<T>)ImmutableSet.super.peek(c);
+        return (TrieSet<T>) ImmutableSet.super.peek(c);
     }
-
 
 
     @Override
     public TrieSet<T> removeStream(Stream<? extends T> stream) {
-        return (TrieSet<T>)ImmutableSet.super.removeStream(stream);
+        return (TrieSet<T>) ImmutableSet.super.removeStream(stream);
     }
 
     @Override
     public TrieSet<T> retainAll(Iterable<? extends T> it) {
-        return (TrieSet<T>)ImmutableSet.super.retainAll(it);
+        return (TrieSet<T>) ImmutableSet.super.retainAll(it);
     }
 
     @Override
     public TrieSet<T> retainStream(Stream<? extends T> stream) {
-        return (TrieSet<T>)ImmutableSet.super.retainStream(stream);
+        return (TrieSet<T>) ImmutableSet.super.retainStream(stream);
     }
 
     @Override
     public TrieSet<T> retainAll(T... values) {
-        return (TrieSet<T>)ImmutableSet.super.retainAll(values);
+        return (TrieSet<T>) ImmutableSet.super.retainAll(values);
     }
 
     @Override
     public TrieSet<ReactiveSeq<T>> permutations() {
-        return (TrieSet<ReactiveSeq<T>>)ImmutableSet.super.permutations();
+        return (TrieSet<ReactiveSeq<T>>) ImmutableSet.super.permutations();
     }
 
     @Override
     public TrieSet<ReactiveSeq<T>> combinations(int size) {
-        return (TrieSet<ReactiveSeq<T>>)ImmutableSet.super.combinations(size);
+        return (TrieSet<ReactiveSeq<T>>) ImmutableSet.super.combinations(size);
     }
 
     @Override
     public TrieSet<ReactiveSeq<T>> combinations() {
-        return (TrieSet<ReactiveSeq<T>>)ImmutableSet.super.combinations();
-    }
-
-  @Override
-    public <T2, R> TrieSet<R> zip(BiFunction<? super T, ? super T2, ? extends R> fn, Publisher<? extends T2> publisher) {
-        return (TrieSet<R>)ImmutableSet.super.zip(fn, publisher);
+        return (TrieSet<ReactiveSeq<T>>) ImmutableSet.super.combinations();
     }
 
     @Override
-    public <U, R> TrieSet<R> zipWithStream(Stream<? extends U> other, BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return (TrieSet<R>)ImmutableSet.super.zipWithStream(other,zipper);
+    public <T2, R> TrieSet<R> zip(BiFunction<? super T, ? super T2, ? extends R> fn,
+                                  Publisher<? extends T2> publisher) {
+        return (TrieSet<R>) ImmutableSet.super.zip(fn,
+                                                   publisher);
+    }
+
+    @Override
+    public <U, R> TrieSet<R> zipWithStream(Stream<? extends U> other,
+                                           BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return (TrieSet<R>) ImmutableSet.super.zipWithStream(other,
+                                                             zipper);
     }
 
     @Override
     public <U> TrieSet<Tuple2<T, U>> zipWithPublisher(Publisher<? extends U> other) {
-        return (TrieSet)ImmutableSet.super.zipWithPublisher(other);
+        return (TrieSet) ImmutableSet.super.zipWithPublisher(other);
     }
 
     @Override
     public <U> TrieSet<Tuple2<T, U>> zip(Iterable<? extends U> other) {
-        return (TrieSet)ImmutableSet.super.zip(other);
+        return (TrieSet) ImmutableSet.super.zip(other);
     }
 
     @Override
-    public <S, U, R> TrieSet<R> zip3(Iterable<? extends S> second, Iterable<? extends U> third, Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return (TrieSet<R>)ImmutableSet.super.zip3(second,third,fn3);
+    public <S, U, R> TrieSet<R> zip3(Iterable<? extends S> second,
+                                     Iterable<? extends U> third,
+                                     Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return (TrieSet<R>) ImmutableSet.super.zip3(second,
+                                                    third,
+                                                    fn3);
     }
 
     @Override
-    public <T2, T3, T4, R> TrieSet<R> zip4(Iterable<? extends T2> second, Iterable<? extends T3> third, Iterable<? extends T4> fourth, Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return (TrieSet<R>)ImmutableSet.super.zip4(second,third,fourth,fn);
+    public <T2, T3, T4, R> TrieSet<R> zip4(Iterable<? extends T2> second,
+                                           Iterable<? extends T3> third,
+                                           Iterable<? extends T4> fourth,
+                                           Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return (TrieSet<R>) ImmutableSet.super.zip4(second,
+                                                    third,
+                                                    fourth,
+                                                    fn);
     }
 
     @Override
-    public TrieSet<T> combine(BiPredicate<? super T, ? super T> predicate, BinaryOperator<T> op) {
-        return (TrieSet<T>)ImmutableSet.super.combine(predicate,op);
+    public TrieSet<T> combine(BiPredicate<? super T, ? super T> predicate,
+                              BinaryOperator<T> op) {
+        return (TrieSet<T>) ImmutableSet.super.combine(predicate,
+                                                       op);
     }
 
     @Override
-    public TrieSet<T> combine(Monoid<T> op, BiPredicate<? super T, ? super T> predicate) {
-        return (TrieSet<T>)ImmutableSet.super.combine(op,predicate);
+    public TrieSet<T> combine(Monoid<T> op,
+                              BiPredicate<? super T, ? super T> predicate) {
+        return (TrieSet<T>) ImmutableSet.super.combine(op,
+                                                       predicate);
     }
 
     @Override
     public TrieSet<T> cycle(long times) {
-        return (TrieSet<T>)ImmutableSet.super.cycle(times);
+        return (TrieSet<T>) ImmutableSet.super.cycle(times);
     }
 
     @Override
-    public TrieSet<T> cycle(Monoid<T> m, long times) {
-        return (TrieSet<T>)ImmutableSet.super.cycle(m,times);
+    public TrieSet<T> cycle(Monoid<T> m,
+                            long times) {
+        return (TrieSet<T>) ImmutableSet.super.cycle(m,
+                                                     times);
     }
 
     @Override
@@ -374,23 +473,31 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public <U, R> TrieSet<R> zip(Iterable<? extends U> other, BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return (TrieSet<R>) ImmutableSet.super.zip(other,zipper);
+    public <U, R> TrieSet<R> zip(Iterable<? extends U> other,
+                                 BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return (TrieSet<R>) ImmutableSet.super.zip(other,
+                                                   zipper);
     }
 
     @Override
-    public <S, U> TrieSet<Tuple3<T, S, U>> zip3(Iterable<? extends S> second, Iterable<? extends U> third) {
-        return (TrieSet) ImmutableSet.super.zip3(second,third);
+    public <S, U> TrieSet<Tuple3<T, S, U>> zip3(Iterable<? extends S> second,
+                                                Iterable<? extends U> third) {
+        return (TrieSet) ImmutableSet.super.zip3(second,
+                                                 third);
     }
 
     @Override
-    public <T2, T3, T4> TrieSet<Tuple4<T, T2, T3, T4>> zip4(Iterable<? extends T2> second, Iterable<? extends T3> third, Iterable<? extends T4> fourth) {
-        return (TrieSet) ImmutableSet.super.zip4(second,third,fourth);
+    public <T2, T3, T4> TrieSet<Tuple4<T, T2, T3, T4>> zip4(Iterable<? extends T2> second,
+                                                            Iterable<? extends T3> third,
+                                                            Iterable<? extends T4> fourth) {
+        return (TrieSet) ImmutableSet.super.zip4(second,
+                                                 third,
+                                                 fourth);
     }
 
     @Override
     public TrieSet<Tuple2<T, Long>> zipWithIndex() {
-        return (TrieSet<Tuple2<T,Long>>) ImmutableSet.super.zipWithIndex();
+        return (TrieSet<Tuple2<T, Long>>) ImmutableSet.super.zipWithIndex();
     }
 
     @Override
@@ -399,13 +506,17 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public TrieSet<Seq<T>> sliding(int windowSize, int increment) {
-        return (TrieSet<Seq<T>>) ImmutableSet.super.sliding(windowSize,increment);
+    public TrieSet<Seq<T>> sliding(int windowSize,
+                                   int increment) {
+        return (TrieSet<Seq<T>>) ImmutableSet.super.sliding(windowSize,
+                                                            increment);
     }
 
     @Override
-    public <C extends PersistentCollection<? super T>> TrieSet<C> grouped(int size, Supplier<C> supplier) {
-        return (TrieSet<C>) ImmutableSet.super.grouped(size,supplier);
+    public <C extends PersistentCollection<? super T>> TrieSet<C> grouped(int size,
+                                                                          Supplier<C> supplier) {
+        return (TrieSet<C>) ImmutableSet.super.grouped(size,
+                                                       supplier);
     }
 
     @Override
@@ -429,13 +540,17 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public <C extends PersistentCollection<? super T>> TrieSet<C> groupedWhile(Predicate<? super T> predicate, Supplier<C> factory) {
-        return (TrieSet<C>) ImmutableSet.super.groupedWhile(predicate,factory);
+    public <C extends PersistentCollection<? super T>> TrieSet<C> groupedWhile(Predicate<? super T> predicate,
+                                                                               Supplier<C> factory) {
+        return (TrieSet<C>) ImmutableSet.super.groupedWhile(predicate,
+                                                            factory);
     }
 
     @Override
-    public <C extends PersistentCollection<? super T>> TrieSet<C> groupedUntil(Predicate<? super T> predicate, Supplier<C> factory) {
-        return (TrieSet<C>) ImmutableSet.super.groupedUntil(predicate,factory);
+    public <C extends PersistentCollection<? super T>> TrieSet<C> groupedUntil(Predicate<? super T> predicate,
+                                                                               Supplier<C> factory) {
+        return (TrieSet<C>) ImmutableSet.super.groupedUntil(predicate,
+                                                            factory);
     }
 
     @Override
@@ -454,8 +569,10 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public <U> TrieSet<U> scanLeft(U seed, BiFunction<? super U, ? super T, ? extends U> function) {
-        return (TrieSet<U>) ImmutableSet.super.scanLeft(seed,function);
+    public <U> TrieSet<U> scanLeft(U seed,
+                                   BiFunction<? super U, ? super T, ? extends U> function) {
+        return (TrieSet<U>) ImmutableSet.super.scanLeft(seed,
+                                                        function);
     }
 
     @Override
@@ -464,8 +581,10 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public <U> TrieSet<U> scanRight(U identity, BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return (TrieSet<U>) ImmutableSet.super.scanRight(identity,combiner);
+    public <U> TrieSet<U> scanRight(U identity,
+                                    BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return (TrieSet<U>) ImmutableSet.super.scanRight(identity,
+                                                         combiner);
     }
 
     @Override
@@ -516,8 +635,10 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public TrieSet<T> slice(long from, long to) {
-        return (TrieSet<T>) ImmutableSet.super.slice(from,to);
+    public TrieSet<T> slice(long from,
+                            long to) {
+        return (TrieSet<T>) ImmutableSet.super.slice(from,
+                                                     to);
     }
 
 
@@ -537,13 +658,17 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
     @Override
-    public TrieSet<T> deleteBetween(int start, int end) {
-        return (TrieSet<T>) ImmutableSet.super.deleteBetween(start,end);
+    public TrieSet<T> deleteBetween(int start,
+                                    int end) {
+        return (TrieSet<T>) ImmutableSet.super.deleteBetween(start,
+                                                             end);
     }
 
     @Override
-    public TrieSet<T> insertStreamAt(int pos, Stream<T> stream) {
-        return (TrieSet<T>) ImmutableSet.super.insertStreamAt(pos,stream);
+    public TrieSet<T> insertStreamAt(int pos,
+                                     Stream<T> stream) {
+        return (TrieSet<T>) ImmutableSet.super.insertStreamAt(pos,
+                                                              stream);
     }
 
 
@@ -551,8 +676,11 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     public <U extends Comparable<? super U>> TrieSet<T> sorted(Function<? super T, ? extends U> function) {
         return (TrieSet<T>) ImmutableSet.super.sorted(function);
     }
-    public String mkString(){
-        return stream().join(",","[","]");
+
+    public String mkString() {
+        return stream().join(",",
+                             "[",
+                             "]");
     }
 
 
@@ -587,60 +715,97 @@ public final class TrieSet<T> implements ImmutableSet<T>,
     }
 
 
-
     @Override
     public TrieSet<T> prependAll(Iterable<? extends T> value) {
         return (TrieSet<T>) ImmutableSet.super.prependAll(value);
     }
 
     @Override
-    public TrieSet<T> updateAt(int pos, T value) {
-        return (TrieSet<T>) ImmutableSet.super.updateAt(pos,value);
+    public TrieSet<T> updateAt(int pos,
+                               T value) {
+        return (TrieSet<T>) ImmutableSet.super.updateAt(pos,
+                                                        value);
     }
 
     @Override
-    public TrieSet<T> insertAt(int pos, Iterable<? extends T> values) {
-        return (TrieSet<T>) ImmutableSet.super.insertAt(pos,values);
-    }
-
-  @Override
-  public <R1, R2, R3, R> TrieSet<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3, Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
-    return (TrieSet< R>) ImmutableSet.super.forEach4(iterable1,iterable2,iterable3,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R2, R3, R> TrieSet<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3, Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction, Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
-    return (TrieSet< R>) ImmutableSet.super.forEach4(iterable1,iterable2,iterable3,filterFunction,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R2, R> TrieSet<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
-    return (TrieSet< R>) ImmutableSet.super.forEach3(iterable1,iterable2,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R2, R> TrieSet<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2, Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction, Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
-    return (TrieSet< R>) ImmutableSet.super.forEach3(iterable1,iterable2,filterFunction,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R> TrieSet<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
-    return (TrieSet< R>) ImmutableSet.super.forEach2(iterable1,yieldingFunction);
-  }
-
-  @Override
-  public <R1, R> TrieSet<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1, BiFunction<? super T, ? super R1, Boolean> filterFunction, BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
-    return (TrieSet< R>) ImmutableSet.super.forEach2(iterable1,filterFunction,yieldingFunction);
-  }
-
-    @Override
-    public TrieSet<T> insertAt(int i, T value) {
-        return (TrieSet<T>) ImmutableSet.super.insertAt(i,value);
+    public TrieSet<T> insertAt(int pos,
+                               Iterable<? extends T> values) {
+        return (TrieSet<T>) ImmutableSet.super.insertAt(pos,
+                                                        values);
     }
 
     @Override
-    public TrieSet<T> insertAt(int pos, T... values) {
-        return (TrieSet<T>) ImmutableSet.super.insertAt(pos,values);
+    public <R1, R2, R3, R> TrieSet<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                               BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                               Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3,
+                                               Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+        return (TrieSet<R>) ImmutableSet.super.forEach4(iterable1,
+                                                        iterable2,
+                                                        iterable3,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R2, R3, R> TrieSet<R> forEach4(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                               BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                               Function3<? super T, ? super R1, ? super R2, ? extends Iterable<R3>> iterable3,
+                                               Function4<? super T, ? super R1, ? super R2, ? super R3, Boolean> filterFunction,
+                                               Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
+        return (TrieSet<R>) ImmutableSet.super.forEach4(iterable1,
+                                                        iterable2,
+                                                        iterable3,
+                                                        filterFunction,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R2, R> TrieSet<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                           BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                           Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+        return (TrieSet<R>) ImmutableSet.super.forEach3(iterable1,
+                                                        iterable2,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R2, R> TrieSet<R> forEach3(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                           BiFunction<? super T, ? super R1, ? extends Iterable<R2>> iterable2,
+                                           Function3<? super T, ? super R1, ? super R2, Boolean> filterFunction,
+                                           Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
+        return (TrieSet<R>) ImmutableSet.super.forEach3(iterable1,
+                                                        iterable2,
+                                                        filterFunction,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R> TrieSet<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                       BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+        return (TrieSet<R>) ImmutableSet.super.forEach2(iterable1,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public <R1, R> TrieSet<R> forEach2(Function<? super T, ? extends Iterable<R1>> iterable1,
+                                       BiFunction<? super T, ? super R1, Boolean> filterFunction,
+                                       BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
+        return (TrieSet<R>) ImmutableSet.super.forEach2(iterable1,
+                                                        filterFunction,
+                                                        yieldingFunction);
+    }
+
+    @Override
+    public TrieSet<T> insertAt(int i,
+                               T value) {
+        return (TrieSet<T>) ImmutableSet.super.insertAt(i,
+                                                        value);
+    }
+
+    @Override
+    public TrieSet<T> insertAt(int pos,
+                               T... values) {
+        return (TrieSet<T>) ImmutableSet.super.insertAt(pos,
+                                                        values);
     }
 
 }

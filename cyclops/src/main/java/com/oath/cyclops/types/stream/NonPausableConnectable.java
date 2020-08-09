@@ -1,21 +1,20 @@
 package com.oath.cyclops.types.stream;
 
+import com.oath.cyclops.internal.stream.BaseConnectableImpl;
+import cyclops.companion.Eithers;
+import cyclops.function.FluentFunctions;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
-import com.oath.cyclops.internal.stream.BaseConnectableImpl;
-import cyclops.companion.Eithers;
-import cyclops.function.FluentFunctions;
-
 /**
  * A Connectable (Stream already emitting data) that can not be paused
  *
+ * @param <T> Data type of elements in the Stream
  * @author johnmcclean
- *
- * @param <T>  Data type of elements in the Stream
  */
 public class NonPausableConnectable<T> extends BaseConnectableImpl<T> {
+
     public NonPausableConnectable(final Stream<T> stream) {
         super(stream);
     }
@@ -26,26 +25,28 @@ public class NonPausableConnectable<T> extends BaseConnectableImpl<T> {
     @Override
     public Connectable<T> init(final Executor exec) {
         CompletableFuture.runAsync(() -> {
-            pause.get()
-                 .join();
-            stream.forEach(a -> {
+                                       pause.get()
+                                            .join();
+                                       stream.forEach(a -> {
 
-                final int local = connected;
+                                           final int local = connected;
 
-                for (int i = 0; i < local; i++) {
+                                           for (int i = 0; i < local; i++) {
 
-                    Eithers.blocking(connections.get(i))
-                              .fold(FluentFunctions.ofChecked(in -> {
-                        in.put(a);
-                        return true;
-                    }), q -> q.offer(a));
-                }
+                                               Eithers.blocking(connections.get(i))
+                                                      .fold(FluentFunctions.ofChecked(in -> {
+                                                                in.put(a);
+                                                                return true;
+                                                            }),
+                                                            q -> q.offer(a));
+                                           }
 
-            });
+                                       });
 
-            open.set(false);
+                                       open.set(false);
 
-        } , exec);
+                                   },
+                                   exec);
         return this;
     }
 }

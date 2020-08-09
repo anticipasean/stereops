@@ -13,8 +13,9 @@ public class MutableArrayList<E> {
 
 
     private void rangeCheck(int index) {
-        if (index < 0 || index >= this.size)
-            throw new IndexOutOfBoundsException("Index: "+index+", Size: "+this.size);
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size);
+        }
     }
 
 

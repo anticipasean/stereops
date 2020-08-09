@@ -1,25 +1,24 @@
 package cyclops.streams.push.async;
 
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.streams.AbstractReactiveSeqTest;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.Spouts;
+import cyclops.streams.AbstractReactiveSeqTest;
+import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.Ignore;
+import org.junit.Test;
 
 @Ignore
 public class AsyncReactiveSeqTest extends AbstractReactiveSeqTest {
 
     @Override
     public ReactiveSeq<Integer> of(Integer... values) {
-        return Spouts.async(s->{
-            Thread t = new Thread(()-> {
+        return Spouts.async(s -> {
+            Thread t = new Thread(() -> {
                 for (Integer next : values) {
                     s.onNext(next);
                 }
@@ -31,8 +30,8 @@ public class AsyncReactiveSeqTest extends AbstractReactiveSeqTest {
 
     @Override
     public ReactiveSeq<Integer> empty() {
-        return Spouts.async(s->{
-            Thread t = new Thread(()-> {
+        return Spouts.async(s -> {
+            Thread t = new Thread(() -> {
                 s.onComplete();
             });
             t.start();
@@ -40,45 +39,48 @@ public class AsyncReactiveSeqTest extends AbstractReactiveSeqTest {
     }
 
     @Test
-    public void onErrorList(){
+    public void onErrorList() {
         AtomicInteger count = new AtomicInteger(0);
 
         try {
-            of(1, 2, 3).map(i -> {
+            of(1,
+               2,
+               3).map(i -> {
                 throw new RuntimeException();
             })
-                .onError(e -> count.incrementAndGet())
-                .toList();
+                 .onError(e -> count.incrementAndGet())
+                 .toList();
             fail("exception expected");
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-        assertThat(count.get(),equalTo(3));
+        assertThat(count.get(),
+                   equalTo(3));
 
     }
 
     @Test
-    public void onErrorIterator(){
+    public void onErrorIterator() {
         AtomicInteger count = new AtomicInteger(0);
 
         try {
-            Iterator<Integer> it = of(1, 2, 3).<Integer>map(i -> {
+            Iterator<Integer> it = of(1,
+                                      2,
+                                      3).<Integer>map(i -> {
                 throw new RuntimeException();
-            })
-                .onError(e -> count.incrementAndGet())
-                .iterator();
-            while(it.hasNext()){
+            }).onError(e -> count.incrementAndGet())
+              .iterator();
+            while (it.hasNext()) {
                 System.out.println(it.next());
             }
             fail("exception expected");
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
 
-
-        assertThat(count.get(),equalTo(3));
+        assertThat(count.get(),
+                   equalTo(3));
 
     }
 

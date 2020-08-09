@@ -1,5 +1,19 @@
 package com.oath.cyclops.data.collections.extensions.standard;
 
+import com.oath.cyclops.data.collections.extensions.CollectionX;
+import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
+import com.oath.cyclops.types.persistent.PersistentCollection;
+import cyclops.companion.Streams;
+import cyclops.data.Seq;
+import cyclops.data.Vector;
+import cyclops.data.tuple.Tuple2;
+import cyclops.data.tuple.Tuple3;
+import cyclops.data.tuple.Tuple4;
+import cyclops.function.Function3;
+import cyclops.function.Function4;
+import cyclops.function.Monoid;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collections.mutable.ListX;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -10,32 +24,17 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import com.oath.cyclops.data.collections.extensions.CollectionX;
-import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.companion.Streams;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-
-import cyclops.function.Monoid;
-import cyclops.reactive.ReactiveSeq;
 import org.reactivestreams.Publisher;
 
 public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
-
     //Add to each collection type : also check AnyMSeq
     @Override
-    default <R> LazyCollectionX<R> mergeMap(int maxConcurency, Function<? super T, ? extends Publisher<? extends R>> fn){
-        return fromStream(stream().mergeMap(maxConcurency,fn));
+    default <R> LazyCollectionX<R> mergeMap(int maxConcurency,
+                                            Function<? super T, ? extends Publisher<? extends R>> fn) {
+        return fromStream(stream().mergeMap(maxConcurency,
+                                            fn));
     }
 
     @Override
@@ -44,13 +43,21 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
     @Override
-    default LazyCollectionX<T> combine(final Monoid<T> op, final BiPredicate<? super T, ? super T> predicate) {
-        return fromStream(stream().combine(op,predicate));
+    default LazyCollectionX<T> combine(final Monoid<T> op,
+                                       final BiPredicate<? super T, ? super T> predicate) {
+        return fromStream(stream().combine(op,
+                                           predicate));
     }
 
     @Override
-    default <R> LazyCollectionX<R> retry(final Function<? super T, ? extends R> fn, final int retries, final long delay, final TimeUnit timeUnit) {
-        return fromStream(stream().retry(fn,retries,delay,timeUnit));
+    default <R> LazyCollectionX<R> retry(final Function<? super T, ? extends R> fn,
+                                         final int retries,
+                                         final long delay,
+                                         final TimeUnit timeUnit) {
+        return fromStream(stream().retry(fn,
+                                         retries,
+                                         delay,
+                                         timeUnit));
     }
 
     @Override
@@ -59,13 +66,17 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
     @Override
-    default <EX extends Throwable> LazyCollectionX<T> recover(Class<EX> exceptionClass, final Function<? super EX, ? extends T> fn) {
-        return fromStream(stream().recover(exceptionClass,fn));
+    default <EX extends Throwable> LazyCollectionX<T> recover(Class<EX> exceptionClass,
+                                                              final Function<? super EX, ? extends T> fn) {
+        return fromStream(stream().recover(exceptionClass,
+                                           fn));
     }
 
-  @Override
-    default <T2, R> LazyCollectionX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn, final Publisher<? extends T2> publisher) {
-        return fromStream(stream().zip(fn, publisher));
+    @Override
+    default <T2, R> LazyCollectionX<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn,
+                                           final Publisher<? extends T2> publisher) {
+        return fromStream(stream().zip(fn,
+                                       publisher));
     }
 
     @Override
@@ -74,16 +85,24 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
     @Override
-    default <S, U, R> LazyCollectionX<R> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third, final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
-        return fromStream(stream().zip3(second,third,fn3));
+    default <S, U, R> LazyCollectionX<R> zip3(final Iterable<? extends S> second,
+                                              final Iterable<? extends U> third,
+                                              final Function3<? super T, ? super S, ? super U, ? extends R> fn3) {
+        return fromStream(stream().zip3(second,
+                                        third,
+                                        fn3));
     }
 
     @Override
-    default <T2, T3, T4, R> LazyCollectionX<R> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third, final Iterable<? extends T4> fourth, final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
-        return fromStream(stream().zip4(second,third,fourth,fn));
+    default <T2, T3, T4, R> LazyCollectionX<R> zip4(final Iterable<? extends T2> second,
+                                                    final Iterable<? extends T3> third,
+                                                    final Iterable<? extends T4> fourth,
+                                                    final Function4<? super T, ? super T2, ? super T3, ? super T4, ? extends R> fn) {
+        return fromStream(stream().zip4(second,
+                                        third,
+                                        fourth,
+                                        fn));
     }
-
-
 
 
     /**
@@ -96,8 +115,10 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
      * @see CollectionX#combine(java.util.function.BiPredicate, java.util.function.BinaryOperator)
      */
     @Override
-    default LazyCollectionX<T> combine(final BiPredicate<? super T, ? super T> predicate, final BinaryOperator<T> op) {
-        return fromStream(stream().combine(predicate, op));
+    default LazyCollectionX<T> combine(final BiPredicate<? super T, ? super T> predicate,
+                                       final BinaryOperator<T> op) {
+        return fromStream(stream().combine(predicate,
+                                           op));
     }
 
     /* (non-Javadoc)
@@ -138,13 +159,11 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
 
-
-
-
-
     @Override
-    default LazyCollectionX<T> slice(final long from, final long to) {
-        return fromStream(stream().slice(from, to));
+    default LazyCollectionX<T> slice(final long from,
+                                     final long to) {
+        return fromStream(stream().slice(from,
+                                         to));
     }
 
 
@@ -152,8 +171,6 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     default LazyCollectionX<Vector<T>> grouped(final int groupSize) {
         return fromStream(stream().grouped(groupSize));
     }
-
-
 
 
     /* (non-Javadoc)
@@ -168,10 +185,11 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
      * @see CollectionX#zip(java.lang.Iterable, java.util.function.BiFunction)
      */
     @Override
-    default <U, R> LazyCollectionX<R> zip(final Iterable<? extends U> other, final BiFunction<? super T, ? super U, ? extends R> zipper) {
-        return fromStream(stream().zip(other, zipper));
+    default <U, R> LazyCollectionX<R> zip(final Iterable<? extends U> other,
+                                          final BiFunction<? super T, ? super U, ? extends R> zipper) {
+        return fromStream(stream().zip(other,
+                                       zipper));
     }
-
 
 
     @Override
@@ -181,8 +199,10 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default LazyCollectionX<Seq<T>> sliding(final int windowSize, final int increment) {
-        return fromStream(stream().sliding(windowSize, increment));
+    default LazyCollectionX<Seq<T>> sliding(final int windowSize,
+                                            final int increment) {
+        return fromStream(stream().sliding(windowSize,
+                                           increment));
     }
 
 
@@ -193,8 +213,10 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default <U> LazyCollectionX<U> scanLeft(final U seed, final BiFunction<? super U, ? super T, ? extends U> function) {
-        return fromStream(stream().scanLeft(seed, function));
+    default <U> LazyCollectionX<U> scanLeft(final U seed,
+                                            final BiFunction<? super U, ? super T, ? extends U> function) {
+        return fromStream(stream().scanLeft(seed,
+                                            function));
     }
 
 
@@ -205,8 +227,10 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default <U> LazyCollectionX<U> scanRight(final U identity, final BiFunction<? super T, ? super U, ? extends U> combiner) {
-        return fromStream(stream().scanRight(identity, combiner));
+    default <U> LazyCollectionX<U> scanRight(final U identity,
+                                             final BiFunction<? super T, ? super U, ? extends U> combiner) {
+        return fromStream(stream().scanRight(identity,
+                                             combiner));
     }
 
 
@@ -239,7 +263,7 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
     @Override
     default LazyCollectionX<T> removeAll(final Iterable<? extends T> list) {
-        removeAll((Iterable)ListX.fromIterable(list));
+        removeAll((Iterable) ListX.fromIterable(list));
         return this;
     }
 
@@ -252,9 +276,11 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default LazyCollectionX<T> cycle(final Monoid<T> m, final long times) {
+    default LazyCollectionX<T> cycle(final Monoid<T> m,
+                                     final long times) {
 
-        return fromStream(stream().cycle(m, times));
+        return fromStream(stream().cycle(m,
+                                         times));
     }
 
 
@@ -279,19 +305,23 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
 
-
     @Override
-    default <S, U> LazyCollectionX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second, final Iterable<? extends U> third) {
+    default <S, U> LazyCollectionX<Tuple3<T, S, U>> zip3(final Iterable<? extends S> second,
+                                                         final Iterable<? extends U> third) {
 
-        return fromStream(stream().zip3(second, third));
+        return fromStream(stream().zip3(second,
+                                        third));
     }
 
 
     @Override
-    default <T2, T3, T4> LazyCollectionX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second, final Iterable<? extends T3> third,
+    default <T2, T3, T4> LazyCollectionX<Tuple4<T, T2, T3, T4>> zip4(final Iterable<? extends T2> second,
+                                                                     final Iterable<? extends T3> third,
                                                                      final Iterable<? extends T4> fourth) {
 
-        return fromStream(stream().zip4(second, third, fourth));
+        return fromStream(stream().zip4(second,
+                                        third,
+                                        fourth));
     }
 
     /* (non-Javadoc)
@@ -452,9 +482,6 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
 
-
-
-
     @Override
     default LazyCollectionX<T> removeAll(final T... values) {
         return fromStream(stream().removeAll(values));
@@ -476,7 +503,6 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     default LazyCollectionX<T> retainStream(final Stream<? extends T> stream) {
         return fromStream(stream().retainStream(stream));
     }
-
 
 
     /* (non-Javadoc)
@@ -508,9 +534,11 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default <C extends PersistentCollection<? super T>> LazyCollectionX<C> grouped(final int size, final Supplier<C> supplier) {
+    default <C extends PersistentCollection<? super T>> LazyCollectionX<C> grouped(final int size,
+                                                                                   final Supplier<C> supplier) {
 
-        return fromStream(stream().grouped(size, supplier));
+        return fromStream(stream().grouped(size,
+                                           supplier));
     }
 
 
@@ -529,16 +557,20 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default <C extends PersistentCollection<? super T>> LazyCollectionX<C> groupedWhile(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> LazyCollectionX<C> groupedWhile(final Predicate<? super T> predicate,
+                                                                                        final Supplier<C> factory) {
 
-        return fromStream(stream().groupedWhile(predicate, factory));
+        return fromStream(stream().groupedWhile(predicate,
+                                                factory));
     }
 
 
     @Override
-    default <C extends PersistentCollection<? super T>> LazyCollectionX<C> groupedUntil(final Predicate<? super T> predicate, final Supplier<C> factory) {
+    default <C extends PersistentCollection<? super T>> LazyCollectionX<C> groupedUntil(final Predicate<? super T> predicate,
+                                                                                        final Supplier<C> factory) {
 
-        return fromStream(stream().groupedUntil(predicate, factory));
+        return fromStream(stream().groupedUntil(predicate,
+                                                factory));
     }
 
 
@@ -558,54 +590,62 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
     @Override
-    default LazyCollectionX<T> prependStream(Stream<? extends T> stream){
+    default LazyCollectionX<T> prependStream(Stream<? extends T> stream) {
         return fromStream(stream().prependStream(stream));
     }
 
     @Override
-    default LazyCollectionX<T> appendAll(T... values){
+    default LazyCollectionX<T> appendAll(T... values) {
         return fromStream(stream().appendAll(values));
     }
 
     @Override
-    default LazyCollectionX<T> append(T value){
+    default LazyCollectionX<T> append(T value) {
         return fromStream(stream().append(value));
     }
 
     @Override
-    default LazyCollectionX<T> prepend(T value){
+    default LazyCollectionX<T> prepend(T value) {
         return fromStream(stream().prepend(value));
     }
 
     @Override
-    default LazyCollectionX<T> prependAll(T... values){
+    default LazyCollectionX<T> prependAll(T... values) {
         return fromStream(stream().prependAll(values));
     }
 
     @Override
-    default LazyCollectionX<T> insertAt(int pos, T... values){
-        return fromStream(stream().insertAt(pos,values));
-    }
-    @Override
-    default LazyCollectionX<T> insertAt(int pos, T value){
-        return fromStream(stream().insertAt(pos,value));
+    default LazyCollectionX<T> insertAt(int pos,
+                                        T... values) {
+        return fromStream(stream().insertAt(pos,
+                                            values));
     }
 
     @Override
-    default LazyCollectionX<T> deleteBetween(int start, int end){
-        return fromStream(stream().deleteBetween(start,end));
+    default LazyCollectionX<T> insertAt(int pos,
+                                        T value) {
+        return fromStream(stream().insertAt(pos,
+                                            value));
     }
 
     @Override
-    default LazyCollectionX<T> insertStreamAt(int pos, Stream<T> stream){
-        return fromStream(stream().insertStreamAt(pos,stream));
+    default LazyCollectionX<T> deleteBetween(int start,
+                                             int end) {
+        return fromStream(stream().deleteBetween(start,
+                                                 end));
+    }
+
+    @Override
+    default LazyCollectionX<T> insertStreamAt(int pos,
+                                              Stream<T> stream) {
+        return fromStream(stream().insertStreamAt(pos,
+                                                  stream));
     }
 
     @Override
     default LazyCollectionX<T> materialize() {
         return this;
     }
-
 
 
     @Override
@@ -630,19 +670,24 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
 
 
     @Override
-    default LazyCollectionX<T> updateAt(int pos, T value) {
-        return fromStream(stream().updateAt(pos,value));
+    default LazyCollectionX<T> updateAt(int pos,
+                                        T value) {
+        return fromStream(stream().updateAt(pos,
+                                            value));
     }
 
 
-
     @Override
-    default LazyCollectionX<T> insertAt(int pos, Iterable<? extends T> values) {
-        return fromStream(stream().insertAt(pos,values));
+    default LazyCollectionX<T> insertAt(int pos,
+                                        Iterable<? extends T> values) {
+        return fromStream(stream().insertAt(pos,
+                                            values));
     }
 
     @Override
-    default LazyCollectionX<T> insertAt(int pos, ReactiveSeq<? extends T> values) {
-        return fromStream(stream().insertAt(pos,values));
+    default LazyCollectionX<T> insertAt(int pos,
+                                        ReactiveSeq<? extends T> values) {
+        return fromStream(stream().insertAt(pos,
+                                            values));
     }
 }

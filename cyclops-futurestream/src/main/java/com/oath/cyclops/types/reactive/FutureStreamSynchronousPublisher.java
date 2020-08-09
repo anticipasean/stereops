@@ -1,5 +1,8 @@
 package com.oath.cyclops.types.reactive;
 
+import com.oath.cyclops.async.adapters.Queue;
+import com.oath.cyclops.internal.react.exceptions.SimpleReactProcessingException;
+import com.oath.cyclops.internal.react.stream.LazyStreamWrapper;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -7,29 +10,23 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import com.oath.cyclops.internal.react.exceptions.SimpleReactProcessingException;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.internal.react.stream.LazyStreamWrapper;
-
 /**
  * Reactive Streams publisher, that publishes on the calling thread
  *
- * @author johnmcclean
- *
  * @param <T> Type of publisher
+ * @author johnmcclean
  */
 public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
+
     LazyStreamWrapper getLastActive();
 
     void cancel();
 
     void forwardErrors(Consumer<Throwable> c);
-
 
 
     /* (non-Javadoc)
@@ -48,11 +45,9 @@ public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
 
             final Subscription sub = new Subscription() {
 
-                volatile boolean complete = false;
-
-                volatile boolean cancelled = false;
                 final LinkedList<Long> requests = new LinkedList<Long>();
-
+                volatile boolean complete = false;
+                volatile boolean cancelled = false;
                 boolean active = false;
 
                 private void handleNext(final T data) {
@@ -66,8 +61,7 @@ public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
                 public void request(final long n) {
 
                     if (n < 1) {
-                        s.onError(new IllegalArgumentException(
-                                                               "3.9 While the Subscription is not cancelled, Subscription.request(long n) MUST throw a java.lang.IllegalArgumentException if the argument is <= 0."));
+                        s.onError(new IllegalArgumentException("3.9 While the Subscription is not cancelled, Subscription.request(long n) MUST throw a java.lang.IllegalArgumentException if the argument is <= 0."));
                     }
                     requests.add(n);
 
@@ -87,10 +81,13 @@ public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
                                 try {
 
                                     if (it.hasNext()) {
-                                        handleNext(s, it, results);
+                                        handleNext(s,
+                                                   it,
+                                                   results);
 
                                     } else {
-                                        handleComplete(results, s);
+                                        handleComplete(results,
+                                                       s);
                                         break;
                                     }
                                 } catch (final Throwable t) {
@@ -107,7 +104,8 @@ public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
 
                 }
 
-                private void handleComplete(final List<CompletableFuture> results, final Subscriber<? super T> s) {
+                private void handleComplete(final List<CompletableFuture> results,
+                                            final Subscriber<? super T> s) {
                     if (!complete && !cancelled) {
                         complete = true;
 
@@ -118,9 +116,9 @@ public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
                                                            .toArray(new CompletableFuture[results.size()]))
                                              .thenAccept(a -> callOnComplete(s))
                                              .exceptionally(e -> {
-                                callOnComplete(s);
-                                return null;
-                            });
+                                                 callOnComplete(s);
+                                                 return null;
+                                             });
                         } else {
                             callOnComplete(s);
                         }
@@ -133,19 +131,20 @@ public interface FutureStreamSynchronousPublisher<T> extends Publisher<T> {
                     s.onComplete();
                 }
 
-                private void handleNext(final Subscriber<? super T> s, final Iterator<CompletableFuture<T>> it,
-                        final List<CompletableFuture> results) {
+                private void handleNext(final Subscriber<? super T> s,
+                                        final Iterator<CompletableFuture<T>> it,
+                                        final List<CompletableFuture> results) {
 
                     results.add(it.next()
                                   .thenAccept(r -> {
-                        s.onNext(r);
-                    })
+                                      s.onNext(r);
+                                  })
                                   .exceptionally(t -> {
 
-                        s.onError(t);
-                        return null;
+                                      s.onError(t);
+                                      return null;
 
-                    }));
+                                  }));
                     final List<CompletableFuture> newResults = results.stream()
                                                                       .filter(cf -> cf.isDone())
                                                                       .collect(Collectors.toList());

@@ -1,19 +1,17 @@
 package com.oath.cyclops.types.traversable;
 
+import com.oath.cyclops.types.Filters;
+import cyclops.companion.Streams;
+import cyclops.control.Eval;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.oath.cyclops.types.Filters;
-import cyclops.companion.Streams;
-import cyclops.control.Eval;
-
 /**
  * An interface that represents a non-scalar Filters
  *
- * @author johnmcclean
- *
  * @param <T> Data type of elements stored in this IterableFilterable
+ * @author johnmcclean
  */
 public interface IterableFilterable<T> extends Filters<T>, Iterable<T> {
 
@@ -24,14 +22,15 @@ public interface IterableFilterable<T> extends Filters<T>, Iterable<T> {
      * @return Filters with all supplied elements removed
      */
     default Filters<T> removeStream(final Stream<? extends T> stream) {
-        final Eval<Set<T>> set = Eval.later(()->stream.collect(Collectors.toSet()));
-        return filterNot(i -> set.get().contains(i));
+        final Eval<Set<T>> set = Eval.later(() -> stream.collect(Collectors.toSet()));
+        return filterNot(i -> set.get()
+                                 .contains(i));
     }
 
     /**
      * Remove all elements in the supplied Iterable from this filterable
      *
-     * @param it  an Iterable of elements to removeValue
+     * @param it an Iterable of elements to removeValue
      * @return Filters with all supplied elements removed
      */
     default Filters<T> removeAll(final Iterable<? extends T> it) {
@@ -66,8 +65,9 @@ public interface IterableFilterable<T> extends Filters<T>, Iterable<T> {
      * @return Filters with supplied values retained, and others removed
      */
     default Filters<T> retainStream(final Stream<? extends T> stream) {
-        final Eval<Set<T>> set = Eval.later(()->stream.collect(Collectors.toSet()));
-        return filter(i -> set.get().contains(i));
+        final Eval<Set<T>> set = Eval.later(() -> stream.collect(Collectors.toSet()));
+        return filter(i -> set.get()
+                              .contains(i));
     }
 
     /**

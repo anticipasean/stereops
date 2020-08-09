@@ -9,24 +9,27 @@ import org.reactivestreams.tck.TestEnvironment;
 import org.testng.annotations.Test;
 
 @Test
-public class TckSynchronousPublisherTest extends PublisherVerification<Long>{
+public class TckSynchronousPublisherTest extends PublisherVerification<Long> {
 
-	public TckSynchronousPublisherTest(){
-		  super(new TestEnvironment(300L));
-	}
+    public TckSynchronousPublisherTest() {
+        super(new TestEnvironment(300L));
+    }
 
 
-	@Override
-	public Publisher<Long> createPublisher(long elements) {
-		return new LazyReact(ThreadPools.getCommonFreeThread()).iterate(0l, i->i+1l).sync().limit(elements);
+    @Override
+    public Publisher<Long> createPublisher(long elements) {
+        return new LazyReact(ThreadPools.getCommonFreeThread()).iterate(0l,
+                                                                        i -> i + 1l)
+                                                               .sync()
+                                                               .limit(elements);
 
-	}
+    }
 
-	@Override
-	public Publisher<Long> createFailedPublisher() {
-		return null; //not possible to forEachAsync to failed Stream
+    @Override
+    public Publisher<Long> createFailedPublisher() {
+        return null; //not possible to forEachAsync to failed Stream
 
-	}
+    }
 
 
 }

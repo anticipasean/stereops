@@ -15,56 +15,58 @@ import org.reactivestreams.Publisher;
 
 public class ReactiveCollections {
 
-    static <T> LinkedListX<T> linkedListX(Publisher<T> flowable){
+    static <T> LinkedListX<T> linkedListX(Publisher<T> flowable) {
         return LinkedListX.linkedListX(Spouts.from(flowable))
-                            .materialize();
+                          .materialize();
     }
 
-    static <T> VectorX<T> vectorX(Publisher<T> flowable){
+    static <T> VectorX<T> vectorX(Publisher<T> flowable) {
         return VectorX.vectorX(Spouts.from(flowable))
-            .materialize();
+                      .materialize();
     }
 
-    static <T> PersistentSetX<T> persistentSetX(Publisher<T> flowable){
+    static <T> PersistentSetX<T> persistentSetX(Publisher<T> flowable) {
         return PersistentSetX.persistentSetX(Spouts.from(flowable))
-            .materialize();
+                             .materialize();
     }
-    static <T> OrderedSetX<T> orderedSetX(Publisher<T> flowable){
+
+    static <T> OrderedSetX<T> orderedSetX(Publisher<T> flowable) {
         return OrderedSetX.orderedSetX(Spouts.from(flowable))
-            .materialize();
+                          .materialize();
     }
-    static <T> BagX<T> bagX(Publisher<T> flowable){
+
+    static <T> BagX<T> bagX(Publisher<T> flowable) {
         return BagX.bagX(Spouts.from(flowable))
-            .materialize();
+                   .materialize();
     }
 
-    static <T> PersistentQueueX<T> persistentQueueX(Publisher<T> flowable){
+    static <T> PersistentQueueX<T> persistentQueueX(Publisher<T> flowable) {
         return PersistentQueueX.persistentQueueX(Spouts.from(flowable))
-            .materialize();
+                               .materialize();
     }
 
-    static <T> ListX<T> listX(Publisher<T> flowable){
+    static <T> ListX<T> listX(Publisher<T> flowable) {
         return ListX.listX(Spouts.from(flowable))
-            .materialize();
+                    .materialize();
     }
 
-    static <T> DequeX<T> dequeX(Publisher<T> flowable){
+    static <T> DequeX<T> dequeX(Publisher<T> flowable) {
         return DequeX.dequeX(Spouts.from(flowable))
-            .materialize();
+                     .materialize();
     }
 
-    static <T> SetX<T> setX(Publisher<T> flowable){
+    static <T> SetX<T> setX(Publisher<T> flowable) {
         return SetX.setX(Spouts.from(flowable))
-            .materialize();
+                   .materialize();
     }
 
-    static <T> SortedSetX<T> sortedSetX(Publisher<T> flowable){
+    static <T> SortedSetX<T> sortedSetX(Publisher<T> flowable) {
         return SortedSetX.sortedSetX(Spouts.from(flowable))
-            .materialize();
+                         .materialize();
     }
 
-    static <T> QueueX<T> queueX(Publisher<T> flowable){
+    static <T> QueueX<T> queueX(Publisher<T> flowable) {
         return QueueX.queueX(Spouts.from(flowable))
-            .materialize();
+                     .materialize();
     }
 }

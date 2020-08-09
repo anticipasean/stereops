@@ -2,9 +2,9 @@ package com.oath.cyclops.async.wait;
 
 /**
  * Repeatedly retry to take or offer element to Queue if full or data unavailable, calling Thread.yield in between attempts
- * @author johnmcclean
  *
  * @param <T> Data type of elements in the async.Queue
+ * @author johnmcclean
  */
 public class YieldWait<T> implements WaitStrategy<T> {
 

@@ -1,7 +1,10 @@
 package com.oath.cyclops.internal.stream.spliterators.push.scan;
 
-import com.oath.cyclops.internal.stream.spliterators.push.*;
-
+import com.oath.cyclops.internal.stream.spliterators.push.AbstractOperatorTest;
+import com.oath.cyclops.internal.stream.spliterators.push.ArrayOfValuesOperator;
+import com.oath.cyclops.internal.stream.spliterators.push.Fixtures;
+import com.oath.cyclops.internal.stream.spliterators.push.LazyMapOperator;
+import com.oath.cyclops.internal.stream.spliterators.push.Operator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -10,28 +13,38 @@ import java.util.function.Supplier;
  */
 public class ScanOperatorTest extends AbstractOperatorTest {
 
-    Supplier<Function<? super Integer,? extends Integer>> s = ()->(a)->a+1;
-    public Operator<Integer> createEmpty(){
-       return new LazyMapOperator<Integer,Integer>(new ArrayOfValuesOperator<>(), s);
-    }
-    public Operator<Integer> createOne(){
-        return new LazyMapOperator<Integer,Integer>(new ArrayOfValuesOperator<>(1), s);
+    Supplier<Function<? super Integer, ? extends Integer>> s = () -> (a) -> a + 1;
 
+    public Operator<Integer> createEmpty() {
+        return new LazyMapOperator<Integer, Integer>(new ArrayOfValuesOperator<>(),
+                                                     s);
     }
 
-    public Operator<Integer> createThree(){
-        return new LazyMapOperator<Integer,Integer>(new ArrayOfValuesOperator<>(1,2,3), s);
-
-    }
-    public Operator<Integer> createTwoAndError(){
-        return new LazyMapOperator<Integer,Integer>(Fixtures.twoAndErrorSource, s);
-
-    }
-    public Operator<Integer> createThreeErrors(){
-        return new LazyMapOperator<Integer,Integer>(Fixtures.threeErrorsSource, s);
+    public Operator<Integer> createOne() {
+        return new LazyMapOperator<Integer, Integer>(new ArrayOfValuesOperator<>(1),
+                                                     s);
 
     }
 
+    public Operator<Integer> createThree() {
+        return new LazyMapOperator<Integer, Integer>(new ArrayOfValuesOperator<>(1,
+                                                                                 2,
+                                                                                 3),
+                                                     s);
+
+    }
+
+    public Operator<Integer> createTwoAndError() {
+        return new LazyMapOperator<Integer, Integer>(Fixtures.twoAndErrorSource,
+                                                     s);
+
+    }
+
+    public Operator<Integer> createThreeErrors() {
+        return new LazyMapOperator<Integer, Integer>(Fixtures.threeErrorsSource,
+                                                     s);
+
+    }
 
 
 }

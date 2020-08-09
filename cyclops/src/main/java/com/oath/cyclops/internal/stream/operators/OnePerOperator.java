@@ -1,12 +1,10 @@
 package com.oath.cyclops.internal.stream.operators;
 
+import cyclops.companion.Streams;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 import java.util.stream.Stream;
-
-import cyclops.companion.Streams;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -14,7 +12,8 @@ public class OnePerOperator<T> {
 
     private final Stream<T> stream;
 
-    public Stream<T> onePer(final long time, final TimeUnit t) {
+    public Stream<T> onePer(final long time,
+                            final TimeUnit t) {
         final Iterator<T> it = stream.iterator();
         final long next = t.toNanos(time);
         return Streams.stream(new Iterator<T>() {

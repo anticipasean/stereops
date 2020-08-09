@@ -12,17 +12,19 @@ public class SingleValueOperator<T> implements Operator<T> {
     final T value;
 
 
-    public SingleValueOperator(T value){
+    public SingleValueOperator(T value) {
         this.value = value;
 
     }
 
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         boolean[] sent = {false};
-        StreamSubscription sub = new StreamSubscription(){
-            LongConsumer work = n->{
+        StreamSubscription sub = new StreamSubscription() {
+            LongConsumer work = n -> {
                 if (n > 0 && !sent[0] && isActive()) {
                     onNext.accept(value);
                     requested.decrementAndGet();
@@ -31,9 +33,11 @@ public class SingleValueOperator<T> implements Operator<T> {
                 }
 
             };
+
             @Override
             public void request(long n) {
-                singleActiveRequest(1, work);
+                singleActiveRequest(1,
+                                    work);
 
             }
 
@@ -46,7 +50,9 @@ public class SingleValueOperator<T> implements Operator<T> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
         try {
             onNext.accept(value);
         } catch (Throwable t) {

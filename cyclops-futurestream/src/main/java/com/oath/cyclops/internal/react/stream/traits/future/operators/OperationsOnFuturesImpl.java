@@ -1,18 +1,17 @@
 package com.oath.cyclops.internal.react.stream.traits.future.operators;
 
-import java.util.stream.Stream;
-
 import com.oath.cyclops.internal.react.async.future.FastFuture;
 import com.oath.cyclops.internal.react.stream.LazyStreamWrapper;
 import com.oath.cyclops.react.async.subscription.Continueable;
 import com.oath.cyclops.types.futurestream.BlockingStreamHelper;
 import com.oath.cyclops.types.futurestream.OperationsOnFutures;
 import cyclops.futurestream.FutureStream;
-
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class OperationsOnFuturesImpl<T> implements OperationsOnFutures<T> {
+
     private final FutureStream<T> lfs;
 
     @Override
@@ -32,7 +31,8 @@ public class OperationsOnFuturesImpl<T> implements OperationsOnFutures<T> {
 
     @Override
     public T safeJoin(final FastFuture<T> f) {
-        return (T) BlockingStreamHelper.getSafe(f, lfs.getErrorHandler());
+        return (T) BlockingStreamHelper.getSafe(f,
+                                                lfs.getErrorHandler());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.oath.cyclops.react.async.subscription;
 
+import com.oath.cyclops.async.adapters.Queue;
+import cyclops.reactive.ReactiveSeq;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,29 +10,22 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import cyclops.reactive.ReactiveSeq;
-
-
-import com.oath.cyclops.async.adapters.Queue;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Subscription implements Continueable {
+
     private final Map<Queue, AtomicLong> limits = new HashMap<>();
 
     private final Map<Queue, AtomicBoolean> unlimited = new HashMap<>();
     private final Map<Queue, AtomicLong> count = new HashMap<>();
     private final List<Queue> queues = new LinkedList<>();
 
-    private final AtomicBoolean closed = new AtomicBoolean(
-                                                           false);
+    private final AtomicBoolean closed = new AtomicBoolean(false);
 
-    private final AtomicLong timeLimitNanos = new AtomicLong(
-                                                             -1);
+    private final AtomicLong timeLimitNanos = new AtomicLong(-1);
 
     /* (non-Javadoc)
      * @see Continueable#timeLimit()
@@ -45,9 +40,10 @@ public class Subscription implements Continueable {
      */
     @Override
     public void registerSkip(final long skip) {
-        if (queues.size() > 0)
+        if (queues.size() > 0) {
             limits.get(currentQueue())
                   .addAndGet(skip);
+        }
     }
 
     /* (non-Javadoc)
@@ -55,8 +51,9 @@ public class Subscription implements Continueable {
      */
     @Override
     public void registerTimeLimit(final long nanos) {
-        if (timeLimitNanos.get() == -1 || timeLimitNanos.get() > nanos)
+        if (timeLimitNanos.get() == -1 || timeLimitNanos.get() > nanos) {
             timeLimitNanos.set(nanos);
+        }
     }
 
     /* (non-Javadoc)
@@ -67,9 +64,10 @@ public class Subscription implements Continueable {
 
         if (queues.size() > 0) {
             if (unlimited.get(currentQueue())
-                         .get())
+                         .get()) {
                 limits.get(currentQueue())
                       .set(0);
+            }
 
             limits.get(currentQueue())
                   .addAndGet(limit);
@@ -90,12 +88,12 @@ public class Subscription implements Continueable {
     public void addQueue(final Queue q) {
 
         queues.add(q);
-        limits.put(q, new AtomicLong(
-                                     Long.MAX_VALUE - 1));
-        unlimited.put(q, new AtomicBoolean(
-                                           true));
-        count.put(q, new AtomicLong(
-                                    0l));
+        limits.put(q,
+                   new AtomicLong(Long.MAX_VALUE - 1));
+        unlimited.put(q,
+                      new AtomicBoolean(true));
+        count.put(q,
+                  new AtomicLong(0l));
 
     }
 
@@ -105,18 +103,22 @@ public class Subscription implements Continueable {
     @Override
     public void closeQueueIfFinished(final Queue queue) {
 
-        closeQueueIfFinished(queue, AtomicLong::incrementAndGet);
+        closeQueueIfFinished(queue,
+                             AtomicLong::incrementAndGet);
 
     }
 
-    private void closeQueueIfFinished(final Queue queue, final Function<AtomicLong, Long> fn) {
+    private void closeQueueIfFinished(final Queue queue,
+                                      final Function<AtomicLong, Long> fn) {
 
-        if (queues.size() == 0)
+        if (queues.size() == 0) {
             return;
+        }
 
         final long queueCount = fn.apply(count.get(queue));
         final long limit = valuesToRight(queue).stream()
-                                               .reduce((acc, next) -> Math.min(acc, next))
+                                               .reduce((acc, next) -> Math.min(acc,
+                                                                               next))
                                                .get();
 
         if (queueCount >= limit) { //last entry - close THIS queue only!
@@ -133,28 +135,33 @@ public class Subscription implements Continueable {
     @Override
     public void closeQueueIfFinishedStateless(final Queue queue) {
 
-        closeQueueIfFinished(queue, AtomicLong::get);
+        closeQueueIfFinished(queue,
+                             AtomicLong::get);
 
     }
 
     private List<Long> valuesToRight(final Queue queue) {
         return ReactiveSeq.fromStream(queues.stream())
-                  .splitAt(findQueue(queue))._2().map(limits::get)
-                                               .map(AtomicLong::get)
-                                               .collect(Collectors.toList());
+                          .splitAt(findQueue(queue))
+                          ._2()
+                          .map(limits::get)
+                          .map(AtomicLong::get)
+                          .collect(Collectors.toList());
 
     }
 
     private ReactiveSeq<Queue> queuesToLeft(final Queue queue) {
         return ReactiveSeq.fromStream(queues.stream())
-                  .splitAt(findQueue(queue))._1();
+                          .splitAt(findQueue(queue))
+                          ._1();
 
     }
 
     private int findQueue(final Queue queue) {
         for (int i = 0; i < queues.size(); i++) {
-            if (queues.get(i) == queue)
+            if (queues.get(i) == queue) {
                 return i;
+            }
         }
         return -1;
     }
@@ -195,11 +202,7 @@ public class Subscription implements Continueable {
     }
 }
 /**
-stream.map().iterator().limit(4).flatMap(..).limit(2).map(..).limit(8)
-subscription
-
-stream no limit
-	q1:limit (4)
-	q2:limit (2)
-	q3:limit (8)
-	**/
+ * stream.map().iterator().limit(4).flatMap(..).limit(2).map(..).limit(8) subscription
+ * <p>
+ * stream no limit q1:limit (4) q2:limit (2) q3:limit (8)
+ **/

@@ -19,6 +19,9 @@
 package scrabble;
 
 
+import static cyclops.reactive.ReactiveSeq.reactiveSeq;
+
+import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +35,6 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -41,13 +43,10 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Warmup;
 
-import cyclops.reactive.ReactiveSeq;
-import static cyclops.reactive.ReactiveSeq.reactiveSeq;
-
-
 
 /**
  * Shakespeare plays Scrabble
+ *
  * @author José
  * @author akarnokd
  * @author johnmcclean (modified to use ReactiveSeq)
@@ -55,15 +54,29 @@ import static cyclops.reactive.ReactiveSeq.reactiveSeq;
 public class IdenticalToStream extends ShakespearePlaysScrabble {
 
 
+    public static void main(String[] args) throws Exception {
+        IdenticalToStream s = new IdenticalToStream();
+        s.init();
+        System.out.println(s.measureThroughput());
+        int count = 0;
+        boolean run = true;
+        while (run) {
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < 100; i++) {
+                count += s.measureThroughput()
+                          .size();
+            }
+            System.out.println("Time " + (System.currentTimeMillis() - start));
+        }
+        System.out.println("" + count);
+
+    }
+
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-            iterations = 5
-    )
-    @Measurement(
-            iterations = 5
-    )
+    @Warmup(iterations = 5)
+    @Measurement(iterations = 5)
     @Fork(1)
     public List<Entry<Integer, List<String>>> measureThroughput() {
 
@@ -71,112 +84,73 @@ public class IdenticalToStream extends ShakespearePlaysScrabble {
         IntUnaryOperator scoreOfALetter = letter -> letterScores[letter - 'a'];
 
         // score of the same letters in a word
-        ToIntFunction<Entry<Integer, Long>> letterScore =
-                entry ->
-                        letterScores[entry.getKey() - 'a'] *
-                                Integer.min(
-                                        entry.getValue().intValue(),
-                                        scrabbleAvailableLetters[entry.getKey() - 'a']
-                                );
-
+        ToIntFunction<Entry<Integer, Long>> letterScore = entry -> letterScores[entry.getKey() - 'a']
+            * Integer.min(entry.getValue()
+                               .intValue(),
+                          scrabbleAvailableLetters[entry.getKey() - 'a']);
 
         // Histogram of the letters in a given word
-        Function<String, Map<Integer, Long>> histoOfLetters =
-                word -> ReactiveSeq.fromCharSequence(word)
-                        .collect(
-                                Collectors.groupingBy(
-                                        Function.identity(),
-                                        Collectors.counting()
-                                )
-                        );
+        Function<String, Map<Integer, Long>> histoOfLetters = word -> ReactiveSeq.fromCharSequence(word)
+                                                                                 .collect(Collectors.groupingBy(Function.identity(),
+                                                                                                                Collectors.counting()));
 
         // number of blanks for a given letter
-        ToLongFunction<Entry<Integer, Long>> blank =
-                entry ->
-                        Long.max(
-                                0L,
-                                entry.getValue() -
-                                        scrabbleAvailableLetters[entry.getKey() - 'a']
-                        );
+        ToLongFunction<Entry<Integer, Long>> blank = entry -> Long.max(0L,
+                                                                       entry.getValue() - scrabbleAvailableLetters[entry.getKey()
+                                                                           - 'a']);
 
         // number of blanks for a given word
-        Function<String, Long> nBlanks =
-                word -> reactiveSeq(histoOfLetters.apply(word).entrySet())
-                        .mapToLong(blank)
-                        .sum();
+        Function<String, Long> nBlanks = word -> reactiveSeq(histoOfLetters.apply(word)
+                                                                           .entrySet()).mapToLong(blank)
+                                                                                       .sum();
 
         // can a word be written with 2 blanks?
         Predicate<String> checkBlanks = word -> nBlanks.apply(word) <= 2;
 
         // score taking blanks into account
-        Function<String, Integer> score2 =
-                word -> reactiveSeq(histoOfLetters.apply(word).entrySet())
-                        .mapToInt(letterScore)
-                        .sum();
+        Function<String, Integer> score2 = word -> reactiveSeq(histoOfLetters.apply(word)
+                                                                             .entrySet()).mapToInt(letterScore)
+                                                                                         .sum();
 
         // Placing the word on the board
         // Building the streams of first and last letters
-        Function<String, IntStream> first3 = word -> word.chars().limit(3);
-        Function<String, IntStream> last3 = word -> word.chars().skip(Integer.max(0, word.length() - 4));
+        Function<String, IntStream> first3 = word -> word.chars()
+                                                         .limit(3);
+        Function<String, IntStream> last3 = word -> word.chars()
+                                                        .skip(Integer.max(0,
+                                                                          word.length() - 4));
 
         // Stream to be maxed
-        Function<String, IntStream> toBeMaxed =
-                word -> ReactiveSeq.of(first3.apply(word), last3.apply(word))
-                                    .flatMapToInt(Function.identity());
+        Function<String, IntStream> toBeMaxed = word -> ReactiveSeq.of(first3.apply(word),
+                                                                       last3.apply(word))
+                                                                   .flatMapToInt(Function.identity());
 
         // Bonus for double letter
-        ToIntFunction<String> bonusForDoubleLetter =
-                word -> toBeMaxed.apply(word)
-                        .map(scoreOfALetter)
-                        .max()
-                        .orElse(0);
+        ToIntFunction<String> bonusForDoubleLetter = word -> toBeMaxed.apply(word)
+                                                                      .map(scoreOfALetter)
+                                                                      .max()
+                                                                      .orElse(0);
 
         // score of the word put on the board
-        Function<String, Integer> score3 =
-                word ->
-                        (score2.apply(word) + bonusForDoubleLetter.applyAsInt(word))
-                                + (score2.apply(word) + bonusForDoubleLetter.applyAsInt(word))
-                                + (word.length() == 7 ? 50 : 0);
+        Function<String, Integer> score3 = word -> (score2.apply(word) + bonusForDoubleLetter.applyAsInt(word)) + (
+            score2.apply(word) + bonusForDoubleLetter.applyAsInt(word)) + (word.length() == 7 ? 50 : 0);
 
-        Function<Function<String, Integer>, ReactiveSeq<Map<Integer, List<String>>>> buildHistoOnScore =
-                score -> ReactiveSeq.of(reactiveSeq(shakespeareWords)
-                        .filter(scrabbleWords::contains)
-                        // .filter(canWrite)    // filter out the words that needs blanks
-                        .filter(checkBlanks) // filter out the words that needs more than 2 blanks
-                        .collect(
-                                Collectors.groupingBy(
-                                        score,
-                                        () -> new TreeMap<Integer, List<String>>(Comparator.reverseOrder()),
-                                        Collectors.toList()
-                                )
-                        ));
-
+        Function<Function<String, Integer>, ReactiveSeq<Map<Integer, List<String>>>> buildHistoOnScore = score -> ReactiveSeq.of(reactiveSeq(shakespeareWords).filter(scrabbleWords::contains)
+                                                                                                                                                              // .filter(canWrite)    // filter out the words that needs blanks
+                                                                                                                                                              .filter(checkBlanks) // filter out the words that needs more than 2 blanks
+                                                                                                                                                              .collect(Collectors.groupingBy(score,
+                                                                                                                                                                                             () -> new TreeMap<Integer, List<String>>(Comparator.reverseOrder()),
+                                                                                                                                                                                             Collectors.toList())));
 
         // best key / value pairs
-        List<Entry<Integer, List<String>>> finalList =
-                buildHistoOnScore.apply(score3).map(e->reactiveSeq(e.entrySet())
-                        .limit(3)
-                        .collect(Collectors.toList())).findAny().get();
+        List<Entry<Integer, List<String>>> finalList = buildHistoOnScore.apply(score3)
+                                                                        .map(e -> reactiveSeq(e.entrySet()).limit(3)
+                                                                                                           .collect(Collectors.toList()))
+                                                                        .findAny()
+                                                                        .get();
 
-//        System.out.println(finalList) ;
+        //        System.out.println(finalList) ;
 
-        return finalList ;
-    }
-
-    public static void main(String[] args) throws Exception {
-        IdenticalToStream s = new IdenticalToStream();
-        s.init();
-        System.out.println(s.measureThroughput());
-        int count =0;
-        boolean run = true;
-        while(run)
-        {
-            long start = System.currentTimeMillis();
-            for(int i=0;i<100;i++)
-                count +=s.measureThroughput().size();
-            System.out.println("Time " + (System.currentTimeMillis()-start));
-        }
-        System.out.println( "" + count);
-
+        return finalList;
     }
 }

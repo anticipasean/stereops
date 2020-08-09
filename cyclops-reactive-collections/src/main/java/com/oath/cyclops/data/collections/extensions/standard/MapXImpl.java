@@ -1,5 +1,9 @@
 package com.oath.cyclops.data.collections.extensions.standard;
 
+import static cyclops.reactive.collections.mutable.MapX.defaultCollector;
+
+import cyclops.data.tuple.Tuple2;
+import cyclops.reactive.collections.mutable.MapX;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -8,18 +12,11 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collector;
-
-import cyclops.data.tuple.Tuple2;
-
-import cyclops.reactive.collections.mutable.MapX;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.reactivestreams.Subscription;
 
-import static cyclops.reactive.collections.mutable.MapX.defaultCollector;
-
-@AllArgsConstructor
 public class MapXImpl<K, V> implements MapX<K, V> {
+
     private final Map<K, V> map;
     @Getter
     private final Collector<Tuple2<? extends K, ? extends V>, ?, Map<K, V>> collector;
@@ -29,15 +26,17 @@ public class MapXImpl<K, V> implements MapX<K, V> {
         this.collector = defaultCollector();
     }
 
+    @SuppressWarnings("unchecked")
     public MapXImpl() {
         this.collector = defaultCollector();
         this.map = (Map) this.collector.supplier()
-            .get();
+                                       .get();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <R> R unwrap() {
-        return (R)map;
+        return (R) map;
     }
 
     /**
@@ -95,8 +94,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#put(java.lang.Object, java.lang.Object)
      */
     @Override
-    public V put(final K key, final V value) {
-        return map.put(key, value);
+    public V put(final K key,
+                 final V value) {
+        return map.put(key,
+                       value);
     }
 
     /**
@@ -119,7 +120,6 @@ public class MapXImpl<K, V> implements MapX<K, V> {
     }
 
     /**
-     *
      * @see java.util.Map#clear()
      */
     @Override
@@ -180,8 +180,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#getOrDefault(java.lang.Object, java.lang.Object)
      */
     @Override
-    public V getOrDefault(final Object key, final V defaultValue) {
-        return map.getOrDefault(key, defaultValue);
+    public V getOrDefault(final Object key,
+                          final V defaultValue) {
+        return map.getOrDefault(key,
+                                defaultValue);
     }
 
     /**
@@ -209,8 +211,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#putIfAbsent(java.lang.Object, java.lang.Object)
      */
     @Override
-    public V putIfAbsent(final K key, final V value) {
-        return map.putIfAbsent(key, value);
+    public V putIfAbsent(final K key,
+                         final V value) {
+        return map.putIfAbsent(key,
+                               value);
     }
 
     /**
@@ -220,8 +224,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#remove(java.lang.Object, java.lang.Object)
      */
     @Override
-    public boolean remove(final Object key, final Object value) {
-        return map.remove(key, value);
+    public boolean remove(final Object key,
+                          final Object value) {
+        return map.remove(key,
+                          value);
     }
 
     /**
@@ -232,8 +238,12 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#replace(java.lang.Object, java.lang.Object, java.lang.Object)
      */
     @Override
-    public boolean replace(final K key, final V oldValue, final V newValue) {
-        return map.replace(key, oldValue, newValue);
+    public boolean replace(final K key,
+                           final V oldValue,
+                           final V newValue) {
+        return map.replace(key,
+                           oldValue,
+                           newValue);
     }
 
     /**
@@ -243,8 +253,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#replace(java.lang.Object, java.lang.Object)
      */
     @Override
-    public V replace(final K key, final V value) {
-        return map.replace(key, value);
+    public V replace(final K key,
+                     final V value) {
+        return map.replace(key,
+                           value);
     }
 
     /**
@@ -254,8 +266,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#computeIfAbsent(java.lang.Object, java.util.function.Function)
      */
     @Override
-    public V computeIfAbsent(final K key, final Function<? super K, ? extends V> mappingFunction) {
-        return map.computeIfAbsent(key, mappingFunction);
+    public V computeIfAbsent(final K key,
+                             final Function<? super K, ? extends V> mappingFunction) {
+        return map.computeIfAbsent(key,
+                                   mappingFunction);
     }
 
     /**
@@ -265,8 +279,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#computeIfPresent(java.lang.Object, java.util.function.BiFunction)
      */
     @Override
-    public V computeIfPresent(final K key, final BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-        return map.computeIfPresent(key, remappingFunction);
+    public V computeIfPresent(final K key,
+                              final BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        return map.computeIfPresent(key,
+                                    remappingFunction);
     }
 
     /**
@@ -276,8 +292,10 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#compute(java.lang.Object, java.util.function.BiFunction)
      */
     @Override
-    public V compute(final K key, final BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-        return map.compute(key, remappingFunction);
+    public V compute(final K key,
+                     final BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        return map.compute(key,
+                           remappingFunction);
     }
 
     /**
@@ -288,47 +306,76 @@ public class MapXImpl<K, V> implements MapX<K, V> {
      * @see java.util.Map#merge(java.lang.Object, java.lang.Object, java.util.function.BiFunction)
      */
     @Override
-    public V merge(final K key, final V value, final BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
-        return map.merge(key, value, remappingFunction);
+    public V merge(final K key,
+                   final V value,
+                   final BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+        return map.merge(key,
+                         value,
+                         remappingFunction);
     }
 
     @Override
-    public <X extends Throwable> Subscription forEach(long numberOfElements, Consumer<? super Tuple2<K, V>> consumer) {
-        return stream().forEach(numberOfElements,consumer);
+    public <X extends Throwable> Subscription forEach(long numberOfElements,
+                                                      Consumer<? super Tuple2<K, V>> consumer) {
+        return stream().forEach(numberOfElements,
+                                consumer);
     }
 
     @Override
-    public <X extends Throwable> Subscription forEach(long numberOfElements, Consumer<? super Tuple2<K, V>> consumer, Consumer<? super Throwable> consumerError) {
-        return stream().forEach(numberOfElements,consumer,consumerError);
+    public <X extends Throwable> Subscription forEach(long numberOfElements,
+                                                      Consumer<? super Tuple2<K, V>> consumer,
+                                                      Consumer<? super Throwable> consumerError) {
+        return stream().forEach(numberOfElements,
+                                consumer,
+                                consumerError);
     }
 
     @Override
-    public <X extends Throwable> Subscription forEach(long numberOfElements, Consumer<? super Tuple2<K, V>> consumer, Consumer<? super Throwable> consumerError, Runnable onComplete) {
-        return stream().forEach(numberOfElements,consumer,consumerError,onComplete);
+    public <X extends Throwable> Subscription forEach(long numberOfElements,
+                                                      Consumer<? super Tuple2<K, V>> consumer,
+                                                      Consumer<? super Throwable> consumerError,
+                                                      Runnable onComplete) {
+        return stream().forEach(numberOfElements,
+                                consumer,
+                                consumerError,
+                                onComplete);
     }
+
     @Override
     public <X extends Throwable> Subscription forEachSubscribe(Consumer<? super Tuple2<K, V>> consumer) {
         return stream().forEachSubscribe(consumer);
     }
 
     @Override
-    public <X extends Throwable> Subscription forEachSubscribe(Consumer<? super Tuple2<K, V>> consumer, Consumer<? super Throwable> consumerError) {
-        return stream().forEachSubscribe(consumer,consumerError);
+    public <X extends Throwable> Subscription forEachSubscribe(Consumer<? super Tuple2<K, V>> consumer,
+                                                               Consumer<? super Throwable> consumerError) {
+        return stream().forEachSubscribe(consumer,
+                                         consumerError);
     }
 
     @Override
-    public <X extends Throwable> Subscription forEachSubscribe(Consumer<? super Tuple2<K, V>> consumer, Consumer<? super Throwable> consumerError, Runnable onComplete) {
-        return stream().forEachSubscribe(consumer,consumerError,onComplete);
+    public <X extends Throwable> Subscription forEachSubscribe(Consumer<? super Tuple2<K, V>> consumer,
+                                                               Consumer<? super Throwable> consumerError,
+                                                               Runnable onComplete) {
+        return stream().forEachSubscribe(consumer,
+                                         consumerError,
+                                         onComplete);
     }
 
     @Override
-    public <X extends Throwable> void forEach(Consumer<? super Tuple2<K, V>> consumerElement, Consumer<? super Throwable> consumerError) {
-        stream().forEach(consumerElement,consumerError);
+    public <X extends Throwable> void forEach(Consumer<? super Tuple2<K, V>> consumerElement,
+                                              Consumer<? super Throwable> consumerError) {
+        stream().forEach(consumerElement,
+                         consumerError);
     }
 
     @Override
-    public <X extends Throwable> void forEach(Consumer<? super Tuple2<K, V>> consumerElement, Consumer<? super Throwable> consumerError, Runnable onComplete) {
-        stream().forEach(consumerElement,consumerError,onComplete);
+    public <X extends Throwable> void forEach(Consumer<? super Tuple2<K, V>> consumerElement,
+                                              Consumer<? super Throwable> consumerError,
+                                              Runnable onComplete) {
+        stream().forEach(consumerElement,
+                         consumerError,
+                         onComplete);
     }
 
     @Override

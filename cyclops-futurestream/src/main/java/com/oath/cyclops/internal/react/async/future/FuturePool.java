@@ -1,16 +1,13 @@
 package com.oath.cyclops.internal.react.async.future;
 
 import java.util.function.Supplier;
-
-import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
-
 import lombok.AllArgsConstructor;
+import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
 
 /**
  * Active consumer / multiple producer future pool
  *
  * @author johnmcclean
- *
  */
 @AllArgsConstructor
 public class FuturePool {

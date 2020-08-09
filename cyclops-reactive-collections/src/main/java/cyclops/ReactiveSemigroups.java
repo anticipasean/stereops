@@ -2,15 +2,23 @@ package cyclops;
 
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
 import cyclops.function.Semigroup;
-import cyclops.reactive.collections.immutable.*;
-import cyclops.reactive.collections.mutable.*;
+import cyclops.reactive.collections.immutable.BagX;
+import cyclops.reactive.collections.immutable.LinkedListX;
+import cyclops.reactive.collections.immutable.OrderedSetX;
+import cyclops.reactive.collections.immutable.PersistentQueueX;
+import cyclops.reactive.collections.immutable.PersistentSetX;
+import cyclops.reactive.collections.immutable.VectorX;
+import cyclops.reactive.collections.mutable.DequeX;
+import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collections.mutable.QueueX;
+import cyclops.reactive.collections.mutable.SetX;
+import cyclops.reactive.collections.mutable.SortedSetX;
 
 /**
- *
  * A static class with a large number of SemigroupK  or Combiners.
- *
+ * <p>
  * A semigroup is an Object that can be used to combine objects of the same type.
- *
+ * <p>
  * Using raw Semigroups with container types
  * <pre>
  *     {@code
@@ -19,8 +27,7 @@ import cyclops.reactive.collections.mutable.*;
  *     }
  * </pre>
  *
- *
- *  @author johnmcclean
+ * @author johnmcclean
  */
 public interface ReactiveSemigroups {
 
@@ -37,16 +44,13 @@ public interface ReactiveSemigroups {
      *
      * }
      * </pre>
+     *
      * @return A Semigroup that can combine any cyclops2-react extended Collection type
      */
     static <T, C extends FluentCollectionX<T>> Semigroup<C> collectionXConcat() {
 
         return (a, b) -> (C) a.plusAll(b);
     }
-
-
-
-
 
 
     /**
@@ -125,7 +129,6 @@ public interface ReactiveSemigroups {
     static <T> Semigroup<BagX<T>> bagXConcat() {
         return ReactiveSemigroups.collectionXConcat();
     }
-
 
 
 }

@@ -1,45 +1,42 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
 import cyclops.data.Seq;
-import lombok.AllArgsConstructor;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import org.agrona.concurrent.OneToOneConcurrentArrayQueue;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import java.util.Queue;
-import java.util.concurrent.atomic.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 
 public class ConcurrentFlatMapper<T, R> {
 
-    volatile Seq<ActiveSubscriber> activeList = Seq.empty();
-    static final AtomicReferenceFieldUpdater<ConcurrentFlatMapper, Seq> queueUpdater =
-        AtomicReferenceFieldUpdater.newUpdater(ConcurrentFlatMapper.class, Seq.class, "activeList");
-
+    static final AtomicReferenceFieldUpdater<ConcurrentFlatMapper, Seq> queueUpdater = AtomicReferenceFieldUpdater.newUpdater(ConcurrentFlatMapper.class,
+                                                                                                                              Seq.class,
+                                                                                                                              "activeList");
     final Consumer<? super R> onNext;
     final Consumer<? super Throwable> onError;
     final Runnable onComplete;
-
-
     final Function<? super T, ? extends Publisher<? extends R>> mapper;
-
     final StreamSubscription sub;
     final int maxConcurrency;
+    final AtomicLong requested = new AtomicLong(0);
+    final AtomicInteger wip = new AtomicInteger(0);
+    volatile Seq<ActiveSubscriber> activeList = Seq.empty();
+    int subscriberIndex;
+    boolean processAll = false;
     private volatile boolean running = true;
 
 
-    final AtomicLong requested = new AtomicLong(0);
-    final AtomicInteger wip = new AtomicInteger(0);
-
-
-    int subscriberIndex;
-    boolean processAll = false;
-
-
-    public ConcurrentFlatMapper(StreamSubscription s, Consumer<? super R> onNext, Consumer<? super Throwable> onError, Runnable onComplete,
+    public ConcurrentFlatMapper(StreamSubscription s,
+                                Consumer<? super R> onNext,
+                                Consumer<? super Throwable> onError,
+                                Runnable onComplete,
                                 Function<? super T, ? extends Publisher<? extends R>> mapper,
                                 int maxConcurrency) {
         this.sub = s;
@@ -54,55 +51,63 @@ public class ConcurrentFlatMapper<T, R> {
 
     public void request(long n) {
 
-        if(!sub.isOpen)
+        if (!sub.isOpen) {
             return;
-        if (processAll)
+        }
+        if (processAll) {
             return;
+        }
 
-        if(n==Long.MAX_VALUE){
-            processAll =true;
+        if (n == Long.MAX_VALUE) {
+            processAll = true;
             requested.set(Long.MAX_VALUE);
         }
-        requested.accumulateAndGet(n,(a,b)->{
-            long sum = a+b;
-            return sum <0L ? Long.MAX_VALUE : sum;
-        });
+        requested.accumulateAndGet(n,
+                                   (a, b) -> {
+                                       long sum = a + b;
+                                       return sum < 0L ? Long.MAX_VALUE : sum;
+                                   });
 
         handleMainPublisher();
     }
 
 
     public void onNext(T t) {
-        if (!running)
+        if (!running) {
             return;
+        }
         try {
             Publisher<? extends R> next = mapper.apply(t);
             ActiveSubscriber inner = new ActiveSubscriber();
-            queueUpdater.getAndUpdate(this, q -> q.plus(inner));
+            queueUpdater.getAndUpdate(this,
+                                      q -> q.plus(inner));
             next.subscribe(inner);
-        }catch(Throwable e){
+        } catch (Throwable e) {
             onError.accept(e);
         }
 
     }
 
     private boolean remove(ActiveSubscriber toRemove) {
-        queueUpdater.getAndUpdate(this, q -> q.removeValue(toRemove));
+        queueUpdater.getAndUpdate(this,
+                                  q -> q.removeValue(toRemove));
         return true;
     }
 
 
     public void onError(Throwable t) {
-        if (!running)
+        if (!running) {
             return;
+        }
         onError.accept(t);
         handleMainPublisher();
     }
 
 
     public void onComplete() {
-        if (!running)
+        if (!running) {
             return;
+        }
 
         running = false;
         handleMainPublisher();
@@ -116,6 +121,94 @@ public class ConcurrentFlatMapper<T, R> {
         populateFromQueuesAndCleanup();
     }
 
+    void populateFromQueuesAndCleanup() {
+        int incomingRequests = 1;
+
+        do {
+
+            Seq<ActiveSubscriber> localActiveSubs = activeList;
+            SubscriberRequests state = new SubscriberRequests(!running,
+                                                              0l,
+                                                              requested.get(),
+                                                              0L,
+                                                              false,
+                                                              null);
+
+            if (state.complete(activeList.isEmpty())) {
+                return;
+            }
+
+            if (activeRequestsAndSubscriptions(state)) {
+                if (processRequests(localActiveSubs,
+                                    state)) {
+                    return;
+                }
+            }
+
+            if (noActiveRequestsAndSubscriptions(state)) {
+                localActiveSubs = activeList;
+                if (cleanupSubsAndReqs(localActiveSubs,
+                                       state)) {
+                    return;
+                }
+            }
+            state.sendMissingRequests();
+            incomingRequests = state.recalcConcurrentRequests(incomingRequests);
+
+        } while (incomingRequests != 0);
+    }
+
+    private boolean noActiveRequestsAndSubscriptions(SubscriberRequests state) {
+        return state.requestedLocal == 0L && !activeList.isEmpty();
+    }
+
+    private boolean activeRequestsAndSubscriptions(SubscriberRequests state) {
+        return state.requestedLocal != 0L && !activeList.isEmpty();
+    }
+
+    private boolean cleanupSubsAndReqs(Seq<ActiveSubscriber> localActiveSubs,
+                                       SubscriberRequests state) {
+        ActiveSubscriber active = null;
+        for (int i = 0; i < localActiveSubs.size() && (active = localActiveSubs.getOrElse(i,
+                                                                                          null)).queue.isEmpty() && sub.isOpen;
+             i++) {
+            if (!sub.isOpen) {
+                return true;
+            }
+            state.setNextActive(active);
+            state.cleanup();
+        }
+        return false;
+    }
+
+    private boolean processRequests(Seq<ActiveSubscriber> localActiveSubs,
+                                    SubscriberRequests state) {
+        int activeIndex = subscriberIndex;
+        if (activeIndex >= localActiveSubs.size()) {
+            activeIndex = 0;
+        }
+
+        for (int i = 0; i < localActiveSubs.size() && state.requestedLocal != 0L && sub.isOpen; i++) {
+
+            state.setNextActive(localActiveSubs.getOrElse(activeIndex,
+                                                          null));
+
+            if (!state.populateRequestsFromQueue()) {
+                return true;
+            }
+            state.handleComplete();
+            state.processPendingRequests();
+            activeIndex = activeIndex + 1;
+            if (activeIndex >= localActiveSubs.size()) {
+                activeIndex = 0;
+            }
+
+
+        }
+
+        subscriberIndex = activeIndex;
+        return false;
+    }
 
     class SubscriberRequests {
 
@@ -126,7 +219,12 @@ public class ConcurrentFlatMapper<T, R> {
         boolean rerun;
         ActiveSubscriber nextActive;
 
-        public SubscriberRequests(boolean completed, long pendingRequests, long requestedLocal, long missing, boolean rerun, ActiveSubscriber nextActive) {
+        public SubscriberRequests(boolean completed,
+                                  long pendingRequests,
+                                  long requestedLocal,
+                                  long missing,
+                                  boolean rerun,
+                                  ActiveSubscriber nextActive) {
             this.completed = completed;
             this.pendingRequests = pendingRequests;
             this.requestedLocal = requestedLocal;
@@ -135,7 +233,7 @@ public class ConcurrentFlatMapper<T, R> {
             this.nextActive = nextActive;
         }
 
-        boolean populateRequestsFromQueue(){
+        boolean populateRequestsFromQueue() {
             while (pendingRequests != requestedLocal) {
                 completed = nextActive.done;
 
@@ -144,9 +242,10 @@ public class ConcurrentFlatMapper<T, R> {
                 if (complete(false)) {
                     return false;
                 }
-                if(raw == null) {
-                    if (completed)
+                if (raw == null) {
+                    if (completed) {
                         removeAndReturn();
+                    }
 
                     return true;
                 }
@@ -158,11 +257,12 @@ public class ConcurrentFlatMapper<T, R> {
             return true;
         }
 
-        void setNextActive(ActiveSubscriber nextActive){
+        void setNextActive(ActiveSubscriber nextActive) {
             this.nextActive = nextActive;
             completed = nextActive.done;
         }
-        void handleComplete(){
+
+        void handleComplete() {
             if (pendingRequests == requestedLocal) {
                 completed = nextActive.done;
                 cleanup();
@@ -181,13 +281,14 @@ public class ConcurrentFlatMapper<T, R> {
             missing++;
         }
 
-        void processPendingRequests(){
+        void processPendingRequests() {
             if (pendingRequests != 0L) {
                 if (!nextActive.done) {
-                    nextActive.sub.get().request(pendingRequests);
+                    nextActive.sub.get()
+                                  .request(pendingRequests);
                 }
                 if (requestedLocal != Long.MAX_VALUE) {
-                    requestedLocal =  requested.addAndGet(-pendingRequests);
+                    requestedLocal = requested.addAndGet(-pendingRequests);
                 }
                 pendingRequests = 0L;
             }
@@ -204,96 +305,25 @@ public class ConcurrentFlatMapper<T, R> {
 
         int recalcConcurrentRequests(int missed) {
 
-            if(!rerun){
+            if (!rerun) {
                 return wip.addAndGet(-missed);
             }
             return missed;
         }
+
         boolean complete(boolean empty) {
 
-            if (!sub.isOpen)
+            if (!sub.isOpen) {
                 return true;
+            }
 
-
-            if(completed && empty) {
+            if (completed && empty) {
                 onComplete.run();
                 return true;
             }
 
             return false;
         }
-    }
-
-    void populateFromQueuesAndCleanup() {
-        int incomingRequests = 1;
-
-        do {
-
-            Seq<ActiveSubscriber> localActiveSubs = activeList;
-            SubscriberRequests state = new SubscriberRequests(!running,0l,requested.get(),0L,false,null);
-
-            if (state.complete(activeList.isEmpty()))
-                return;
-
-            if (activeRequestsAndSubscriptions(state)) {
-                if (processRequests(localActiveSubs, state))
-                    return;
-            }
-
-            if (noActiveRequestsAndSubscriptions(state)) {
-                localActiveSubs = activeList;
-                if (cleanupSubsAndReqs(localActiveSubs, state))
-                    return;
-            }
-            state.sendMissingRequests();
-            incomingRequests =state.recalcConcurrentRequests(incomingRequests);
-
-        } while (incomingRequests != 0);
-    }
-
-    private boolean noActiveRequestsAndSubscriptions(SubscriberRequests state) {
-        return state.requestedLocal == 0L && !activeList.isEmpty();
-    }
-
-    private boolean activeRequestsAndSubscriptions(SubscriberRequests state) {
-        return state.requestedLocal != 0L && !activeList.isEmpty();
-    }
-
-    private boolean cleanupSubsAndReqs(Seq<ActiveSubscriber> localActiveSubs, SubscriberRequests state) {
-        ActiveSubscriber active =null;
-        for (int i = 0; i < localActiveSubs.size() && (active=localActiveSubs.getOrElse(i,null)).queue.isEmpty() && sub.isOpen; i++) {
-            if (!sub.isOpen) {
-                return true;
-            }
-            state.setNextActive(active);
-            state.cleanup();
-        }
-        return false;
-    }
-
-    private boolean processRequests(Seq<ActiveSubscriber> localActiveSubs, SubscriberRequests state) {
-        int activeIndex = subscriberIndex;
-        if(activeIndex >= localActiveSubs.size())
-            activeIndex =0;
-
-        for (int i = 0; i < localActiveSubs.size() && state.requestedLocal !=0L && sub.isOpen; i++) {
-
-
-            state.setNextActive(localActiveSubs.getOrElse(activeIndex, null));
-
-            if(!state.populateRequestsFromQueue())
-                return true;
-            state.handleComplete();
-            state.processPendingRequests();
-            activeIndex = activeIndex+1;
-            if(activeIndex >= localActiveSubs.size())
-                activeIndex = 0;
-
-
-        }
-
-        subscriberIndex = activeIndex;
-        return false;
     }
 
     final class ActiveSubscriber implements Subscriber<R> {
@@ -305,7 +335,8 @@ public class ConcurrentFlatMapper<T, R> {
 
         @Override
         public void onSubscribe(Subscription s) {
-            if (this.sub.compareAndSet(null, s)) {
+            if (this.sub.compareAndSet(null,
+                                       s)) {
                 s.request(1);
             }
         }
@@ -313,9 +344,9 @@ public class ConcurrentFlatMapper<T, R> {
         @Override
         public void onNext(R t) {
 
-            if (wip.compareAndSet(0, 1)) {
+            if (wip.compareAndSet(0,
+                                  1)) {
                 long localRequested = requested.get();
-
 
                 if (localRequested != 0L) {
 
@@ -323,7 +354,8 @@ public class ConcurrentFlatMapper<T, R> {
                     if (localRequested != Long.MAX_VALUE) {
                         requested.decrementAndGet();
                     }
-                    sub.get().request(1);
+                    sub.get()
+                       .request(1);
                 } else {
                     queue.offer(com.oath.cyclops.async.adapters.Queue.nullSafe(t)); //queue full! handle somehow
                 }
@@ -339,8 +371,9 @@ public class ConcurrentFlatMapper<T, R> {
 
         @Override
         public void onError(Throwable t) {
-            if(done)
+            if (done) {
                 return;
+            }
             onError.accept(t);
             handleMainPublisher();
         }

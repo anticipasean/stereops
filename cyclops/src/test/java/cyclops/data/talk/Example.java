@@ -5,11 +5,11 @@ import cyclops.data.Seq;
 
 public class Example {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         Seq<Integer> seq = Seq.empty();
-        int first = seq.fold(c->c.head(),
-                             n->-1);
+        int first = seq.fold(c -> c.head(),
+                             n -> -1);
 
 
     }

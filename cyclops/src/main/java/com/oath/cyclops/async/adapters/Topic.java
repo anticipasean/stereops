@@ -1,43 +1,38 @@
 package com.oath.cyclops.async.adapters;
 
+import com.oath.cyclops.async.QueueFactories;
+import com.oath.cyclops.react.async.subscription.Continueable;
+import com.oath.cyclops.types.futurestream.Continuation;
+import cyclops.control.Option;
+import cyclops.data.HashMap;
+import cyclops.data.Seq;
+import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.oath.cyclops.types.futurestream.Continuation;
-import com.oath.cyclops.async.QueueFactories;
-
-
-import cyclops.control.Option;
-import cyclops.data.HashMap;
-import cyclops.data.Seq;
-import cyclops.reactive.ReactiveSeq;
-import com.oath.cyclops.react.async.subscription.Continueable;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Synchronized;
 
 /**
- * A class that can accept input streams and generate emitted streams where data sent in the Topic is guaranteed to be
- * provided to all Topic subsribers
- *
- * @author johnmcclean
+ * A class that can accept input streams and generate emitted streams where data sent in the Topic is guaranteed to be provided to
+ * all Topic subsribers
  *
  * @param <T> Data type for the Topic
+ * @author johnmcclean
  */
 public class Topic<T> implements Adapter<T> {
 
     @Getter(AccessLevel.PACKAGE)
     private final DistributingCollection<T> distributor = new DistributingCollection<T>();
+    private final Object lock = new Object();
+    private final QueueFactory<T> factory;
     @Getter(AccessLevel.PACKAGE)
     private volatile HashMap<ReactiveSeq<?>, Queue<T>> streamToQueue = HashMap.empty();
-    private final Object lock = new Object();
     private volatile int index = 0;
-    private final QueueFactory<T> factory;
 
     /**
      * Construct a new Topic
@@ -50,30 +45,33 @@ public class Topic<T> implements Adapter<T> {
 
     /**
      * Construct a Topic using the Queue provided
+     *
      * @param q Queue to back this Topic with
      */
     public Topic(final Queue<T> q) {
         factory = QueueFactories.unboundedQueue();
         distributor.addQueue(q);
     }
-    public Topic(final Queue<T> q,QueueFactory<T> factory) {
+
+    public Topic(final Queue<T> q,
+                 QueueFactory<T> factory) {
         this.factory = factory;
         distributor.addQueue(q);
     }
 
     /**
-     * Topic will maintain a queue for each Subscribing Stream
-     * If a Stream is finished with a Topic it is good practice to disconnect from the Topic
-     * so messages will no longer be stored for that Stream
+     * Topic will maintain a queue for each Subscribing Stream If a Stream is finished with a Topic it is good practice to
+     * disconnect from the Topic so messages will no longer be stored for that Stream
      *
      * @param stream
      */
     @Synchronized("lock")
     public void disconnect(final ReactiveSeq<T> stream) {
 
-      Option<Queue<T>> o = streamToQueue.get(stream);
+        Option<Queue<T>> o = streamToQueue.get(stream);
 
-        distributor.removeQueue(streamToQueue.getOrElse(stream, new Queue<>()));
+        distributor.removeQueue(streamToQueue.getOrElse(stream,
+                                                        new Queue<>()));
         this.streamToQueue = streamToQueue.remove(stream);
         this.index--;
     }
@@ -83,7 +81,8 @@ public class Topic<T> implements Adapter<T> {
         final Queue<T> queue = this.getNextQueue();
         final ReactiveSeq<R> stream = streamCreator.apply(queue);
 
-        this.streamToQueue = streamToQueue.put(stream, queue);
+        this.streamToQueue = streamToQueue.put(stream,
+                                               queue);
         return stream;
     }
 
@@ -98,8 +97,8 @@ public class Topic<T> implements Adapter<T> {
     }
 
     /**
-     * Generating a streamCompletableFutures will register the Stream as a reactiveSubscriber to this topic.
-     * It will be provided with an internal Queue as a mailbox. @see Topic.disconnect to disconnect from the topic
+     * Generating a streamCompletableFutures will register the Stream as a reactiveSubscriber to this topic. It will be provided
+     * with an internal Queue as a mailbox. @see Topic.disconnect to disconnect from the topic
      *
      * @return Stream of CompletableFutures that can be used as input into a SimpleReact concurrent dataflow
      */
@@ -109,8 +108,9 @@ public class Topic<T> implements Adapter<T> {
     }
 
     /**
-     * Generating a stream will register the Stream as a reactiveSubscriber to this topic.
-     * It will be provided with an internal Queue as a mailbox. @see Topic.disconnect to disconnect from the topic
+     * Generating a stream will register the Stream as a reactiveSubscriber to this topic. It will be provided with an internal
+     * Queue as a mailbox. @see Topic.disconnect to disconnect from the topic
+     *
      * @return Stream of data
      */
     @Override
@@ -129,7 +129,6 @@ public class Topic<T> implements Adapter<T> {
 
     private Queue<T> getNextQueue() {
 
-
         if (index >= this.distributor.getSubscribers()
                                      .size()) {
 
@@ -137,7 +136,8 @@ public class Topic<T> implements Adapter<T> {
 
         }
         return this.distributor.getSubscribers()
-                               .getOrElse(index++,null);
+                               .getOrElse(index++,
+                                          null);
     }
 
     /**
@@ -158,13 +158,16 @@ public class Topic<T> implements Adapter<T> {
      */
     public Signal<Integer> getSizeSignal(final int index) {
         return this.distributor.getSubscribers()
-                               .getOrElse(index,null)
+                               .getOrElse(index,
+                                          null)
                                .getSizeSignal();
     }
 
-    public void setSizeSignal(final int index, final Signal<Integer> s) {
+    public void setSizeSignal(final int index,
+                              final Signal<Integer> s) {
         this.distributor.getSubscribers()
-                        .getOrElse(index, null)
+                        .getOrElse(index,
+                                   null)
                         .setSizeSignal(s);
     }
 
@@ -182,16 +185,21 @@ public class Topic<T> implements Adapter<T> {
     }
 
     public void addContinuation(Continuation cont) {
-        distributor.subscribers.forEach(q->q.addContinuation(cont));
+        distributor.subscribers.forEach(q -> q.addContinuation(cont));
+    }
+
+    @Override
+    public <R> R fold(final Function<? super Queue<T>, ? extends R> caseQueue,
+                      final Function<? super Topic<T>, ? extends R> caseTopic) {
+        return caseTopic.apply(this);
     }
 
     static class DistributingCollection<T> extends ArrayList<T> {
 
         private static final long serialVersionUID = 1L;
+        private final Object lock = new Object();
         @Getter
         private volatile Seq<Queue<T>> subscribers = Seq.empty();
-
-        private final Object lock = new Object();
 
         @Synchronized("lock")
         public void addQueue(final Queue<T> q) {
@@ -200,7 +208,7 @@ public class Topic<T> implements Adapter<T> {
 
         @Synchronized("lock")
         public void removeQueue(final Queue<T> q) {
-             subscribers = subscribers.removeValue(q);
+            subscribers = subscribers.removeValue(q);
         }
 
         @Override
@@ -216,11 +224,6 @@ public class Topic<T> implements Adapter<T> {
             return true;
         }
 
-    }
-
-    @Override
-    public <R> R fold(final Function<? super Queue<T>, ? extends R> caseQueue, final Function<? super Topic<T>, ? extends R> caseTopic) {
-        return caseTopic.apply(this);
     }
 
 }

@@ -2,7 +2,6 @@ package com.oath.cyclops.internal.stream.spliterators.push;
 
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
-
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -10,15 +9,17 @@ import java.util.function.Consumer;
 /**
  * Created by johnmcclean on 12/01/2017.
  */
-public class CombineOperator<T,A,R> extends BaseOperator<T,ReactiveSeq<T>> {
-
-    private final BiPredicate<? super T, ? super T> predicate;
-
-    private final BinaryOperator<T> accumulator;
+public class CombineOperator<T, A, R> extends BaseOperator<T, ReactiveSeq<T>> {
 
     static final Object UNSET = new Object();
+    private final BiPredicate<? super T, ? super T> predicate;
+    private final BinaryOperator<T> accumulator;
+    volatile int test = 0;
 
-    public CombineOperator(Operator<T> source, BiPredicate<? super T, ? super T> predicate, BinaryOperator<T> accumulator){
+
+    public CombineOperator(Operator<T> source,
+                           BiPredicate<? super T, ? super T> predicate,
+                           BinaryOperator<T> accumulator) {
         super(source);
         this.predicate = predicate;
 
@@ -26,23 +27,25 @@ public class CombineOperator<T,A,R> extends BaseOperator<T,ReactiveSeq<T>> {
 
     }
 
-
     @Override
-    public StreamSubscription subscribe(Consumer<? super ReactiveSeq<T>> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super ReactiveSeq<T>> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
         final Object[] current = {UNSET};
         StreamSubscription[] upstream = {null};
-        StreamSubscription sub = new StreamSubscription(){
+        StreamSubscription sub = new StreamSubscription() {
             @Override
             public void request(long n) {
-                if(n<=0) {
+                if (n <= 0) {
                     onError.accept(new IllegalArgumentException("3.9 While the Subscription is not cancelled, Subscription.request(long n) MUST throw a java.lang.IllegalArgumentException if the argument is <= 0."));
                     return;
                 }
-                if(!isOpen)
+                if (!isOpen) {
                     return;
+                }
                 super.request(n);
 
-                upstream[0].request(n );
+                upstream[0].request(n);
 
 
             }
@@ -54,75 +57,89 @@ public class CombineOperator<T,A,R> extends BaseOperator<T,ReactiveSeq<T>> {
 
             }
         };
-        upstream[0] = source.subscribe(next-> {
-                    try {
-                        if(current[0]== UNSET){
-                            current[0]=next;
-                        } else if (predicate.test((T)current[0], next)) {
-                            current[0] = accumulator.apply((T)current[0], next);
+        upstream[0] = source.subscribe(next -> {
+                                           try {
+                                               if (current[0] == UNSET) {
+                                                   current[0] = next;
+                                               } else if (predicate.test((T) current[0],
+                                                                         next)) {
+                                                   current[0] = accumulator.apply((T) current[0],
+                                                                                  next);
 
-                        } else {
-                            final T result = (T)current[0];
-                            current[0] = (T) UNSET;
-                            onNext.accept(Spouts.of(result, next));
-                            return;
-                        }
+                                               } else {
+                                                   final T result = (T) current[0];
+                                                   current[0] = (T) UNSET;
+                                                   onNext.accept(Spouts.of(result,
+                                                                           next));
+                                                   return;
+                                               }
 
+                                               request(upstream,
+                                                       1l);
 
-                       request( upstream,1l);
+                                           } catch (Throwable t) {
 
-                    } catch (Throwable t) {
-
-                        onError.accept(t);
-                    }
-                }
-                ,t->{onError.accept(t);
-                    sub.requested.decrementAndGet();
-                    if(sub.isActive())
-                        request( upstream,1);
-                },()->{
-                    if(current[0]!= UNSET)
-                        onNext.accept(Spouts.of((T)current[0]));
-                    onComplete.run();
-                });
+                                               onError.accept(t);
+                                           }
+                                       },
+                                       t -> {
+                                           onError.accept(t);
+                                           sub.requested.decrementAndGet();
+                                           if (sub.isActive()) {
+                                               request(upstream,
+                                                       1);
+                                           }
+                                       },
+                                       () -> {
+                                           if (current[0] != UNSET) {
+                                               onNext.accept(Spouts.of((T) current[0]));
+                                           }
+                                           onComplete.run();
+                                       });
         return sub;
     }
 
-    volatile int test = 0;
     @Override
-    public void subscribeAll(Consumer<? super ReactiveSeq<T>> onNext, Consumer<? super Throwable> onError, Runnable onCompleteDs) {
+    public void subscribeAll(Consumer<? super ReactiveSeq<T>> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onCompleteDs) {
         final Object[] current = {UNSET};
         boolean[] completed = {false};
-        source.subscribeAll(next-> {
+        source.subscribeAll(next -> {
 
-                    try {
-                        if(current[0]== UNSET){
-                            current[0]=next;
-                        } else if (predicate.test((T)current[0], next)) {
-                            current[0] = accumulator.apply((T)current[0], next);
+                                try {
+                                    if (current[0] == UNSET) {
+                                        current[0] = next;
+                                    } else if (predicate.test((T) current[0],
+                                                              next)) {
+                                        current[0] = accumulator.apply((T) current[0],
+                                                                       next);
 
-                        } else {
-                            final T result = (T)current[0];
-                            current[0] = (T) UNSET;
+                                    } else {
+                                        final T result = (T) current[0];
+                                        current[0] = (T) UNSET;
 
-                            onNext.accept(Spouts.of(result, next));
-                            return;
-                        }
+                                        onNext.accept(Spouts.of(result,
+                                                                next));
+                                        return;
+                                    }
 
 
-                    } catch (Throwable t) {
+                                } catch (Throwable t) {
 
-                        onError.accept(t);
-                    }
-                }
-                ,onError,()->{
-                    if(!completed[0]) {
+                                    onError.accept(t);
+                                }
+                            },
+                            onError,
+                            () -> {
+                                if (!completed[0]) {
 
-                        if (current[0] != UNSET)
-                            onNext.accept(Spouts.of((T) current[0]));
-                        onCompleteDs.run();
-                        completed[0]=true;
-                    }
-                });
+                                    if (current[0] != UNSET) {
+                                        onNext.accept(Spouts.of((T) current[0]));
+                                    }
+                                    onCompleteDs.run();
+                                    completed[0] = true;
+                                }
+                            });
     }
 }

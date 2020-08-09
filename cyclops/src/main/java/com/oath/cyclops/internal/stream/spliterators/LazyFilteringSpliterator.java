@@ -9,24 +9,30 @@ import java.util.function.Supplier;
 /**
  * Created by johnmcclean on 22/12/2016.
  */
-public class LazyFilteringSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements CopyableSpliterator<T>{
+public class LazyFilteringSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements CopyableSpliterator<T> {
+
     Spliterator<T> source;
     Predicate<? super T> mapper;
     Supplier<Predicate<? super T>> mapperSupplier;
-    public LazyFilteringSpliterator(final Spliterator<T> source, Supplier<Predicate<? super T>> mapperSupplier) {
-        super(source.estimateSize(),source.characteristics() & Spliterator.ORDERED);
+
+    public LazyFilteringSpliterator(final Spliterator<T> source,
+                                    Supplier<Predicate<? super T>> mapperSupplier) {
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
 
         this.source = source;
         this.mapperSupplier = mapperSupplier;
         this.mapper = mapperSupplier.get();
 
     }
+
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
-        source.forEachRemaining(t->{
+        source.forEachRemaining(t -> {
 
-            if(mapper.test(t))
+            if (mapper.test(t)) {
                 action.accept(t);
+            }
         });
 
     }
@@ -44,13 +50,14 @@ public class LazyFilteringSpliterator<T> extends Spliterators.AbstractSpliterato
                     accepted[0] = true;
                 }
             });
-        }while(!accepted[0] && advance);
+        } while (!accepted[0] && advance);
         return accepted[0] && advance;
     }
 
     @Override
     public Spliterator<T> copy() {
-        return new LazyFilteringSpliterator<T>(CopyableSpliterator.copy(source),mapperSupplier);
+        return new LazyFilteringSpliterator<T>(CopyableSpliterator.copy(source),
+                                               mapperSupplier);
     }
 
 

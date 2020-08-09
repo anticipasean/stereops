@@ -1,21 +1,24 @@
 package com.oath.cyclops.internal.react.stream;
 
+import com.oath.cyclops.async.adapters.Queue;
+import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
+import com.oath.cyclops.react.async.subscription.Continueable;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import com.oath.cyclops.react.async.subscription.Continueable;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
-
 public class InfiniteClosingSpliterator<T> implements Spliterator<T> {
-    private long estimate;
+
     final Supplier<T> s;
     private final Continueable subscription;
     private final Queue queue;
+    private long estimate;
 
-    protected InfiniteClosingSpliterator(final long estimate, final Supplier<T> s, final Continueable subscription, final Queue queue) {
+    protected InfiniteClosingSpliterator(final long estimate,
+                                         final Supplier<T> s,
+                                         final Continueable subscription,
+                                         final Queue queue) {
         this.estimate = estimate;
         this.s = s;
         this.subscription = subscription;
@@ -23,7 +26,9 @@ public class InfiniteClosingSpliterator<T> implements Spliterator<T> {
         this.subscription.addQueue(queue);
     }
 
-    public InfiniteClosingSpliterator(final long estimate, final Supplier<T> s, final Continueable subscription) {
+    public InfiniteClosingSpliterator(final long estimate,
+                                      final Supplier<T> s,
+                                      final Continueable subscription) {
         this.estimate = estimate;
         this.s = s;
         this.subscription = subscription;
@@ -47,8 +52,9 @@ public class InfiniteClosingSpliterator<T> implements Spliterator<T> {
         try {
 
             action.accept(s.get());
-            if (subscription.closed())
+            if (subscription.closed()) {
                 return false;
+            }
             return true;
         } catch (final ClosedQueueException e) {
             return false;
@@ -62,8 +68,10 @@ public class InfiniteClosingSpliterator<T> implements Spliterator<T> {
     @Override
     public Spliterator<T> trySplit() {
 
-        return new InfiniteClosingSpliterator(
-                                              estimate >>>= 1, s, subscription, queue);
+        return new InfiniteClosingSpliterator(estimate >>>= 1,
+                                              s,
+                                              subscription,
+                                              queue);
     }
 
 }

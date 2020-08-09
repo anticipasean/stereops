@@ -8,7 +8,7 @@ public interface ContinuationStrategy {
 
     public void handleContinuation();
 
-    default boolean isBlocking(){
+    default boolean isBlocking() {
         return false;
     }
 }

@@ -1,8 +1,7 @@
 package cyclops.futurestream.react.async.vertx;
 
-import java.util.concurrent.Executor;
-
 import io.vertx.core.Vertx;
+import java.util.concurrent.Executor;
 
 /* vert.x 3 dependency:
     <dependency>
@@ -13,16 +12,17 @@ import io.vertx.core.Vertx;
 */
 
 public class VertxExecutor implements Executor {
-  protected final Vertx vertx;
 
-  public VertxExecutor(Vertx vertx) {
-    super();
-    this.vertx = vertx;
-  }
+    protected final Vertx vertx;
 
-  @Override
-  public void execute(Runnable command) {
-    vertx.runOnContext(v -> command.run()); // event loop, non-blocking
-   // vertx.executeBlocking(v -> command.run(), null); // thread pool, blocking
-  }
+    public VertxExecutor(Vertx vertx) {
+        super();
+        this.vertx = vertx;
+    }
+
+    @Override
+    public void execute(Runnable command) {
+        vertx.runOnContext(v -> command.run()); // event loop, non-blocking
+        // vertx.executeBlocking(v -> command.run(), null); // thread pool, blocking
+    }
 }

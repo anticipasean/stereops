@@ -2,86 +2,148 @@ package cyclops.streams;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-
-import static cyclops.data.tuple.Tuple.tuple;
-import static cyclops.data.tuple.Tuple.tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import com.oath.cyclops.types.foldable.Folds;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import com.oath.cyclops.types.foldable.Folds;
-
 import org.junit.Before;
 import org.junit.Test;
 
 public abstract class CollectableTest {
-    public abstract <T> Folds<T> of(T... values);
+
+    static final Executor exec = Executors.newFixedThreadPool(1);
     Folds<Integer> empty;
     Folds<Integer> nonEmpty;
-    static final Executor exec = Executors.newFixedThreadPool(1);
+
+    public abstract <T> Folds<T> of(T... values);
+
     @Before
-    public void setup(){
+    public void setup() {
         empty = of();
         nonEmpty = of(1);
 
     }
+
     @Test
-    public void testMax(){
-        assertThat(of(1,2,3,4,5).maximum((t1, t2) -> t1-t2)
-                .orElse(-1),is(5));
+    public void testMax() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).maximum((t1, t2) -> t1 - t2)
+                        .orElse(-1),
+                   is(5));
     }
+
     @Test
-    public void testMin(){
-        assertThat(of(1,2,3,4,5).minimum((t1, t2) -> t1-t2)
-                .orElse(-1),is(1));
+    public void testMin() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).minimum((t1, t2) -> t1 - t2)
+                        .orElse(-1),
+                   is(1));
     }
 
 
     @Test
-    public void testAnyMatch(){
-        assertThat(of(1,2,3,4,5).anyMatch(it-> it.equals(3)),is(true));
+    public void testAnyMatch() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).anyMatch(it -> it.equals(3)),
+                   is(true));
     }
+
     @Test
-    public void testAllMatch(){
-        assertThat(of(1,2,3,4,5).allMatch(it-> it>0 && it <6),is(true));
+    public void testAllMatch() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).allMatch(it -> it > 0 && it < 6),
+                   is(true));
     }
+
     @Test
-    public void testNoneMatch(){
-        assertThat(of(1,2,3,4,5).noneMatch(it-> it==5000),is(true));
+    public void testNoneMatch() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).noneMatch(it -> it == 5000),
+                   is(true));
     }
 
 
     @Test
-    public void testAnyMatchFalse(){
-        assertThat(of(1,2,3,4,5).anyMatch(it-> it.equals(8)),is(false));
+    public void testAnyMatchFalse() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).anyMatch(it -> it.equals(8)),
+                   is(false));
     }
+
     @Test
-    public void testAllMatchFalse(){
-        assertThat(of(1,2,3,4,5).allMatch(it-> it<0 && it >6),is(false));
+    public void testAllMatchFalse() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).allMatch(it -> it < 0 && it > 6),
+                   is(false));
     }
 
     @Test
     public void testToCollection() {
-        assertThat( Arrays.asList(1,2,3,4,5),equalTo(of(1,2,3,4,5)
-                .toCollection(()->new ArrayList())));
+        assertThat(Arrays.asList(1,
+                                 2,
+                                 3,
+                                 4,
+                                 5),
+                   equalTo(of(1,
+                              2,
+                              3,
+                              4,
+                              5).toCollection(() -> new ArrayList())));
     }
 
     @Test
-    public void testCount(){
-        assertThat(of(1,5,3,4,2).count(),is(5L));
+    public void testCount() {
+        assertThat(of(1,
+                      5,
+                      3,
+                      4,
+                      2).count(),
+                   is(5L));
     }
 
 
     @Test
-    public void collect(){
-        assertThat(of(1,2,3,4,5).collect(Collectors.toList()).size(),is(5));
-        assertThat(of(1,1,1,2).collect(Collectors.toSet()).size(),is(2));
+    public void collect() {
+        assertThat(of(1,
+                      2,
+                      3,
+                      4,
+                      5).collect(Collectors.toList())
+                        .size(),
+                   is(5));
+        assertThat(of(1,
+                      1,
+                      1,
+                      2).collect(Collectors.toSet())
+                        .size(),
+                   is(2));
     }
 
     protected Object value() {
@@ -93,6 +155,7 @@ public abstract class CollectableTest {
         }
         return "jello";
     }
+
     protected int value2() {
         try {
             Thread.sleep(250);
@@ -104,42 +167,45 @@ public abstract class CollectableTest {
     }
 
 
+    @Test
+    public void testMinByMaxBy() {
+        Supplier<Folds<Integer>> s = () -> of(1,
+                                              2,
+                                              3,
+                                              4,
+                                              5,
+                                              6);
 
+        assertEquals(1,
+                     (int) s.get()
+                            .maxBy(t -> Math.abs(t - 5))
+                            .orElse(-1));
+        assertEquals(5,
+                     (int) s.get()
+                            .minBy(t -> Math.abs(t - 5))
+                            .orElse(-1));
 
-
-
-
-
-
-
-
-        @Test
-        public void testMinByMaxBy() {
-            Supplier<Folds<Integer>> s = () -> of(1, 2, 3, 4, 5, 6);
-
-            assertEquals(1, (int) s.get().maxBy(t -> Math.abs(t - 5)).orElse(-1));
-            assertEquals(5, (int) s.get().minBy(t -> Math.abs(t - 5)).orElse(-1));
-
-            assertEquals(6, (int) s.get().maxBy(t -> "" + t).orElse(-1));
-            assertEquals(1, (int) s.get().minBy(t -> "" + t).orElse(-1));
-        }
-
-
-
-
-
+        assertEquals(6,
+                     (int) s.get()
+                            .maxBy(t -> "" + t)
+                            .orElse(-1));
+        assertEquals(1,
+                     (int) s.get()
+                            .minBy(t -> "" + t)
+                            .orElse(-1));
+    }
 
 
     protected Object sleep(int i) {
         try {
-            Thread.currentThread().sleep(i);
+            Thread.currentThread()
+                  .sleep(i);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return i;
     }
-
 
 
 }

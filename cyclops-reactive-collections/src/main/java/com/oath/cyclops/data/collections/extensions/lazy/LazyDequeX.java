@@ -2,25 +2,24 @@ package com.oath.cyclops.data.collections.extensions.lazy;
 
 
 import com.oath.cyclops.types.foldable.Evaluation;
-import cyclops.reactive.collections.mutable.DequeX;
 import cyclops.reactive.ReactiveSeq;
-import lombok.EqualsAndHashCode;
-
-import java.util.*;
+import cyclops.reactive.collections.mutable.DequeX;
+import java.util.Deque;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.stream.Collector;
+import lombok.EqualsAndHashCode;
 
 /**
- * An extended List type {@see java.util.List}
- * Extended List operations execute lazily e.g.
+ * An extended List type {@see java.util.List} Extended List operations execute lazily e.g.
  * <pre>
  * {@code
  *    StreamX<Integer> q = StreamX.of(1,2,3)
  *                                      .map(i->i*2);
  * }
  * </pre>
- * The map operation above is not executed immediately. It will only be executed when (if) the data inside the
- * queue is accessed. This allows lazy operations to be chained and executed more efficiently e.g.
+ * The map operation above is not executed immediately. It will only be executed when (if) the data inside the queue is accessed.
+ * This allows lazy operations to be chained and executed more efficiently e.g.
  *
  * <pre>
  * {@code
@@ -29,16 +28,49 @@ import java.util.stream.Collector;
  *                              .filter(i->i<5);
  * }
  * </pre>
- *
+ * <p>
  * The operation above is more efficient than the equivalent operation with a ListX.
  *
- * @author johnmcclean
- *
  * @param <T> the type of elements held in this toX
+ * @author johnmcclean
  */
-@EqualsAndHashCode(of = { "deque" })
-public class LazyDequeX<T> extends AbstractLazyCollection<T,Deque<T>> implements DequeX<T> {
+@EqualsAndHashCode(of = {"deque"})
+public class LazyDequeX<T> extends AbstractLazyCollection<T, Deque<T>> implements DequeX<T> {
 
+
+    public LazyDequeX(Deque<T> list,
+                      ReactiveSeq<T> seq,
+                      Collector<T, ?, Deque<T>> collector,
+                      Evaluation strict) {
+        super(list,
+              seq,
+              collector,
+              strict,
+              asyncDeque());
+
+    }
+
+    public LazyDequeX(Deque<T> list,
+                      Collector<T, ?, Deque<T>> collector,
+                      Evaluation strict) {
+        super(list,
+              null,
+              collector,
+              strict,
+              asyncDeque());
+
+    }
+
+    public LazyDequeX(ReactiveSeq<T> seq,
+                      Collector<T, ?, Deque<T>> collector,
+                      Evaluation strict) {
+        super(null,
+              seq,
+              collector,
+              strict,
+              asyncDeque());
+
+    }
 
     public static final <T> Function<ReactiveSeq<Deque<T>>, Deque<T>> asyncDeque() {
         return r -> {
@@ -48,56 +80,60 @@ public class LazyDequeX<T> extends AbstractLazyCollection<T,Deque<T>> implements
         };
     }
 
-    public LazyDequeX(Deque<T> list, ReactiveSeq<T> seq, Collector<T, ?, Deque<T>> collector, Evaluation strict) {
-        super(list, seq, collector,strict, asyncDeque());
-
-    }
-    public LazyDequeX(Deque<T> list, Collector<T, ?, Deque<T>> collector,Evaluation strict) {
-        super(list, null, collector,strict,asyncDeque());
-
-    }
-
-    public LazyDequeX(ReactiveSeq<T> seq, Collector<T, ?, Deque<T>> collector,Evaluation strict) {
-        super(null, seq, collector,strict,asyncDeque());
-
-    }
-
     @Override
-    public LazyDequeX<T> type(Collector<T, ?, Deque<T>> collector){
-        return (LazyDequeX)new LazyDequeX<T>(this.getList(),this.getSeq().get(),collector, evaluation());
+    public LazyDequeX<T> type(Collector<T, ?, Deque<T>> collector) {
+        return new LazyDequeX<T>(this.getList(),
+                                 this.getSeq()
+                                     .get(),
+                                 collector,
+                                 evaluation());
     }
+
     //@Override
     public DequeX<T> materialize() {
         get();
         return this;
     }
+
     @Override
     public DequeX<T> lazy() {
-        return new LazyDequeX<T>(getList(),getSeq().get(),getCollectorInternal(),Evaluation.LAZY) ;
+        return new LazyDequeX<T>(getList(),
+                                 getSeq().get(),
+                                 getCollectorInternal(),
+                                 Evaluation.LAZY);
     }
 
     @Override
     public DequeX<T> eager() {
-        return new LazyDequeX<T>(getList(),getSeq().get(),getCollectorInternal(),Evaluation.EAGER) ;
+        return new LazyDequeX<T>(getList(),
+                                 getSeq().get(),
+                                 getCollectorInternal(),
+                                 Evaluation.EAGER);
     }
 
     @Override
     public <T1> Collector<T1, ?, Deque<T1>> getCollector() {
-        return (Collector)super.getCollectorInternal();
+        return (Collector) super.getCollectorInternal();
     }
-
 
 
     @Override
     public <X> LazyDequeX<X> fromStream(ReactiveSeq<X> stream) {
 
-        return new LazyDequeX<X>((Deque)getList(),ReactiveSeq.fromStream(stream),(Collector)this.getCollectorInternal(), evaluation());
+        return new LazyDequeX<X>((Deque) getList(),
+                                 ReactiveSeq.fromStream(stream),
+                                 (Collector) this.getCollectorInternal(),
+                                 evaluation());
     }
 
     @Override
     public <T1> LazyDequeX<T1> from(Iterable<T1> c) {
-        if(c instanceof Deque)
-            return new LazyDequeX<T1>((Deque)c,null,(Collector)this.getCollectorInternal(), evaluation());
+        if (c instanceof Deque) {
+            return new LazyDequeX<T1>((Deque) c,
+                                      null,
+                                      (Collector) this.getCollectorInternal(),
+                                      evaluation());
+        }
         return fromStream(ReactiveSeq.fromIterable(c));
     }
 
@@ -105,7 +141,6 @@ public class LazyDequeX<T> extends AbstractLazyCollection<T,Deque<T>> implements
     public <U> LazyDequeX<U> unitIterable(Iterable<U> it) {
         return fromStream(ReactiveSeq.fromIterable(it));
     }
-
 
 
     @Override

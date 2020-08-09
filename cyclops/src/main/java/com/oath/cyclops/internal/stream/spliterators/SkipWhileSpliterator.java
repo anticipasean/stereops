@@ -9,32 +9,38 @@ import java.util.function.Predicate;
  * Created by johnmcclean on 22/12/2016.
  */
 public class SkipWhileSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements CopyableSpliterator<T> {
+
     private final Spliterator<T> source;
     private final Predicate<? super T> predicate;
     boolean closed = false;
-    public SkipWhileSpliterator(final Spliterator<T> source, Predicate<? super T> predicate) {
-        super(source.estimateSize(),source.characteristics() & Spliterator.ORDERED);
+    boolean open = false;
+
+    public SkipWhileSpliterator(final Spliterator<T> source,
+                                Predicate<? super T> predicate) {
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
 
         this.source = source;
         this.predicate = predicate;
 
     }
-    boolean open = false;
+
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
 
-        while(!closed){
+        while (!closed) {
             boolean canAdvance = source.tryAdvance(t -> {
-                if(!open) {
+                if (!open) {
                     open = !predicate.test(t);
 
-                    if (open)
+                    if (open) {
                         action.accept(t);
-                }else{
+                    }
+                } else {
                     action.accept(t);
                 }
             });
-            if(!canAdvance){
+            if (!canAdvance) {
                 closed = true;
                 return;
             }
@@ -46,10 +52,11 @@ public class SkipWhileSpliterator<T> extends Spliterators.AbstractSpliterator<T>
 
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
-        if(closed)
+        if (closed) {
             return true;
+        }
         boolean sent[] = {false};
-        for(;;) {
+        for (; ; ) {
 
             boolean canAdvance = source.tryAdvance(t -> {
                 if (!open) {
@@ -64,7 +71,7 @@ public class SkipWhileSpliterator<T> extends Spliterators.AbstractSpliterator<T>
                     action.accept(t);
                 }
             });
-            if(sent[0] || !canAdvance) {
+            if (sent[0] || !canAdvance) {
                 closed = !canAdvance;
                 boolean result = !closed;
                 return result;
@@ -74,6 +81,7 @@ public class SkipWhileSpliterator<T> extends Spliterators.AbstractSpliterator<T>
 
     @Override
     public Spliterator<T> copy() {
-        return new SkipWhileSpliterator<>(CopyableSpliterator.copy(source),predicate);
+        return new SkipWhileSpliterator<>(CopyableSpliterator.copy(source),
+                                          predicate);
     }
 }

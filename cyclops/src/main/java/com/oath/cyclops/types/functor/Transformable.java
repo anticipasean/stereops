@@ -1,22 +1,16 @@
 package com.oath.cyclops.types.functor;
 
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.control.Trampoline;
 
 /**
  * An interface that represents a type that can transform a value from one type to another
  *
- * @author johnmcclean
- *
  * @param <T> Data type of element(s) stored in this Transformable
+ * @author johnmcclean
  */
 @FunctionalInterface
 public interface Transformable<T> {
-
 
 
     /**
@@ -41,7 +35,7 @@ public interface Transformable<T> {
     /**
      * Peek at the current value of this Transformable, without transforming it
      *
-      * <pre>
+     * <pre>
      * {@code
      *
      *
@@ -53,6 +47,7 @@ public interface Transformable<T> {
      *
      * }
      * </pre>
+     *
      * @param c Consumer that recieves each element from this Transformable
      * @return Transformable that will peek at each value
      */
@@ -62,11 +57,6 @@ public interface Transformable<T> {
             return input;
         });
     }
-
-
-
-
-
 
 
 }

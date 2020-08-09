@@ -10,8 +10,4 @@ public interface LazyFluentCollection<T, C extends PersistentCollection<T>> {
     ReactiveSeq<T> stream();
 
 
-
-
-
-
 }

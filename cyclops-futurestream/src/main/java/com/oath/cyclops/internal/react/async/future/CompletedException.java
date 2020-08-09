@@ -1,6 +1,7 @@
 package com.oath.cyclops.internal.react.async.future;
 
 public class CompletedException extends RuntimeException {
+
     /**
      *
      */

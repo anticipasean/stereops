@@ -1,17 +1,14 @@
 package com.oath.cyclops.react;
 
 import com.oath.cyclops.types.persistent.PersistentList;
-
 import cyclops.reactive.collections.immutable.LinkedListX;
-
 import lombok.AllArgsConstructor;
 
 /**
  * Class that returned to blocking predicates for short circuiting result toX
  *
- * @author johnmcclean
- *
  * @param <T> Result type
+ * @author johnmcclean
  */
 @AllArgsConstructor
 public class Status<T> {

@@ -1,30 +1,30 @@
 package com.oath.cyclops.async.adapters;
 
+import com.oath.cyclops.matching.Sealed2;
+import com.oath.cyclops.react.async.subscription.Continueable;
+import com.oath.cyclops.types.futurestream.Continuation;
+import cyclops.control.Either;
+import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import com.oath.cyclops.matching.Sealed2;
-import com.oath.cyclops.types.futurestream.Continuation;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.control.Either;
-import com.oath.cyclops.react.async.subscription.Continueable;
-
 /**
- *
  * Interface for an Adapter that inputs data from 1 or more input Streams and sends it to 1 or more emitted Streams
  *
- * @author johnmcclean
- *
  * @param <T> Data type
+ * @author johnmcclean
  */
-public interface Adapter<T> extends Sealed2<Queue<T>,Topic<T>> {
+public interface Adapter<T> extends Sealed2<Queue<T>, Topic<T>> {
+
     public void addContinuation(Continuation cont);
+
     /**
      * @return A structural Pattern Matcher for this Adapter that allows matching on  Queue / Topic types
      */
     default Either<Queue<T>, Topic<T>> matches() {
-        return fold(q -> Either.left(q), topic -> Either.right(topic));
+        return fold(q -> Either.left(q),
+                    topic -> Either.right(topic));
     }
 
     /**
@@ -34,7 +34,8 @@ public interface Adapter<T> extends Sealed2<Queue<T>,Topic<T>> {
      * @param caseTopic Function to execute if this Adapter is a Topic
      * @return Value returned from executed funciton
      */
-    <R> R fold(Function<? super Queue<T>, ? extends R> caseQueue, Function<? super Topic<T>, ? extends R> caseTopic);
+    <R> R fold(Function<? super Queue<T>, ? extends R> caseQueue,
+               Function<? super Topic<T>, ? extends R> caseTopic);
 
     /**
      * Offer a single datapoint to this adapter

@@ -9,30 +9,35 @@ import java.util.function.Predicate;
  * Created by johnmcclean on 22/12/2016.
  */
 public class SkipWhileClosedSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements CopyableSpliterator<T> {
+
     private final Spliterator<T> source;
     private final Predicate<? super T> predicate;
     boolean closed = false;
-    public SkipWhileClosedSpliterator(final Spliterator<T> source, Predicate<? super T> predicate) {
-        super(source.estimateSize(),source.characteristics() & Spliterator.ORDERED);
+    boolean open = false;
+
+    public SkipWhileClosedSpliterator(final Spliterator<T> source,
+                                      Predicate<? super T> predicate) {
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
 
         this.source = source;
         this.predicate = predicate;
 
     }
-    boolean open = false;
+
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
 
-        while(!closed){
+        while (!closed) {
             boolean canAdvance = source.tryAdvance(t -> {
-                if(!open) {
+                if (!open) {
                     open = !predicate.test(t);
 
-                }else{
+                } else {
                     action.accept(t);
                 }
             });
-            if(!canAdvance){
+            if (!canAdvance) {
                 closed = true;
                 return;
             }
@@ -44,22 +49,24 @@ public class SkipWhileClosedSpliterator<T> extends Spliterators.AbstractSplitera
 
     @Override
     public boolean tryAdvance(Consumer<? super T> action) {
-        if(closed)
+        if (closed) {
             return true;
+        }
         boolean canAdvance = source.tryAdvance(t -> {
-            if(!open) {
+            if (!open) {
                 open = !predicate.test(t);
 
-            }else{
+            } else {
                 action.accept(t);
             }
-            });
+        });
 
         return closed = canAdvance;
     }
 
     @Override
     public Spliterator<T> copy() {
-        return new SkipWhileClosedSpliterator<>(CopyableSpliterator.copy(source),predicate);
+        return new SkipWhileClosedSpliterator<>(CopyableSpliterator.copy(source),
+                                                predicate);
     }
 }

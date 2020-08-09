@@ -32,16 +32,17 @@ import java.util.function.Predicate;
  */
 public interface Pattern<T> extends Predicate<T> {
 
-  static <E extends Exception> Pattern<E> Message(String message) {
-    return e -> Objects.equals(message, e.getMessage());
-  }
+    static <E extends Exception> Pattern<E> Message(String message) {
+        return e -> Objects.equals(message,
+                                   e.getMessage());
+    }
 
-  static <E extends Exception> Pattern<E> Class(Class<? extends Exception> type) {
-    return type::isInstance;
-  }
+    static <E extends Exception> Pattern<E> Class(Class<? extends Exception> type) {
+        return type::isInstance;
+    }
 
-  static <E extends Exception> Pattern<E> Cause(Class<? extends Exception> cause) {
-    return e -> cause.isInstance(e.getCause());
-  }
+    static <E extends Exception> Pattern<E> Cause(Class<? extends Exception> cause) {
+        return e -> cause.isInstance(e.getCause());
+    }
 
 }

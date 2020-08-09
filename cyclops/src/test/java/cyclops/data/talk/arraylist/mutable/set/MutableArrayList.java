@@ -7,7 +7,8 @@ public class MutableArrayList<E> {
     private int modCount;
 
 
-    public E set(int index, E e) {
+    public E set(int index,
+                 E e) {
         rangeCheck(index);
         checkForComodification();
         E oldValue = elementData[index];
@@ -22,8 +23,9 @@ public class MutableArrayList<E> {
 
 
     private void rangeCheck(int index) {
-        if (index < 0 || index >= this.size)
-            throw new IndexOutOfBoundsException("Index: "+index+", Size: "+this.size);
+        if (index < 0 || index >= this.size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size);
+        }
     }
 
 }

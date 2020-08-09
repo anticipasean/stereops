@@ -1,15 +1,15 @@
 package com.oath.cyclops.internal.stream.spliterators.push;
 
 import com.oath.cyclops.types.reactive.BufferOverflowPolicy;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 
 public class BufferingSinkOperator<T> implements Operator<T> {
+
     private final Queue<T> q;
 
     private final AtomicBoolean active = new AtomicBoolean(false);
@@ -17,24 +17,28 @@ public class BufferingSinkOperator<T> implements Operator<T> {
     private final BufferOverflowPolicy policy;
 
 
-
-    public BufferingSinkOperator(Queue<T> q, Consumer<? super Subscriber<T>> sub, BufferOverflowPolicy  policy) {
+    public BufferingSinkOperator(Queue<T> q,
+                                 Consumer<? super Subscriber<T>> sub,
+                                 BufferOverflowPolicy policy) {
         this.q = q;
         this.sub = sub;
         this.policy = policy;
     }
 
     @Override
-    public StreamSubscription subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public StreamSubscription subscribe(Consumer<? super T> onNext,
+                                        Consumer<? super Throwable> onError,
+                                        Runnable onComplete) {
 
         Subscription[] delegate = {null};
-        StreamSubscription ss = new StreamSubscription(){
+        StreamSubscription ss = new StreamSubscription() {
 
             @Override
             public void request(long n) {
-               super.request(n);
-               delegate[0].request(n);
-               processQueue(this,onNext);
+                super.request(n);
+                delegate[0].request(n);
+                processQueue(this,
+                             onNext);
             }
         };
 
@@ -42,23 +46,25 @@ public class BufferingSinkOperator<T> implements Operator<T> {
 
             @Override
             public void onSubscribe(Subscription s) {
-                delegate[0]=s;
+                delegate[0] = s;
             }
 
             @Override
             public void onNext(T t) {
 
-
-                if(!q.offer(t)){
-                    policy.match(t).map(v->{
-                       while(!q.offer(t)){
-                           Thread.yield();
-                           processQueue(ss,onNext);
-                       }
-                       return v;
-                    });
+                if (!q.offer(t)) {
+                    policy.match(t)
+                          .map(v -> {
+                              while (!q.offer(t)) {
+                                  Thread.yield();
+                                  processQueue(ss,
+                                               onNext);
+                              }
+                              return v;
+                          });
                 }
-                processQueue(ss,onNext);
+                processQueue(ss,
+                             onNext);
 
             }
 
@@ -74,38 +80,44 @@ public class BufferingSinkOperator<T> implements Operator<T> {
         });
         return ss;
     }
-    private void processQueue(StreamSubscription ss,Consumer<? super T> onNext) {
 
-        if(active.compareAndSet(false,true)) {
+    private void processQueue(StreamSubscription ss,
+                              Consumer<? super T> onNext) {
 
-            while(ss.isActive()) {
+        if (active.compareAndSet(false,
+                                 true)) {
+
+            while (ss.isActive()) {
                 T next = q.poll();
                 if (next != null) {
                     onNext.accept(next);
                     ss.requested.decrementAndGet();
-                }
-                else
+                } else {
                     break;
+                }
             }
             active.set(false);
             if (!q.isEmpty() && ss.isActive()) {
-                processQueue(ss,onNext);
+                processQueue(ss,
+                             onNext);
             }
 
         }
 
     }
+
     private void processQueue(Consumer<? super T> onNext) {
 
-        if(active.compareAndSet(false,true)) {
-            while(true) {
+        if (active.compareAndSet(false,
+                                 true)) {
+            while (true) {
                 T next = q.poll();
                 if (next != null) {
                     onNext.accept(next);
 
-                }
-                else
+                } else {
                     break;
+                }
             }
             active.set(false);
             if (!q.isEmpty()) {
@@ -117,7 +129,9 @@ public class BufferingSinkOperator<T> implements Operator<T> {
     }
 
     @Override
-    public void subscribeAll(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Runnable onComplete) {
+    public void subscribeAll(Consumer<? super T> onNext,
+                             Consumer<? super Throwable> onError,
+                             Runnable onComplete) {
         sub.accept(new Subscriber<T>() {
 
             @Override
@@ -128,13 +142,14 @@ public class BufferingSinkOperator<T> implements Operator<T> {
             @Override
             public void onNext(T t) {
 
-                if(!q.offer(t)){
-                    policy.match(t).map(v->{
-                        while(!q.offer(t)){
-                            Thread.yield();
-                        }
-                        return v;
-                    });
+                if (!q.offer(t)) {
+                    policy.match(t)
+                          .map(v -> {
+                              while (!q.offer(t)) {
+                                  Thread.yield();
+                              }
+                              return v;
+                          });
                 }
                 processQueue(onNext);
 

@@ -11,20 +11,16 @@ public class One<E> {
     }
 
     public Option<E> get(int index) {
-        if(index>=0 && index<array.length)
-            return Option.some((E)array[index]);
+        if (index >= 0 && index < array.length) {
+            return Option.some((E) array[index]);
+        }
         return Option.none();
     }
 
 
 }
 
-
 /**
-    public E getOrElse(int pos, E alt) {
-        int index = pos & 0x01f;
-        if(index>=0 && index<array.length)
-            return (E)array[index];
-        return alt;
-    }
+ * public E getOrElse(int pos, E alt) { int index = pos & 0x01f; if(index>=0 && index<array.length) return (E)array[index]; return
+ * alt; }
  **/

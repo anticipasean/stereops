@@ -1,18 +1,18 @@
 package com.oath.cyclops.types.futurestream;
 
+import com.oath.cyclops.async.adapters.Queue;
+import com.oath.cyclops.async.adapters.QueueFactory;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collector;
-
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.QueueFactory;
 
 public interface EagerToQueue<U> extends ToQueue<U> {
 
     @Override
     abstract QueueFactory<U> getQueueFactory();
 
-    abstract <R1, R2> SimpleReactStream<R2> allOf(final Collector<? super U, ?, R1> collector, final Function<? super R1, ? extends R2> fn);
+    abstract <R1, R2> SimpleReactStream<R2> allOf(final Collector<? super U, ?, R1> collector,
+                                                  final Function<? super R1, ? extends R2> fn);
 
     abstract <R> SimpleReactStream<R> thenSync(final Function<? super U, ? extends R> fn);
 
@@ -61,14 +61,15 @@ public interface EagerToQueue<U> extends ToQueue<U> {
      * @see com.oath.cyclops.react.stream.traits.ToQueue#toQueue(java.util.Map, java.util.function.Function)
      */
     @Override
-    default <K> void toQueue(final Map<K, Queue<U>> shards, final Function<? super U, ? extends K> sharder) {
+    default <K> void toQueue(final Map<K, Queue<U>> shards,
+                             final Function<? super U, ? extends K> sharder) {
 
         thenSync(it -> shards.get(sharder.apply(it))
                              .offer(it)).allOf(data -> {
-                                 shards.values()
-                                       .forEach(it -> it.close());
-                                 return true;
-                             });
+            shards.values()
+                  .forEach(it -> it.close());
+            return true;
+        });
 
     }
 }

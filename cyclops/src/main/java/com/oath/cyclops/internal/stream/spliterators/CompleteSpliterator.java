@@ -13,8 +13,10 @@ public class CompleteSpliterator<T> extends Spliterators.AbstractSpliterator<T> 
     private final Spliterator<T> source;
     private final Runnable fn;
 
-    public CompleteSpliterator(final Spliterator<T> source, Runnable fn) {
-        super(source.estimateSize(), source.characteristics() & Spliterator.ORDERED);
+    public CompleteSpliterator(final Spliterator<T> source,
+                               Runnable fn) {
+        super(source.estimateSize(),
+              source.characteristics() & Spliterator.ORDERED);
 
         this.source = source;
         this.fn = fn;
@@ -25,14 +27,16 @@ public class CompleteSpliterator<T> extends Spliterators.AbstractSpliterator<T> 
     public boolean tryAdvance(Consumer<? super T> action) {
         boolean existed = source.tryAdvance(action);
         if (!existed) {
-            if (fn != null)
+            if (fn != null) {
                 fn.run();
+            }
         }
         return existed;
     }
 
     @Override
     public Spliterator<T> copy() {
-        return new CompleteSpliterator<>(CopyableSpliterator.copy(source), fn);
+        return new CompleteSpliterator<>(CopyableSpliterator.copy(source),
+                                         fn);
     }
 }

@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import cyclops.data.HashMap;
+import cyclops.futurestream.SimpleReact;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -13,232 +15,282 @@ import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-
-import cyclops.data.HashMap;
 import org.junit.Test;
-
-
-import cyclops.futurestream.SimpleReact;
 
 
 public class AllOfTest {
 
-	@Test
-	public void allOf(){
-		List<HashMap<String, List<Integer>>> result =
+    @Test
+    public void allOf() {
+        List<HashMap<String, List<Integer>>> result =
 
-				SimpleReact.sequentialBuilder().ofAsync(()->1,()->2,()->3)
-		 									 .then(it->it+100)
-		 									 .peek(System.out::println)
-		 									 .allOf((List<Integer> c)-> { System.out.println(c);return HashMap.of("numbers",c);})
-		 									 .peek(map -> System.out.println(map))
-		 									 .block(Collectors.toList());
+            SimpleReact.sequentialBuilder()
+                       .ofAsync(() -> 1,
+                                () -> 2,
+                                () -> 3)
+                       .then(it -> it + 100)
+                       .peek(System.out::println)
+                       .allOf((List<Integer> c) -> {
+                           System.out.println(c);
+                           return HashMap.of("numbers",
+                                             c);
+                       })
+                       .peek(map -> System.out.println(map))
+                       .block(Collectors.toList());
 
-		 assertThat(result.size(),is(1));
-	}
+        assertThat(result.size(),
+                   is(1));
+    }
 
-	@Test
-	public void testAllOfFailure(){
-		new SimpleReact().ofAsync(()-> { throw new RuntimeException();},()->"hello",()->"world")
-				//.onFail(it -> it.getMessage())
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.allOf((List<String> data) -> {
-					System.out.println(data);
-						return "hello"; }).block();
-	}
-	@Test
-	public void testAllOfCompletableFutureOneFailsContinue(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		List<String> result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
+    @Test
+    public void testAllOfFailure() {
+        new SimpleReact().ofAsync(() -> {
+                                      throw new RuntimeException();
+                                  },
+                                  () -> "hello",
+                                  () -> "world")
+                         //.onFail(it -> it.getMessage())
+                         .capture(e -> e.printStackTrace())
+                         .peek(it -> System.out.println(it))
+                         .allOf((List<String> data) -> {
+                             System.out.println(data);
+                             return "hello";
+                         })
+                         .block();
+    }
 
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.allOf((List<String> data) -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+    @Test
+    public void testAllOfCompletableFutureOneFailsContinue() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        List<String> result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
 
-		assertThat(result.size(),is(2));
-	}
-	@Test
-	public void testAllOfCompletableOnFail(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		List<String> result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
-				.onFail(it ->"hello")
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.allOf((List<String> data) -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+                                               .capture(e -> e.printStackTrace())
+                                               .peek(it -> System.out.println(it))
+                                               .allOf((List<String> data) -> {
+                                                   System.out.println(data);
+                                                   return data;
+                                               })
+                                               .block()
+                                               .firstValue(null);
 
-		assertThat(result.size(),is(3));
-	}
-	@Test
-	public void testAllOfCompletableFilter(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		List<String> result = new SimpleReact().fromStream(urls.stream()
-				.map(it ->  handle(it)))
-				.onFail(it ->"hello")
-				.filter(it-> !"2".equals(it))
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.allOf((List<String> data) -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+        assertThat(result.size(),
+                   is(2));
+    }
 
-		System.out.println(result);
-		assertThat(result.size(),is(2));
-		assertThat(result,hasItem("hello"));
-		assertThat(result,hasItem("world"));
-	}
-	@Test
-	public void testBlockompletableFuture(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		List<String> result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
+    @Test
+    public void testAllOfCompletableOnFail() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        List<String> result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
+                                               .onFail(it -> "hello")
+                                               .capture(e -> e.printStackTrace())
+                                               .peek(it -> System.out.println(it))
+                                               .allOf((List<String> data) -> {
+                                                   System.out.println(data);
+                                                   return data;
+                                               })
+                                               .block()
+                                               .firstValue(null);
 
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.block();
+        assertThat(result.size(),
+                   is(3));
+    }
 
-		assertThat(result.size(),is(2));
-	}
+    @Test
+    public void testAllOfCompletableFilter() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        List<String> result = new SimpleReact().fromStream(urls.stream()
+                                                               .map(it -> handle(it)))
+                                               .onFail(it -> "hello")
+                                               .filter(it -> !"2".equals(it))
+                                               .capture(e -> e.printStackTrace())
+                                               .peek(it -> System.out.println(it))
+                                               .allOf((List<String> data) -> {
+                                                   System.out.println(data);
+                                                   return data;
+                                               })
+                                               .block()
+                                               .firstValue(null);
 
-	private CompletableFuture<String> handle(String it) {
-		if("hello".equals(it))
-		{
-			 CompletableFuture f= new CompletableFuture();
-			 f.completeExceptionally(new RuntimeException());
-			 return f;
-		}
-		return CompletableFuture.completedFuture(it);
-	}
-	@Test
-	public void testAllOfToSet() throws InterruptedException, ExecutionException {
+        System.out.println(result);
+        assertThat(result.size(),
+                   is(2));
+        assertThat(result,
+                   hasItem("hello"));
+        assertThat(result,
+                   hasItem("world"));
+    }
 
-		Set<Integer> result = (Set<Integer>)new SimpleReact()
-		.<Integer> ofAsync(() -> 1, () -> 2, () -> 3, () -> 5)
-		.then( it -> it*100)
-		.allOf(Collectors.toSet(), it -> {
-			assertThat (it,instanceOf( Set.class));
-			return it;
-		}).block().firstValue(null);
+    @Test
+    public void testBlockompletableFuture() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        List<String> result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
 
-		assertThat(result.size(),is(4));
-	}
+                                               .capture(e -> e.printStackTrace())
+                                               .peek(it -> System.out.println(it))
+                                               .block();
 
+        assertThat(result.size(),
+                   is(2));
+    }
 
+    private CompletableFuture<String> handle(String it) {
+        if ("hello".equals(it)) {
+            CompletableFuture f = new CompletableFuture();
+            f.completeExceptionally(new RuntimeException());
+            return f;
+        }
+        return CompletableFuture.completedFuture(it);
+    }
 
-	@Test
-	public void testAllOfParallelStreams() throws InterruptedException,
-			ExecutionException {
+    @Test
+    public void testAllOfToSet() throws InterruptedException, ExecutionException {
 
-		Integer result = new SimpleReact()
-				.<Integer> ofAsync(() -> 1, () -> 2, () -> 3, () -> 5)
-				.<Integer> then(it -> {
-					return it * 200;
-				})
-				.then((Integer it) -> {
-					if (it == 1000)
-						throw new RuntimeException("boo!");
+        Set<Integer> result = (Set<Integer>) new SimpleReact().<Integer>ofAsync(() -> 1,
+                                                                                () -> 2,
+                                                                                () -> 3,
+                                                                                () -> 5).then(it -> it * 100)
+                                                                                        .allOf(Collectors.toSet(),
+                                                                                               it -> {
+                                                                                                   assertThat(it,
+                                                                                                              instanceOf(Set.class));
+                                                                                                   return it;
+                                                                                               })
+                                                                                        .block()
+                                                                                        .firstValue(null);
 
-					return it;
-				})
-				.onFail(e -> 100)
-				.allOf(it -> {
-
-					return it.parallelStream().filter(f -> f > 300)
-							.map(m -> m - 5)
-							.reduce(0, (acc, next) -> acc + next);
-				}).block(Collectors.reducing(0, (acc,next)-> next));
-
-
-		assertThat(result, is(990));
-	}
-
-	@Test
-	public void testAllOfParallelStreamsSkip() throws InterruptedException,
-			ExecutionException {
-
-		List<Integer> result = new SimpleReact()
-				.<Integer> ofAsync(() -> 1, () -> 2, () -> 3, () -> 5)
-				.<Integer> then(it -> {
-					return it * 200;
-				})
-				.then((Integer it) -> {
-					if (it == 1000)
-						throw new RuntimeException("boo!");
-
-					return it;
-				})
-				.onFail(e -> 100)
-				.allOf(it -> {
-
-					return it.parallelStream().skip(1).limit(3).collect(Collectors.toList());
-				}).block().firstValue(null);
+        assertThat(result.size(),
+                   is(4));
+    }
 
 
-		assertThat(result.size(), is(3));
-	}
+    @Test
+    public void testAllOfParallelStreams() throws InterruptedException, ExecutionException {
 
-	@Test
-	public void testAllOfParallelStreamsSameForkJoinPool() throws InterruptedException,
-			ExecutionException {
-		Set<String> threadGroup = Collections.synchronizedSet(new TreeSet());
-		Integer result = new SimpleReact()
-				.<Integer> ofAsync(() -> 1, () -> 2, () -> 3, () -> 5)
-				.<Integer> then(it -> {
-					threadGroup.add(Thread.currentThread().getThreadGroup().getName());
-					return it * 200;
-				})
-				.then((Integer it) -> {
-					if (it == 1000)
-						throw new RuntimeException("boo!");
+        Integer result = new SimpleReact().<Integer>ofAsync(() -> 1,
+                                                            () -> 2,
+                                                            () -> 3,
+                                                            () -> 5).<Integer>then(it -> {
+            return it * 200;
+        }).then((Integer it) -> {
+            if (it == 1000) {
+                throw new RuntimeException("boo!");
+            }
 
-					return it;
-				})
-				.onFail(e -> 100)
-				.allOf(it -> {
+            return it;
+        })
+          .onFail(e -> 100)
+          .allOf(it -> {
 
-					return it.parallelStream().filter(f -> f > 300)
-							.map(m ->{ threadGroup.add(Thread.currentThread().getThreadGroup().getName());return m - 5; })
-							.reduce(0, (acc, next) -> acc + next);
-				}).block(Collectors.reducing(0, (acc,next)-> next));
+              return it.parallelStream()
+                       .filter(f -> f > 300)
+                       .map(m -> m - 5)
+                       .reduce(0,
+                               (acc, next) -> acc + next);
+          })
+          .block(Collectors.reducing(0,
+                                     (acc, next) -> next));
 
+        assertThat(result,
+                   is(990));
+    }
 
-		assertThat(threadGroup.size(), is(1));
-	}
+    @Test
+    public void testAllOfParallelStreamsSkip() throws InterruptedException, ExecutionException {
 
-	@Test
-	public void testAllOf() throws InterruptedException, ExecutionException {
+        List<Integer> result = new SimpleReact().<Integer>ofAsync(() -> 1,
+                                                                  () -> 2,
+                                                                  () -> 3,
+                                                                  () -> 5).<Integer>then(it -> {
+            return it * 200;
+        }).then((Integer it) -> {
+            if (it == 1000) {
+                throw new RuntimeException("boo!");
+            }
 
-		boolean blocked[] = { false };
+            return it;
+        })
+          .onFail(e -> 100)
+          .allOf(it -> {
 
-		new SimpleReact().<Integer> ofAsync(() -> 1)
+              return it.parallelStream()
+                       .skip(1)
+                       .limit(3)
+                       .collect(Collectors.toList());
+          })
+          .block()
+          .firstValue(null);
 
-		.then(it -> {
-			try {
-				Thread.sleep(10);
-			} catch (Exception e) {
+        assertThat(result.size(),
+                   is(3));
+    }
 
-			}
-			blocked[0] = true;
-			return 10;
-		}).allOf(it -> it.size());
+    @Test
+    public void testAllOfParallelStreamsSameForkJoinPool() throws InterruptedException, ExecutionException {
+        Set<String> threadGroup = Collections.synchronizedSet(new TreeSet());
+        Integer result = new SimpleReact().<Integer>ofAsync(() -> 1,
+                                                            () -> 2,
+                                                            () -> 3,
+                                                            () -> 5).<Integer>then(it -> {
+            threadGroup.add(Thread.currentThread()
+                                  .getThreadGroup()
+                                  .getName());
+            return it * 200;
+        }).then((Integer it) -> {
+            if (it == 1000) {
+                throw new RuntimeException("boo!");
+            }
 
-		assertThat(blocked[0], is(false));
-	}
+            return it;
+        })
+          .onFail(e -> 100)
+          .allOf(it -> {
+
+              return it.parallelStream()
+                       .filter(f -> f > 300)
+                       .map(m -> {
+                           threadGroup.add(Thread.currentThread()
+                                                 .getThreadGroup()
+                                                 .getName());
+                           return m - 5;
+                       })
+                       .reduce(0,
+                               (acc, next) -> acc + next);
+          })
+          .block(Collectors.reducing(0,
+                                     (acc, next) -> next));
+
+        assertThat(threadGroup.size(),
+                   is(1));
+    }
+
+    @Test
+    public void testAllOf() throws InterruptedException, ExecutionException {
+
+        boolean blocked[] = {false};
+
+        new SimpleReact().<Integer>ofAsync(() -> 1)
+
+            .then(it -> {
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {
+
+                }
+                blocked[0] = true;
+                return 10;
+            })
+            .allOf(it -> it.size());
+
+        assertThat(blocked[0],
+                   is(false));
+    }
 
 }

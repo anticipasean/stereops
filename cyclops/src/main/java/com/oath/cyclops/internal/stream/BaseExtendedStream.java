@@ -1,29 +1,46 @@
 package com.oath.cyclops.internal.stream;
 
 import com.oath.cyclops.types.Unwrappable;
-
 import com.oath.cyclops.util.ExceptionSoftener;
-
 import cyclops.companion.Streams;
 import cyclops.data.Seq;
 import cyclops.function.Monoid;
 import cyclops.function.Reducer;
-
 import cyclops.reactive.ReactiveSeq;
-
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
-import java.util.function.*;
-import java.util.stream.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
+import java.util.stream.BaseStream;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  * Created by johnmcclean on 13/01/2017.
  */
-public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<T>, Iterable<T>  {
+public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<T>, Iterable<T> {
 
     public abstract Stream<T> unwrapStream();
+
     @Override
     public final ReactiveSeq<T> parallel() {
         return this;
@@ -31,8 +48,10 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
 
     @Override
     public boolean endsWith(final Iterable<T> iterable) {
-        return Streams.endsWith(this, iterable);
+        return Streams.endsWith(this,
+                                iterable);
     }
+
     @Override
     public boolean allMatch(final Predicate<? super T> c) {
         return unwrapStream().allMatch(c);
@@ -44,8 +63,11 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
     @Override
-    public boolean xMatch(final int num, final Predicate<? super T> c) {
-        return Streams.xMatch(this, num, c);
+    public boolean xMatch(final int num,
+                          final Predicate<? super T> c) {
+        return Streams.xMatch(this,
+                              num,
+                              c);
     }
 
     @Override
@@ -55,29 +77,38 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
 
     @Override
     public final String join() {
-        return Streams.join(this, "");
+        return Streams.join(this,
+                            "");
     }
 
     @Override
     public final String join(final String sep) {
-        return Streams.join(this, sep);
+        return Streams.join(this,
+                            sep);
     }
 
     @Override
-    public final String join(final String sep, final String start, final String end) {
-        return Streams.join(this, sep, start, end);
+    public final String join(final String sep,
+                             final String start,
+                             final String end) {
+        return Streams.join(this,
+                            sep,
+                            start,
+                            end);
     }
 
 
     @Override
     public final Optional<T> min(final Comparator<? super T> comparator) {
-        return Streams.min(this, comparator);
+        return Streams.min(this,
+                           comparator);
     }
 
 
     @Override
     public final Optional<T> max(final Comparator<? super T> comparator) {
-        return Streams.max(this, comparator);
+        return Streams.max(this,
+                           comparator);
     }
 
 
@@ -87,12 +118,13 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
     @Override
-    public final <R> R foldMap(final Reducer<R,T> reducer) {
+    public final <R> R foldMap(final Reducer<R, T> reducer) {
         return reducer.foldMap(unwrapStream());
     }
 
     @Override
-    public final <R> R foldMap(final Function<? super T, ? extends R> mapper, final Monoid<R> reducer) {
+    public final <R> R foldMap(final Function<? super T, ? extends R> mapper,
+                               final Monoid<R> reducer) {
         return reducer.foldLeft(map(mapper));
     }
 
@@ -105,37 +137,48 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
     @Override
-    public <R> R collect(final Supplier<R> supplier, final BiConsumer<R, ? super T> accumulator, final BiConsumer<R, R> combiner) {
-        return unwrapStream().collect(supplier, accumulator, combiner);
+    public <R> R collect(final Supplier<R> supplier,
+                         final BiConsumer<R, ? super T> accumulator,
+                         final BiConsumer<R, R> combiner) {
+        return unwrapStream().collect(supplier,
+                                      accumulator,
+                                      combiner);
     }
 
     @Override
     public final T reduce(final Monoid<T> reducer) {
 
-        return reduce(reducer.zero(),reducer);
+        return reduce(reducer.zero(),
+                      reducer);
     }
 
     @Override
-    public <U> U reduce(final U identity, final BiFunction<U, ? super T, U> accumulator, final BinaryOperator<U> combiner) {
-        return unwrapStream().reduce(identity, accumulator, combiner);
+    public <U> U reduce(final U identity,
+                        final BiFunction<U, ? super T, U> accumulator,
+                        final BinaryOperator<U> combiner) {
+        return unwrapStream().reduce(identity,
+                                     accumulator,
+                                     combiner);
     }
-
 
 
     @Override
     public final Seq<T> reduce(final Iterable<? extends Monoid<T>> reducers) {
-        return Streams.reduce(this, reducers);
+        return Streams.reduce(this,
+                              reducers);
     }
 
     public final T foldLeft(final Monoid<T> reducer) {
         return reduce(reducer);
     }
 
-    public final T foldLeft(final T identity, final BinaryOperator<T> accumulator) {
-        return unwrapStream().reduce(identity, accumulator);
+    public final T foldLeft(final T identity,
+                            final BinaryOperator<T> accumulator) {
+        return unwrapStream().reduce(identity,
+                                     accumulator);
     }
 
-    public final <R> R foldLeftMapToType(final Reducer<R,T> reducer) {
+    public final <R> R foldLeftMapToType(final Reducer<R, T> reducer) {
         return reducer.foldMap(unwrapStream());
     }
 
@@ -145,16 +188,18 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
     @Override
-    public final <U> U foldRight(final U seed, final BiFunction<? super T, ? super U, ? extends U> function) {
-        return reverse().foldLeft(seed, (u,t)->function.apply(t, u));
+    public final <U> U foldRight(final U seed,
+                                 final BiFunction<? super T, ? super U, ? extends U> function) {
+        return reverse().foldLeft(seed,
+                                  (u, t) -> function.apply(t,
+                                                           u));
 
     }
 
     @Override
-    public final <R> R foldMapRight(final Reducer<R,T> reducer) {
+    public final <R> R foldMapRight(final Reducer<R, T> reducer) {
         return reducer.foldMap(reverse());
     }
-
 
 
     @Override
@@ -177,14 +222,16 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
 
     @Override
     public final boolean startsWith(final Iterable<T> iterable) {
-        return Streams.startsWith(this, iterable);
+        return Streams.startsWith(this,
+                                  iterable);
 
     }
 
 
     @Override
     public final <R> ReactiveSeq<R> flatMapStream(final Function<? super T, BaseStream<? extends R, ?>> fn) {
-        return createSeq(Streams.flatMapStream(this, fn));
+        return createSeq(Streams.flatMapStream(this,
+                                               fn));
 
     }
 
@@ -253,11 +300,6 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
 
-
-
-
-
-
     @Override
     public ReactiveSeq<T> onClose(final Runnable closeHandler) {
 
@@ -268,14 +310,17 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     public void close() {
 
     }
+
     @Override
-    public ReactiveSeq<T> xPer(final int x, final long time, final TimeUnit t) {
+    public ReactiveSeq<T> xPer(final int x,
+                               final long time,
+                               final TimeUnit t) {
         final long next = t.toNanos(time);
-        Supplier<Function<? super T, ? extends T>> lazy = ()-> {
+        Supplier<Function<? super T, ? extends T>> lazy = () -> {
 
             long[] last = {System.nanoTime()};
             int[] count = {0};
-            return a-> {
+            return a -> {
                 if (count[0] < x) {
                     last[0] = System.nanoTime();
                     count[0]++;
@@ -286,8 +331,9 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
                 long since = System.nanoTime() - last[0];
                 final long sleepFor = next - since;
 
-                if(sleepFor>0)
-                      LockSupport.parkNanos(sleepFor);
+                if (sleepFor > 0) {
+                    LockSupport.parkNanos(sleepFor);
+                }
 
                 last[0] = System.nanoTime();
                 return a;
@@ -296,28 +342,33 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
         return mapLazyFn(lazy);
 
     }
+
     @Override
     public final ReactiveSeq<T> sorted() {
-        Comparator<? super T> c = (a,b)-> {
-                            Comparable<T> cA = (Comparable<T>) a;
-                            Comparable<T> cB = (Comparable<T>) b;
-                            Comparator<Comparable> cp =  Comparator.naturalOrder();
-                            return cp.compare(cA,cB);
+        Comparator<? super T> c = (a, b) -> {
+            Comparable<T> cA = (Comparable<T>) a;
+            Comparable<T> cB = (Comparable<T>) b;
+            Comparator<Comparable> cp = Comparator.naturalOrder();
+            return cp.compare(cA,
+                              cB);
 
-         };
+        };
         return sorted(c);
 
     }
 
-    public  abstract <R> ReactiveSeq<R> mapLazyFn(Supplier<Function<? super T, ? extends R>> fn);
+    public abstract <R> ReactiveSeq<R> mapLazyFn(Supplier<Function<? super T, ? extends R>> fn);
+
     public abstract ReactiveSeq<T> filterLazyPredicate(final Supplier<Predicate<? super T>> fn);
+
     @Override
-    public ReactiveSeq<T> onePer(final long time, final TimeUnit t) {
+    public ReactiveSeq<T> onePer(final long time,
+                                 final TimeUnit t) {
         final long next = t.toNanos(time);
-        Supplier<Function<? super T, ? extends T>> lazy = ()-> {
+        Supplier<Function<? super T, ? extends T>> lazy = () -> {
 
             long[] last = {System.nanoTime()};
-            return a-> {
+            return a -> {
                 final long sleepFor = next - (System.nanoTime() - last[0]);
 
                 LockSupport.parkNanos(sleepFor);
@@ -331,21 +382,22 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
     @Override
-    public ReactiveSeq<T> debounce(final long time, final TimeUnit t) {
+    public ReactiveSeq<T> debounce(final long time,
+                                   final TimeUnit t) {
         final long timeNanos = t.toNanos(time);
 
-        Supplier<Predicate<? super T>> lazy = ()-> {
+        Supplier<Predicate<? super T>> lazy = () -> {
             final long[] last = {-1};
 
-            return a-> {
+            return a -> {
 
-                if(last[0]==-1) {
+                if (last[0] == -1) {
 
                     last[0] = System.nanoTime();
                     return true;
                 }
-                long elapsedNanos  =  (System.nanoTime() - last[0]);
-                 T nextValue = null;
+                long elapsedNanos = (System.nanoTime() - last[0]);
+                T nextValue = null;
                 if (elapsedNanos >= timeNanos) {
 
                     last[0] = System.nanoTime();
@@ -359,11 +411,12 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
         return filterLazyPredicate(lazy);
 
     }
+
     public ReactiveSeq<T> removeFirst(Predicate<? super T> pred) {
 
         Supplier<Predicate<? super T>> predicate = () -> {
             AtomicBoolean active = new AtomicBoolean(true);
-            return i-> {
+            return i -> {
                 if (active.get() && pred.test(i)) {
                     active.set(false);
                     return false;
@@ -374,15 +427,20 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
         return this.filterLazyPredicate(predicate);
 
     }
+
     @Override
-    public ReactiveSeq<T> fixedDelay(final long l, final TimeUnit unit) {
+    public ReactiveSeq<T> fixedDelay(final long l,
+                                     final TimeUnit unit) {
         final long elapsedNanos = unit.toNanos(l);
         final long millis = elapsedNanos / 1000000;
         final int nanos = (int) (elapsedNanos - millis * 1000000);
-        return map(a->{
+        return map(a -> {
             try {
 
-                Thread.sleep(Math.max(0, millis), Math.max(0, nanos));
+                Thread.sleep(Math.max(0,
+                                      millis),
+                             Math.max(0,
+                                      nanos));
                 return a;
             } catch (final InterruptedException e) {
                 throw ExceptionSoftener.throwSoftenedException(e);
@@ -396,12 +454,15 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     public ReactiveSeq<T> jitter(final long l) {
 
         final Random r = new Random();
-        return map(a->{
+        return map(a -> {
             try {
                 final long elapsedNanos = (long) (l * r.nextDouble());
                 final long millis = elapsedNanos / 1000000;
                 final int nanos = (int) (elapsedNanos - millis * 1000000);
-                Thread.sleep(Math.max(0, millis), Math.max(0, nanos));
+                Thread.sleep(Math.max(0,
+                                      millis),
+                             Math.max(0,
+                                      nanos));
                 return a;
             } catch (final InterruptedException e) {
                 throw ExceptionSoftener.throwSoftenedException(e);
@@ -412,22 +473,27 @@ public abstract class BaseExtendedStream<T> implements Unwrappable, ReactiveSeq<
     }
 
     @Override
-    public T foldRight(final T identity, final BinaryOperator<T> accumulator) {
-        return reverse().foldLeft(identity, accumulator);
+    public T foldRight(final T identity,
+                       final BinaryOperator<T> accumulator) {
+        return reverse().foldLeft(identity,
+                                  accumulator);
     }
 
     @Override
     public T firstValue(T alt) {
         return findFirst().get();
     }
+
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
         return unwrapStream().reduce(accumulator);
     }
 
     @Override
-    public T reduce(T identity, BinaryOperator<T> accumulator) {
-        return unwrapStream().reduce(identity,accumulator);
+    public T reduce(T identity,
+                    BinaryOperator<T> accumulator) {
+        return unwrapStream().reduce(identity,
+                                     accumulator);
     }
 }
 

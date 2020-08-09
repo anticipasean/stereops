@@ -1,11 +1,9 @@
 package com.oath.cyclops.util;
 
 /**
- *
  * Simple Timer class that returns elapsed milliseconds since construction
  *
  * @author johnmcclean
- *
  */
 public final class SimpleTimer {
 
@@ -18,7 +16,7 @@ public final class SimpleTimer {
         return System.nanoTime() - startNanoSeconds;
     }
 
-    public final long getElapsedMillis(){
-        return (long)(getElapsedNanoseconds()/ 1e+6);
+    public final long getElapsedMillis() {
+        return (long) (getElapsedNanoseconds() / 1e+6);
     }
 }

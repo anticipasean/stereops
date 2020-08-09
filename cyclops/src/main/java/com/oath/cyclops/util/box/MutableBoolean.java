@@ -1,51 +1,46 @@
 package com.oath.cyclops.util.box;
 
 import com.oath.cyclops.types.foldable.To;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 /**
- * Class that represents a Closed Variable
- * In Java 8 because of the effectively final rule references to captured
- * variables can't be changed.
- * e.g.
- *<pre>{@code
+ * Class that represents a Closed Variable In Java 8 because of the effectively final rule references to captured variables can't
+ * be changed. e.g.
+ * <pre>{@code
  * boolean var = true;
  * Runnable r = () -> var =false;
  * }</pre>
- *
- * Won't compile because var is treated as if it is final.
- * This can be 'worked around' by using a wrapping object or array.
- *
+ * <p>
+ * Won't compile because var is treated as if it is final. This can be 'worked around' by using a wrapping object or array.
+ * <p>
  * e.g.
  * <pre>{@code
  * MutableBoolean var =  MutableBoolean.of(true);
  * Runnable r = () -> var.set(false);
  * }</pre>
  *
- * @author johnmcclean
- *
  * @param <T> Type held inside closed var
+ * @author johnmcclean
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consumer<Boolean>, Supplier<Boolean> {
+public class MutableBoolean implements To<MutableBoolean>, BooleanSupplier, Consumer<Boolean>, Supplier<Boolean> {
 
 
     private boolean var;
 
     /**
      * Create a Mutable variable, which can be mutated inside a Closure
-     *
+     * <p>
      * e.g.
      * <pre>{@code
      *   MutableBoolean num = MutableBoolean.of(true);
@@ -60,13 +55,12 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
      * @return New Mutable instance
      */
     public static <T> MutableBoolean of(final boolean var) {
-        return new MutableBoolean(
-                                  var);
+        return new MutableBoolean(var);
     }
 
     /**
      * Construct a MutableBoolean that gets and sets an external value using the provided Supplier and Consumer
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -74,12 +68,12 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
      * }
      * </pre>
      *
-     *
      * @param s Supplier of an external value
      * @param c Consumer that sets an external value
      * @return MutableBoolean that gets / sets an external (mutable) value
      */
-    public static MutableBoolean fromExternal(final BooleanSupplier s, final Consumer<Boolean> c) {
+    public static MutableBoolean fromExternal(final BooleanSupplier s,
+                                              final Consumer<Boolean> c) {
         return new MutableBoolean() {
             @Override
             public boolean getAsBoolean() {
@@ -113,7 +107,6 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the result when getValue is called
      * @return Mutable that lazily applies the provided function when getValue is called to the return value
      */
@@ -142,7 +135,6 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the input when set is called
      * @return Mutable that lazily applies the provided function when set is called to the input value
      */
@@ -168,7 +160,7 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
 
     /**
      * @param var New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public MutableBoolean set(final boolean var) {
         this.var = var;
@@ -177,15 +169,11 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
 
     /**
      * @param varFn New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public MutableBoolean mutate(final BooleanFunction varFn) {
         return set(varFn.apply(getAsBoolean()));
 
-    }
-
-    public static interface BooleanFunction {
-        boolean apply(boolean var);
     }
 
     @Override
@@ -194,9 +182,14 @@ public class MutableBoolean implements To<MutableBoolean>,BooleanSupplier, Consu
 
     }
 
-
     public Boolean get() {
         return getAsBoolean();
+    }
+
+
+    public static interface BooleanFunction {
+
+        boolean apply(boolean var);
     }
 
 }

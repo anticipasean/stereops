@@ -9,28 +9,38 @@ import java.util.function.Function;
 /**
  * Created by johnmcclean on 22/12/2016.
  */
-public class DistinctSpliterator<IN,T> extends BaseComposableSpliterator<IN,T,DistinctSpliterator<IN,?>> implements CopyableSpliterator<T> {
+public class DistinctSpliterator<IN, T> extends BaseComposableSpliterator<IN, T, DistinctSpliterator<IN, ?>> implements
+                                                                                                             CopyableSpliterator<T> {
+
     Spliterator<IN> source;
     Set<IN> values;
+
     public DistinctSpliterator(final Spliterator<IN> source) {
-        super(source.estimateSize(),source.characteristics() & ORDERED,null);
+        super(source.estimateSize(),
+              source.characteristics() & ORDERED,
+              null);
 
         this.source = source;
         this.values = new HashSet<>();
 
     }
-    DistinctSpliterator(Function<? super IN, ? extends T> fn,final Spliterator<IN> source) {
-        super(source.estimateSize(),source.characteristics() & ORDERED,fn);
+
+    DistinctSpliterator(Function<? super IN, ? extends T> fn,
+                        final Spliterator<IN> source) {
+        super(source.estimateSize(),
+              source.characteristics() & ORDERED,
+              fn);
 
         this.source = source;
         this.values = new HashSet<>();
 
     }
+
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
         final Consumer<? super IN> toUse = apply(action);
-        source.forEachRemaining(e->{
-            if(!values.contains(e)){
+        source.forEachRemaining(e -> {
+            if (!values.contains(e)) {
                 values.add(e);
                 toUse.accept(e);
             }
@@ -53,18 +63,20 @@ public class DistinctSpliterator<IN,T> extends BaseComposableSpliterator<IN,T,Di
                     accepted[0] = true;
                 }
             });
-        }while(!accepted[0] && advance);
+        } while (!accepted[0] && advance);
         return accepted[0] && advance;
 
     }
 
     @Override
     public Spliterator<T> copy() {
-        return new DistinctSpliterator<IN,T>(fn, CopyableSpliterator.copy(source));
+        return new DistinctSpliterator<IN, T>(fn,
+                                              CopyableSpliterator.copy(source));
     }
 
     @Override
     <R2> DistinctSpliterator<IN, ?> create(Function<? super IN, ? extends R2> after) {
-        return new DistinctSpliterator(after, CopyableSpliterator.copy(source));
+        return new DistinctSpliterator(after,
+                                       CopyableSpliterator.copy(source));
     }
 }

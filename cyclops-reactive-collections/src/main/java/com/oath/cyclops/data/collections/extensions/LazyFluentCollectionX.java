@@ -1,33 +1,28 @@
 package com.oath.cyclops.data.collections.extensions;
 
-import java.util.Collection;
-
-import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collections.mutable.ListX;
+import java.util.Collection;
 
 
 /**
- * A Lazy Collection with a fluent api. Extended operators act eagerly, direct operations on a toX
- * to add, removeValue or retrieve elements should be eager unless otherwise stated.
- *
- *
- * @author johnmcclean
+ * A Lazy Collection with a fluent api. Extended operators act eagerly, direct operations on a toX to add, removeValue or retrieve
+ * elements should be eager unless otherwise stated.
  *
  * @param <T> the type of elements held in this toX
+ * @author johnmcclean
  */
 public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
-
-
 
 
     /**
      * @return This toX with any queued Lazy Operations materialized
      */
     LazyFluentCollectionX<T> materialize();
+
     /**
-     * Create a LazyFluentCollection from a Flux.
-     * The created LazyFluentCollection will be of the same type as the object this method is called on.
-     * i.e. Calling stream(Flux) on a StreamX results in a StreamX
+     * Create a LazyFluentCollection from a Flux. The created LazyFluentCollection will be of the same type as the object this
+     * method is called on. i.e. Calling stream(Flux) on a StreamX results in a StreamX
      *
      *
      * <pre>
@@ -39,11 +34,9 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      * }
      * </pre>
      * Calling stream(Flux) on a LazySetX results in a LazySetX etc.
-     *
-     * The same toX / reduction method will be used in the newly created Object. I.e. Calling  stream(Flux) on
-     * a toX which as an Immutable Collector  will result in an Immutable Collection.
-     *
-
+     * <p>
+     * The same toX / reduction method will be used in the newly created Object. I.e. Calling  stream(Flux) on a toX which as an
+     * Immutable Collector  will result in an Immutable Collection.
      *
      * @param stream Flux to create new toX from
      * @return New toX from Flux
@@ -51,8 +44,8 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
     <X> FluentCollectionX<X> stream(ReactiveSeq<X> stream);
 
     /**
-     * Lazily add an element to this Collection.
-     * The Collection will not be materialized (unlike via @see {@link LazyFluentCollectionX#plus(Object)}
+     * Lazily add an element to this Collection. The Collection will not be materialized (unlike via @see {@link
+     * LazyFluentCollectionX#plus(Object)}
      * <pre>
      * {@code
      *    StreamX<Integer> lazy = StreamX.of(1,2,3)
@@ -72,8 +65,8 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
     }
 
     /**
-     * Lazily add all the elements in the supplied Collection to this Collection.
-     * The Collection will not be materialized (unlike via @see {@link LazyFluentCollectionX#plusAll(Object)}
+     * Lazily add all the elements in the supplied Collection to this Collection. The Collection will not be materialized (unlike
+     * via @see {@link LazyFluentCollectionX#plusAll(Object)}
      * <pre>
      * {@code
      *    StreamX<Integer> lazy = StreamX.of(1,2,3)
@@ -83,6 +76,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      *   //Lazy List that will contain [2,4,6,5,10] when triggered
      * }
      * </pre>
+     *
      * @param col Collection to add
      * @return LazyFluentCollectionX with Collection added
      */
@@ -92,8 +86,8 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
     }
 
     /**
-     * Lazily removeValue an element from this Collection.
-     * The Collection will not be materialized (unlike via @see {@link LazyFluentCollectionX#removeValue(Object)}
+     * Lazily removeValue an element from this Collection. The Collection will not be materialized (unlike via @see {@link
+     * LazyFluentCollectionX#removeValue(Object)}
      * <pre>
      * {@code
      *    StreamX<Integer> lazy = StreamX.of(1,2,3)
@@ -103,7 +97,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      *   //Lazy List that will contain [2,6] when triggered
      * }
      * </pre>
-     *
+     * <p>
      * This is an equivalent operation to filtering by equality e.g.
      * <pre>
      * {@code
@@ -124,8 +118,8 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
     }
 
     /**
-     * Lazily removeValue the elements in the supplied Collection from this Collection.
-     * The Collection will not be materialized (unlike via @see {@link LazyFluentCollectionX#minusAll(Collection)}
+     * Lazily removeValue the elements in the supplied Collection from this Collection. The Collection will not be materialized
+     * (unlike via @see {@link LazyFluentCollectionX#minusAll(Collection)}
      * <pre>
      * {@code
      *    StreamX<Integer> lazy = StreamX.of(1,2,3)
@@ -135,7 +129,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      *   //Lazy List that will contain [2,6] when triggered
      * }
      * </pre>
-     *
+     * <p>
      * This is an equivalent operation to filtering by equality e.g.
      * <pre>
      * {@code
@@ -146,11 +140,12 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      *   //Lazy List that will contain [2,6] when triggered
      * }
      * </pre>
+     *
      * @param list of elements to removeValue
-     * @return  LazyFluentCollectionX with elements removed
+     * @return LazyFluentCollectionX with elements removed
      */
     default LazyFluentCollectionX<T> minusAllLazy(Iterable<? extends T> list) {
-        removeAll((Iterable)(ListX.fromIterable(list)));
+        removeAll((Iterable) (ListX.fromIterable(list)));
         return this;
     }
 
@@ -174,7 +169,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      * lang.Object)
      */
     @Override
-    public FluentCollectionX<T> plus(T e);
+    FluentCollectionX<T> plus(T e);
 
     /*
      * (non-Javadoc)
@@ -184,7 +179,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      * java.util.Collection)
      */
     @Override
-    public FluentCollectionX<T> plusAll(Iterable<? extends T> list);
+    FluentCollectionX<T> plusAll(Iterable<? extends T> list);
 
     /*
      * (non-Javadoc)
@@ -194,7 +189,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      * lang.Object)
      */
     @Override
-    public FluentCollectionX<T> removeValue(T e);
+    FluentCollectionX<T> removeValue(T e);
 
     /*
      * (non-Javadoc)
@@ -204,7 +199,7 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      * java.util.Collection)
      */
     @Override
-    public FluentCollectionX<T> removeAll(Iterable<? extends T> list);
+    FluentCollectionX<T> removeAll(Iterable<? extends T> list);
 
     /*
      * (non-Javadoc)
@@ -214,5 +209,5 @@ public interface LazyFluentCollectionX<T> extends FluentCollectionX<T> {
      * util.Collection)
      */
     @Override
-    public <R> FluentCollectionX<R> unit(Iterable<R> col);
+    <R> FluentCollectionX<R> unit(Iterable<R> col);
 }

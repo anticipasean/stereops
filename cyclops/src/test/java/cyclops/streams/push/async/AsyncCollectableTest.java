@@ -8,10 +8,10 @@ import cyclops.streams.CollectableTest;
 public class AsyncCollectableTest extends CollectableTest {
 
 
-    public <T> Folds<T> of(T... values){
+    public <T> Folds<T> of(T... values) {
 
-        return Spouts.<T>async(s->{
-            Thread t = new Thread(()-> {
+        return Spouts.<T>async(s -> {
+            Thread t = new Thread(() -> {
                 for (T next : values) {
                     s.onNext(next);
                 }

@@ -2,15 +2,25 @@ package com.oath.cyclops.data;
 
 public interface ReactiveWitness {
 
-    public static enum sortedSet {}
-    public static enum set {}
-    public static enum list {}
-    public static enum linkedListX {}
-    public static enum vectorX {}
-    public static enum persistentQueueX{}
-    public static enum persistentSetX {}
-    public static enum orderedSetX {}
-    public static enum bagX {}
-    public static enum deque{}
-    public static enum queue {}
+    enum sortedSet {}
+
+    enum set {}
+
+    enum list {}
+
+    enum linkedListX {}
+
+    enum vectorX {}
+
+    enum persistentQueueX {}
+
+    enum persistentSetX {}
+
+    enum orderedSetX {}
+
+    enum bagX {}
+
+    enum deque {}
+
+    enum queue {}
 }

@@ -2,7 +2,6 @@ package com.oath.cyclops.react;
 
 
 import cyclops.control.Either;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,13 +13,13 @@ public class SimpleReactFailedStageException extends RuntimeException {
     @Getter
     private final Throwable cause;
 
-    public <T> T getValue() {
-        return (T) value;
+    public static Either<Throwable, SimpleReactFailedStageException> matchable(final Throwable t) {
+        final Either<Throwable, SimpleReactFailedStageException> error =
+            t instanceof SimpleReactFailedStageException ? Either.right((SimpleReactFailedStageException) t) : Either.left(t);
+        return error;
     }
 
-    public static Either<Throwable, SimpleReactFailedStageException> matchable(final Throwable t) {
-        final Either<Throwable, SimpleReactFailedStageException> error = t instanceof SimpleReactFailedStageException
-                ? Either.right((SimpleReactFailedStageException) t) : Either.left(t);
-        return error;
+    public <T> T getValue() {
+        return (T) value;
     }
 }

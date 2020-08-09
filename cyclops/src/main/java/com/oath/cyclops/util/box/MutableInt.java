@@ -1,49 +1,49 @@
 package com.oath.cyclops.util.box;
 
 import com.oath.cyclops.types.foldable.To;
+import java.util.OptionalInt;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
+import java.util.function.IntSupplier;
+import java.util.function.IntUnaryOperator;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.OptionalInt;
-import java.util.function.*;
-import java.util.stream.IntStream;
-
 /**
- * Class that represents a Closed Variable
- * In Java 8 because of the effectively final rule references to captured
- * variables can't be changed.
- * e.g.
- *<pre>{@code
+ * Class that represents a Closed Variable In Java 8 because of the effectively final rule references to captured variables can't
+ * be changed. e.g.
+ * <pre>{@code
  * String var = "hello";
  * Runnable r = () -> var ="world";
  * }</pre>
- *
- * Won't compile because var is treated as if it is final.
- * This can be 'worked around' by using a wrapping object or array.
- *
+ * <p>
+ * Won't compile because var is treated as if it is final. This can be 'worked around' by using a wrapping object or array.
+ * <p>
  * e.g.
  * <pre>{@code
  * Mutable<String> var =  Mutable.of("hello");
  * Runnable r = () -> var.set("world");
  * }</pre>
  *
- * @author johnmcclean
- *
  * @param <T> Type held inside closed var
+ * @author johnmcclean
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supplier<Integer> {
+public class MutableInt implements To<MutableInt>, IntSupplier, IntConsumer, Supplier<Integer> {
 
     private int var;
 
     /**
      * Create a Mutable variable, which can be mutated inside a Closure
-     *
+     * <p>
      * e.g.
      * <pre>{@code
      *   MutableInt num = MutableInt.of(20);
@@ -58,13 +58,12 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
      * @return New Mutable instance
      */
     public static MutableInt of(final int var) {
-        return new MutableInt(
-                              var);
+        return new MutableInt(var);
     }
 
     /**
      * Construct a MutableInt that gets and sets an external value using the provided Supplier and Consumer
-     *
+     * <p>
      * e.g.
      * <pre>
      * {@code
@@ -72,12 +71,12 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
      * }
      * </pre>
      *
-     *
      * @param s Supplier of an external value
      * @param c Consumer that sets an external value
      * @return MutableInt that gets / sets an external (mutable) value
      */
-    public static MutableInt fromExternal(final IntSupplier s, final IntConsumer c) {
+    public static MutableInt fromExternal(final IntSupplier s,
+                                          final IntConsumer c) {
         return new MutableInt() {
             @Override
             public int getAsInt() {
@@ -111,7 +110,6 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the result when getValue is called
      * @return Mutable that lazily applies the provided function when getValue is called to the return value
      */
@@ -139,7 +137,6 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
      *
      * }
      * </pre>
-     *
      *
      * @param fn Map function to be applied to the input when set is called
      * @return Mutable that lazily applies the provided function when set is called to the input value
@@ -170,7 +167,6 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the result when getValue is called
      * @return Mutable that lazily applies the provided function when getValue is called to the return value
      */
@@ -199,7 +195,6 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
      * }
      * </pre>
      *
-     *
      * @param fn Map function to be applied to the input when set is called
      * @return Mutable that lazily applies the provided function when set is called to the input value
      */
@@ -225,7 +220,7 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
 
     /**
      * @param var New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public MutableInt set(final int var) {
         this.var = var;
@@ -234,7 +229,7 @@ public class MutableInt implements To<MutableInt>,IntSupplier, IntConsumer, Supp
 
     /**
      * @param varFn New value
-     * @return  this object with mutated value
+     * @return this object with mutated value
      */
     public MutableInt mutate(final IntFunction<Integer> varFn) {
         var = varFn.apply(var);

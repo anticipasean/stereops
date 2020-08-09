@@ -1,7 +1,7 @@
 package cyclops.data.vector;
 
 import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
+import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -13,8 +13,6 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.util.concurrent.TimeUnit;
-
 @State(Scope.Benchmark)
 public class VectorZip {
 
@@ -23,8 +21,10 @@ public class VectorZip {
 
     @Setup
     public void before() {
-        vector = Vector.range(0, 1000);
-        js = io.vavr.collection.Vector.range(0, 1000);
+        vector = Vector.range(0,
+                              1000);
+        js = io.vavr.collection.Vector.range(0,
+                                             1000);
 
     }
 
@@ -32,32 +32,26 @@ public class VectorZip {
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-        iterations = 10
-    )
-    @Measurement(
-        iterations = 10
-    )
+    @Warmup(iterations = 10)
+    @Measurement(iterations = 10)
     @Fork(1)
     public void cyclopsOps() {
-        vector.zip(Vector.range(0,10000));
+        vector.zip(Vector.range(0,
+                                10000));
 
     }
+
     @Benchmark
     @BenchmarkMode(Mode.SampleTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(
-        iterations = 10
-    )
-    @Measurement(
-        iterations = 10
-    )
+    @Warmup(iterations = 10)
+    @Measurement(iterations = 10)
     @Fork(1)
     public void vavrOps() {
-        js.zip(Vector.range(0,10000));
+        js.zip(Vector.range(0,
+                            10000));
 
     }
-
 
 
 }
