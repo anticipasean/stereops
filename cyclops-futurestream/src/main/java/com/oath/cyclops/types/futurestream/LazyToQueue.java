@@ -1,19 +1,19 @@
 package com.oath.cyclops.types.futurestream;
 
+import com.oath.cyclops.async.adapters.Queue;
+import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
+import com.oath.cyclops.internal.react.async.future.CompletedException;
+import cyclops.futurestream.FutureStream;
+import cyclops.futurestream.LazyReact;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import cyclops.futurestream.LazyReact;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
-import com.oath.cyclops.internal.react.async.future.CompletedException;
-import cyclops.futurestream.FutureStream;
-
 public interface LazyToQueue<U> extends ToQueue<U> {
 
-    <R> FutureStream<R> then(final Function<? super U, ? extends R> fn, Executor exec);
+    <R> FutureStream<R> then(final Function<? super U, ? extends R> fn,
+                             Executor exec);
 
     <R> FutureStream<R> thenSync(final Function<? super U, ? extends R> fn);
 
@@ -30,19 +30,20 @@ public interface LazyToQueue<U> extends ToQueue<U> {
     default Queue<U> toQueue() {
         final Queue<U> queue = getQueueFactory().build();
 
-        final Continuation continuation = peekSync(queue::add).capture(e->{
+        final Continuation continuation = peekSync(queue::add).capture(e -> {
             queue.addError(e);
-        }).self(s -> {
-            if (this.getPopulator()
-                    .isPoolingActive())
-                s.peekSync(v -> {
-                    throw new CompletedException(
-                            v);
-                });
         })
-                .runContinuation(() -> {
-                    queue.close();
-                });
+                                                              .self(s -> {
+                                                                  if (this.getPopulator()
+                                                                          .isPoolingActive()) {
+                                                                      s.peekSync(v -> {
+                                                                          throw new CompletedException(v);
+                                                                      });
+                                                                  }
+                                                              })
+                                                              .runContinuation(() -> {
+                                                                  queue.close();
+                                                              });
 
         queue.addContinuation(continuation);
         return queue;
@@ -61,12 +62,16 @@ public interface LazyToQueue<U> extends ToQueue<U> {
         final Queue<U> queue = fn.apply(getQueueFactory().build());
 
         final Continuation continuation = thenSync(queue::add).self(s -> {
-            if (this.getPopulator().isPoolingActive())
+            if (this.getPopulator()
+                    .isPoolingActive()) {
                 s.peekSync(v -> {
-                    throw new CompletedException(
-                                                 v);
+                    throw new CompletedException(v);
                 });
-        }).runContinuation(() -> {queue.close();});
+            }
+        })
+                                                              .runContinuation(() -> {
+                                                                  queue.close();
+                                                              });
         queue.addContinuation(continuation);
         return queue;
     }
@@ -75,19 +80,19 @@ public interface LazyToQueue<U> extends ToQueue<U> {
     default void addToQueue(final Queue queue) {
         FutureStream str = thenSync(queue::add).self(s -> {
             if (this.getPopulator()
-                .isPoolingActive())
+                    .isPoolingActive()) {
                 s.peekSync(v -> {
-                    throw new CompletedException(
-                        v);
+                    throw new CompletedException(v);
                 });
+            }
         });
 
-
-        final Continuation continuation =  queue.getContinuationStrategy().isBlocking() ? str.blockingContinuation(() -> {
+        final Continuation continuation = queue.getContinuationStrategy()
+                                               .isBlocking() ? str.blockingContinuation(() -> {
             throw new ClosedQueueException();
-        }) : str.runContinuation(() -> {throw new ClosedQueueException();
-                                   }
-                           );
+        }) : str.runContinuation(() -> {
+            throw new ClosedQueueException();
+        });
         queue.addContinuation(continuation);
 
     }
@@ -100,7 +105,8 @@ public interface LazyToQueue<U> extends ToQueue<U> {
      * @see com.oath.cyclops.react.stream.traits.ToQueue#toQueue(java.util.Map, java.util.function.Function)
      */
     @Override
-    default <K> void toQueue(final Map<K, Queue<U>> shards, final Function<? super U, ? extends K> sharder) {
+    default <K> void toQueue(final Map<K, Queue<U>> shards,
+                             final Function<? super U, ? extends K> sharder) {
 
         //in this case all the items have to be pushed to the shards,
         //we can't rely on the client pulling them all to getValue them in to the right shards
@@ -108,18 +114,20 @@ public interface LazyToQueue<U> extends ToQueue<U> {
         then(it -> shards.get(sharder.apply(it))
                          .offer(it),
              service.getExecutor()).runThread(() -> {
-                 shards.values()
-                       .forEach(it -> it.close());
-                 returnPopulator(service);
-             });
+            shards.values()
+                  .forEach(it -> it.close());
+            returnPopulator(service);
+        });
 
     }
 
     void returnPopulator(LazyReact service);
 
-    default U add(final U value, final Queue<U> queue) {
-        if (!queue.add(value))
+    default U add(final U value,
+                  final Queue<U> queue) {
+        if (!queue.add(value)) {
             throw new RuntimeException();
+        }
         return value;
     }
 }

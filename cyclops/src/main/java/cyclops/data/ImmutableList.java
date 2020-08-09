@@ -631,7 +631,6 @@ public interface ImmutableList<T> extends Sealed2<ImmutableList.Some<T>, Immutab
     default ImmutableList<Tuple2<T, Long>> zipWithIndex() {
         return zipWithStream(ReactiveSeq.rangeLong(0,
                                                    Long.MAX_VALUE));
-        // return unitStream(stream().zipWithIndex());
     }
 
     @Override

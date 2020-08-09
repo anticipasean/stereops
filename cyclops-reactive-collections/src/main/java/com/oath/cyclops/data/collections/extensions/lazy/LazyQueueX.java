@@ -88,7 +88,7 @@ public class LazyQueueX<T> extends AbstractLazyCollection<T, Queue<T>> implement
     public LazyQueueX<T> withCollector(Collector<T, ?, Queue<T>> collector) {
         return new LazyQueueX<T>(this.getList(),
                                  this.getSeq()
-                                                  .get(),
+                                     .get(),
                                  collector,
                                  evaluation());
     }

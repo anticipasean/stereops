@@ -15,14 +15,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
 
 /*
   A Tuple implementation that can be either eager / strict or lazy
-
-
  */
-@AllArgsConstructor//(access = AccessLevel.PROTECTED)
+
 public class Tuple3<T1, T2, T3> implements To<Tuple3<T1, T2, T3>>, Serializable, Higher3<tuple3, T1, T2, T3>,
                                            EqualTo<Higher<Higher<tuple3, T1>, T2>, T3, Tuple3<T1, T2, T3>>,
                                            OrderedBy<Higher<Higher<tuple3, T1>, T2>, T3, Tuple3<T1, T2, T3>>,
@@ -32,6 +29,14 @@ public class Tuple3<T1, T2, T3> implements To<Tuple3<T1, T2, T3>>, Serializable,
     private final T1 _1;
     private final T2 _2;
     private final T3 _3;
+
+    public Tuple3(T1 _1,
+                     T2 _2,
+                     T3 _3) {
+        this._1 = _1;
+        this._2 = _2;
+        this._3 = _3;
+    }
 
     public static <T1, T2, T3> Tuple3<T1, T2, T3> of(T1 value1,
                                                      T2 value2,

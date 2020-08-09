@@ -20,9 +20,6 @@ import java.util.Comparator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 
 
 public interface RedBlackTree extends Serializable {
@@ -33,6 +30,7 @@ public interface RedBlackTree extends Serializable {
                         Case(leaf -> leaf));
     }
 
+    @SuppressWarnings("unchecked")
     public static <K, V> Tree<K, V> fromStream(Comparator<? super K> comp,
                                                Stream<? extends Tuple2<? extends K, ? extends V>> stream) {
         Tree<K, V> tree[] = new Tree[1];
@@ -188,8 +186,6 @@ public interface RedBlackTree extends Serializable {
         }
     }
 
-    @AllArgsConstructor
-    @Wither
     public static final class Node<K, V> implements Tree<K, V>, Deconstruct5<Boolean, Tree<K, V>, Tree<K, V>, K, V> {
 
         private static final long serialVersionUID = 1L;
@@ -199,6 +195,20 @@ public interface RedBlackTree extends Serializable {
         private final K key;
         private final V value;
         private final Comparator<K> comp;
+
+        private Node(boolean isBlack,
+                     Tree<K, V> left,
+                     Tree<K, V> right,
+                     K key,
+                     V value,
+                     Comparator<K> comp) {
+            this.isBlack = isBlack;
+            this.left = left;
+            this.right = right;
+            this.key = key;
+            this.value = value;
+            this.comp = comp;
+        }
 
         static <K, V> Node<K, V> RED(Tree<K, V> left,
                                      Tree<K, V> right,
@@ -439,13 +449,26 @@ public interface RedBlackTree extends Serializable {
         public int size() {
             return left.size() + right.size() + 1;
         }
+
+        public Node<K, V> withBlack(boolean black) {
+            return new Node<>(black,
+                              this.left,
+                              this.right,
+                              this.key,
+                              this.value,
+                              this.comp);
+        }
     }
 
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+
     public static final class Leaf<K, V> implements Tree<K, V> {
 
         private static final long serialVersionUID = 1L;
         private final Comparator<? super K> comp;
+
+        private Leaf(Comparator<? super K> comp) {
+            this.comp = comp;
+        }
 
         @Override
         public boolean isEmpty() {

@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 import org.reactivestreams.Publisher;
 
 public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transformable<T>, Iterable<T>,
@@ -286,7 +287,6 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @EqualsAndHashCode
     public final class Invalid<E, T> implements Validated<E, T> {
 
         private final Either<NonEmptyList<E>, T> either;

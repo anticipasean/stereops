@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 
 
 //https://apocalisp.wordpress.com/2008/10/23/heterogeneous-lists-and-the-limits-of-the-java-type-system/
@@ -35,12 +36,20 @@ public interface HList<T1 extends HList<T1>> extends SealedOr<HList<T1>> {
     <TB> HCons<TB, T1> prepend(TB value);
 
 
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @EqualsAndHashCode(of = {"head,tail"})
+
+    @EqualsAndHashCode
     public static class HCons<T1, T2 extends HList<T2>> implements Deconstruct2<T1, HList<T2>>, HList<HCons<T1, T2>> {
 
+        @Include
         public final T1 head;
+        @Include
         public final HList<T2> tail;
+
+        private HCons(T1 head,
+                      HList<T2> tail) {
+            this.head = head;
+            this.tail = tail;
+        }
 
         @Override
         public Tuple2<T1, HList<T2>> unapply() {
@@ -61,10 +70,13 @@ public interface HList<T1 extends HList<T1>> extends SealedOr<HList<T1>> {
         }
     }
 
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class HNil implements HList<HNil> {
 
         final static HNil Instance = new HNil();
+
+        private HNil() {
+
+        }
 
         @Override
         public <R> R fold(Function<? super HList<HNil>, ? extends R> fn1,

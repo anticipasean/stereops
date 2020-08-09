@@ -7,6 +7,7 @@ import com.oath.cyclops.types.persistent.PersistentCollection;
 import com.oath.cyclops.types.persistent.PersistentSet;
 import cyclops.control.Option;
 import cyclops.data.base.HashedPatriciaTrie;
+import cyclops.data.base.HashedPatriciaTrie.Node;
 import cyclops.data.tuple.Tuple;
 import cyclops.data.tuple.Tuple2;
 import cyclops.data.tuple.Tuple3;
@@ -33,15 +34,16 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TrieSet<T> implements ImmutableSet<T>, Higher<trieSet, T>, Serializable {
 
     private static final long serialVersionUID = 1L;
     private final HashedPatriciaTrie.Node<T, T> map;
+
+    private TrieSet(Node<T, T> map) {
+        this.map = map;
+    }
 
     public static <T> TrieSet<T> empty() {
         return new TrieSet<T>(HashedPatriciaTrie.empty());

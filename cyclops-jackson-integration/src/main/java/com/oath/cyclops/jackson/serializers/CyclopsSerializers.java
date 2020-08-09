@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.Serializers;
-import com.fasterxml.jackson.databind.ser.impl.BeanAsArraySerializer;
-import com.fasterxml.jackson.databind.ser.std.SerializableSerializer;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.ReferenceType;
@@ -18,107 +16,157 @@ import com.oath.cyclops.matching.Sealed5;
 import com.oath.cyclops.types.Value;
 import com.oath.cyclops.types.persistent.PersistentMap;
 import com.oath.cyclops.types.traversable.IterableX;
-import cyclops.control.*;
-import cyclops.data.tuple.*;
-
+import cyclops.control.Either;
+import cyclops.control.Eval;
+import cyclops.control.Ior;
+import cyclops.control.Option;
+import cyclops.control.Trampoline;
+import cyclops.data.tuple.Tuple1;
+import cyclops.data.tuple.Tuple2;
+import cyclops.data.tuple.Tuple3;
+import cyclops.data.tuple.Tuple4;
+import cyclops.data.tuple.Tuple5;
+import cyclops.data.tuple.Tuple6;
+import cyclops.data.tuple.Tuple7;
+import cyclops.data.tuple.Tuple8;
 import java.util.Collection;
 
 public class CyclopsSerializers extends Serializers.Base {
 
 
-  @Override
-  public JsonSerializer<?> findReferenceSerializer(SerializationConfig config, ReferenceType type, BeanDescription beanDesc, TypeSerializer contentTypeSerializer, JsonSerializer<Object> contentValueSerializer) {
-    if (Option.class.isAssignableFrom(type.getRawClass())) {
-      return new OptionSerializer(type,true,contentTypeSerializer,contentValueSerializer);
-    }
-    if (Eval.class.isAssignableFrom(type.getRawClass())) {
-      return new EvalSerializer(type,true,contentTypeSerializer,contentValueSerializer);
-    }
-    if (Trampoline.class.isAssignableFrom(type.getRawClass())) {
-      return new TrampolineSerializer(type,true,contentTypeSerializer,contentValueSerializer);
-    }
-    if (Ior.class.isAssignableFrom(type.getRawClass())) {
-      return new IorSerializer();
-    }
-    if (Sealed2.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed2Serializer();
-    }
-    if (Sealed3.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed3Serializer();
-    }
-    if (Sealed4.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed4Serializer();
-    }
-    if (Sealed5.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed5Serializer();
-    }
-    if (Value.class.isAssignableFrom(type.getRawClass())) {
-      return new ValueSerializer(type,true,contentTypeSerializer,contentValueSerializer);
-    }
+    @Override
+    public JsonSerializer<?> findReferenceSerializer(SerializationConfig config,
+                                                     ReferenceType type,
+                                                     BeanDescription beanDesc,
+                                                     TypeSerializer contentTypeSerializer,
+                                                     JsonSerializer<Object> contentValueSerializer) {
+        if (Option.class.isAssignableFrom(type.getRawClass())) {
+            return new OptionSerializer(type,
+                                        true,
+                                        contentTypeSerializer,
+                                        contentValueSerializer);
+        }
+        if (Eval.class.isAssignableFrom(type.getRawClass())) {
+            return new EvalSerializer(type,
+                                      true,
+                                      contentTypeSerializer,
+                                      contentValueSerializer);
+        }
+        if (Trampoline.class.isAssignableFrom(type.getRawClass())) {
+            return new TrampolineSerializer(type,
+                                            true,
+                                            contentTypeSerializer,
+                                            contentValueSerializer);
+        }
+        if (Ior.class.isAssignableFrom(type.getRawClass())) {
+            return new IorSerializer();
+        }
+        if (Sealed2.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed2Serializer();
+        }
+        if (Sealed3.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed3Serializer();
+        }
+        if (Sealed4.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed4Serializer();
+        }
+        if (Sealed5.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed5Serializer();
+        }
+        if (Value.class.isAssignableFrom(type.getRawClass())) {
+            return new ValueSerializer(type,
+                                       true,
+                                       contentTypeSerializer,
+                                       contentValueSerializer);
+        }
 
-    return super.findReferenceSerializer(config, type, beanDesc, contentTypeSerializer, contentValueSerializer);
-  }
-
-  @Override
-  public JsonSerializer<?> findCollectionLikeSerializer(SerializationConfig config, CollectionLikeType type, BeanDescription beanDesc, TypeSerializer elementTypeSerializer, JsonSerializer<Object> elementValueSerializer) {
-      if (!Collection.class.isAssignableFrom(type.getRawClass()) && IterableX.class.isAssignableFrom(type.getRawClass())) {
-          return new IterableXSerializer();
-      }
-    return super.findCollectionLikeSerializer(config, type, beanDesc, elementTypeSerializer, elementValueSerializer);
-  }
+        return super.findReferenceSerializer(config,
+                                             type,
+                                             beanDesc,
+                                             contentTypeSerializer,
+                                             contentValueSerializer);
+    }
 
     @Override
-    public JsonSerializer<?> findCollectionSerializer(SerializationConfig config, CollectionType type, BeanDescription beanDesc, TypeSerializer elementTypeSerializer, JsonSerializer<Object> elementValueSerializer) {
-        return super.findCollectionSerializer(config, type, beanDesc, elementTypeSerializer, elementValueSerializer);
+    public JsonSerializer<?> findCollectionLikeSerializer(SerializationConfig config,
+                                                          CollectionLikeType type,
+                                                          BeanDescription beanDesc,
+                                                          TypeSerializer elementTypeSerializer,
+                                                          JsonSerializer<Object> elementValueSerializer) {
+        if (!Collection.class.isAssignableFrom(type.getRawClass()) && IterableX.class.isAssignableFrom(type.getRawClass())) {
+            return new IterableXSerializer();
+        }
+        return super.findCollectionLikeSerializer(config,
+                                                  type,
+                                                  beanDesc,
+                                                  elementTypeSerializer,
+                                                  elementValueSerializer);
     }
 
     @Override
-  public JsonSerializer<?> findSerializer(SerializationConfig config, JavaType type, BeanDescription beanDesc) {
-
-    if (Tuple1.class==type.getRawClass()) {
-      return new Tuple1Serializer();
-    }
-    if (Tuple2.class==type.getRawClass()) {
-      return new Tuple2Serializer();
-    }
-    if (Tuple3.class==type.getRawClass()) {
-      return new Tuple3Serializer();
-    }
-    if (Tuple4.class==type.getRawClass()) {
-      return new Tuple4Serializer();
-    }
-    if (Tuple5.class==type.getRawClass()) {
-      return new Tuple5Serializer();
-    }
-    if (Tuple6.class==type.getRawClass()) {
-      return new Tuple6Serializer();
-    }
-    if (Tuple7.class==type.getRawClass()) {
-      return new Tuple7Serializer();
-    }
-    if (Tuple8.class==type.getRawClass()) {
-      return new Tuple8Serializer();
-    }
-    if(PersistentMap.class.isAssignableFrom(type.getRawClass())) {
-      return new PersistentMapSerializer();
+    public JsonSerializer<?> findCollectionSerializer(SerializationConfig config,
+                                                      CollectionType type,
+                                                      BeanDescription beanDesc,
+                                                      TypeSerializer elementTypeSerializer,
+                                                      JsonSerializer<Object> elementValueSerializer) {
+        return super.findCollectionSerializer(config,
+                                              type,
+                                              beanDesc,
+                                              elementTypeSerializer,
+                                              elementValueSerializer);
     }
 
-    if (Either.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed2Serializer();
-    }
+    @Override
+    public JsonSerializer<?> findSerializer(SerializationConfig config,
+                                            JavaType type,
+                                            BeanDescription beanDesc) {
 
-    if (Sealed2.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed2Serializer();
+        if (Tuple1.class == type.getRawClass()) {
+            return new Tuple1Serializer();
+        }
+        if (Tuple2.class == type.getRawClass()) {
+            return new Tuple2Serializer();
+        }
+        if (Tuple3.class == type.getRawClass()) {
+            return new Tuple3Serializer();
+        }
+        if (Tuple4.class == type.getRawClass()) {
+            return new Tuple4Serializer();
+        }
+        if (Tuple5.class == type.getRawClass()) {
+            return new Tuple5Serializer();
+        }
+        if (Tuple6.class == type.getRawClass()) {
+            return new Tuple6Serializer();
+        }
+        if (Tuple7.class == type.getRawClass()) {
+            return new Tuple7Serializer();
+        }
+        if (Tuple8.class == type.getRawClass()) {
+            return new Tuple8Serializer();
+        }
+        if (PersistentMap.class.isAssignableFrom(type.getRawClass())) {
+            return new PersistentMapSerializer();
+        }
+
+        if (Either.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed2Serializer();
+        }
+
+        if (Sealed2.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed2Serializer();
+        }
+        if (Sealed3.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed3Serializer();
+        }
+        if (Sealed4.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed4Serializer();
+        }
+        if (Sealed5.class.isAssignableFrom(type.getRawClass())) {
+            return new Sealed5Serializer();
+        }
+        return super.findSerializer(config,
+                                    type,
+                                    beanDesc);
     }
-    if (Sealed3.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed3Serializer();
-    }
-    if (Sealed4.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed4Serializer();
-    }
-    if (Sealed5.class.isAssignableFrom(type.getRawClass())) {
-      return new Sealed5Serializer();
-    }
-    return super.findSerializer(config, type, beanDesc);
-  }
 }

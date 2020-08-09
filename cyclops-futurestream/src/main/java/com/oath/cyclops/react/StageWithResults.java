@@ -1,14 +1,12 @@
 package com.oath.cyclops.react;
 
+import com.oath.cyclops.types.futurestream.ConfigurableStream;
+import com.oath.cyclops.util.ExceptionSoftener;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
-
-import com.oath.cyclops.types.futurestream.ConfigurableStream;
-import com.oath.cyclops.util.ExceptionSoftener;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -22,7 +20,8 @@ public class StageWithResults<RS, U> {
     @Getter
     private final RS results;
 
-    public StageWithResults(final ConfigurableStream<U, Object> stage, final RS results) {
+    public StageWithResults(final ConfigurableStream<U, Object> stage,
+                            final RS results) {
 
         this.taskExecutor = stage.getTaskExecutor();
         this.stage = stage;
@@ -30,8 +29,8 @@ public class StageWithResults<RS, U> {
     }
 
     /**
-     * This method allows the SimpleReact Executor to be reused by JDK parallel streams. It is best used when
-     * collectResults and block are called explicitly for finer grained control over the blocking conditions.
+     * This method allows the SimpleReact Executor to be reused by JDK parallel streams. It is best used when collectResults and
+     * block are called explicitly for finer grained control over the blocking conditions.
      *
      * @param fn Function that contains parallelStream code to be executed by the SimpleReact ForkJoinPool (if configured)
      */
@@ -63,8 +62,7 @@ public class StageWithResults<RS, U> {
         try {
             return callable.call();
         } catch (final Exception e) {
-            throw new RuntimeException(
-                                       e);
+            throw new RuntimeException(e);
         }
     }
 

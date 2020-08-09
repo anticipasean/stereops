@@ -96,7 +96,7 @@ public class LazySetX<T> extends AbstractLazyCollection<T, Set<T>> implements Se
     public LazySetX<T> type(Collector<T, ?, Set<T>> collector) {
         return new LazySetX<T>(this.getList(),
                                this.getSeq()
-                                              .get(),
+                                   .get(),
                                collector,
                                evaluation());
     }

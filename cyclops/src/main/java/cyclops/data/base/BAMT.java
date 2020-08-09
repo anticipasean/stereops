@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 public class BAMT<T> {
@@ -355,11 +356,14 @@ public class BAMT<T> {
 
     }
 
-    @AllArgsConstructor
     public static class Two<T> implements PopulatedArray<T> {
 
         public static final int bitShiftDepth = 5;
         final Object[][] array;
+
+        private Two(Object[][] array) {
+            this.array = array;
+        }
 
         public static <T> Two<T> two(Object[][] array) {
             return new Two<T>(array);

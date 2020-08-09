@@ -1,16 +1,15 @@
 package cyclops.reactive.collections.guava;
 
+import com.google.common.collect.testing.TestStringListGenerator;
+import cyclops.reactive.collections.mutable.ListX;
 import java.util.List;
 
-import cyclops.reactive.collections.mutable.ListX;
-import com.google.common.collect.testing.TestStringListGenerator;
-
-public class ListXGenerator extends  TestStringListGenerator {
+public class ListXGenerator extends TestStringListGenerator {
 
 
     @Override
     public List<String> create(String... elements) {
-       return ListX.of(elements);
+        return ListX.of(elements);
     }
 
 }

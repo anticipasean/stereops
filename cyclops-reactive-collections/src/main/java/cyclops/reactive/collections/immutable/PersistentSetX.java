@@ -254,16 +254,14 @@ public interface PersistentSetX<T> extends To<PersistentSetX<T>>, PersistentSet<
     static <T> PersistentSetX<T> fromIterator(Iterator<T> iterator) {
         return fromIterable(() -> iterator);
     }
+
     /**
-     default ConvertableSequence<T> to(){
-
-     return new ConvertableSequence<>(this);
-     }
-     default Collectable<T> collectors(){
-
-
-     return Seq.seq(this);
-     }
+     * default ConvertableSequence<T> to(){
+     * <p>
+     * return new ConvertableSequence<>(this); } default Collectable<T> collectors(){
+     * <p>
+     * <p>
+     * return Seq.seq(this); }
      **/
 
     static <T> PersistentSetX<T> narrowK(final Higher<persistentSetX, T> persistentSetX) {

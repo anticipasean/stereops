@@ -10,12 +10,10 @@ import java.util.stream.Collector;
 /**
  * Collector that does nothing
  *
- * @author johnmcclean
- *
  * @param <T> the type of input elements to the reduction operation
- * @param <A> the mutable accumulation type of the reduction operation (often
- *            hidden as an implementation detail)
+ * @param <A> the mutable accumulation type of the reduction operation (often hidden as an implementation detail)
  * @param <R> the result type of the reduction operation
+ * @author johnmcclean
  */
 class NonCollector<T, A, R> implements Collector<T, A, R> {
 

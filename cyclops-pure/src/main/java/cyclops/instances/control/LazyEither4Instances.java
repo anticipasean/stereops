@@ -150,11 +150,15 @@ public class LazyEither4Instances {
         return INSTANCE;
     }
 
-    @AllArgsConstructor
+
     public static class LazyEither4Typeclasses<L1, L2, L3> implements Monad<Higher<Higher<Higher<lazyEither4, L1>, L2>, L3>>,
                                                                       MonadRec<Higher<Higher<Higher<lazyEither4, L1>, L2>, L3>>,
                                                                       Traverse<Higher<Higher<Higher<lazyEither4, L1>, L2>, L3>>,
                                                                       Foldable<Higher<Higher<Higher<lazyEither4, L1>, L2>, L3>> {
+
+        public LazyEither4Typeclasses() {
+
+        }
 
         @Override
         public <T, R> R foldMap(Monoid<R> mb,

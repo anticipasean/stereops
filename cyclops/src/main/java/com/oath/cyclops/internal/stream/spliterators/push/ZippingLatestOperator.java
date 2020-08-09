@@ -11,17 +11,22 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
-import lombok.AllArgsConstructor;
 import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
 
-@AllArgsConstructor
 public class ZippingLatestOperator<T1, T2, R> implements Operator<R> {
-
 
     private final BiFunction<? super T1, ? super T2, ? extends R> fn;
     private final Object UNSET = new Object();
     Operator<? super T1> left;
     Operator<? super T2> right;
+
+    public ZippingLatestOperator(Operator<? super T1> left,
+                                 Operator<? super T2> right,
+                                 BiFunction<? super T1, ? super T2, ? extends R> fn) {
+        this.fn = fn;
+        this.left = left;
+        this.right = right;
+    }
 
     @Override
     public StreamSubscription subscribe(Consumer<? super R> onNext,

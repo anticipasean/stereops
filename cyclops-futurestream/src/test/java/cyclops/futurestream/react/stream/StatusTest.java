@@ -10,7 +10,12 @@ public class StatusTest {
 
     @Test
     public void testGetMillis() {
-        Status status = new Status(0, 0, 0, 1000000L, null);
-        assertThat(status.getElapsedMillis(), is(1L));
+        Status status = new Status(0,
+                                   0,
+                                   0,
+                                   1000000L,
+                                   null);
+        assertThat(status.getElapsedMillis(),
+                   is(1L));
     }
 }

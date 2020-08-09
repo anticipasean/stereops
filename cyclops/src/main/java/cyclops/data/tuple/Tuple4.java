@@ -15,14 +15,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
 
 /*
   A Tuple implementation that can be either eager / strict or lazy
-
-
  */
-@AllArgsConstructor
 public class Tuple4<T1, T2, T3, T4> implements To<Tuple4<T1, T2, T3, T4>>, Serializable, Higher4<tuple4, T1, T2, T3, T4>,
                                                EqualTo<Higher<Higher<Higher<tuple4, T1>, T2>, T3>, T4, Tuple4<T1, T2, T3, T4>>,
                                                OrderedBy<Higher<Higher<Higher<tuple4, T1>, T2>, T3>, T4, Tuple4<T1, T2, T3, T4>>,
@@ -33,6 +29,16 @@ public class Tuple4<T1, T2, T3, T4> implements To<Tuple4<T1, T2, T3, T4>>, Seria
     private final T2 _2;
     private final T3 _3;
     private final T4 _4;
+
+    public Tuple4(T1 t1,
+                     T2 t2,
+                     T3 t3,
+                     T4 t4) {
+        _1 = t1;
+        _2 = t2;
+        _3 = t3;
+        _4 = t4;
+    }
 
     public static <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> of(T1 value1,
                                                              T2 value2,

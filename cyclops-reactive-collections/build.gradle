@@ -15,9 +15,11 @@ dependencies {
     compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     testCompileClasspath project(':cyclops')
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    compileClasspath "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
     testCompileClasspath project(':cyclops')
-    implementation 'org.reactivestreams:reactive-streams-tck:1.0.0'
+    implementation 'org.reactivestreams:reactive-streams:1.0.3'
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testCompileClasspath group: 'io.projectreactor', name: 'reactor-test', version: '3.2.2.RELEASE'
     testCompileClasspath 'org.mockito:mockito-core:1.9.5'
     testCompileClasspath 'io.projectreactor:reactor-core:3.0.7.RELEASE'

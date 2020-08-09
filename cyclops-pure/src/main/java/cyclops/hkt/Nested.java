@@ -133,10 +133,10 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                                                    InstanceDefinitions<W2> def2) {
         Compose<W1, W2> composed = Compose.compose(def1.functor(),
                                                    def2.functor());
-        return new Nested<>(narrow(nested),
-                            composed,
-                            def1,
-                            def2);
+        return new Nested<W1, W2, T>(narrow(nested),
+                                     composed,
+                                     def1,
+                                     def2);
     }
 
     public static <W1, W2, T> Nested<W1, W2, T> of(Active<W1, ? extends Higher<W2, ? extends T>> nested,
@@ -144,10 +144,10 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
         Compose<W1, W2> composed = Compose.compose(nested.getDef1()
                                                          .functor(),
                                                    def2.functor());
-        return new Nested<>(narrow(nested.getActive()),
-                            composed,
-                            nested.getDef1(),
-                            def2);
+        return new Nested<W1, W2, T>(narrow(nested.getActive()),
+                                     composed,
+                                     nested.getDef1(),
+                                     def2);
     }
 
     public static <W1, W2, T> Higher<W1, Higher<W2, T>> narrow(Higher<W1, ? extends Higher<W2, ? extends T>> nested) {
@@ -362,10 +362,10 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                                                                       .flatMap(fn.andThen(widenFn),
                                                                                a),
                                                              nested);
-        return new Nested<>(res,
-                            composedFunctor,
-                            def1,
-                            def2);
+        return new Nested<W1, W2, R>(res,
+                                     composedFunctor,
+                                     def1,
+                                     def2);
     }
 
     public <T2, R> Nested<W1, W2, R> zip(Higher<W2, T2> fb,

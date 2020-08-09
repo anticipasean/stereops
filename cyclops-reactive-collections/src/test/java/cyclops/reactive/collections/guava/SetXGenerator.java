@@ -1,16 +1,15 @@
 package cyclops.reactive.collections.guava;
 
+import com.google.common.collect.testing.TestStringSetGenerator;
+import cyclops.reactive.collections.mutable.SetX;
 import java.util.Set;
 
-import cyclops.reactive.collections.mutable.SetX;
-import com.google.common.collect.testing.TestStringSetGenerator;
-
-public class SetXGenerator extends  TestStringSetGenerator {
+public class SetXGenerator extends TestStringSetGenerator {
 
 
     @Override
     public Set<String> create(String... elements) {
-       return SetX.of(elements);
+        return SetX.of(elements);
     }
 
 }

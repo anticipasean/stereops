@@ -10,10 +10,10 @@ import cyclops.reactive.Spouts;
 public class AsyncCollectableTest extends CollectableTest {
 
 
-    public <T> ReactiveSeq<T> of(T... values){
+    public <T> ReactiveSeq<T> of(T... values) {
 
-        ReactiveSeq<T> seq = Spouts.<T>async(s->{
-            Thread t = new Thread(()-> {
+        ReactiveSeq<T> seq = Spouts.<T>async(s -> {
+            Thread t = new Thread(() -> {
                 for (T next : values) {
                     s.onNext(next);
                 }

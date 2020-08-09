@@ -12,11 +12,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collector;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.reactivestreams.Subscription;
 
-@AllArgsConstructor
 public class MapXImpl<K, V> implements MapX<K, V> {
 
     private final Map<K, V> map;
@@ -28,6 +26,7 @@ public class MapXImpl<K, V> implements MapX<K, V> {
         this.collector = defaultCollector();
     }
 
+    @SuppressWarnings("unchecked")
     public MapXImpl() {
         this.collector = defaultCollector();
         this.map = (Map) this.collector.supplier()
@@ -35,6 +34,7 @@ public class MapXImpl<K, V> implements MapX<K, V> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <R> R unwrap() {
         return (R) map;
     }

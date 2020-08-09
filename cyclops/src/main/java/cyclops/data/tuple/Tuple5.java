@@ -9,14 +9,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
 
 /*
   A Tuple implementation that can be lazyEither eager / strict or lazy
-
-
  */
-@AllArgsConstructor
 public class Tuple5<T1, T2, T3, T4, T5> implements To<Tuple5<T1, T2, T3, T4, T5>>, Serializable,
                                                    Comparable<Tuple5<T1, T2, T3, T4, T5>> {
 
@@ -26,6 +22,18 @@ public class Tuple5<T1, T2, T3, T4, T5> implements To<Tuple5<T1, T2, T3, T4, T5>
     private final T3 _3;
     private final T4 _4;
     private final T5 _5;
+
+    public Tuple5(T1 t1,
+                  T2 t2,
+                  T3 t3,
+                  T4 t4,
+                  T5 t5) {
+        _1 = t1;
+        _2 = t2;
+        _3 = t3;
+        _4 = t4;
+        _5 = t5;
+    }
 
     public static <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> of(T1 value1,
                                                                      T2 value2,

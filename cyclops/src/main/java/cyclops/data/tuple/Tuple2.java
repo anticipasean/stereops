@@ -16,12 +16,10 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
 
 /*
   A Tuple implementation that can be either eager / strict or lazy
  */
-@AllArgsConstructor
 public class Tuple2<T1, T2> implements To<Tuple2<T1, T2>>, Serializable, EqualTo<Higher<tuple2, T1>, T2, Tuple2<T1, T2>>,
                                        OrderedBy<Higher<tuple2, T1>, T2, Tuple2<T1, T2>>, Comparable<Tuple2<T1, T2>>,
                                        Higher2<tuple2, T1, T2> {
@@ -29,6 +27,12 @@ public class Tuple2<T1, T2> implements To<Tuple2<T1, T2>>, Serializable, EqualTo
     private static final long serialVersionUID = 1L;
     private final T1 _1;
     private final T2 _2;
+
+    public Tuple2(T1 t1,
+                  T2 t2) {
+        _1 = t1;
+        _2 = t2;
+    }
 
     public static <T1, T2> Tuple2<T1, T2> of(T1 value1,
                                              T2 value2) {

@@ -5,103 +5,116 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
+import cyclops.futurestream.FutureStream;
+import cyclops.futurestream.LazyReact;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
 import org.junit.Test;
-
-import cyclops.futurestream.LazyReact;
-import cyclops.futurestream.FutureStream;
 
 
 public class LazyReactTest {
 
-	@Test
-	public void testReactListWithExtendedSuppliers() throws InterruptedException, ExecutionException {
+    @Test
+    public void testReactListWithExtendedSuppliers() throws InterruptedException, ExecutionException {
 
-		class DummySupplier implements Supplier<Integer> {
+        class DummySupplier implements Supplier<Integer> {
 
-			private Integer i;
-			public DummySupplier(Integer i) {
-				this.i = i;
-			}
+            private Integer i;
 
-			@Override
-			public Integer get() {
-				return i;
-			}
+            public DummySupplier(Integer i) {
+                this.i = i;
+            }
 
-		}
+            @Override
+            public Integer get() {
+                return i;
+            }
 
-		DummySupplier s1 = new DummySupplier(1);
-		DummySupplier s2 = new DummySupplier(2);
-		DummySupplier s3 = new DummySupplier(3);
+        }
 
-		Iterable<DummySupplier> iterable = Arrays.asList(s1, s2, s3);
-		FutureStream<Integer> futures = new LazyReact()
-				.<Integer> fromIterableAsync(iterable)
-				.withAsync(false);
+        DummySupplier s1 = new DummySupplier(1);
+        DummySupplier s2 = new DummySupplier(2);
+        DummySupplier s3 = new DummySupplier(3);
 
-		assertThat(futures.elementAt(0).toOptional().get(), is(lessThan(99)));
-	}
+        Iterable<DummySupplier> iterable = Arrays.asList(s1,
+                                                         s2,
+                                                         s3);
+        FutureStream<Integer> futures = new LazyReact().<Integer>fromIterableAsync(iterable).withAsync(false);
 
-	@Test
-	public void testFromStreamAsyncWithExtendedSuppliers() throws InterruptedException, ExecutionException {
+        assertThat(futures.elementAt(0)
+                          .toOptional()
+                          .get(),
+                   is(lessThan(99)));
+    }
 
-		class DummySupplier implements Supplier<Integer> {
+    @Test
+    public void testFromStreamAsyncWithExtendedSuppliers() throws InterruptedException, ExecutionException {
 
-			private Integer i;
-			public DummySupplier(Integer i) {
-				this.i = i;
-			}
+        class DummySupplier implements Supplier<Integer> {
 
-			@Override
-			public Integer get() {
-				return i;
-			}
+            private Integer i;
 
-		}
+            public DummySupplier(Integer i) {
+                this.i = i;
+            }
 
-		DummySupplier s1 = new DummySupplier(1);
-		DummySupplier s2 = new DummySupplier(2);
-		DummySupplier s3 = new DummySupplier(3);
+            @Override
+            public Integer get() {
+                return i;
+            }
 
-		Stream<DummySupplier> stream = Arrays.asList(s1, s2, s3).stream();
-		FutureStream<Integer> futures = new LazyReact()
-				.<Integer> fromStreamAsync(stream).withAsync(false);
+        }
 
-		assertThat(futures.elementAt(0).toOptional().get(), is(lessThan(99)));
-	}
+        DummySupplier s1 = new DummySupplier(1);
+        DummySupplier s2 = new DummySupplier(2);
+        DummySupplier s3 = new DummySupplier(3);
 
-	@Test
-	public void testReactListFromIteratorAsync() throws InterruptedException, ExecutionException {
+        Stream<DummySupplier> stream = Arrays.asList(s1,
+                                                     s2,
+                                                     s3)
+                                             .stream();
+        FutureStream<Integer> futures = new LazyReact().<Integer>fromStreamAsync(stream).withAsync(false);
 
-		class DummySupplier implements Supplier<Integer> {
+        assertThat(futures.elementAt(0)
+                          .toOptional()
+                          .get(),
+                   is(lessThan(99)));
+    }
 
-			private Integer i;
-			public DummySupplier(Integer i) {
-				this.i = i;
-			}
+    @Test
+    public void testReactListFromIteratorAsync() throws InterruptedException, ExecutionException {
 
-			@Override
-			public Integer get() {
-				return i;
-			}
+        class DummySupplier implements Supplier<Integer> {
 
-		}
+            private Integer i;
 
-		DummySupplier s1 = new DummySupplier(1);
-		DummySupplier s2 = new DummySupplier(2);
-		DummySupplier s3 = new DummySupplier(3);
+            public DummySupplier(Integer i) {
+                this.i = i;
+            }
 
-		Iterator<DummySupplier> iterator = Arrays.asList(s1, s2, s3).iterator();
-		FutureStream<Integer> futures = new LazyReact()
-				.<Integer> fromIteratorAsync(iterator)
-				.withAsync(false);
+            @Override
+            public Integer get() {
+                return i;
+            }
 
-		assertThat(futures.elementAt(0).toOptional().get(), is(lessThan(99)));
-	}
+        }
+
+        DummySupplier s1 = new DummySupplier(1);
+        DummySupplier s2 = new DummySupplier(2);
+        DummySupplier s3 = new DummySupplier(3);
+
+        Iterator<DummySupplier> iterator = Arrays.asList(s1,
+                                                         s2,
+                                                         s3)
+                                                 .iterator();
+        FutureStream<Integer> futures = new LazyReact().<Integer>fromIteratorAsync(iterator).withAsync(false);
+
+        assertThat(futures.elementAt(0)
+                          .toOptional()
+                          .get(),
+                   is(lessThan(99)));
+    }
 }

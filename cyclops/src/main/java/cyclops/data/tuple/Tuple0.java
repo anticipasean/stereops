@@ -6,8 +6,12 @@ import lombok.AllArgsConstructor;
 /**
  * Empty tuple type
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+
 public final class Tuple0 {
+
+    private Tuple0() {
+
+    }
 
     static Tuple0 INSTANCE = new Tuple0();
 

@@ -16,6 +16,7 @@ dependencies {
     compileClasspath project(':cyclops')
     compileClasspath "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombokVersion}"
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombokVersion}"
     testCompileClasspath project(':cyclops-reactive-collections')
     testCompileClasspath 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:' + jacksonVersion
     testCompileClasspath group: 'junit', name: 'junit', version: '4.12'

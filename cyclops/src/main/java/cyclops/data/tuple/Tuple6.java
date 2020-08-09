@@ -9,15 +9,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
 /*
   A Tuple implementation that can be lazyEither eager / strict or lazy
-
-
  */
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tuple6<T1, T2, T3, T4, T5, T6> implements To<Tuple6<T1, T2, T3, T4, T5, T6>>, Serializable,
                                                        Comparable<Tuple6<T1, T2, T3, T4, T5, T6>> {
 
@@ -28,6 +23,20 @@ public class Tuple6<T1, T2, T3, T4, T5, T6> implements To<Tuple6<T1, T2, T3, T4,
     private final T4 _4;
     private final T5 _5;
     private final T6 _6;
+
+    public Tuple6(T1 t1,
+                  T2 t2,
+                  T3 t3,
+                  T4 t4,
+                  T5 t5,
+                  T6 t6) {
+        _1 = t1;
+        _2 = t2;
+        _3 = t3;
+        _4 = t4;
+        _5 = t5;
+        _6 = t6;
+    }
 
     public static <T1, T2, T3, T4, T5, T6> Tuple6<T1, T2, T3, T4, T5, T6> of(T1 value1,
                                                                              T2 value2,

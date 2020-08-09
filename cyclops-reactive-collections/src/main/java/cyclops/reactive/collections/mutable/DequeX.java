@@ -267,7 +267,7 @@ public interface DequeX<T> extends To<DequeX<T>>, Deque<T>, LazyCollectionX<T>, 
      * @param publisher to construct DequeX from
      * @return DequeX
      */
-    static <T> DequeX<T> fromPublisher(final Publisher<? extends T> publisher) {
+    static <T> DequeX<T> fromPublisher(final Publisher<T> publisher) {
         return Spouts.from(publisher)
                      .to(ReactiveConvertableSequence::converter)
                      .dequeX(LAZY);

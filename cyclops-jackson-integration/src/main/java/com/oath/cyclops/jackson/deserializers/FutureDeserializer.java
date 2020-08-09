@@ -10,42 +10,48 @@ import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import cyclops.control.Future;
-
 import java.io.IOException;
 
 final class FutureDeserializer extends StdDeserializer<Future<?>> implements ResolvableDeserializer {
-  JavaType valueType;
-  private JsonDeserializer<Object> deser;
 
-  protected FutureDeserializer(JavaType valueType) {
-    super(valueType);
-    this.valueType = valueType;
-  }
+    JavaType valueType;
+    private JsonDeserializer<Object> deser;
 
-  @Override
-  public Object deserializeWithType(JsonParser p, DeserializationContext ctxt, TypeDeserializer typeDeserializer) throws IOException {
-    return super.deserializeWithType(p, ctxt, typeDeserializer);
-  }
-
-
-  @Override
-  public Future<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-    return Future.ofResult( deser.deserialize(p,ctxt));
-  }
-  @Override
-  public void resolve(DeserializationContext ctxt) throws JsonMappingException {
-    if (valueType.isContainerType()) {
-       deser = ctxt.findRootValueDeserializer(valueType.getContentType());
-    }else{
-      deser = ctxt.findRootValueDeserializer(valueType.containedTypeOrUnknown(0));
+    protected FutureDeserializer(JavaType valueType) {
+        super(valueType);
+        this.valueType = valueType;
     }
-  }
-  @Override
-  public Future<?> getNullValue(DeserializationContext ctxt) {
-    return Future.ofResult(null);
-  }
+
+    @Override
+    public Object deserializeWithType(JsonParser p,
+                                      DeserializationContext ctxt,
+                                      TypeDeserializer typeDeserializer) throws IOException {
+        return super.deserializeWithType(p,
+                                         ctxt,
+                                         typeDeserializer);
+    }
 
 
+    @Override
+    public Future<?> deserialize(JsonParser p,
+                                 DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        return Future.ofResult(deser.deserialize(p,
+                                                 ctxt));
+    }
+
+    @Override
+    public void resolve(DeserializationContext ctxt) throws JsonMappingException {
+        if (valueType.isContainerType()) {
+            deser = ctxt.findRootValueDeserializer(valueType.getContentType());
+        } else {
+            deser = ctxt.findRootValueDeserializer(valueType.containedTypeOrUnknown(0));
+        }
+    }
+
+    @Override
+    public Future<?> getNullValue(DeserializationContext ctxt) {
+        return Future.ofResult(null);
+    }
 
 
 }

@@ -98,7 +98,7 @@ public class LazySortedSetX<T> extends AbstractLazyCollection<T, SortedSet<T>> i
     public LazySortedSetX<T> type(Collector<T, ?, SortedSet<T>> collector) {
         return new LazySortedSetX<T>(this.getList(),
                                      this.getSeq()
-                                                          .get(),
+                                         .get(),
                                      collector,
                                      evaluation());
     }

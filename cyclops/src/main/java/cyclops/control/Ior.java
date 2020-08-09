@@ -31,6 +31,7 @@ import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 import org.reactivestreams.Publisher;
 
 /**
@@ -1036,10 +1037,12 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     }
 
     @AllArgsConstructor(access = AccessLevel.PACKAGE)
-    @EqualsAndHashCode(of = {"left", "right"})
+    @EqualsAndHashCode
     public static class Both<ST, PT> implements Ior<ST, PT> {
 
+        @Include
         private final ST secondary;
+        @Include
         private final PT primary;
 
         private static <ST, PT> Ior<ST, PT> both(final ST secondary,

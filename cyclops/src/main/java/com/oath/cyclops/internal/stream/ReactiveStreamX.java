@@ -97,24 +97,21 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.experimental.Wither;
+import lombok.With;
 import org.agrona.concurrent.OneToOneConcurrentArrayQueue;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-
-@AllArgsConstructor
 public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
     static final Object UNSET = new Object();
     @Getter
     final Operator<T> source;
-    @Wither
+    @With
     final Consumer<? super Throwable> defaultErrorHandler;
-    @Wither
+    @With
     final Type async; //SYNC streams should switch to lazy Backpressured or No backpressure when zip or flatMapP are called
     //zip can check the provided Stream settings for async usage
     //flatMapP should assume async
@@ -138,6 +135,14 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                 throw ExceptionSoftener.throwSoftenedException(e);
             }
         };
+        this.async = async;
+    }
+
+    public ReactiveStreamX(Operator<T> source,
+                           Consumer<? super Throwable> defaultErrorHandler,
+                           Type async) {
+        this.source = source;
+        this.defaultErrorHandler = defaultErrorHandler;
         this.async = async;
     }
 

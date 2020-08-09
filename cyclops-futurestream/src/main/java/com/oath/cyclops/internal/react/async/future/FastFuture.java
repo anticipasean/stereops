@@ -1,5 +1,6 @@
 package com.oath.cyclops.internal.react.async.future;
 
+import com.oath.cyclops.internal.react.exceptions.SimpleReactCompletionException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,9 +9,6 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.oath.cyclops.internal.react.exceptions.SimpleReactCompletionException;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -28,34 +26,124 @@ import lombok.Getter;
 @AllArgsConstructor
 public class FastFuture<T> {
 
+    private static UnSet UNSET = new UnSet();
+    private final AtomicReference result = new AtomicReference(UNSET);
+    private final AtomicReference exception = new AtomicReference(UNSET);
+    private final Consumer<FastFuture<T>> doFinally;
+    @Getter
+    private final FinalPipeline pipeline;
+    private final AtomicInteger count = new AtomicInteger(0);
+    private final AtomicInteger max = new AtomicInteger(0);
     @Getter
     private volatile boolean done = false;
     private volatile Consumer<OnComplete> forXOf;
     private volatile Consumer<OnComplete> essential;
     @Getter
     private volatile boolean completedExceptionally = false;
-    private final AtomicReference result = new AtomicReference(
-                                                               UNSET);
-    private final AtomicReference exception = new AtomicReference(
-                                                                  UNSET);
-    private final Consumer<FastFuture<T>> doFinally;
-    private static UnSet UNSET = new UnSet();
-
-    static class UnSet {
-    }
-
-    @Getter
-    private final FinalPipeline pipeline;
-
-    private final AtomicInteger count = new AtomicInteger(
-                                                          0);
-    private final AtomicInteger max = new AtomicInteger(
-                                                        0);
-
     public FastFuture() {
         max.set(0);
         this.doFinally = null;
         this.pipeline = null;
+    }
+
+    public FastFuture(final FinalPipeline pipeline,
+                      final Consumer<FastFuture<T>> doFinally) {
+        this.max.set(0);
+        this.pipeline = pipeline;
+        this.doFinally = doFinally;
+
+    }
+
+    public FastFuture(final FinalPipeline pipeline,
+                      final int max) {
+        this.max.set(max);
+        this.pipeline = pipeline;
+        this.doFinally = null;
+    }
+
+    public static <T> FastFuture<T> completedFuture(final T value) {
+        final FastFuture<T> f = new FastFuture();
+        f.result.lazySet(value);
+        f.done = true;
+        return f;
+    }
+
+    public static <T> FastFuture<T> failedFuture(final Throwable t) {
+        return new FastFuture<T>().completeExceptionally(t);
+    }
+
+    /**
+     * Internal conversion method to convert CompletableFutures to FastFuture.
+     */
+    public static <T> FastFuture<T> fromCompletableFuture(final CompletableFuture<T> cf) {
+        final FastFuture<T> f = new FastFuture<>();
+        cf.thenAccept(i -> f.set(i));
+        cf.exceptionally(t -> {
+
+            f.completedExceptionally(t);
+            return f.join();
+        });
+        return f;
+    }
+
+    public static <R> FastFuture<List<R>> allOf(final Runnable onComplete,
+                                                final FastFuture... futures) {
+        //needs to use onComplete
+        final FastFuture allOf = new FastFuture(FinalPipeline.empty(),
+                                                futures.length);
+
+        for (final FastFuture next : futures) {
+            final AtomicInteger count = new AtomicInteger(0);
+            next.onComplete(v -> {
+                if (!count.compareAndSet(0,
+                                         1)) {
+                    return;
+                }
+                if (allOf.count.incrementAndGet() == allOf.max.get()) {
+                    onComplete.run();
+                }
+
+            });
+        }
+        return allOf;
+    }
+
+    public static <R> FastFuture<List<R>> xOf(final int x,
+                                              final Runnable onComplete,
+                                              final FastFuture... futures) {
+        //needs to use onComplete
+        final FastFuture xOf = new FastFuture(FinalPipeline.empty(),
+                                              x);
+        for (final FastFuture next : futures) {
+            final AtomicInteger count = new AtomicInteger(0);
+            next.onComplete(v -> {
+                if (!count.compareAndSet(0,
+                                         1)) {
+                    return;
+                }
+                if (xOf.count.incrementAndGet() >= xOf.max.get()) {
+
+                    onComplete.run();
+
+                }
+
+            });
+        }
+        return xOf;
+    }
+
+    public static <R> FastFuture<List<R>> anyOf(final FastFuture... futures) {
+
+        final FastFuture anyOf = new FastFuture();
+
+        for (final FastFuture next : futures) {
+            next.onComplete(v -> {
+                anyOf.result.lazySet(true);
+                anyOf.done();
+
+            });
+        }
+        return anyOf;
     }
 
     private T result() {
@@ -72,19 +160,6 @@ public class FastFuture<T> {
             Thread.yield();
         }
         return (Throwable) result;
-    }
-
-    public FastFuture(final FinalPipeline pipeline, final Consumer<FastFuture<T>> doFinally) {
-        this.max.set(0);
-        this.pipeline = pipeline;
-        this.doFinally = doFinally;
-
-    }
-
-    public FastFuture(final FinalPipeline pipeline, final int max) {
-        this.max.set(max);
-        this.pipeline = pipeline;
-        this.doFinally = null;
     }
 
     public void await() {
@@ -108,9 +183,9 @@ public class FastFuture<T> {
             while (!done) {
                 LockSupport.parkNanos(spin++);
             }
-            if (completedExceptionally)
-                throw new SimpleReactCompletionException(
-                                                         exception());
+            if (completedExceptionally) {
+                throw new SimpleReactCompletionException(exception());
+            }
             return result();
         } finally {
             markComplete();
@@ -118,28 +193,24 @@ public class FastFuture<T> {
     }
 
     public void markComplete() {
-        if (doFinally != null)
+        if (doFinally != null) {
             doFinally.accept(this);
-    }
-
-    public static <T> FastFuture<T> completedFuture(final T value) {
-        final FastFuture<T> f = new FastFuture();
-        f.result.lazySet(value);
-        f.done = true;
-        return f;
+        }
     }
 
     public CompletableFuture<T> toCompletableFuture() {
         final CompletableFuture<T> f = new CompletableFuture<>();
-        final AtomicInteger count = new AtomicInteger(
-                                                      0);
+        final AtomicInteger count = new AtomicInteger(0);
         this.onComplete(c -> {
-            if (!count.compareAndSet(0, 1))
+            if (!count.compareAndSet(0,
+                                     1)) {
                 return;
-            if (c.exceptionally)
+            }
+            if (c.exceptionally) {
                 f.completeExceptionally(c.exception);
-            else
+            } else {
                 f.complete((T) c.result);
+            }
         });
         return f;
 
@@ -176,82 +247,11 @@ public class FastFuture<T> {
         exception.lazySet(t);
         completedExceptionally = true;
         handleOnComplete(true);
-        if (pipeline != null && pipeline.onFail != null)
+        if (pipeline != null && pipeline.onFail != null) {
             pipeline.onFail.accept(t);
+        }
         done = true;
         return this;
-    }
-
-    public static <T> FastFuture<T> failedFuture(final Throwable t) {
-        return new FastFuture<T>().completeExceptionally(t);
-    }
-
-    /** Internal conversion method to convert CompletableFutures to FastFuture.
-     */
-    public static <T> FastFuture<T> fromCompletableFuture(final CompletableFuture<T> cf) {
-        final FastFuture<T> f = new FastFuture<>();
-        cf.thenAccept(i -> f.set(i));
-        cf.exceptionally(t -> {
-
-            f.completedExceptionally(t);
-            return f.join();
-        });
-        return f;
-    }
-
-    public static <R> FastFuture<List<R>> allOf(final Runnable onComplete, final FastFuture... futures) {
-        //needs to use onComplete
-        final FastFuture allOf = new FastFuture(
-                                                FinalPipeline.empty(), futures.length);
-
-        for (final FastFuture next : futures) {
-            final AtomicInteger count = new AtomicInteger(
-                                                          0);
-            next.onComplete(v -> {
-                if (!count.compareAndSet(0, 1))
-                    return;
-                if (allOf.count.incrementAndGet() == allOf.max.get()) {
-                    onComplete.run();
-                }
-
-            });
-        }
-        return allOf;
-    }
-
-    public static <R> FastFuture<List<R>> xOf(final int x, final Runnable onComplete, final FastFuture... futures) {
-        //needs to use onComplete
-        final FastFuture xOf = new FastFuture(
-                                              FinalPipeline.empty(), x);
-        for (final FastFuture next : futures) {
-            final AtomicInteger count = new AtomicInteger(
-                                                          0);
-            next.onComplete(v -> {
-                if (!count.compareAndSet(0, 1))
-                    return;
-                if (xOf.count.incrementAndGet() >= xOf.max.get()) {
-
-                    onComplete.run();
-
-                }
-
-            });
-        }
-        return xOf;
-    }
-
-    public static <R> FastFuture<List<R>> anyOf(final FastFuture... futures) {
-
-        final FastFuture anyOf = new FastFuture();
-
-        for (final FastFuture next : futures) {
-            next.onComplete(v -> {
-                anyOf.result.lazySet(true);
-                anyOf.done();
-
-            });
-        }
-        return anyOf;
     }
 
     public void set(final T result) {
@@ -269,12 +269,14 @@ public class FastFuture<T> {
             if (this.pipeline.executors[0] != null) {
 
                 this.pipeline.executors[0].execute(() -> {
-                    set(() -> (T) op.apply(use), 1);
+                    set(() -> (T) op.apply(use),
+                        1);
                 });
 
             } else {
 
-                set(() -> (T) op.apply(use), 1);
+                set(() -> (T) op.apply(use),
+                    1);
 
             }
         } catch (final Throwable t) {
@@ -284,7 +286,8 @@ public class FastFuture<T> {
 
     }
 
-    private void set(final Supplier<T> result, final int index) {
+    private void set(final Supplier<T> result,
+                     final int index) {
         try {
 
             final Object current = result.get();
@@ -293,7 +296,8 @@ public class FastFuture<T> {
             if (index < pipeline.functions.length) {
                 final Function op = pipeline.functions[index];
                 this.pipeline.executors[index].execute(() -> {
-                    set(() -> (T) op.apply(use), index + 1);
+                    set(() -> (T) op.apply(use),
+                        index + 1);
                 });
                 return;
             }
@@ -303,8 +307,9 @@ public class FastFuture<T> {
 
         } catch (final Throwable t) {
             if (t instanceof CompletedException) {
-                if (this.doFinally != null)
+                if (this.doFinally != null) {
                     doFinally.accept(this);
+                }
             }
 
             completeExceptionally(t);
@@ -335,7 +340,6 @@ public class FastFuture<T> {
 
     /**
      * Called at least once on complete
-     *
      */
     public void essential(final Consumer<OnComplete> fn) {
         this.essential = fn; //set - could also be called on a separate thread
@@ -346,7 +350,6 @@ public class FastFuture<T> {
 
     /**
      * Called at least once on complete
-     *
      */
     public void onComplete(final Consumer<OnComplete> fn) {
 
@@ -358,23 +361,30 @@ public class FastFuture<T> {
     }
 
     private void handleOnComplete(final boolean force) {
-        if (forXOf != null)
+        if (forXOf != null) {
             forXOf.accept(buildOnComplete());
+        }
 
-        if (this.essential != null)
+        if (this.essential != null) {
             this.essential.accept(buildOnComplete());
+        }
 
     }
 
     private OnComplete buildOnComplete() {
-        final OnComplete c = new OnComplete(
-                                            !completedExceptionally && done ? result() : null, completedExceptionally ? exception() : null,
+        final OnComplete c = new OnComplete(!completedExceptionally && done ? result() : null,
+                                            completedExceptionally ? exception() : null,
                                             this.completedExceptionally);
         return c;
     }
 
+    static class UnSet {
+
+    }
+
     @AllArgsConstructor
     public static class OnComplete {
+
         public final Object result;
         public final Throwable exception;
         public final boolean exceptionally;

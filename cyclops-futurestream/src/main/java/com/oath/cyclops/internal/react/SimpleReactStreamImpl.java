@@ -1,5 +1,14 @@
 package com.oath.cyclops.internal.react;
 
+import com.oath.cyclops.async.QueueFactories;
+import com.oath.cyclops.async.adapters.Queue;
+import com.oath.cyclops.async.adapters.QueueFactory;
+import com.oath.cyclops.internal.react.stream.EagerStreamWrapper;
+import com.oath.cyclops.react.async.subscription.AlwaysContinue;
+import com.oath.cyclops.react.async.subscription.Continueable;
+import com.oath.cyclops.types.futurestream.EagerToQueue;
+import com.oath.cyclops.types.futurestream.SimpleReactStream;
+import cyclops.futurestream.SimpleReact;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -7,18 +16,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
-
-import com.oath.cyclops.internal.react.stream.EagerStreamWrapper;
-import com.oath.cyclops.react.async.subscription.AlwaysContinue;
-import com.oath.cyclops.react.async.subscription.Continueable;
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import cyclops.futurestream.SimpleReact;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.QueueFactory;
-import com.oath.cyclops.types.futurestream.EagerToQueue;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Wither;
@@ -34,13 +31,14 @@ public class SimpleReactStreamImpl<U> implements SimpleReactStream<U>, EagerToQu
     private final SimpleReact simpleReact;
     private final Continueable subscription;
 
-    public SimpleReactStreamImpl(final SimpleReact simpleReact, final Stream<CompletableFuture<U>> stream) {
+    public SimpleReactStreamImpl(final SimpleReact simpleReact,
+                                 final Stream<CompletableFuture<U>> stream) {
         this.simpleReact = simpleReact;
         final Stream s = stream;
 
         this.errorHandler = Optional.empty();
-        this.lastActive = new EagerStreamWrapper(
-                                                 s, this.errorHandler);
+        this.lastActive = new EagerStreamWrapper(s,
+                                                 this.errorHandler);
         this.queueFactory = QueueFactories.unboundedQueue();
         this.subscription = new AlwaysContinue();
 
@@ -58,15 +56,16 @@ public class SimpleReactStreamImpl<U> implements SimpleReactStream<U>, EagerToQu
     }
 
     @Override
-    public <R1, R2> SimpleReactStream<R2> allOf(final Collector<? super U, ?, R1> collector, final Function<? super R1, ? extends R2> fn) {
-        return SimpleReactStream.super.allOf(collector, fn);
+    public <R1, R2> SimpleReactStream<R2> allOf(final Collector<? super U, ?, R1> collector,
+                                                final Function<? super R1, ? extends R2> fn) {
+        return SimpleReactStream.super.allOf(collector,
+                                             fn);
     }
 
     @Override
     public Executor getTaskExecutor() {
         return this.simpleReact.getExecutor();
     }
-
 
 
     @Override

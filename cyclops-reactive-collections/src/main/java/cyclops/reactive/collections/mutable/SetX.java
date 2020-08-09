@@ -201,7 +201,7 @@ public interface SetX<T> extends To<SetX<T>>, Set<T>, LazyCollectionX<T>, Higher
      * @param publisher to construct SetX from
      * @return SetX
      */
-    static <T> SetX<T> fromPublisher(final Publisher<? extends T> publisher) {
+    static <T> SetX<T> fromPublisher(final Publisher<T> publisher) {
         return Spouts.from(publisher)
                      .to(ReactiveConvertableSequence::converter)
                      .setX(LAZY);

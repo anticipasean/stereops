@@ -5,161 +5,189 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import cyclops.futurestream.SimpleReact;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cyclops.futurestream.SimpleReact;
-
 public class AnyOfTest {
 
-	@Test
-	public void testAnyOfFailure(){
-		new SimpleReact().ofAsync(()-> { throw new RuntimeException();},()->"hello",()->"world")
-				//.onFail(it -> it.getMessage())
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.anyOf(data -> {
-					System.out.println(data);
-						return "hello"; }).block();
-	}
-	@Test
-	public void testAnyOfCompletableFutureOnFailRecovers(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		List<String> result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
+    @Test
+    public void testAnyOfFailure() {
+        new SimpleReact().ofAsync(() -> {
+                                      throw new RuntimeException();
+                                  },
+                                  () -> "hello",
+                                  () -> "world")
+                         //.onFail(it -> it.getMessage())
+                         .capture(e -> e.printStackTrace())
+                         .peek(it -> System.out.println(it))
+                         .anyOf(data -> {
+                             System.out.println(data);
+                             return "hello";
+                         })
+                         .block();
+    }
 
-				.capture(e ->
-				  e.printStackTrace()).onFail(e -> "woot!")
+    @Test
+    public void testAnyOfCompletableFutureOnFailRecovers() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        List<String> result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
 
-				.anyOf(data -> {
-					System.out.println(data);
-						return data; }).block();
+                                               .capture(e -> e.printStackTrace())
+                                               .onFail(e -> "woot!")
 
-		assertThat(result.size(),is(1));
-	}
-	@Test
-	public void testAnyOfCompletableExceptionally(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		List<String> result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
+                                               .anyOf(data -> {
+                                                   System.out.println(data);
+                                                   return data;
+                                               })
+                                               .block();
 
-				.capture(e ->
-				  e.printStackTrace())
+        assertThat(result.size(),
+                   is(1));
+    }
 
-				.anyOf(data -> {
-					System.out.println(data);
-						return data; }).block();
+    @Test
+    public void testAnyOfCompletableExceptionally() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        List<String> result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
 
-		assertThat(result.size(),is(0));
-	}
-	@Test
-	public void testAnyOfCompletableOnFail(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		String result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
-				.onFail(it ->"hello")
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.anyOf(data -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+                                               .capture(e -> e.printStackTrace())
 
-		assertThat(urls,hasItem(result));
-	}
-	@Test @Ignore
-	public void testAnyOfCompletableFilter(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		String result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
-				.onFail(it ->"hello")
-				.filter(it-> !"2".equals(it))
-				.capture(e ->
-				  e.printStackTrace())
-				.peek(it ->
-				System.out.println(it))
-				.anyOf(data -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+                                               .anyOf(data -> {
+                                                   System.out.println(data);
+                                                   return data;
+                                               })
+                                               .block();
 
-		assertThat(urls,hasItem(result));
+        assertThat(result.size(),
+                   is(0));
+    }
 
-	}
+    @Test
+    public void testAnyOfCompletableOnFail() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        String result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
+                                         .onFail(it -> "hello")
+                                         .capture(e -> e.printStackTrace())
+                                         .peek(it -> System.out.println(it))
+                                         .anyOf(data -> {
+                                             System.out.println(data);
+                                             return data;
+                                         })
+                                         .block()
+                                         .firstValue(null);
 
-	@Test @Ignore //unreliable with filter, as filtered records count as completed.
-	public void testAnyOfCompletableFilterNoError(){
+        assertThat(urls,
+                   hasItem(result));
+    }
 
-		String result = new SimpleReact().of("hello","world","2")
-				.onFail(it ->"hello")
-				.filter(it-> !"2".equals(it))
-				.peek(it ->
-				System.out.println(it))
-				.anyOf(data -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+    @Test
+    @Ignore
+    public void testAnyOfCompletableFilter() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        String result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
+                                         .onFail(it -> "hello")
+                                         .filter(it -> !"2".equals(it))
+                                         .capture(e -> e.printStackTrace())
+                                         .peek(it -> System.out.println(it))
+                                         .anyOf(data -> {
+                                             System.out.println(data);
+                                             return data;
+                                         })
+                                         .block()
+                                         .firstValue(null);
 
-		assertThat(result,is(notNullValue()));
+        assertThat(urls,
+                   hasItem(result));
 
-	}
+    }
 
-	@Test
-	public void testAnyOfCompletableFilterNoTarget(){
-		List<String> urls = Arrays.asList("hello","world","2");
-		String result = new SimpleReact().fromStream(urls.stream()
-				.<CompletableFuture<String>>map(it ->  handle(it)))
-				.onFail(it ->"hello")
-				.filter(it-> !"3".equals(it))
-				.capture(Throwable::printStackTrace)
-				.peek(System.out::println)
-				.anyOf(data -> {
-					System.out.println(data);
-						return data; }).block().firstValue(null);
+    @Test
+    @Ignore //unreliable with filter, as filtered records count as completed.
+    public void testAnyOfCompletableFilterNoError() {
 
-		assertThat(urls,hasItem(result));
+        String result = new SimpleReact().of("hello",
+                                             "world",
+                                             "2")
+                                         .onFail(it -> "hello")
+                                         .filter(it -> !"2".equals(it))
+                                         .peek(it -> System.out.println(it))
+                                         .anyOf(data -> {
+                                             System.out.println(data);
+                                             return data;
+                                         })
+                                         .block()
+                                         .firstValue(null);
 
-	}
+        assertThat(result,
+                   is(notNullValue()));
+
+    }
+
+    @Test
+    public void testAnyOfCompletableFilterNoTarget() {
+        List<String> urls = Arrays.asList("hello",
+                                          "world",
+                                          "2");
+        String result = new SimpleReact().fromStream(urls.stream().<CompletableFuture<String>>map(it -> handle(it)))
+                                         .onFail(it -> "hello")
+                                         .filter(it -> !"3".equals(it))
+                                         .capture(Throwable::printStackTrace)
+                                         .peek(System.out::println)
+                                         .anyOf(data -> {
+                                             System.out.println(data);
+                                             return data;
+                                         })
+                                         .block()
+                                         .firstValue(null);
+
+        assertThat(urls,
+                   hasItem(result));
+
+    }
 
 
-	private CompletableFuture<String> handle(String it) {
-		if("hello".equals(it))
-		{
-			 CompletableFuture f= new CompletableFuture();
-			 f.completeExceptionally(new RuntimeException());
-			 return f;
-		}
-		return CompletableFuture.completedFuture(it);
-	}
+    private CompletableFuture<String> handle(String it) {
+        if ("hello".equals(it)) {
+            CompletableFuture f = new CompletableFuture();
+            f.completeExceptionally(new RuntimeException());
+            return f;
+        }
+        return CompletableFuture.completedFuture(it);
+    }
 
 
+    @Test
+    public void testAnyOf() throws InterruptedException, ExecutionException {
 
+        boolean blocked[] = {false};
 
+        new SimpleReact().<Integer>ofAsync(() -> 1)
 
+            .then(it -> {
+                try {
+                    Thread.sleep(50);
+                } catch (Exception e) {
 
-	@Test
-	public void testAnyOf() throws InterruptedException, ExecutionException {
+                }
+                blocked[0] = true;
+                return 10;
+            })
+            .anyOf(it -> it);
 
-		boolean blocked[] = { false };
-
-		new SimpleReact().<Integer> ofAsync(() -> 1)
-
-		.then(it -> {
-			try {
-				Thread.sleep(50);
-			} catch (Exception e) {
-
-			}
-			blocked[0] = true;
-			return 10;
-		}).anyOf(it -> it);
-
-		assertThat(blocked[0], is(false));
-	}
+        assertThat(blocked[0],
+                   is(false));
+    }
 }

@@ -235,7 +235,7 @@ public interface QueueX<T> extends To<QueueX<T>>, Queue<T>, LazyCollectionX<T>, 
      * @param publisher to construct QueueX from
      * @return QueueX
      */
-    static <T> QueueX<T> fromPublisher(final Publisher<? extends T> publisher) {
+    static <T> QueueX<T> fromPublisher(final Publisher<T> publisher) {
         return Spouts.from(publisher)
                      .to(ReactiveConvertableSequence::converter)
                      .queueX(Evaluation.LAZY);

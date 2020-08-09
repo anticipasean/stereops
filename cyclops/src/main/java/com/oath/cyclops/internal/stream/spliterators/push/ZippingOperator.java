@@ -7,19 +7,24 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
-import lombok.AllArgsConstructor;
 import org.agrona.concurrent.OneToOneConcurrentArrayQueue;
 
 /**
  * Created by johnmcclean on 12/01/2017.
  */
-@AllArgsConstructor
 public class ZippingOperator<T1, T2, R> implements Operator<R> {
-
 
     private final BiFunction<? super T1, ? super T2, ? extends R> fn;
     Operator<? super T1> left;
     Operator<? super T2> right;
+
+    public ZippingOperator(Operator<? super T1> left,
+                           Operator<? super T2> right,
+                           BiFunction<? super T1, ? super T2, ? extends R> fn) {
+        this.fn = fn;
+        this.left = left;
+        this.right = right;
+    }
 
     @Override
     public StreamSubscription subscribe(Consumer<? super R> onNext,

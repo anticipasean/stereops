@@ -84,7 +84,7 @@ public class LazyDequeX<T> extends AbstractLazyCollection<T, Deque<T>> implement
     public LazyDequeX<T> type(Collector<T, ?, Deque<T>> collector) {
         return new LazyDequeX<T>(this.getList(),
                                  this.getSeq()
-                                                  .get(),
+                                     .get(),
                                  collector,
                                  evaluation());
     }

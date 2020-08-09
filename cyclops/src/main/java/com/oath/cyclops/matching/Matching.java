@@ -6,15 +6,18 @@ import cyclops.data.tuple.Tuple;
 import cyclops.data.tuple.Tuple0;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 
 
 public interface Matching {
 
-    @AllArgsConstructor
+
     final class PatternMatching<T> implements Matching {
 
         private final T value;
+
+        public PatternMatching(T value) {
+            this.value = value;
+        }
 
         @SafeVarargs
         public final <R> Option<R> with(Case<T, R>... cases) {
@@ -123,10 +126,14 @@ public interface Matching {
 
     }
 
-    @AllArgsConstructor
+
     final class PatternMatching2<T1, T2> implements Matching {
 
         private final Sealed2<T1, T2> value;
+
+        public PatternMatching2(Sealed2<T1, T2> value) {
+            this.value = value;
+        }
 
         public <R> R with(Case<T1, R> case1,
                           Case<T2, R> case2) {
@@ -137,10 +144,14 @@ public interface Matching {
 
     }
 
-    @AllArgsConstructor
+
     final class PatternMatching3<T1, T2, T3> implements Matching {
 
         private final Sealed3<T1, T2, T3> value;
+
+        public PatternMatching3(Sealed3<T1, T2, T3> value) {
+            this.value = value;
+        }
 
         public <R> R with(Case<T1, R> case1,
                           Case<T2, R> case2,
@@ -153,10 +164,14 @@ public interface Matching {
 
     }
 
-    @AllArgsConstructor
+
     final class PatternMatching4<T1, T2, T3, T4> implements Matching {
 
         private final Sealed4<T1, T2, T3, T4> value;
+
+        public PatternMatching4(Sealed4<T1, T2, T3, T4> value) {
+            this.value = value;
+        }
 
         public <R> R with(Case<T1, R> case1,
                           Case<T2, R> case2,
@@ -171,10 +186,14 @@ public interface Matching {
 
     }
 
-    @AllArgsConstructor
+
     final class PatternMatching5<T1, T2, T3, T4, T5> implements Matching {
 
         private final Sealed5<T1, T2, T3, T4, T5> value;
+
+        public PatternMatching5(Sealed5<T1, T2, T3, T4, T5> value) {
+            this.value = value;
+        }
 
         public <R> R with(Case<T1, R> case1,
                           Case<T2, R> case2,
@@ -191,10 +210,14 @@ public interface Matching {
 
     }
 
-    @AllArgsConstructor
+
     final class PatternMatchingOrNone<T1> implements Matching {
 
         private final SealedOr<T1> value;
+
+        public PatternMatchingOrNone(SealedOr<T1> value) {
+            this.value = value;
+        }
 
         public <R> R with(Case<T1, R> case1,
                           Case<Tuple0, R> case2) {
@@ -205,10 +228,14 @@ public interface Matching {
 
     }
 
-    @AllArgsConstructor
+
     final class OptionalMatching<T> implements Matching {
 
         private final Optional<T> value;
+
+        public OptionalMatching(Optional<T> value) {
+            this.value = value;
+        }
 
         public <R> R of(Case.CaseOptional<T, R> caseOptional) {
             return caseOptional.test(value)

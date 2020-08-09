@@ -1,5 +1,7 @@
 package com.oath.cyclops.react.threads;
 
+import com.oath.cyclops.internal.react.stream.ReactBuilder;
+import com.oath.cyclops.util.ExceptionSoftener;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -7,18 +9,13 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.oath.cyclops.internal.react.stream.ReactBuilder;
-import com.oath.cyclops.util.ExceptionSoftener;
-
 /**
- * Maintain a pool of x-react builders
- * x-react builders (SimpleReact,LazyReact) can be extracted and returned to the pool externally
- * or Streams creating function can be supplied to the ReactPool which will select an x-react builder, run the stream and return
- *  the x-react builder to the pool
- *
- * @author johnmcclean
+ * Maintain a pool of x-react builders x-react builders (SimpleReact,LazyReact) can be extracted and returned to the pool
+ * externally or Streams creating function can be supplied to the ReactPool which will select an x-react builder, run the stream
+ * and return the x-react builder to the pool
  *
  * @param <REACTOR> x-react builder type (SimpleReact, EagerReact, LazyReact)
+ * @author johnmcclean
  */
 public class ReactPool<REACTOR extends ReactBuilder> {
 
@@ -27,8 +24,7 @@ public class ReactPool<REACTOR extends ReactBuilder> {
     private final Supplier<REACTOR> supplier;
 
     private ReactPool(final int size) {
-        queue = new LinkedBlockingQueue<REACTOR>(
-                                                 size);
+        queue = new LinkedBlockingQueue<REACTOR>(size);
         supplier = null;
     }
 
@@ -54,8 +50,7 @@ public class ReactPool<REACTOR extends ReactBuilder> {
      * @return ReactPool
      */
     public static <REACTOR extends ReactBuilder> ReactPool<REACTOR> boundedPool(final Collection<REACTOR> reactors) {
-        final ReactPool<REACTOR> r = new ReactPool<>(
-                                                     reactors.size());
+        final ReactPool<REACTOR> r = new ReactPool<>(reactors.size());
         reactors.forEach(r::populate);
         return r;
     }
@@ -74,15 +69,14 @@ public class ReactPool<REACTOR extends ReactBuilder> {
 
     /**
      * If all REACTORs are in use calling react will create a new REACTOR to handle the extra demand.
-     *
+     * <p>
      * Generate an elastic pool of REACTORs
      *
      * @param supplier To create new REACTORs
      * @return ReactPool
      */
     public static <REACTOR extends ReactBuilder> ReactPool<REACTOR> elasticPool(final Supplier<REACTOR> supplier) {
-        return new ReactPool<>(
-                               supplier);
+        return new ReactPool<>(supplier);
 
     }
 
@@ -91,8 +85,7 @@ public class ReactPool<REACTOR extends ReactBuilder> {
      */
     public static <REACTOR extends ReactBuilder> ReactPool<REACTOR> syncrhonousPool() {
 
-        final ReactPool<REACTOR> r = new ReactPool<>(
-                                                     new SynchronousQueue<>());
+        final ReactPool<REACTOR> r = new ReactPool<>(new SynchronousQueue<>());
 
         return r;
     }
@@ -113,8 +106,8 @@ public class ReactPool<REACTOR extends ReactBuilder> {
     }
 
     /**
-     * @param fn Function that operates on a REACTOR - typically will build an execute a Stream using that REACTOR.
-     * 				This method will extract and return the REACTOR to the pool.
+     * @param fn Function that operates on a REACTOR - typically will build an execute a Stream using that REACTOR. This method
+     *           will extract and return the REACTOR to the pool.
      * @return typically will return the result of Stream execution (result of fn.applyHKT(reactor))
      */
     public <T> T react(final Function<? super REACTOR, ? extends T> fn) {
@@ -125,8 +118,9 @@ public class ReactPool<REACTOR extends ReactBuilder> {
             return fn.apply(reactor);
         } finally {
 
-            if (reactor != null)
+            if (reactor != null) {
                 queue.offer(reactor);
+            }
 
         }
     }
@@ -142,8 +136,9 @@ public class ReactPool<REACTOR extends ReactBuilder> {
                 if (isElastic()) {
                     reactor = supplier.get();
 
-                } else
+                } else {
                     reactor = queue.take();
+                }
             }
         } catch (final InterruptedException e) {
             Thread.currentThread()

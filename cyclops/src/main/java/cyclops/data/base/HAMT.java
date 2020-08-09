@@ -14,11 +14,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 
-
-@AllArgsConstructor
 public final class HAMT<K, V> implements Serializable {
 
     static final int BITS_IN_INDEX = 5;
@@ -28,6 +25,10 @@ public final class HAMT<K, V> implements Serializable {
     static final int MAX_INDEX = SIZE - 1;
     static final int MASK = (1 << BITS_IN_INDEX) - 1;
     private static final long serialVersionUID = 1L;
+
+    public HAMT() {
+
+    }
 
     public static <K, V> Node<K, V> empty() {
         return EmptyNode.Instance;
@@ -113,9 +114,9 @@ public final class HAMT<K, V> implements Serializable {
                                int hash,
                                K key,
                                V value) {
-            return new ValueNode<>(hash,
-                                   key,
-                                   value);
+            return new ValueNode<K, V>(key,
+                                       value,
+                                       hash);
         }
 
         @Override
@@ -178,7 +179,6 @@ public final class HAMT<K, V> implements Serializable {
         }
     }
 
-    @AllArgsConstructor
     @EqualsAndHashCode
     public static final class ValueNode<K, V> implements Node<K, V>, Deconstruct2<K, V> {
 
@@ -187,14 +187,22 @@ public final class HAMT<K, V> implements Serializable {
         public final V value;
         private final int hash;
 
+        public ValueNode(K key,
+                         V value,
+                         int hash) {
+            this.key = key;
+            this.value = value;
+            this.hash = hash;
+        }
+
         @Override
         public Node<K, V> plus(int bitShiftDepth,
                                int hash,
                                K key,
                                V value) {
-            ValueNode<K, V> newNode = new ValueNode<>(hash,
-                                                      key,
-                                                      value);
+            ValueNode<K, V> newNode = new ValueNode<K, V>(key,
+                                                          value,
+                                                          hash);
             return isMatch(hash,
                            key) ? newNode : merge(bitShiftDepth,
                                                   newNode);
@@ -326,17 +334,17 @@ public final class HAMT<K, V> implements Serializable {
                                                                                       t._1()));
 
             if (this.hash == hash) {
-                return filtered.size() == 0 ? new ValueNode<>(hash,
-                                                              key,
-                                                              value) : new CollisionNode<>(hash,
-                                                                                           filtered.prepend(Tuple.tuple(key,
-                                                                                                                        value)));
+                return filtered.size() == 0 ? new ValueNode<K, V>(key,
+                                                                  value,
+                                                                  hash) : new CollisionNode<>(hash,
+                                                                                              filtered.prepend(Tuple.tuple(key,
+                                                                                                                           value)));
             }
             return merge(bitShiftDepth,
                          hash,
-                         new ValueNode<>(hash,
-                                         key,
-                                         value));
+                         new ValueNode<K, V>(key,
+                                             value,
+                                             hash));
         }
 
         private Node<K, V> merge(int bitShiftDepth,
@@ -440,7 +448,6 @@ public final class HAMT<K, V> implements Serializable {
         }
     }
 
-    @AllArgsConstructor
     @EqualsAndHashCode
     public static final class BitsetNode<K, V> implements Node<K, V> {
 
@@ -448,6 +455,14 @@ public final class HAMT<K, V> implements Serializable {
         public final int bitset;
         private final int size;
         private final Node<K, V>[] nodes;
+
+        public BitsetNode(int bitset,
+                          int size,
+                          Node<K, V>[] nodes) {
+            this.bitset = bitset;
+            this.size = size;
+            this.nodes = nodes;
+        }
 
         static int size(Node[] n) {
             int res = 0;

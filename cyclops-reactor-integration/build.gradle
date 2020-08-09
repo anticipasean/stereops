@@ -20,16 +20,20 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 dependencies {
-    compileClasspath project(':cyclops')
+    implementation project(':cyclops')
     compileClasspath project(':cyclops-pure')
     compileClasspath project(':cyclops-anym')
     compileClasspath project(':cyclops-futurestream')
-    compileClasspath project(':cyclops-reactive-collections')
-    compileClasspath 'io.projectreactor:reactor-core:' + reactorVersion
+    implementation project(':cyclops-reactive-collections')
+    compileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     testCompileClasspath project(':cyclops-anym').sourceSets.test.output
     testCompileClasspath project(':cyclops').sourceSets.test.output
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
-
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    testImplementation project(':cyclops')
+    testImplementation project(':cyclops-reactive-collections')
+    testImplementation project(':cyclops-anym')
+    testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     testCompileClasspath 'commons-io:commons-io:2.4'
     testCompileClasspath group: 'junit', name: 'junit', version: '4.12'
     testCompileClasspath group: 'junit', name: 'junit', version: '4.12'
@@ -39,7 +43,7 @@ dependencies {
     testCompileClasspath 'org.assertj:assertj-core:3.2.0'
     testCompileClasspath 'com.github.stefanbirkner:system-rules:1.10.0'
     testCompileClasspath(group: 'org.hibernate', name: 'hibernate-core', version: '5.1.0.Final')
-    testCompileClasspath (group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.1.0.Final')
+    testCompileClasspath(group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.1.0.Final')
 }
 
 test {

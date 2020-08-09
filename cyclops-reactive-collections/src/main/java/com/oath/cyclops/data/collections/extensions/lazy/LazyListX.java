@@ -72,7 +72,7 @@ public class LazyListX<T> extends AbstractLazyCollection<T, List<T>> implements 
     public LazyListX<T> withCollector(Collector<T, ?, List<T>> collector) {
         return new LazyListX<T>(this.getList(),
                                 this.getSeq()
-                                                .get(),
+                                    .get(),
                                 collector,
                                 evaluation());
     }

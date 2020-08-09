@@ -13,7 +13,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import lombok.experimental.Wither;
+import lombok.With;
 
 /**
  * Sequence generator, for simple and complex sequences
@@ -56,7 +56,7 @@ public class Generator<T> implements Iterable<T>, ToStream<T> {
 
     private final Suspended suspended;
     private final Maybe<T> value;
-    @Wither
+    @With
     private final GeneratorSupplier<T> remainderOfWorkToBeDone;
 
 

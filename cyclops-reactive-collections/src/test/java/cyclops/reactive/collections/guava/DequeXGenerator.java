@@ -1,18 +1,18 @@
 package cyclops.reactive.collections.guava;
 
+import com.google.common.collect.testing.TestStringQueueGenerator;
+import cyclops.reactive.collections.mutable.DequeX;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import cyclops.reactive.collections.mutable.DequeX;
-import com.google.common.collect.testing.TestStringQueueGenerator;
-
-public class DequeXGenerator extends  TestStringQueueGenerator {
+public class DequeXGenerator extends TestStringQueueGenerator {
 
 
     @Override
     public Queue<String> create(String... elements) {
-       return DequeX.of(elements).type(Collectors.toCollection(()->new LinkedList<>()));
+        return DequeX.of(elements)
+                     .type(Collectors.toCollection(() -> new LinkedList<>()));
     }
 
 }

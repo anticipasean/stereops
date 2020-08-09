@@ -19,19 +19,21 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import lombok.AllArgsConstructor;
 
 /*
   A Tuple1 implementation that can be either eager / strict or lazy
   Roughly analogous to the Identity monad
 
  */
-@AllArgsConstructor
 public class Tuple1<T> implements To<Tuple1<T>>, Serializable, Transformable<T>, Filters<T>, EqualTo<tuple1, T, Tuple1<T>>,
                                   OrderedBy<tuple1, T, Tuple1<T>>, Comparable<Tuple1<T>>, Higher<tuple1, T> {
 
     private static final long serialVersionUID = 1L;
     private final T _1;
+
+    public Tuple1(T t) {
+        _1 = t;
+    }
 
     public static <T> Tuple1<T> of(T value) {
         return new Tuple1<T>(value);

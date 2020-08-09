@@ -1,10 +1,8 @@
 package com.oath.cyclops.internal.react.stream;
 
-import java.util.Iterator;
-
-import com.oath.cyclops.react.async.subscription.Continueable;
 import com.oath.cyclops.async.adapters.Queue;
-
+import com.oath.cyclops.react.async.subscription.Continueable;
+import java.util.Iterator;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -16,8 +14,9 @@ public class CloseableIterator<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        if (!iterator.hasNext())
+        if (!iterator.hasNext()) {
             close();
+        }
         return iterator.hasNext();
     }
 

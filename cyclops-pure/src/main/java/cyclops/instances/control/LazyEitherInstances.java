@@ -188,11 +188,13 @@ public class LazyEitherInstances {
         return INSTANCE;
     }
 
-    @AllArgsConstructor
+
     public static class LazyEitherTypeclasses<L> implements Monad<Higher<either, L>>, MonadRec<Higher<either, L>>,
                                                             TraverseByTraverse<Higher<either, L>>, Foldable<Higher<either, L>>,
                                                             ApplicativeError<Higher<either, L>, L>, BiFunctor<either> {
 
+        public LazyEitherTypeclasses() {
+        }
 
         @Override
         public <T> T foldRight(Monoid<T> monoid,

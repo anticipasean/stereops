@@ -11,12 +11,15 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
+
 public class CollectionXImpl<T> implements LazyCollectionX<T> {
 
     private final Collection<T> delegate;
+
+    public CollectionXImpl(Collection<T> delegate) {
+        this.delegate = delegate;
+    }
 
     @Override
     public <R> CollectionX<R> unit(final R value) {
