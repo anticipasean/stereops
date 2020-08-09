@@ -6,6 +6,7 @@ import com.oath.cyclops.types.persistent.PersistentMap;
 import cyclops.companion.Comparators;
 import cyclops.control.Option;
 import cyclops.data.base.RedBlackTree;
+import cyclops.data.base.redblacktree.Tree;
 import cyclops.data.tuple.Tuple;
 import cyclops.data.tuple.Tuple2;
 import cyclops.function.Function3;
@@ -30,7 +31,7 @@ import lombok.experimental.Wither;
 public final class TreeMap<K, V> implements ImmutableMap<K, V>, Higher2<treeMap, K, V>, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final RedBlackTree.Tree<K, V> map;
+    private final Tree<K, V> map;
     @Wither()
     private final Comparator<K> comparator;
 
@@ -243,7 +244,7 @@ public final class TreeMap<K, V> implements ImmutableMap<K, V>, Higher2<treeMap,
 
     @Override
     public TreeMap<K, V> removeAll(K... keys) {
-        RedBlackTree.Tree<K, V> cur = map;
+        Tree<K, V> cur = map;
         for (K key : keys) {
             cur = cur.minus(key);
         }

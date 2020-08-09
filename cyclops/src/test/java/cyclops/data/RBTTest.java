@@ -7,16 +7,17 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.companion.Comparators;
 import cyclops.data.base.RedBlackTree;
+import cyclops.data.base.redblacktree.Tree;
 import org.junit.Test;
 
 public class RBTTest {
 
-    <T> RedBlackTree.Tree<T, T> empty() {
+    <T> Tree<T, T> empty() {
         return RedBlackTree.empty(Comparators.naturalOrderIdentityComparator());
     }
 
-    <T> RedBlackTree.Tree<T, T> of(T... values) {
-        RedBlackTree.Tree<T, T> x = empty();
+    <T> Tree<T, T> of(T... values) {
+        Tree<T, T> x = empty();
         for (T next : values) {
             x = RedBlackTree.rootIsBlack(x.plus(next,
                                                 next));
@@ -48,7 +49,7 @@ public class RBTTest {
     @Test
     public void balanceCheckNew() {
 
-        RedBlackTree.Tree<Integer, Integer> tree = empty();
+        Tree<Integer, Integer> tree = empty();
         assertThat(tree.tree(),
                    equalTo("{LEAF}"));
         assertThat(tree.size(),
@@ -153,7 +154,7 @@ public class RBTTest {
 
     @Test
     public void balanceCheckTo6() {
-        RedBlackTree.Tree<Integer, Integer> tree = empty();
+        Tree<Integer, Integer> tree = empty();
         assertThat(tree.tree(),
                    equalTo("{LEAF}"));
         assertThat(tree.size(),

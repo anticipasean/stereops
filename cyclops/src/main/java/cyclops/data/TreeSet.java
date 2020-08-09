@@ -8,6 +8,7 @@ import com.oath.cyclops.types.persistent.PersistentSet;
 import cyclops.companion.Comparators;
 import cyclops.control.Option;
 import cyclops.data.base.RedBlackTree;
+import cyclops.data.base.redblacktree.Tree;
 import cyclops.data.tuple.Tuple;
 import cyclops.data.tuple.Tuple2;
 import cyclops.data.tuple.Tuple3;
@@ -41,10 +42,10 @@ import org.reactivestreams.Publisher;
 public final class TreeSet<T> implements ImmutableSortedSet<T>, Higher<treeSet, T>, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final RedBlackTree.Tree<T, T> map;
+    private final Tree<T, T> map;
     private final Comparator<? super T> comp;
 
-    public TreeSet(RedBlackTree.Tree<T, T> map,
+    public TreeSet(Tree<T, T> map,
                    Comparator<? super T> comp) {
         this.map = RedBlackTree.rootIsBlack(map);
         this.comp = comp;
@@ -183,7 +184,7 @@ public final class TreeSet<T> implements ImmutableSortedSet<T>, Higher<treeSet, 
 
     public static <T> TreeSet<T> of(Comparator<? super T> comp,
                                     T... values) {
-        RedBlackTree.Tree<T, T> tree = RedBlackTree.empty(comp);
+        Tree<T, T> tree = RedBlackTree.empty(comp);
         for (T value : values) {
             tree = RedBlackTree.rootIsBlack(tree.plus(value,
                                                       value));
@@ -194,7 +195,7 @@ public final class TreeSet<T> implements ImmutableSortedSet<T>, Higher<treeSet, 
     }
 
     public static <T extends Comparable<? super T>> TreeSet<T> of(T... values) {
-        RedBlackTree.Tree<T, T> tree = RedBlackTree.empty(Comparator.naturalOrder());
+        Tree<T, T> tree = RedBlackTree.empty(Comparator.naturalOrder());
         for (T value : values) {
             tree = RedBlackTree.rootIsBlack(tree.plus(value,
                                                       value));
@@ -342,7 +343,7 @@ public final class TreeSet<T> implements ImmutableSortedSet<T>, Higher<treeSet, 
 
     @Override
     public TreeSet<T> removeAll(Iterable<? extends T> list) {
-        RedBlackTree.Tree<T, T> local = map;
+        Tree<T, T> local = map;
         for (T next : list) {
             local = local.minus(next);
         }
