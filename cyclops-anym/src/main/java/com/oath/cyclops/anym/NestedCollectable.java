@@ -14,8 +14,8 @@ import cyclops.container.traversable.IterableX;
 import cyclops.monads.AnyM;
 import cyclops.async.Future;
 import cyclops.monads.WitnessType;
-import cyclops.monads.transformers.FutureT;
-import cyclops.monads.transformers.ListT;
+import cyclops.reactor.container.transformer.FutureT;
+import cyclops.reactor.container.transformer.ListT;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.SetX;
 

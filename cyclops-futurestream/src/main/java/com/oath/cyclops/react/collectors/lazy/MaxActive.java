@@ -7,7 +7,7 @@ import lombok.experimental.Wither;
 
 @AllArgsConstructor
 @Getter
-@Wither
+@lombok.With
 @Builder
 public class MaxActive {
 

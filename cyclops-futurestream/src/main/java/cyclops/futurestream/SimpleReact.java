@@ -69,7 +69,7 @@ import org.reactivestreams.Publisher;
  * @author johnmcclean
  */
 @Builder
-@Wither
+@lombok.With
 public class SimpleReact implements ReactBuilder {
 
     @Getter

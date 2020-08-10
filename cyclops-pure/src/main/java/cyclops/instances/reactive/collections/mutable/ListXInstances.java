@@ -222,7 +222,7 @@ public class ListXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class ListXTypeClasses implements MonadPlus<list>, MonadRec<list>, TraverseByTraverse<list>, Foldable<list>,
                                                     Unfoldable<list> {
 

@@ -129,7 +129,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
 
 
     final Either<X, T> xor;
-    @Wither(AccessLevel.PRIVATE)
+    @lombok.With(AccessLevel.PRIVATE)
     private final Class<? extends Throwable>[] classes;
 
     public static <X extends Throwable, T, R> Try<R, X> tailRec(T initial,

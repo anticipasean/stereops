@@ -205,7 +205,7 @@ public class QueueXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class QueueXTypeClasses implements MonadPlus<queue>, MonadRec<queue>, TraverseByTraverse<queue>,
                                                      Foldable<queue>, Unfoldable<queue> {
 

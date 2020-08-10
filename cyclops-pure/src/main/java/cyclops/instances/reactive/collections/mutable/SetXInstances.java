@@ -217,7 +217,7 @@ public class SetXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class SetXTypeClasses implements MonadPlus<set>, MonadRec<set>, TraverseByTraverse<set>, Foldable<set>,
                                                    Unfoldable<set> {
 

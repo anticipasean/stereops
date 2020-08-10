@@ -186,7 +186,7 @@ public class PublisherInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class ReactiveSeqTypeClasses implements MonadPlus<reactiveSeq>, MonadRec<reactiveSeq>,
                                                           TraverseByTraverse<reactiveSeq>, Foldable<reactiveSeq>,
                                                           Unfoldable<reactiveSeq> {

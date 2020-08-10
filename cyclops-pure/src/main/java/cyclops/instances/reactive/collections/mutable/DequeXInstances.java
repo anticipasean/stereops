@@ -200,7 +200,7 @@ public class DequeXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class DequeXTypeClasses implements MonadPlus<deque>, MonadRec<deque>, TraverseByTraverse<deque>,
                                                      Foldable<deque>, Unfoldable<deque> {
 

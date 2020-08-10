@@ -205,7 +205,7 @@ public class VectorXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class VectorXTypeClasses implements MonadPlus<vectorX>, MonadRec<vectorX>, TraverseByTraverse<vectorX>,
                                                       Foldable<vectorX>, Unfoldable<vectorX> {
 

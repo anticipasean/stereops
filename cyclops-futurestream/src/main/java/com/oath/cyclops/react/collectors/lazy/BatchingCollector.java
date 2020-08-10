@@ -19,7 +19,7 @@ import lombok.experimental.Wither;
  * @param <T> Result type
  * @author johnmcclean
  */
-@Wither
+@lombok.With
 @AllArgsConstructor
 @Builder
 public class BatchingCollector<T> implements LazyResultConsumer<T> {

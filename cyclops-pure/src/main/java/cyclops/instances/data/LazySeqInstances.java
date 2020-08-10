@@ -195,7 +195,7 @@ public class LazySeqInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class LazySeqTypeClasses implements MonadPlus<lazySeq>, MonadRec<lazySeq>, TraverseByTraverse<lazySeq>,
                                                       Foldable<lazySeq>, Unfoldable<lazySeq> {
 

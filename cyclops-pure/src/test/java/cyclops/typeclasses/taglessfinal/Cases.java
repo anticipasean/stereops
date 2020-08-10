@@ -5,7 +5,7 @@ import lombok.Value;
 import lombok.experimental.Wither;
 
 public class Cases {
-    @Value @Wither @ToString
+    @Value @lombok.With @ToString
     public static class Account {
         double balance;
         long id;

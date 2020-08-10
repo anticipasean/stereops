@@ -200,7 +200,7 @@ public class PersistentSetXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class PersistentSetXTypeClasses implements MonadPlus<persistentSetX>, MonadRec<persistentSetX>,
                                                              TraverseByTraverse<persistentSetX>, Foldable<persistentSetX>,
                                                              Unfoldable<persistentSetX> {

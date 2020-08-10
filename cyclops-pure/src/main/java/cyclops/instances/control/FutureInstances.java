@@ -191,7 +191,7 @@ public class FutureInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class FutureTypeclasses implements MonadPlus<future>, MonadRec<future>, TraverseByTraverse<future>,
                                                      Foldable<future> {
 

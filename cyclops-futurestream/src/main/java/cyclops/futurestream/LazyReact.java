@@ -58,7 +58,7 @@ import org.reactivestreams.Publisher;
  */
 
 @Builder
-@Wither
+@lombok.With
 @ToString
 public class LazyReact implements ReactBuilder {
 

@@ -33,7 +33,7 @@ public final class TreeMap<K, V> implements ImmutableMap<K, V>, Higher2<treeMap,
 
     private static final long serialVersionUID = 1L;
     private final Tree<K, V> map;
-    @Wither()
+    @lombok.With()
     private final Comparator<K> comparator;
 
     public static <K, V> TreeMap<K, V> empty(Comparator<K> comp) {

@@ -208,7 +208,7 @@ public class OptionInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class OptionTypeclasses implements MonadPlus<option>, MonadRec<option>, TraverseByTraverse<option>,
                                                      Foldable<option>, Unfoldable<option> {
 

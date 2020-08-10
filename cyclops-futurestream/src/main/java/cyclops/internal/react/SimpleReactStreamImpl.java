@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Wither;
 
-@Wither
+@lombok.With
 @Getter
 @AllArgsConstructor
 public class SimpleReactStreamImpl<U> implements SimpleReactStream<U>, EagerToQueue<U> {

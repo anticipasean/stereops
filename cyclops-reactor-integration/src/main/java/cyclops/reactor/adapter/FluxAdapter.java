@@ -1,0 +1,79 @@
+package cyclops.reactor.adapter;
+
+import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
+import cyclops.monads.AnyM;
+import cyclops.reactor.container.higherkinded.FluxAnyM;
+import cyclops.reactor.container.higherkinded.ReactorWitness;
+import cyclops.reactor.container.higherkinded.ReactorWitness.flux;
+import cyclops.reactive.ReactiveSeq;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import reactor.core.publisher.Flux;
+
+
+public class FluxAdapter extends AbstractMonadAdapter<flux> {
+
+    public FluxAdapter() {
+    }
+
+    @Override
+    public <T> Iterable<T> toIterable(AnyM<flux, T> t) {
+        return () -> stream(t).toIterable()
+                              .iterator();
+    }
+
+    @Override
+    public <T, R> AnyM<flux, R> ap(AnyM<flux, ? extends Function<? super T, ? extends R>> fn,
+                                   AnyM<flux, T> apply) {
+        Flux<T> f = stream(apply);
+        Flux<? extends Function<? super T, ? extends R>> fnF = stream(fn);
+        Flux<R> res = fnF.zipWith(f,
+                                  (a, b) -> a.apply(b));
+        return FluxAnyM.anyM(res);
+
+    }
+
+    @Override
+    public <T> AnyM<flux, T> filter(AnyM<flux, T> t,
+                                    Predicate<? super T> fn) {
+        return FluxAnyM.anyM(stream(t).filter(fn));
+    }
+
+    <T> Flux<T> stream(AnyM<flux, T> anyM) {
+        return anyM.unwrap();
+    }
+
+    @Override
+    public <T> AnyM<flux, T> empty() {
+        return FluxAnyM.anyM(Flux.empty());
+    }
+
+
+    @Override
+    public <T, R> AnyM<flux, R> flatMap(AnyM<flux, T> t,
+                                        Function<? super T, ? extends AnyM<flux, ? extends R>> fn) {
+        return FluxAnyM.anyM(stream(t).flatMap(fn.andThen(a -> stream(a))));
+
+    }
+
+    @Override
+    public <T> AnyM<flux, T> unitIterable(Iterable<T> it) {
+        return FluxAnyM.anyM(Flux.fromIterable(it));
+    }
+
+    @Override
+    public <T> AnyM<flux, T> unit(T o) {
+        return FluxAnyM.anyM(Flux.just(o));
+    }
+
+    @Override
+    public <T> ReactiveSeq<T> toStream(AnyM<flux, T> t) {
+        return ReactiveSeq.fromPublisher(ReactorWitness.flux(t));
+    }
+
+    @Override
+    public <T, R> AnyM<flux, R> map(AnyM<flux, T> t,
+                                    Function<? super T, ? extends R> fn) {
+        return FluxAnyM.anyM(stream(t).map(fn));
+    }
+}

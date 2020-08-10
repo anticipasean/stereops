@@ -49,7 +49,7 @@ import org.reactivestreams.Subscription;
 public class FlowableReactiveSeqImpl<T> implements ReactiveSeq<T> {
 
     private final static Object UNSET = new Object();
-    @Wither
+    @lombok.With
     @Getter
     Flowable<T> flowable;
 

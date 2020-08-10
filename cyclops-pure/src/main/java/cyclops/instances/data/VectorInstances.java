@@ -200,7 +200,7 @@ public class VectorInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class VectorTypeClasses implements MonadPlus<vector>, MonadRec<vector>, TraverseByTraverse<vector>,
                                                      Foldable<vector>, Unfoldable<vector> {
 

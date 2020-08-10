@@ -2,7 +2,7 @@ package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMValue;
 import cyclops.monads.Rx2Witness.maybe;
-import cyclops.monads.transformers.rx2.MaybeT;
+import cyclops.reactor.container.transformer.rx2.MaybeT;
 import io.reactivex.Maybe;
 
 

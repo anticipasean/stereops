@@ -146,7 +146,7 @@ String type = seq.fold(sync->"synchronous",rs->"reactive-streams",async->"pure a
 Use Reactor to extend cyclops-react's array of operations for and from Flux
 
 ```java
-import static cyclops.streams.ReactorOperators.flux;
+import static cyclops.reactor.stream.operator.ReactorOperators.flux;
 
 ReactiveSeq<List<Integer>> seq = FluxReactiveSeq.of(1,2,3)
                                       .map(i->i+1)
@@ -156,7 +156,7 @@ ReactiveSeq<List<Integer>> seq = FluxReactiveSeq.of(1,2,3)
 For and from Mono
 
 ```java
-import static cyclops.streams.ReactorOperators.mono;
+import static cyclops.reactor.stream.operator.ReactorOperators.mono;
 
 Future<Integer> future;
 Future<Integer> useMonoLogOp = future.to(mono(m->m.log()));

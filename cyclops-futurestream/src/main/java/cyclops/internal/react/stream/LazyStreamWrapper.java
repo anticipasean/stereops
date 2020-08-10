@@ -17,9 +17,9 @@ import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
 @AllArgsConstructor
 public class LazyStreamWrapper<U> implements StreamWrapper<U> {
 
-    @Wither
+    @lombok.With
     private final Supplier<Stream<U>> values;
-    @Wither
+    @lombok.With
     private final LazyReact react;
     private final FuturePool pool;
     private PipelineBuilder pipeline;

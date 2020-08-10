@@ -147,7 +147,7 @@ public class CompletableFutureInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class CompletableFutureTypeclasses implements MonadPlus<completableFuture>, MonadRec<completableFuture>,
                                                                 TraverseByTraverse<completableFuture>,
                                                                 Foldable<completableFuture> {

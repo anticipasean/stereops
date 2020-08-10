@@ -203,7 +203,7 @@ public class LinkedListXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class LinkedListXTypeClasses implements MonadPlus<linkedListX>, MonadRec<linkedListX>,
                                                           TraverseByTraverse<linkedListX>, Foldable<linkedListX>,
                                                           Unfoldable<linkedListX> {

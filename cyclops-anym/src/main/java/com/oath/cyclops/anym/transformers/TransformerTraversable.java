@@ -5,8 +5,8 @@ import java.util.function.Predicate;
 
 import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.Witness.reactiveSeq;
-import cyclops.monads.transformers.SeqT;
-import cyclops.monads.transformers.VectorT;
+import cyclops.reactor.container.transformer.SeqT;
+import cyclops.reactor.container.transformer.VectorT;
 import cyclops.reactive.ReactiveSeq;
 
 /**

@@ -9,7 +9,7 @@ import cyclops.container.transformable.Transformable;
 import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
-import cyclops.monads.transformers.StreamT;
+import cyclops.reactor.container.transformer.StreamT;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 

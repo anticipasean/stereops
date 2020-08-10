@@ -12,7 +12,7 @@ import lombok.experimental.Wither;
 
 @ToString
 @AllArgsConstructor
-@Wither
+@lombok.With
 public class ExecutionPipeline {
 
     private final Seq<Function> functionList;

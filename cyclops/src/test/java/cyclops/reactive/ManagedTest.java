@@ -308,9 +308,9 @@ public class ManagedTest {
                    equalTo(Try.success("HELLO world")));
     }
 
-    static class Resource implements AutoCloseable {
+    public static class Resource implements AutoCloseable {
 
-        boolean open = true;
+        public boolean open = true;
 
         @Override
         public void close() throws Exception {

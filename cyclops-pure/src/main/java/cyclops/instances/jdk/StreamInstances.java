@@ -160,7 +160,7 @@ public class StreamInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class StreamTypeClasses implements MonadPlus<stream>, MonadRec<stream>, TraverseByTraverse<stream>,
                                                      Foldable<stream>, Unfoldable<stream> {
 

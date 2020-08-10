@@ -195,7 +195,7 @@ public class SeqInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class SeqTypeClasses implements MonadPlus<seq>, MonadRec<seq>, TraverseByTraverse<seq>, Foldable<seq>,
                                                   Unfoldable<seq> {
 

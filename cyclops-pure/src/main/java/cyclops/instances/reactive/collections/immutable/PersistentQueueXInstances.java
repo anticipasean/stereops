@@ -204,7 +204,7 @@ public class PersistentQueueXInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class PersistentQueueXTypeClasses implements MonadPlus<persistentQueueX>, MonadRec<persistentQueueX>,
                                                                TraverseByTraverse<persistentQueueX>, Foldable<persistentQueueX>,
                                                                Unfoldable<persistentQueueX> {

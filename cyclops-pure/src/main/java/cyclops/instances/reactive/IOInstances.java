@@ -197,7 +197,7 @@ public class IOInstances {
     }
 
     @AllArgsConstructor
-    @Wither
+    @lombok.With
     public static class IOTypeClasses implements MonadPlus<io>, MonadRec<io>, TraverseByTraverse<io>, Foldable<io>,
                                                  Unfoldable<io> {
 

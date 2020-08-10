@@ -79,7 +79,7 @@ public class AlgorithmCompareTest {
     }
 
 
-    @Wither
+    @lombok.With
     @Getter
     @AllArgsConstructor
     @Builder

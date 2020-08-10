@@ -48,7 +48,7 @@ import org.reactivestreams.Subscription;
 @Deprecated
 public class ObservableReactiveSeqImpl<T> implements ReactiveSeq<T> {
 
-    @Wither
+    @lombok.With
     @Getter
     final Observable<T> observable;
 

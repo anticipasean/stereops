@@ -16,7 +16,7 @@ import lombok.experimental.Wither;
  * @author johnmcclean
  */
 @AllArgsConstructor
-@Wither
+@lombok.With
 @Builder
 public class SamplingCollector<T> implements LazyResultConsumer<T> {
 

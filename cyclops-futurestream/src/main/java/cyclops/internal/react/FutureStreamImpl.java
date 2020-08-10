@@ -44,20 +44,20 @@ import org.reactivestreams.Subscriber;
 public class FutureStreamImpl<U> implements FutureStream<U> {
 
     private final static ReactPool<LazyReact> pool = ReactPool.elasticPool(() -> new LazyReact(Executors.newSingleThreadExecutor()));
-    @Wither
+    @lombok.With
     private final Optional<Consumer<Throwable>> errorHandler;
     private final LazyStreamWrapper<U> lastActive;
-    @Wither
+    @lombok.With
     private final Supplier<LazyResultConsumer<U>> lazyCollector;
-    @Wither
+    @lombok.With
     private final QueueFactory<U> queueFactory;
-    @Wither
+    @lombok.With
     private final LazyReact simpleReact;
-    @Wither
+    @lombok.With
     private final Continueable subscription;
-    @Wither
+    @lombok.With
     private final ConsumerHolder error;
-    @Wither
+    @lombok.With
     private final MaxActive maxActive;
     private final AtomicBoolean subscribed = new AtomicBoolean(false);
 

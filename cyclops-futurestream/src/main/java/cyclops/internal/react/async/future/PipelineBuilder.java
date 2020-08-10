@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
 
 @AllArgsConstructor
-@Wither
+@lombok.With
 public class PipelineBuilder {
 
     private final ExecutionPipeline builder;

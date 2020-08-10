@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
 
-@Wither
+@lombok.With
 @AllArgsConstructor
 public class EagerStreamWrapper implements StreamWrapper {
 

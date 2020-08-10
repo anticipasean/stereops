@@ -76,7 +76,7 @@ import lombok.experimental.Wither;
  * }
  * </pre>
  */
-@Wither
+@lombok.With
 @AllArgsConstructor
 public class Queue<T> implements Adapter<T> {
 

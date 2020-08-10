@@ -325,7 +325,7 @@ ReactiveSeq.generate(suspend(times(10),s-> {
 [via cyclops-reactor](https://github.com/aol/cyclops/tree/master/cyclops-reactor)
 
 ```java
-import static cyclops.streams.ReactorOperators.flux;
+import static cyclops.reactor.stream.operator.ReactorOperators.flux;
 ReactiveSeq<List<Integer>> seq = Spouts.of(1,2,3)
                                        .map(i->i+1)
                                        .to(flux(o->o.buffer(10)));

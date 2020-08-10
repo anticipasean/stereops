@@ -329,7 +329,7 @@ public class FluentFunctions {
         };
     }
 
-    @Wither(AccessLevel.PRIVATE)
+    @lombok.With(AccessLevel.PRIVATE)
     @AllArgsConstructor
     public static class FluentRunnable<R> implements Effect {
 
@@ -503,7 +503,7 @@ public class FluentFunctions {
         }
     }
 
-    @Wither(AccessLevel.PRIVATE)
+    @lombok.With(AccessLevel.PRIVATE)
     @AllArgsConstructor
     public static class FluentSupplier<R> implements Function0<R> {
 
@@ -717,7 +717,7 @@ public class FluentFunctions {
 
     }
 
-    @Wither(AccessLevel.PRIVATE)
+    @lombok.With(AccessLevel.PRIVATE)
     @AllArgsConstructor
     public static class FluentFunction<T, R> implements Function1<T, R>, Transformable<R> {
 
@@ -1053,7 +1053,7 @@ public class FluentFunctions {
 
     }
 
-    @Wither(AccessLevel.PRIVATE)
+    @lombok.With(AccessLevel.PRIVATE)
     @AllArgsConstructor
     public static class FluentBiFunction<T1, T2, R> implements Function2<T1, T2, R> {
 
@@ -1456,7 +1456,7 @@ public class FluentFunctions {
 
     }
 
-    @Wither(AccessLevel.PRIVATE)
+    @lombok.With(AccessLevel.PRIVATE)
     @AllArgsConstructor
     public static class FluentTriFunction<T1, T2, T3, R> implements Function3<T1, T2, T3, R> {
 
