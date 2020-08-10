@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
- * Java friendly version of Free (as in Unrestricted) monad for cyclops2 also see {@link cyclops.free.Free} for a more advanced
+ * Java friendly version of Free (as in Unrestricted) monad for cyclops2 also see {@link cyclops.pure.free.Free} for a more advanced
  * type safe version
  * <p>
  * Inspiration and heavily influenced by https://github.com/xuwei-k/free-monad-java/blob/master/src/main/java/free/Free.java Other

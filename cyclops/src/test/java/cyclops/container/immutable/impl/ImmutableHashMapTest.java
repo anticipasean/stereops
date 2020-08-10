@@ -1,7 +1,6 @@
 package cyclops.container.immutable.impl;
 
 import cyclops.container.basetests.BaseImmutableMapTest;
-import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

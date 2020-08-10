@@ -12,7 +12,6 @@ import com.google.common.cache.CacheBuilder;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.tuple.Tuple;
-import cyclops.function.companion.FluentFunctions;
 import cyclops.function.companion.FluentFunctions.FluentBiFunction;
 import cyclops.function.companion.FluentFunctions.FluentFunction;
 import cyclops.function.companion.FluentFunctions.FluentSupplier;

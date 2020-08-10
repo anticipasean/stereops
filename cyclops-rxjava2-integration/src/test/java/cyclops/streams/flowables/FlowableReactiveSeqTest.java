@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
 import cyclops.container.immutable.impl.Vector;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.streams.AbstractReactiveSeqTest;
 import java.util.concurrent.atomic.AtomicBoolean;

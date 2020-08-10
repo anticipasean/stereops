@@ -3,7 +3,7 @@ package com.oath.cyclops.anym.internal.adapters;
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.container.control.Identity;
+import cyclops.pure.control.Identity;
 import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.identity;

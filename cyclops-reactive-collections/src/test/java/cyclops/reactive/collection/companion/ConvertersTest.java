@@ -20,8 +20,6 @@ import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.QueueX;
 import cyclops.reactive.collection.container.mutable.SetX;
 import cyclops.reactive.collection.container.mutable.SortedSetX;
-import cyclops.reactive.collection.companion.Converters;
-import cyclops.reactive.collection.companion.MapXs;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;

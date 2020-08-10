@@ -3,8 +3,6 @@ package cyclops.container.immutable.impl;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
 import cyclops.function.higherkinded.DataWitness.reactiveSeq;
 import cyclops.function.higherkinded.DataWitness.seq;
 import cyclops.function.higherkinded.DataWitness.vector;

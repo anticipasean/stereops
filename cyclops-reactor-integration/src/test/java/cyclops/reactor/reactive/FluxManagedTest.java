@@ -1,7 +1,7 @@
 package cyclops.reactor.reactive;
 
 import cyclops.reactive.Managed;
-import cyclops.reactive.ManagedTest;
+import cyclops.pure.reactive.ManagedTest;
 import cyclops.reactor.companion.Fluxs;
 import cyclops.async.Future;
 import cyclops.container.control.Try;
@@ -10,7 +10,6 @@ import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactor.reactive.FluxManaged;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;

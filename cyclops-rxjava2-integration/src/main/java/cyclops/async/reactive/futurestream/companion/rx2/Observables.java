@@ -6,7 +6,7 @@ import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.Rx2Witness.observable;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import io.reactivex.BackpressureStrategy;

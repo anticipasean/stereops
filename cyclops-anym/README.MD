@@ -1,6 +1,6 @@
 # Cyclops AnyM : A higher kinded monad abstraction
 
-*DEPRECATED in favour of cyclops-pure & cyclops.typeclasses.Do*
+*DEPRECATED in favour of cyclops-pure & cyclops.pure.typeclasses.Do*
 
 AnyM allows developers to abstract, in a type safe manner, over any Java monadic type.
 

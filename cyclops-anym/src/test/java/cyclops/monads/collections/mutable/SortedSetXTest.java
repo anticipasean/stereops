@@ -3,7 +3,7 @@ package cyclops.monads.collections.mutable;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.reactive.collections.mutable.SortedSetX;
+import cyclops.pure.reactive.collections.mutable.SortedSetX;
 import cyclops.monads.AnyM;
 
 import cyclops.container.immutable.tuple.Tuple2;

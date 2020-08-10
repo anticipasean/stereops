@@ -4,7 +4,7 @@ import static org.junit.Assert.assertThat;
 
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.reactive.collections.immutable.VectorX;
+import cyclops.pure.reactive.collections.immutable.VectorX;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.Witness.reactiveSeq;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;

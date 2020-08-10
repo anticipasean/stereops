@@ -13,7 +13,6 @@ import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.experimental.Wither;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

@@ -32,9 +32,9 @@ import org.junit.Test;
 
 import cyclops.monads.AnyM;
 import cyclops.container.control.Maybe;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.QueueX;
-import cyclops.reactive.collections.mutable.SetX;
+import cyclops.pure.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.QueueX;
+import cyclops.pure.reactive.collections.mutable.SetX;
 
 
 import reactor.core.publisher.Flux;

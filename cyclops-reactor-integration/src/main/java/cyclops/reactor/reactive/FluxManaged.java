@@ -84,7 +84,7 @@ public abstract class FluxManaged<T> extends Managed<T> {
     public <R> Managed<R> map(Function<? super T, ? extends R> mapper){
         return of(apply(mapper.andThen(IO::of)),__->{});
     }
-    public  <R> Managed<R> flatMap(Function<? super T, cyclops.reactive.Managed<R>> f){
+    public  <R> Managed<R> flatMap(Function<? super T, Managed<R>> f){
 
         FluxManaged<T> m = this;
         return new IO.SyncIO.SyncManaged<R>(){

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.util.SimpleTimer;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import io.reactivex.Flowable;

@@ -9,7 +9,7 @@ import cyclops.async.adapters.Queue;
 import cyclops.async.wait.WaitStrategy;
 import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.async.reactive.futurestream.SimpleReact;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;

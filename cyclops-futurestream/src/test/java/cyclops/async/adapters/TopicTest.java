@@ -10,7 +10,7 @@ import cyclops.async.QueueFactories;
 import cyclops.async.reactive.futurestream.pipeline.stream.BaseSimpleReactStream;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.SimpleReact;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

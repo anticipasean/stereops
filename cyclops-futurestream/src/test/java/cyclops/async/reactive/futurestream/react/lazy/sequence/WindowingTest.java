@@ -11,7 +11,7 @@ import cyclops.container.Seq;
 import cyclops.container.Vector;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.react.lazy.DuplicationTest;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

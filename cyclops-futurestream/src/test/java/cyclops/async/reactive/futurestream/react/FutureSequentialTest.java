@@ -6,8 +6,8 @@ import static org.junit.Assert.assertThat;
 import cyclops.stream.operator.BaseSequentialTest;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.ReactiveSeq;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.util.stream.Stream;
 import org.junit.Test;
 

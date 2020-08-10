@@ -35,7 +35,7 @@ The ListX only blocks on first access to the data.
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.reactive.ObservableReactiveSeq.reactiveSeq;
+import static cyclops.pure.reactive.ObservableReactiveSeq.reactiveSeq;
 AtomicBoolean complete = new AtomicBoolean(false);
 
 

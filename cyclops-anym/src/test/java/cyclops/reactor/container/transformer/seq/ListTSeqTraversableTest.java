@@ -1,7 +1,7 @@
 package cyclops.reactor.container.transformer.seq;
 
 import cyclops.types.AbstractTraversableTest;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.container.traversable.Traversable;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness.list;

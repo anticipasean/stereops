@@ -19,7 +19,7 @@ import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.function.Monoid;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;

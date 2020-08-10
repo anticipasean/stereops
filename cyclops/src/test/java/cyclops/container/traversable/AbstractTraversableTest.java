@@ -14,7 +14,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.traversable.Traversable;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;

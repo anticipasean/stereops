@@ -18,7 +18,6 @@ import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collection.container.AbstractSetTest;
-import cyclops.reactive.collection.container.immutable.OrderedSetX;
 import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.SetX;
 import java.util.Arrays;

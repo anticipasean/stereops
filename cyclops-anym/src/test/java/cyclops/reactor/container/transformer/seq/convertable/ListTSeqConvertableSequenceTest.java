@@ -2,7 +2,7 @@ package cyclops.reactor.container.transformer.seq.convertable;
 
 import cyclops.container.foldable.AbstractConvertableSequenceTest;
 import cyclops.container.immutable.impl.ConvertableSequence;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;
 

@@ -1,6 +1,5 @@
 package cyclops.async.reactive.futurestream.operation;
 
-import cyclops.async.reactive.futurestream.operation.LazyFutureStreamUtils;
 import cyclops.reactive.operation.ReactiveStreamsTerminalFutureOperations;
 import cyclops.reactive.subscription.impl.ReactiveTask;
 import cyclops.async.reactive.futurestream.FutureStream;

@@ -13,7 +13,7 @@ import cyclops.async.reactive.futurestream.companion.Streamable;
 import cyclops.async.reactive.futurestream.companion.Streams;
 import cyclops.container.control.Maybe;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;

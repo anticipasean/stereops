@@ -14,8 +14,8 @@ import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.immutable.LinkedListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import org.junit.Before;
 import org.junit.Test;
 

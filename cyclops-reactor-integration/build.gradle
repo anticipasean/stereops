@@ -24,7 +24,7 @@ dependencies {
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     testCompileClasspath project(':cyclops-anym')
-    testCompileClasspath project(':cyclops').tasks.matching({ Task t -> t.name.contains('compileTestJava')}).first().outputs.files
+    testCompileClasspath project(':cyclops').tasks.matching({ Task t -> t.name.contains('compileTestJava') }).first().outputs.files
     testImplementation project(':cyclops-reactive-collections')
     testImplementation project(':cyclops-anym')
     testCompileClasspath "io.kindedj:kindedj:${kindedJVersion}"

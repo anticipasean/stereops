@@ -7,10 +7,10 @@ import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.async.reactive.futurestream.companion.rx2.Observables;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

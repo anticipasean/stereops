@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import cyclops.container.persistent.PersistentMap;
-import cyclops.container.immutable.impl.HashMap;
-import cyclops.container.immutable.impl.TrieMap;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.ArrayList;
 import org.hamcrest.MatcherAssert;

@@ -7,7 +7,6 @@ import cyclops.async.Future;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
-import cyclops.function.enhanced.Function3;
 import java.util.concurrent.ForkJoinPool;
 import org.junit.Test;
 

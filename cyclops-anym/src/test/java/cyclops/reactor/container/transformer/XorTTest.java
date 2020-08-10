@@ -8,8 +8,8 @@ import cyclops.monads.Witness.*;
 
 import cyclops.container.printable.Printable;
 import cyclops.container.mutable.Mutable;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.immutable.LinkedListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.function.companion.Reducers;
 import cyclops.stream.companion.Streams;
 import cyclops.container.control.*;

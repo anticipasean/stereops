@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import cyclops.async.reactive.futurestream.companion.Reducers;
 import cyclops.container.Seq;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.util.Arrays;
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package cyclops;
 
 
 import cyclops.container.Vector;
-import cyclops.reactive.collections.immutable.VectorX;
+import cyclops.pure.reactive.collections.immutable.VectorX;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

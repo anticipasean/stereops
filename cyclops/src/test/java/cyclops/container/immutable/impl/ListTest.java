@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.function.companion.Monoids;
-import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

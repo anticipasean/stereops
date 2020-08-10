@@ -4,7 +4,7 @@ package cyclops.container.control.reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import cyclops.container.control.Reader;
+import cyclops.pure.control.Reader;
 
 
 

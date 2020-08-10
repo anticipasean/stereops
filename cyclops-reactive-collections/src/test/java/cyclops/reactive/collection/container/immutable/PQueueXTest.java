@@ -14,7 +14,6 @@ import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collection.container.AbstractCollectionXTest;
-import cyclops.reactive.collection.container.immutable.PersistentQueueX;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;

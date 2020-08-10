@@ -7,7 +7,6 @@ import static org.junit.Assert.assertThat;
 import cyclops.function.companion.Reducers;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collection.container.immutable.BagX;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.junit.Test;

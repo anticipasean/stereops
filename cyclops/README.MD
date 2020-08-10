@@ -452,7 +452,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Group     | A function for combining values of the same type, with an identity value and an inverse     |                  |
 | Reducer     | Accepted by cyclops fold /reduce methods for reducing sequences of values to cyclops data types     |                  |
 
-# cyclops.reactive
+# cyclops.pure.reactive
 
 | type | description | characteristics |
 |------|-------------|-----------------|

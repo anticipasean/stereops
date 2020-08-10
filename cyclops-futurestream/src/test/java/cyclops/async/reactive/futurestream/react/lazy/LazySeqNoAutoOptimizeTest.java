@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.List;
 import java.util.function.Supplier;
 import org.junit.Test;

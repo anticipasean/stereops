@@ -1,6 +1,5 @@
 package cyclops.reactive.collection.container.mutable;
 
-import cyclops.reactive.collection.container.mutable.ListX;
 import org.junit.Test;
 
 /**

@@ -1,6 +1,6 @@
 package cyclops.container.immutable.tuple;
 
-import cyclops.container.control.Identity;
+import cyclops.pure.control.Identity;
 import org.junit.Before;
 import org.junit.Test;
 

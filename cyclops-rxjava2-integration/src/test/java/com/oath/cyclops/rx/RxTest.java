@@ -1,6 +1,6 @@
 package com.oath.cyclops.rx;
 
-import static cyclops.reactive.ObservableReactiveSeq.reactiveSeq;
+import static cyclops.pure.reactive.ObservableReactiveSeq.reactiveSeq;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -9,11 +9,11 @@ import com.oath.cyclops.anym.AnyMSeq;
 import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.monads.ObservableAnyM;
 import cyclops.monads.Rx2Witness.observable;
-import cyclops.reactive.FlowableCollections;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableCollections;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import java.util.concurrent.Executors;

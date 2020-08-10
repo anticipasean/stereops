@@ -3,7 +3,6 @@ package cyclops.reactive.collection.container;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import java.util.Comparator;
 import org.junit.Test;
 

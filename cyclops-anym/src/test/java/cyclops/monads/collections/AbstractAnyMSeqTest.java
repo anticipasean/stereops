@@ -56,7 +56,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import cyclops.function.combiner.Monoid;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 import cyclops.util.SimpleTimer;
 

@@ -1,7 +1,7 @@
 package cyclops.streams.flowables.syncflux;
 
 
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.streams.flowables.CollectableTest;
 import reactor.core.publisher.Flux;

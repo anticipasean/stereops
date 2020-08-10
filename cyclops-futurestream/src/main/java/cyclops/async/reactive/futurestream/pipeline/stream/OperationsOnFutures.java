@@ -1,7 +1,6 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
 import cyclops.async.reactive.futurestream.pipeline.FastFuture;
-import cyclops.async.reactive.futurestream.pipeline.stream.LazyStreamWrapper;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Seq;

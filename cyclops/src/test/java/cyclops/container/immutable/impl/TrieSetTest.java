@@ -11,8 +11,6 @@ import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.basetests.BaseImmutableSetTest;
 import cyclops.container.immutable.ImmutableSet;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.TrieSet;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Arrays;
 import java.util.List;

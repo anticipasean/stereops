@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.Seq;
-import cyclops.reactive.collection.container.immutable.VectorX;
 import org.junit.Test;
 
 public class NQueensPStackTest {

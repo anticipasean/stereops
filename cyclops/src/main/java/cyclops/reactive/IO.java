@@ -978,7 +978,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
                           });
             }
 
-            public <R> Managed<R> flatMap(Function<? super T, cyclops.reactive.Managed<R>> f) {
+            public <R> Managed<R> flatMap(Function<? super T, Managed<R>> f) {
 
                 SyncManaged<T> m = this;
                 return new SyncManaged<R>() {

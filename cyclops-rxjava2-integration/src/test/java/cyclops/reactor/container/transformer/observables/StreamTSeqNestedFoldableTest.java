@@ -5,7 +5,7 @@ import com.oath.cyclops.anym.transformers.FoldableTransformerSeq;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;
 import cyclops.monads.transformers.AbstractNestedFoldableTest;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 
 
 public class StreamTSeqNestedFoldableTest extends AbstractNestedFoldableTest<Witness.list> {

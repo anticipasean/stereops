@@ -36,7 +36,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 
 /**
  * Fluent API for working with java.util.Function types

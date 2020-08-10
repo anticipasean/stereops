@@ -5,6 +5,7 @@ import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
+import cyclops.pure.control.Identity;
 import cyclops.reactive.collection.container.immutable.BagX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.immutable.OrderedSetX;

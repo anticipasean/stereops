@@ -26,7 +26,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TreeMap<K, V> implements ImmutableMap<K, V>, Higher2<treeMap, K, V>, Serializable {

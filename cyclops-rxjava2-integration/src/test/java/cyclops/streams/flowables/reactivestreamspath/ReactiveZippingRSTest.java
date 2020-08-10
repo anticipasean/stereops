@@ -1,7 +1,7 @@
 package cyclops.streams.flowables.reactivestreamspath;
 
 import static cyclops.container.immutable.tuple.Tuple.tuple;
-import static cyclops.reactive.FlowableReactiveSeq.of;
+import static cyclops.pure.reactive.FlowableReactiveSeq.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -15,7 +15,7 @@ import cyclops.stream.type.Streamable;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

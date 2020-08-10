@@ -4,12 +4,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.container.immutable.tuple.Tuple;
-import cyclops.reactive.collection.container.mutable.DequeX;
-import cyclops.reactive.collection.container.mutable.ListX;
-import cyclops.reactive.collection.container.mutable.MapX;
-import cyclops.reactive.collection.container.mutable.QueueX;
-import cyclops.reactive.collection.container.mutable.SetX;
-import cyclops.reactive.collection.container.mutable.SortedSetX;
 import cyclops.reactive.collection.companion.MapXs;
 import java.util.HashMap;
 import java.util.Map;

@@ -5,7 +5,7 @@ import com.oath.cyclops.rx2.adapter.FlowableReactiveSeqImpl;
 import cyclops.async.reactive.futurestream.companion.rx2.Flowables;
 import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.reactor.container.transformer.StreamT;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;

@@ -9,7 +9,6 @@ import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.NonEmptyChain;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
-import cyclops.function.combiner.Semigroup;
 import cyclops.function.companion.Semigroups;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;

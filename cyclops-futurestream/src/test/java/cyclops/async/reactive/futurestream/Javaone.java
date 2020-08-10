@@ -3,7 +3,7 @@ package cyclops.async.reactive.futurestream;
 import cyclops.async.QueueFactories;
 import cyclops.async.adapters.Queue;
 import cyclops.async.reactive.futurestream.companion.Streams;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;

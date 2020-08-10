@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.immutable.ImmutableList;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;

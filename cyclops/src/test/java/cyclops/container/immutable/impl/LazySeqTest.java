@@ -8,9 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 
 import cyclops.container.immutable.ImmutableList;
-import cyclops.container.immutable.impl.LazySeq;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;

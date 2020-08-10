@@ -1,6 +1,7 @@
 package cyclops.container.control;
 
 import cyclops.container.immutable.tuple.Tuple;
+import cyclops.pure.control.State;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -13,7 +14,7 @@ public class StateTest {
 
     @Test
     public void eval(){
-        State<String,Integer> state = State.state(s-> Tuple.tuple(s,10));
+        State<String,Integer> state = State.state(s-> Tuple.tuple(s, 10));
         assertThat(state.eval("hello"),equalTo(10));
     }
     @Test

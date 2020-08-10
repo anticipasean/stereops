@@ -1,14 +1,12 @@
 package cyclops.monads.collections.persistent;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.immutable.LinkedListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.linkedListX;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
-import org.junit.Test;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class LinkedListXTest extends AbstractAnyMSeqOrderedDependentTest<linkedListX> {

@@ -7,9 +7,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.immutable.ImmutableList;
-import cyclops.container.immutable.impl.LazySeq;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Zipper;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;

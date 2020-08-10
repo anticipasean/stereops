@@ -4,9 +4,8 @@ import cyclops.async.Future;
 import cyclops.container.control.Try;
 
 import cyclops.container.immutable.impl.Vector;
-import cyclops.reactive.AbstractIOTestBase;
+import cyclops.pure.reactive.AbstractIOTestBase;
 import cyclops.reactive.IO;
-import cyclops.reactor.reactive.FluxIO;
 import org.hamcrest.MatcherAssert;
 import org.junit.Ignore;
 import org.junit.Test;

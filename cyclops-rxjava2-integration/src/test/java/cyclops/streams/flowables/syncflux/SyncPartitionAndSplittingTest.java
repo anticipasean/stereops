@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

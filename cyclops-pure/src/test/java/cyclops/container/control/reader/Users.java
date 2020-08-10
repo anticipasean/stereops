@@ -1,6 +1,6 @@
 package cyclops.container.control.reader;
 
-import cyclops.container.control.Reader;
+import cyclops.pure.control.Reader;
 
 public interface Users {
 

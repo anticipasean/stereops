@@ -9,7 +9,7 @@ import cyclops.monads.collections.AbstractAnyMSeqTest;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.reactive.collections.mutable.SetX;
+import cyclops.pure.reactive.collections.mutable.SetX;
 
 
 import java.util.List;

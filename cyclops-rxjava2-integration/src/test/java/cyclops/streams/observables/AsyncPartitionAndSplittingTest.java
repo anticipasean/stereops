@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.container.control.Option;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.function.Supplier;

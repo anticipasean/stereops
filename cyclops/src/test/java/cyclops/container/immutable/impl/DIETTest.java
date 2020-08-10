@@ -6,8 +6,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.immutable.impl.DIET;
-import cyclops.container.immutable.impl.Enumeration;
 import cyclops.container.ordering.Ordering;
 import java.util.Arrays;
 import java.util.Comparator;

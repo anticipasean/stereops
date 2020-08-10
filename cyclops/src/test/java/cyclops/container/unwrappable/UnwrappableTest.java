@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.container.control.Either;
 import cyclops.container.control.LazyEither;
-import cyclops.container.unwrappable.Unwrappable;
 import org.junit.Test;
 
 public class UnwrappableTest {

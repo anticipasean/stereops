@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Future;
 import cyclops.container.control.Try;
-import cyclops.reactive.AbstractIOTestBase;
-import cyclops.reactive.IO;
+import cyclops.pure.reactive.AbstractIOTestBase;
+import cyclops.pure.reactive.IO;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

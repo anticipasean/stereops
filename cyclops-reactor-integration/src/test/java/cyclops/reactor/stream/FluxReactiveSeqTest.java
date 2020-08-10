@@ -1,7 +1,6 @@
 package cyclops.reactor.stream;
 
 import cyclops.container.immutable.impl.Vector;
-import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.AbstractReactiveSeqTest;
 import org.junit.Ignore;

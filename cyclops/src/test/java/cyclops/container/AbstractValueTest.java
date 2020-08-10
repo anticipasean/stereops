@@ -2,7 +2,6 @@ package cyclops.container;
 
 import static org.junit.Assert.assertEquals;
 
-import cyclops.container.Value;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Test;

@@ -8,8 +8,6 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.container.control.LazyEither3;
 import cyclops.container.control.LazyEither4;
-import cyclops.container.immutable.impl.DMap;
-import cyclops.container.immutable.impl.HashMap;
 import java.util.Date;
 import org.junit.Test;
 

@@ -2,7 +2,6 @@ package cyclops.stream;
 
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static cyclops.function.companion.Predicates.anyOf;
-import static cyclops.function.companion.Predicates.greaterThan;
 import static cyclops.function.companion.Predicates.hasItems;
 import static cyclops.function.companion.Predicates.in;
 import static cyclops.function.companion.Predicates.not;

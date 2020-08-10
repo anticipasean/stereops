@@ -2,7 +2,7 @@ package cyclops.reactor.container.transformer;
 
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.Reader;
+import cyclops.pure.control.Reader;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;

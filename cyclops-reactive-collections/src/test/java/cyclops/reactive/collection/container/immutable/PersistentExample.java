@@ -1,11 +1,5 @@
 package cyclops.reactive.collection.container.immutable;
 
-import cyclops.reactive.collection.container.immutable.BagX;
-import cyclops.reactive.collection.container.immutable.LinkedListX;
-import cyclops.reactive.collection.container.immutable.OrderedSetX;
-import cyclops.reactive.collection.container.immutable.PersistentQueueX;
-import cyclops.reactive.collection.container.immutable.PersistentSetX;
-import cyclops.reactive.collection.container.immutable.VectorX;
 import org.junit.Test;
 
 public class PersistentExample {

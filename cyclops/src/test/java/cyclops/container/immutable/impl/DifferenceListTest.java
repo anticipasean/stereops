@@ -3,9 +3,7 @@ package cyclops.container.immutable.impl;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.immutable.impl.DifferenceList;
 import cyclops.container.immutable.ImmutableList;
-import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Option;
 import cyclops.container.basetests.BaseImmutableListTest;

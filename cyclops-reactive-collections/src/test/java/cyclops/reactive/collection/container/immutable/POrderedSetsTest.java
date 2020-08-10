@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collection.container.immutable.OrderedSetX;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.junit.Test;

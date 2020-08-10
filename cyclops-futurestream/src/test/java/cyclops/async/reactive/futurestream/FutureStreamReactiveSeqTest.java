@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.pure.reactive.ReactiveSeq;
+import cyclops.pure.reactive.Spouts;
 import cyclops.stream.AbstractReactiveSeqTest;
 import java.util.ArrayList;
 import java.util.Iterator;

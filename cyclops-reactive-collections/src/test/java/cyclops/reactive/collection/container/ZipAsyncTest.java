@@ -3,7 +3,6 @@ package cyclops.reactive.collection.container;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.subscriber.AsyncSubscriber;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

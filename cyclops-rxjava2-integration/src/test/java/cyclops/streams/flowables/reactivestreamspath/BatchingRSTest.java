@@ -1,7 +1,7 @@
 package cyclops.streams.flowables.reactivestreamspath;
 
-import static cyclops.reactive.FlowableReactiveSeq.just;
-import static cyclops.reactive.FlowableReactiveSeq.of;
+import static cyclops.pure.reactive.FlowableReactiveSeq.just;
+import static cyclops.pure.reactive.FlowableReactiveSeq.of;
 import static cyclops.reactive.companion.Spouts.iterate;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.util.SimpleTimer;
 import cyclops.stream.type.Streamable;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import java.io.IOException;
 import java.util.ArrayList;

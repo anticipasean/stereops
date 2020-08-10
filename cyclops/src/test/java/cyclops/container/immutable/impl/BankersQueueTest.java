@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.ImmutableQueue;
 import cyclops.container.traversable.IterableX;
 import cyclops.stream.type.Streamable;

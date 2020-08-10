@@ -1,7 +1,6 @@
 package cyclops.reactive.collection.container.immutable;
 
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collection.container.immutable.LinkedListX;
 import org.junit.Test;
 
 /**

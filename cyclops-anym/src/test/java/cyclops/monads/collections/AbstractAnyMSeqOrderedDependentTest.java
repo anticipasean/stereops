@@ -5,7 +5,7 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.WitnessType;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 import cyclops.reactive.companion.Spouts;
 import lombok.AllArgsConstructor;

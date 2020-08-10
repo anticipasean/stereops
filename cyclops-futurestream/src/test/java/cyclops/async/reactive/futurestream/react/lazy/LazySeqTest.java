@@ -21,7 +21,7 @@ import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.async.reactive.futurestream.react.base.BaseSeqTest;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

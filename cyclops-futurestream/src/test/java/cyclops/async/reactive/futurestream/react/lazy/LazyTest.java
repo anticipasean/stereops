@@ -11,7 +11,7 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.util.mixins.Printable;
 import cyclops.async.reactive.futurestream.companion.Semigroups;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

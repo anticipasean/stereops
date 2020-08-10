@@ -7,8 +7,8 @@ import cyclops.monads.AnyMs;
 import cyclops.monads.ObservableAnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.list;
-import cyclops.reactive.ObservableReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import io.reactivex.Observable;
 import org.junit.Test;
 

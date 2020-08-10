@@ -16,7 +16,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 
-import cyclops.reactive.collection.container.CollectionX;
 import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.TreeSet;

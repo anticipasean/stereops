@@ -19,9 +19,9 @@
 package scrabble;
 
 
-import static cyclops.reactive.ReactiveSeq.reactiveSeq;
+import static cyclops.pure.reactive.ReactiveSeq.reactiveSeq;
 
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;

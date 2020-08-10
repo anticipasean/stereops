@@ -5,9 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import cyclops.container.immutable.ImmutableList;
-import cyclops.container.immutable.impl.NonEmptyList;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
 import cyclops.container.traversable.IterableX;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.control.Option;

@@ -21,7 +21,7 @@ import org.junit.Test;
 import java.util.stream.Stream;
 
 import cyclops.monads.AnyM;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 
 public class FutureStreamTest extends AbstractAnyMSeqOrderedDependentTest<futureStream> {

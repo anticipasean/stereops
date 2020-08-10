@@ -10,7 +10,7 @@ import static org.mockito.Matchers.anyInt;
 
 import cyclops.exception.ExceptionSoftener;
 import cyclops.async.reactive.futurestream.companion.rx2.Observables;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.IOException;

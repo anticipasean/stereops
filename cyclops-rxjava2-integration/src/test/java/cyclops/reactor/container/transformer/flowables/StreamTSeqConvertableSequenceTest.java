@@ -5,7 +5,7 @@ import cyclops.container.foldable.AbstractConvertableSequenceTest;
 import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness.list;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 
 
 public class StreamTSeqConvertableSequenceTest extends AbstractConvertableSequenceTest {

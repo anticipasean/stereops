@@ -215,9 +215,9 @@ public final class FutureStreamIO<T> implements IO<T> {
                       ExceptionSoftener.softenConsumer(c -> c.close()));
         }
 
-        public static <T> cyclops.reactive.Managed<Seq<T>> sequence(Iterable<? extends Managed<T>> all) {
+        public static <T> Managed<Seq<T>> sequence(Iterable<? extends Managed<T>> all) {
 
-            cyclops.reactive.Managed<Seq<T>> acc = null;
+            Managed<Seq<T>> acc = null;
             for (Managed<T> n : all) {
                 if (acc == null) {
                     acc = n.map(Seq::of);
@@ -238,7 +238,7 @@ public final class FutureStreamIO<T> implements IO<T> {
                       });
         }
 
-        public <R> Managed<R> flatMap(Function<? super T, cyclops.reactive.Managed<R>> f) {
+        public <R> Managed<R> flatMap(Function<? super T, Managed<R>> f) {
 
             FutureStreamManaged<T> m = this;
             return new FutureStreamManaged<R>() {

@@ -1,7 +1,7 @@
 package cyclops.streams.flowables.reactivestreamspath;
 
 
-import static cyclops.reactive.FlowableReactiveSeq.of;
+import static cyclops.pure.reactive.FlowableReactiveSeq.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -9,7 +9,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Option;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.Supplier;
 import org.junit.Test;

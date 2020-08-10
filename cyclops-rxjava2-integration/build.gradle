@@ -16,6 +16,7 @@ dependencies {
     compileClasspath project(':cyclops-anym')
     compileClasspath project(':cyclops-futurestream')
     compileClasspath project(':cyclops-reactive-collections')
+    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     compileClasspath group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxJava2Version
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion

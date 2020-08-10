@@ -4,7 +4,7 @@ import cyclops.container.control.Maybe;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.Witness.list;
 import cyclops.monads.Witness.maybe;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import org.junit.Before;
 import org.junit.Test;
 

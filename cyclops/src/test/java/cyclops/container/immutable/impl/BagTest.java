@@ -7,10 +7,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
-import cyclops.container.immutable.impl.Bag;
 import cyclops.container.immutable.ImmutableSet;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.traversable.IterableX;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.control.Maybe;

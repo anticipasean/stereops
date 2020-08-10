@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 
 import cyclops.container.printable.Printable;
 import cyclops.container.mutable.Mutable;
-import cyclops.reactive.collections.immutable.LinkedListX;
+import cyclops.pure.reactive.collections.immutable.LinkedListX;
 import cyclops.container.control.*;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Trampoline;
@@ -35,7 +35,7 @@ import org.junit.Test;
 
 import cyclops.function.combiner.Monoid;
 import cyclops.function.companion.Reducers;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 
 public class FutureTTest implements Printable {

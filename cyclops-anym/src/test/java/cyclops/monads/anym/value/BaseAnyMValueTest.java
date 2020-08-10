@@ -14,7 +14,7 @@ import cyclops.container.control.Maybe;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 import cyclops.stream.companion.Streams;
 import cyclops.monads.AnyM;

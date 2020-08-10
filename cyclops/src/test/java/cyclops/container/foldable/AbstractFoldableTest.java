@@ -7,7 +7,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.foldable.Foldable;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Vector;

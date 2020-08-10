@@ -10,7 +10,7 @@ import org.junit.Test;
 import cyclops.monads.AnyM;
 import cyclops.container.control.Maybe;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;;
+import cyclops.pure.reactive.collections.mutable.ListX;;
 
 public class AnyMValueTest {
 

@@ -19,7 +19,7 @@ import cyclops.monads.function.AnyMFunction2;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 
 public class MonadTest {

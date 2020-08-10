@@ -7,7 +7,6 @@ import static org.junit.Assert.assertThat;
 import cyclops.function.companion.Comparators;
 import cyclops.container.basetests.BaseImmutableMapTest;
 import cyclops.container.immutable.ImmutableMap;
-import cyclops.container.immutable.impl.TreeMap;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Map;

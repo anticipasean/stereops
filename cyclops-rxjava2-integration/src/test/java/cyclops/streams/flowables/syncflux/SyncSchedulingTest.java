@@ -4,7 +4,7 @@ package cyclops.streams.flowables.syncflux;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.concurrent.Executors;

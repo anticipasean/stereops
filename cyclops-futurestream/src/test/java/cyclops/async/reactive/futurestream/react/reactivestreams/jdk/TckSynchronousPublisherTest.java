@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.react.reactivestreams.jdk;
 
 
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.tck.PublisherVerification;
 import org.reactivestreams.tck.TestEnvironment;

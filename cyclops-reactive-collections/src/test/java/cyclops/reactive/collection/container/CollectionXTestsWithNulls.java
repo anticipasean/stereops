@@ -3,8 +3,6 @@ package cyclops.reactive.collection.container;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.reactive.collection.container.AbstractOrderDependentCollectionXTest;
-import cyclops.reactive.collection.container.CollectionX;
 import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import java.util.function.Supplier;
 import org.junit.Test;
