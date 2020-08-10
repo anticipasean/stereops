@@ -1,7 +1,7 @@
 package cyclops.reactiveSeq;
 
-import cyclops.companion.Streamable;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.async.reactive.futurestream.companion.Streamable;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

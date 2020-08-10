@@ -1,11 +1,11 @@
 package cyclops.monads;
 
 
-import com.oath.cyclops.types.functor.Transformable;
-import cyclops.function.Function1;
+import cyclops.container.transformable.Transformable;
+import cyclops.function.enhanced.Function1;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 
 import java.util.function.Function;
 

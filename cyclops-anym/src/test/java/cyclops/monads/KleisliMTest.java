@@ -1,13 +1,13 @@
 package cyclops.monads;
 
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.control.Option;
-import cyclops.control.Either;
+import cyclops.pure.reactive.collections.mutable.ListX;
+import cyclops.container.control.Option;
+import cyclops.container.control.Either;
 import cyclops.monads.Witness.stream;
 import cyclops.monads.Witness.reactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import org.junit.Test;
 
 import java.util.stream.Collectors;

@@ -2,9 +2,9 @@ package com.oath.cyclops.rx2.adapter;
 
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
-import cyclops.companion.rx2.Functions;
-import cyclops.companion.rx2.Maybes;
-import cyclops.control.Future;
+import cyclops.async.reactive.futurestream.companion.rx2.Functions;
+import cyclops.async.reactive.futurestream.companion.rx2.Maybes;
+import cyclops.async.Future;
 import cyclops.monads.AnyM;
 import cyclops.monads.MaybeAnyM;
 import cyclops.monads.Rx2Witness.maybe;

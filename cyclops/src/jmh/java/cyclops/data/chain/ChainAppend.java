@@ -1,7 +1,7 @@
-package cyclops.data.chain;
+package cyclops.container.chain;
 
-import cyclops.data.Chain;
-import cyclops.data.Seq;
+import cyclops.container.Chain;
+import cyclops.container.Seq;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

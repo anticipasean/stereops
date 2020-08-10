@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.control.Either;
-import com.oath.cyclops.util.box.Mutable;
+import cyclops.container.control.Either;
+import cyclops.container.mutable.Mutable;
 
 public class XorAnyMValueTest extends BaseAnyMValueTest<either> {
     @Before

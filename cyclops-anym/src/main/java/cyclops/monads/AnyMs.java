@@ -2,15 +2,24 @@ package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.anym.AnyMValue;
-import cyclops.control.*;
-import cyclops.monads.transformers.jdk.CompletableFutureT;
-import cyclops.monads.transformers.jdk.OptionalT;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.immutable.VectorX;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.companion.Functions;
-import cyclops.companion.Streams;
-import cyclops.function.Function1;
+import cyclops.async.Future;
+import cyclops.container.control.*;
+import cyclops.monads.Witness.reactiveSeq;
+import cyclops.reactor.container.transformer.EitherT;
+import cyclops.reactor.container.transformer.EvalT;
+import cyclops.reactor.container.transformer.FutureT;
+import cyclops.reactor.container.transformer.ListT;
+import cyclops.reactor.container.transformer.MaybeT;
+import cyclops.reactor.container.transformer.OptionT;
+import cyclops.reactor.container.transformer.StreamT;
+import cyclops.reactor.container.transformer.jdk.CompletableFutureT;
+import cyclops.reactor.container.transformer.jdk.OptionalT;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.function.companion.Functions;
+import cyclops.stream.companion.Streams;
+import cyclops.function.enhanced.Function1;
 import cyclops.monads.transformers.*;
 import cyclops.reactive.ReactiveSeq;
 
@@ -95,7 +104,7 @@ public interface AnyMs {
   public static <T,W extends WitnessType<W>> Function<W,OptionalT<W, T>> liftM(Optional<T> opt) {
     return w->liftM(opt,w);
   }
-  public static <T> StreamT<Witness.reactiveSeq,T> combinationsT(ReactiveSeq<T> s,final int size) {
+  public static <T> StreamT<reactiveSeq,T> combinationsT(ReactiveSeq<T> s, final int size) {
     return StreamT.fromReactiveSeq(s.combinations(size));
   }
 

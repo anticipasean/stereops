@@ -2,30 +2,34 @@ package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.anym.AnyMValue;
-import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import com.oath.cyclops.types.Unwrappable;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.IndexedSequenceX;
+import cyclops.function.companion.Lambda;
+import cyclops.function.companion.Predicates;
+import cyclops.container.unwrappable.Unwrappable;
 
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import com.oath.cyclops.types.factory.EmptyUnit;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.stream.ToStream;
-import cyclops.control.Future;
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple2;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.control.*;
-import cyclops.control.Maybe;
-import cyclops.function.*;
+import cyclops.container.factory.EmptyUnit;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.Transformable;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function5;
+import cyclops.stream.type.ToStream;
+import cyclops.async.Future;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.container.control.*;
+import cyclops.container.control.Maybe;
 import cyclops.monads.function.AnyMFunction1;
 import cyclops.monads.function.AnyMFunction2;
-import cyclops.monads.transformers.ListT;
-import cyclops.monads.transformers.FutureT;
-import cyclops.futurestream.FutureStream;
+import cyclops.reactor.container.transformer.ListT;
+import cyclops.reactor.container.transformer.FutureT;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 
 import org.reactivestreams.Publisher;
 
@@ -34,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.*;
 import java.util.stream.*;
 
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import static cyclops.function.evaluation.Evaluation.LAZY;
 
 /**
  *
@@ -67,8 +71,7 @@ import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
 public interface AnyM2<W extends WitnessType<W>,T2,T> extends   AnyM<W,T>,
                                                                 Unwrappable,
                                                                 EmptyUnit<T>,
-                                                                Unit<T>,
-                                                                Folds<T>,
+                                                                Unit<T>, Foldable<T>,
                                                                 Transformable<T>,
                                                                 ToStream<T>,
                                                                 Publisher<T> {
@@ -246,7 +249,7 @@ public interface AnyM2<W extends WitnessType<W>,T2,T> extends   AnyM<W,T>,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.factory.EmptyUnit#emptyUnit()
+     * @see cyclops.container.factory.EmptyUnit#emptyUnit()
      */
     @Override
     default <T> Unit<T> emptyUnit(){

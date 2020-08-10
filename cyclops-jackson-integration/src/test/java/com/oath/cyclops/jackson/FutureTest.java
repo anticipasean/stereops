@@ -3,8 +3,8 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.container.control.Eval;
+import cyclops.container.control.Future;
 import org.junit.Ignore;
 import org.junit.Test;
 

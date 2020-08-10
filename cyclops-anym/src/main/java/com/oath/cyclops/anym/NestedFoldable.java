@@ -1,22 +1,23 @@
 package com.oath.cyclops.anym;
 
+import cyclops.container.immutable.impl.HashMap;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.*;
 
-import com.oath.cyclops.types.foldable.ConvertableSequence;
-import com.oath.cyclops.types.stream.Connectable;
-import com.oath.cyclops.types.traversable.IterableX;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.container.immutable.impl.ConvertableSequence;
+import cyclops.stream.type.Connectable;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
-import com.oath.cyclops.types.stream.ToStream;
+import cyclops.stream.type.ToStream;
 import org.reactivestreams.Subscription;
 
 @Deprecated //use cyclops-pure Do instead
@@ -263,7 +264,7 @@ public interface NestedFoldable<W extends WitnessType<W>,T> extends ToStream<T> 
      *
      * </pre>
      */
-    default <K> AnyM<W,cyclops.data.HashMap<K, Vector<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
+    default <K> AnyM<W, HashMap<K, Vector<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
         return nestedFoldables().map(s -> s.groupBy(classifier));
     }
 

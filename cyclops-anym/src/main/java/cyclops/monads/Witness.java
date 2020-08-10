@@ -1,5 +1,17 @@
 package cyclops.monads;
 
+import cyclops.container.immutable.impl.BankersQueue;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.pure.control.Identity;
+import cyclops.reactive.collection.container.immutable.BagX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.OrderedSetX;
+import cyclops.reactive.collection.container.immutable.PersistentQueueX;
+import cyclops.reactive.collection.container.immutable.PersistentSetX;
+import cyclops.reactive.collection.container.immutable.VectorX;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.Queue;
@@ -9,20 +21,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.internal.adapters.*;
-import com.oath.cyclops.types.traversable.IterableX;
-import cyclops.control.*;
-import cyclops.control.Future;
-import cyclops.data.*;
-import cyclops.futurestream.FutureStream;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.control.*;
+import cyclops.async.Future;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
-import cyclops.reactive.collections.immutable.*;
-import cyclops.reactive.collections.mutable.DequeX;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.QueueX;
-import cyclops.reactive.collections.mutable.SetX;
-import cyclops.reactive.collections.mutable.SortedSetX;
-import com.oath.cyclops.types.MonadicValue;
+import cyclops.stream.type.Streamable;
+import cyclops.reactive.collection.container.mutable.DequeX;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.QueueX;
+import cyclops.reactive.collection.container.mutable.SetX;
+import cyclops.reactive.collection.container.mutable.SortedSetX;
+import cyclops.container.MonadicValue;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 
 public interface Witness {
@@ -305,7 +315,8 @@ public interface Witness {
       @Override
       public MonadAdapter<seq> adapter() {
         return new IterableXAdapter<seq>(Seq::empty,
-          Seq::of,Seq::fromIterable,this);
+                                         Seq::of,
+                                         Seq::fromIterable, this);
       }
 
     }
@@ -315,7 +326,7 @@ public interface Witness {
       @Override
       public MonadAdapter<lazySeq> adapter() {
         return new IterableXAdapter<lazySeq>(LazySeq::empty,
-          LazySeq::of, LazySeq::fromIterable,this);
+                                             LazySeq::of, LazySeq::fromIterable, this);
       }
 
     }
@@ -325,7 +336,7 @@ public interface Witness {
       @Override
       public MonadAdapter<vector> adapter() {
         return new IterableXAdapter<vector>(Vector::empty,
-          Vector::of, Vector::fromIterable,this);
+                                            Vector::of, Vector::fromIterable, this);
       }
 
     }
@@ -335,7 +346,7 @@ public interface Witness {
       @Override
       public MonadAdapter<hashSet> adapter() {
         return new IterableXAdapter<hashSet>(HashSet::empty,
-          HashSet::of, HashSet::fromIterable,this);
+                                             HashSet::of, HashSet::fromIterable, this);
       }
 
     }
@@ -345,7 +356,7 @@ public interface Witness {
       @Override
       public MonadAdapter<bankersQueue> adapter() {
         return new IterableXAdapter<bankersQueue>(BankersQueue::empty,
-          BankersQueue::of, BankersQueue::fromIterable,this);
+                                                  BankersQueue::of, BankersQueue::fromIterable, this);
       }
 
     }

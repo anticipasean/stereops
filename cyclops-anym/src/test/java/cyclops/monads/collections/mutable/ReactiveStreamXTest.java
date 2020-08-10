@@ -3,19 +3,18 @@ package cyclops.monads.collections.mutable;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.reactiveSeq;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import org.junit.Test;
 
 import java.util.concurrent.ForkJoinPool;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 
 public class ReactiveStreamXTest extends AbstractAnyMSeqOrderedDependentTest<reactiveSeq> {

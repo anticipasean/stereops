@@ -1,5 +1,28 @@
 package cyclops.monads;
 
+import cyclops.container.immutable.impl.BankersQueue;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.function.companion.Lambda;
+import cyclops.function.companion.Predicates;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function5;
+import cyclops.pure.control.Identity;
+import cyclops.reactive.collection.container.immutable.BagX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.OrderedSetX;
+import cyclops.reactive.collection.container.immutable.PersistentQueueX;
+import cyclops.reactive.collection.container.immutable.PersistentSetX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.DequeX;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.QueueX;
+import cyclops.reactive.collection.container.mutable.SetX;
+import cyclops.reactive.collection.container.mutable.SortedSetX;
+import cyclops.reactive.Generator;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.companion.Spouts;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -21,39 +44,34 @@ import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.AnyMValue2;
 import com.oath.cyclops.anym.internal.adapters.StreamAdapter;
 import com.oath.cyclops.anym.internal.monads.AnyMValue2Impl;
-import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.internal.stream.ReactiveStreamX;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Unwrappable;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.stream.type.impl.ReactiveStreamX;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.MonadicValue;
+import cyclops.container.unwrappable.Unwrappable;
 
-import com.oath.cyclops.types.factory.EmptyUnit;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.traversable.IterableX;
-import cyclops.companion.Streamable;
-import cyclops.control.*;
-import cyclops.data.*;
-import cyclops.data.HashSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.futurestream.FutureStream;
+import cyclops.container.factory.EmptyUnit;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.To;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.traversable.IterableX;
+import cyclops.stream.type.Streamable;
+import cyclops.container.control.*;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.monads.function.AnyMFunction1;
-import cyclops.monads.transformers.FutureT;
-import cyclops.monads.transformers.ListT;
-import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.control.Future;
-import cyclops.function.*;
-import cyclops.reactive.*;
-import cyclops.data.tuple.Tuple2;
-import cyclops.reactive.collections.immutable.*;
-import cyclops.reactive.collections.mutable.*;
+import cyclops.reactor.container.transformer.FutureT;
+import cyclops.reactor.container.transformer.ListT;
+import cyclops.reactive.collection.container.IndexedSequenceX;
+import cyclops.async.Future;
+import cyclops.container.immutable.tuple.Tuple2;
 import org.reactivestreams.Publisher;
 
-import com.oath.cyclops.data.collections.extensions.CollectionX;
+import cyclops.reactive.collection.container.CollectionX;
 import com.oath.cyclops.anym.internal.monads.AnyMSeqImpl;
 import com.oath.cyclops.anym.internal.monads.AnyMValueImpl;
 
@@ -73,10 +91,10 @@ import cyclops.monads.Witness.either;
 import cyclops.monads.Witness.*;
 import cyclops.monads.Witness.future;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import com.oath.cyclops.types.stream.ToStream;
-import cyclops.companion.Optionals;
+import cyclops.stream.type.ToStream;
+import cyclops.async.reactive.futurestream.companion.Optionals;
 
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import static cyclops.function.evaluation.Evaluation.LAZY;
 
 /**
  *
@@ -110,12 +128,10 @@ import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
 public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
                                                             To<AnyM<W,T>>,
                                                             EmptyUnit<T>,
-                                                            Unit<T>,
-                                                            Folds<T>,
+                                                            Unit<T>, Foldable<T>,
                                                             Transformable<T>,
                                                             ToStream<T>,
-                                                            Publisher<T>,
-                                                            Filters<T> {
+                                                            Publisher<T>, Filterable<T> {
 
 
     /**
@@ -264,7 +280,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.factory.EmptyUnit#emptyUnit()
+     * @see cyclops.container.factory.EmptyUnit#emptyUnit()
      */
     @Override
     default <T> Unit<T> emptyUnit(){
@@ -389,7 +405,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
         ReactiveSeq<T> s = matchable().fold(value -> value.stream(), seq -> seq.stream());
         ReactiveSeq<T> s2 = next.matchable().fold(value -> value.stream(), seq -> seq.stream());
         Seq<T> ag = ReactiveSeq.concat(s, s2)
-            .seq();
+                               .seq();
         return unit(ag);
     }
 
@@ -595,7 +611,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
      * @return AnyMSeq that wraps a Publisher
      */
     public static <T> AnyMSeq<reactiveSeq,T> fromPublisher(final Publisher<T> publisher) {
-        return AnyMFactory.instance.seq(Spouts.from(publisher),reactiveSeq.REACTIVE);
+        return AnyMFactory.instance.seq(Spouts.from(publisher), reactiveSeq.REACTIVE);
     }
     /**
      * Create an AnyM instance that wraps a Stream
@@ -1488,17 +1504,17 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
 
     @Override
     default <U> AnyM<W,U> ofType(final Class<? extends U> type) {
-        return (AnyM<W,U>)Filters.super.ofType(type);
+        return (AnyM<W,U>) Filterable.super.ofType(type);
     }
 
     @Override
     default AnyM<W,T> filterNot(final Predicate<? super T> predicate) {
-        return (AnyM<W,T>)Filters.super.filterNot(predicate);
+        return (AnyM<W,T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     default AnyM<W,T> notNull() {
-        return (AnyM<W,T>)Filters.super.notNull();
+        return (AnyM<W,T>) Filterable.super.notNull();
     }
 
 

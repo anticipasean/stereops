@@ -1,7 +1,7 @@
 package cyclops.streams.flowables.reactivestreamspath;
 
 
-import static cyclops.control.Option.some;
+import static cyclops.container.control.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -13,13 +13,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Semigroups;
-import cyclops.companion.Streamable;
-import cyclops.companion.Streams;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.companion.Streams;
 import cyclops.monads.AnyM;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;

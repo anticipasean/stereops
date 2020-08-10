@@ -2,7 +2,7 @@ package com.oath.cyclops.jackson;
 
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.data.HashMap;
+import cyclops.container.HashMap;
 import org.junit.Test;
 
 public class PersistentMapTest {

@@ -1,6 +1,6 @@
 package cyclops.streams.observables;
 
-import static cyclops.reactive.Spouts.iterate;
+import static cyclops.reactive.companion.Spouts.iterate;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -10,12 +10,12 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.util.SimpleTimer;
-import cyclops.companion.rx2.Observables;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.util.SimpleTimer;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

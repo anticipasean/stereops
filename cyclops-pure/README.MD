@@ -15,7 +15,7 @@ Cyclops pure provides support for advanced functional data structures and higher
 # Type dictionary
 
 
-### cyclops.typeclasses
+### cyclops.pure.typeclasses
 
 | type | description | characteristics |
 |------|-------------|-----------------|

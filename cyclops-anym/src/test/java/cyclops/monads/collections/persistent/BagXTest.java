@@ -2,8 +2,8 @@ package cyclops.monads.collections.persistent;
 
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.reactive.collections.immutable.BagX;
-import cyclops.companion.Reducers;
+import cyclops.pure.reactive.collections.immutable.BagX;
+import cyclops.function.companion.Reducers;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.bagX;
 import cyclops.monads.collections.AbstractAnyMSeqTest;
@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static java.util.Comparator.comparing;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;

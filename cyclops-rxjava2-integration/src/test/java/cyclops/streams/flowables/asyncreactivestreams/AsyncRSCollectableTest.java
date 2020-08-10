@@ -1,7 +1,7 @@
 package cyclops.streams.flowables.asyncreactivestreams;
 
 
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.streams.flowables.CollectableTest;
 import java.util.concurrent.ForkJoinPool;

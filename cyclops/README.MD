@@ -179,7 +179,7 @@ Eval<String> chained = lazy.map(this::process)
 
 # Replace mutable java maps with HashMap
 
-cyclops.data.HashMap is a performant persistent HashMap (implemented via a Hash Array mapped Trie)
+cyclops.data.persistent.impl.HashMap is a performant persistent HashMap (implemented via a Hash Array mapped Trie)
 
 ```java
 Map<String,Integer> map = new j.u.HashMap<>();
@@ -187,7 +187,7 @@ map.put("key",10)
 map.put("key2",200);
 map.remove("key");
 
-HashMap<String,Integer> map = cyclops.data.HashMap.of("key",10,"key2",200);
+HashMap<String,Integer> map = cyclops.data.persistent.impl.HashMap.of("key",10,"key2",200);
 Immutable<String,Integer> removed = map.remove("key");
 
 
@@ -325,7 +325,7 @@ ReactiveSeq.generate(suspend(times(10),s-> {
 [via cyclops-reactor](https://github.com/aol/cyclops/tree/master/cyclops-reactor)
 
 ```java
-import static cyclops.streams.ReactorOperators.flux;
+import static cyclops.reactor.stream.operator.ReactorOperators.flux;
 ReactiveSeq<List<Integer>> seq = Spouts.of(1,2,3)
                                        .map(i->i+1)
                                        .to(flux(o->o.buffer(10)));
@@ -383,7 +383,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Tuple     | Factory methods for Tuples | Strict, Higher kinded               |
 | Tuple0-Tuple8     | Tuple implementations | Strict, Higher kinded               |
 
-## cyclops.control
+## cyclops.container.control
 
 | type | description | characteristics |
 |------|-------------|-----------------|
@@ -400,7 +400,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Unrestricted     | "Java Friendly" implementation of the Free monad for Java, facilitates functional interpreters.         | Lazy, concurrent                |
 | Future     | Potentially asynchronous task that may populate a result in the Future            | Eager async, Higher kinded                 |
 
-### cyclops.control : Reactive Sum Types
+### cyclops.container.control : Reactive Sum Types
 
 
 | type | description | characteristics |
@@ -412,7 +412,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | CompletableEither5     | Reactive Either type maybe one of five values.  Create via Either5.either5()            | Reactive,Lazy, tail recursive, sum type                 |
 
 
-## cyclops.companion
+## cyclops.async.reactive.futurestream.companion
 
 | type | description | characteristics |
 |------|-------------|-----------------|
@@ -452,7 +452,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Group     | A function for combining values of the same type, with an identity value and an inverse     |                  |
 | Reducer     | Accepted by cyclops fold /reduce methods for reducing sequences of values to cyclops data types     |                  |
 
-# cyclops.reactive
+# cyclops.pure.reactive
 
 | type | description | characteristics |
 |------|-------------|-----------------|
@@ -462,7 +462,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Generator     | Kotlinesque Sequence Generator              |             |
 
 
-## com.oath.cyclops.async
+## cyclops.async
 
 | type | description | characteristics |
 |------|-------------|-----------------|

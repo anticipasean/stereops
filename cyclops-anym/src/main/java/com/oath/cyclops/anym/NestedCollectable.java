@@ -8,17 +8,16 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.IndexedSequenceX;
+import cyclops.container.traversable.IterableX;
 import cyclops.monads.AnyM;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.monads.WitnessType;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.monads.transformers.FutureT;
-import cyclops.monads.transformers.ListT;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.SetX;
+import cyclops.reactor.container.transformer.FutureT;
+import cyclops.reactor.container.transformer.ListT;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.SetX;
 
 
 /**

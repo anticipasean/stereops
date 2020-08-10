@@ -1,14 +1,14 @@
 package cyclops.streams.flowables.reactivestreamspath;
 
-import static cyclops.reactive.FlowableReactiveSeq.of;
+import static cyclops.pure.reactive.FlowableReactiveSeq.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
-import cyclops.companion.Streamable;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.function.companion.Reducers;
+import cyclops.stream.type.Streamable;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import org.junit.Test;
 
 public class ReactiveScanningRSTest {

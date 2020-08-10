@@ -2,10 +2,10 @@ package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.rx2.adapter.FlowableReactiveSeqImpl;
-import cyclops.companion.rx2.Flowables;
-import cyclops.companion.rx2.Observables;
-import cyclops.monads.transformers.StreamT;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.async.reactive.futurestream.companion.rx2.Flowables;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.reactor.container.transformer.StreamT;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;

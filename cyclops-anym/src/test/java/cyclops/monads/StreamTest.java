@@ -2,17 +2,17 @@ package cyclops.monads;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.companion.Semigroups;
-import cyclops.control.Future;
-import cyclops.data.Seq;
-import cyclops.futurestream.LazyReact;
-import cyclops.monads.transformers.VectorT;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.SetX;
+import cyclops.function.companion.Semigroups;
+import cyclops.async.Future;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.async.reactive.futurestream.LazyReact;
+import cyclops.reactor.container.transformer.VectorT;
+import cyclops.pure.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.SetX;
 import cyclops.monads.Witness.reactiveSeq;
-import cyclops.monads.transformers.ListT;
+import cyclops.reactor.container.transformer.ListT;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import org.junit.Test;
 
 import java.util.*;

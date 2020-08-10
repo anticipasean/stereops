@@ -3,9 +3,9 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple1;
+import cyclops.container.Seq;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple1;
 import org.junit.Test;
 
 public class TupleTest {

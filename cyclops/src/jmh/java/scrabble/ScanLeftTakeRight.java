@@ -18,7 +18,7 @@
 
 package scrabble;
 
-import cyclops.reactive.ReactiveSeq;
+import cyclops.pure.reactive.ReactiveSeq;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;

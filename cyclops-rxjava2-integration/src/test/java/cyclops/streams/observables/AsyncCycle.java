@@ -5,12 +5,12 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.rx2.Observables;
-import cyclops.data.tuple.Tuple2;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.companion.Spouts;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import org.junit.Test;
 
 /**

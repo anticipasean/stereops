@@ -1,17 +1,17 @@
 package cyclops.monads;
 
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.immutable.PersistentSetX;
-import cyclops.reactive.collections.immutable.VectorX;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.SetX;
-import cyclops.control.Maybe;
-import cyclops.control.Either;
-import cyclops.control.LazyEither;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.To;
+import cyclops.container.transformable.Transformable;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.PersistentSetX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.SetX;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Either;
+import cyclops.container.control.LazyEither;
 import cyclops.monads.Witness.*;
 import cyclops.reactive.ReactiveSeq;
 import lombok.AccessLevel;
@@ -49,11 +49,10 @@ import java.util.stream.Stream;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(of="either")
-public class XorM<W1 extends WitnessType<W1>,W2 extends WitnessType<W2>,T> implements Filters<T>,
-                                                                                       Transformable<T>,
-                                                                                       Folds<T>,
-                                                                                       Publisher<T>,
-                                                                                       To<XorM<W1,W2,T>> {
+public class XorM<W1 extends WitnessType<W1>,W2 extends WitnessType<W2>,T> implements Filterable<T>,
+                                                                                      Transformable<T>, Foldable<T>,
+                                                                                      Publisher<T>,
+                                                                                      To<XorM<W1,W2,T>> {
 
     @Getter
     private final Either<AnyM<W1,T>,AnyM<W2,T>> xor;

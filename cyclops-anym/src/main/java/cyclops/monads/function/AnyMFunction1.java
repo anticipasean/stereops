@@ -1,14 +1,13 @@
 package cyclops.monads.function;
 
-import cyclops.function.Function0;
-import cyclops.function.Function1;
+import cyclops.function.enhanced.Function1;
 import cyclops.monads.AnyMs;
 import cyclops.monads.KleisliM;
 import cyclops.monads.WitnessType;
 import cyclops.monads.AnyM;
-import cyclops.monads.transformers.FutureT;
-import cyclops.monads.transformers.ListT;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactor.container.transformer.FutureT;
+import cyclops.reactor.container.transformer.ListT;
+import cyclops.reactive.collection.container.mutable.ListX;
 
 import java.util.function.Function;
 

@@ -1,7 +1,6 @@
 package cyclops.monads.collections.mutable;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -13,7 +12,7 @@ import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 
 public class StreamableTest extends AbstractAnyMSeqOrderedDependentTest<Witness.streamable> {
 

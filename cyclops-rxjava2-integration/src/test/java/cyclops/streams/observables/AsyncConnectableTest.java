@@ -5,11 +5,11 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.stream.PausableConnectable;
-import cyclops.companion.rx2.Observables;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.stream.type.PausableConnectable;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Queue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;

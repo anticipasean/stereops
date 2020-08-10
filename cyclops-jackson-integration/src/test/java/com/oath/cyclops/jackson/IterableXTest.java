@@ -3,11 +3,11 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.container.LazySeq;
+import cyclops.container.Seq;
+import cyclops.container.Vector;
+import cyclops.pure.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.junit.Test;
 
 public class IterableXTest {

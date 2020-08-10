@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.jackson.CyclopsModule;
 
 public final class JacksonUtil {
 

@@ -1,7 +1,7 @@
 package cyclops.streams.observables;
 
 
-import static cyclops.control.Option.some;
+import static cyclops.container.control.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -13,19 +13,19 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Semigroups;
-import cyclops.companion.Streamable;
-import cyclops.companion.Streams;
-import cyclops.companion.rx2.Observables;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.companion.Streams;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.monads.AnyM;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.companion.Spouts;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;

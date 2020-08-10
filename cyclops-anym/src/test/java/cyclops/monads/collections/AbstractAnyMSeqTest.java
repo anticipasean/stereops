@@ -10,13 +10,17 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 
+import cyclops.function.companion.Monoids;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.companion.Streams;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,29 +37,28 @@ import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.data.HashMap;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.companion.*;
-import cyclops.futurestream.LazyReact;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.async.reactive.futurestream.LazyReact;
 
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cyclops.function.Monoid;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.function.combiner.Monoid;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
-import com.oath.cyclops.util.SimpleTimer;
+import cyclops.util.SimpleTimer;
 
 public abstract class AbstractAnyMSeqTest<W extends WitnessType<W>> {//@TODO extends AbstractIterableXTest{
 	public abstract <T> AnyMSeq<W,T> empty();
@@ -1108,7 +1111,7 @@ public abstract class AbstractAnyMSeqTest<W extends WitnessType<W>> {//@TODO ext
     @Test
     public void combineNoOrderMonoid(){
         assertThat(of(1,2,3)
-                .combine(Monoids.intSum,(a, b)->a.equals(b))
+                .combine(Monoids.intSum, (a, b)->a.equals(b))
                 .to(ReactiveConvertableSequence::converter).listX(),equalTo(ListX.of(1,2,3)));
 
     }

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 
 
 

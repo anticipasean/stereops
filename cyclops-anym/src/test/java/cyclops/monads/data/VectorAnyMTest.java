@@ -1,14 +1,13 @@
 package cyclops.monads.data;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.data.Vector;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.vector;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class VectorAnyMTest extends AbstractAnyMSeqOrderedDependentTest<vector> {

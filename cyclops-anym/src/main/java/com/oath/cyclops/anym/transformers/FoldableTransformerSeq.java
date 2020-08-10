@@ -2,7 +2,7 @@ package com.oath.cyclops.anym.transformers;
 
 import java.util.function.Function;
 
-import com.oath.cyclops.types.functor.FilterableTransformable;
+import cyclops.container.transformable.FilterableTransformable;
 import com.oath.cyclops.anym.NestedCollectable;
 import cyclops.reactive.ReactiveSeq;
 import com.oath.cyclops.anym.NestedFoldable;

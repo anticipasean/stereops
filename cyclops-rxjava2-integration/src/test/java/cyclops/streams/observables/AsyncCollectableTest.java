@@ -1,10 +1,10 @@
 package cyclops.streams.observables;
 
 
-import cyclops.companion.rx2.Observables;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 
 
 public class AsyncCollectableTest extends CollectableTest {

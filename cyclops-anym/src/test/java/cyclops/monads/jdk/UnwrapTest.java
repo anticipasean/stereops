@@ -12,7 +12,7 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
 public class UnwrapTest {
 

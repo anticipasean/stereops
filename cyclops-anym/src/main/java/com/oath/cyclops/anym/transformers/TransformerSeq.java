@@ -5,26 +5,26 @@ import java.util.Random;
 import java.util.function.*;
 import java.util.stream.*;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.traversable.IterableX;
-import com.oath.cyclops.types.traversable.Traversable;
-import com.oath.cyclops.types.Unwrappable;
-import com.oath.cyclops.types.foldable.ConvertableSequence;
-import com.oath.cyclops.types.stream.ToStream;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.Traversable;
+import cyclops.container.unwrappable.Unwrappable;
+import cyclops.container.immutable.impl.ConvertableSequence;
+import cyclops.stream.type.ToStream;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.monads.WitnessType;
 
 @Deprecated
@@ -85,7 +85,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-         * @see com.oath.cyclops.types.traversable.Traversable#combine(java.util.function.BiPredicate, java.util.function.BinaryOperator)
+         * @see cyclops.data.traversable.Traversable#combine(java.util.function.BiPredicate, java.util.function.BinaryOperator)
          */
     @Override
     default TransformerSeq<W,T> combine(final BiPredicate<? super T, ? super T> predicate, final BinaryOperator<T> op) {
@@ -94,7 +94,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#forEachAsync(org.reactivestreams.Subscriber)
+     * @see cyclops.data.traversable.Traversable#forEachAsync(org.reactivestreams.Subscriber)
      */
     @Override
     default void subscribe(final Subscriber<? super T> s) {
@@ -104,7 +104,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#cycle(int)
+     * @see cyclops.data.traversable.Traversable#cycle(int)
      */
     @Override
     default TransformerSeq<W,T> cycle(final long times) {
@@ -112,7 +112,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#cycle(cyclops2.function.Monoid, int)
+     * @see cyclops.data.traversable.Traversable#cycle(cyclops2.function.Monoid, int)
      */
     @Override
     default TransformerSeq<W,T> cycle(final Monoid<T> m, final long times) {
@@ -120,7 +120,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#cycleWhile(java.util.function.Predicate)
+     * @see cyclops.data.traversable.Traversable#cycleWhile(java.util.function.Predicate)
      */
     @Override
     default TransformerSeq<W,T> cycleWhile(final Predicate<? super T> predicate) {
@@ -128,7 +128,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#cycleUntil(java.util.function.Predicate)
+     * @see cyclops.data.traversable.Traversable#cycleUntil(java.util.function.Predicate)
      */
     @Override
     default TransformerSeq<W,T> cycleUntil(final Predicate<? super T> predicate) {
@@ -136,7 +136,7 @@ public interface TransformerSeq<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#zip(java.lang.Iterable, java.util.function.BiFunction)
+     * @see cyclops.data.traversable.Traversable#zip(java.lang.Iterable, java.util.function.BiFunction)
      */
     @Override
     default <U, R> TransformerSeq<W,R> zip(final Iterable<? extends U> other, final BiFunction<? super T, ? super U, ? extends R> zipper) {

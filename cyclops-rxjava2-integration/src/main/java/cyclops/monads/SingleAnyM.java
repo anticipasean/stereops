@@ -1,7 +1,7 @@
 package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMValue;
-import cyclops.monads.transformers.rx2.SingleT;
+import cyclops.reactor.container.transformer.rx2.SingleT;
 import io.reactivex.Single;
 
 @Deprecated

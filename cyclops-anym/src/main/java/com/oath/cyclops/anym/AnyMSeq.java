@@ -14,28 +14,28 @@ import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.transformers.TransformerTraversable;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import com.oath.cyclops.types.foldable.ConvertableSequence;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.traversable.IterableX;
-import com.oath.cyclops.types.traversable.RecoverableTraversable;
-import com.oath.cyclops.types.traversable.Traversable;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.immutable.impl.ConvertableSequence;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.RecoverableTraversable;
+import cyclops.container.traversable.Traversable;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.WitnessType;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.control.Either;
-import cyclops.function.Predicates;
-import cyclops.function.Function4;
-import cyclops.function.Function3;
+import cyclops.container.control.Either;
+import cyclops.function.companion.Predicates;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function3;
 
 /**
  * Wrapper around 'Any' non-scalar 'M'onad

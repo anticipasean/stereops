@@ -2,17 +2,16 @@ package cyclops.monads.collections;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Semigroups;
-import cyclops.data.Seq;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.WitnessType;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.pure.reactive.collections.mutable.ListX;
 
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.junit.Test;
 
 import java.io.Serializable;

@@ -1,20 +1,20 @@
 package com.oath.cyclops.rx2.adapter;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import cyclops.companion.rx2.Functions;
-import cyclops.control.LazyEither;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.async.reactive.futurestream.companion.rx2.Functions;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.Deque;
@@ -39,7 +39,6 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.experimental.Wither;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -49,7 +48,7 @@ import org.reactivestreams.Subscription;
 public class FlowableReactiveSeqImpl<T> implements ReactiveSeq<T> {
 
     private final static Object UNSET = new Object();
-    @Wither
+    @lombok.With
     @Getter
     Flowable<T> flowable;
 

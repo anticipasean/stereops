@@ -12,26 +12,26 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Streams;
-import cyclops.companion.rx2.Observables;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.function.Monoid;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.stream.companion.Streams;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.combiner.Monoid;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.companion.Spouts;
+import cyclops.pure.reactive.collections.mutable.ListX;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -883,12 +883,12 @@ public class AsyncReactiveStreamXTest {
 
     @Test
     public void testGroupByEager() {
-        cyclops.data.HashMap<Integer, cyclops.data.Vector<Integer>> map1 = of(1,
-                                                                              2,
-                                                                              3,
-                                                                              4).groupBy(i -> i % 2);
-        assertEquals(Option.some(cyclops.data.Vector.of(2,
-                                                        4)),
+        HashMap<Integer, Vector<Integer>> map1 = of(1,
+                                                    2,
+                                                    3,
+                                                    4).groupBy(i -> i % 2);
+        assertEquals(Option.some(Vector.of(2,
+                                           4)),
                      map1.get(0));
         assertEquals(Option.some(Vector.of(1,
                                            3)),

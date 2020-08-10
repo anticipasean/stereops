@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.Vector;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.streams.AbstractReactiveSeqTest;
 import java.util.concurrent.atomic.AtomicBoolean;

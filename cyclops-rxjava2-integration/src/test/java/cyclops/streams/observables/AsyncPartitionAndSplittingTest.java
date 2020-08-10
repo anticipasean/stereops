@@ -5,11 +5,11 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.rx2.Observables;
-import cyclops.control.Option;
-import cyclops.reactive.ObservableReactiveSeq;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
+import cyclops.container.control.Option;
+import cyclops.pure.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.function.Supplier;
 import org.junit.Test;
 

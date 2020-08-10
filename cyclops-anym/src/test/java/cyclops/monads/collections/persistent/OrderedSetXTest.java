@@ -2,9 +2,9 @@ package cyclops.monads.collections.persistent;
 
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.reactive.collections.immutable.OrderedSetX;
+import cyclops.pure.reactive.collections.immutable.OrderedSetX;
 import cyclops.monads.AnyM;
-import cyclops.companion.Comparators;
+import cyclops.function.companion.Comparators;
 import cyclops.monads.Witness.orderedSetX;
 import cyclops.monads.collections.AbstractAnyMSeqTest;
 import org.junit.Test;

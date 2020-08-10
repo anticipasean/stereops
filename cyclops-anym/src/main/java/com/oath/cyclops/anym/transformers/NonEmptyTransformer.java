@@ -1,15 +1,15 @@
 package com.oath.cyclops.anym.transformers;
 
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Unwrappable;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.functor.Transformable;
-import cyclops.control.Option;
+import cyclops.container.MonadicValue;
+import cyclops.container.unwrappable.Unwrappable;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
-import cyclops.monads.transformers.StreamT;
+import cyclops.reactor.container.transformer.StreamT;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
@@ -18,8 +18,7 @@ import java.util.function.*;
 @Deprecated
 public abstract class NonEmptyTransformer<W extends WitnessType<W>,T> implements Publisher<T>,
                                                                             Unwrappable,Transformable<T>,
-                                                                            Unit<T>,
-                                                                            Folds<T>{
+                                                                            Unit<T>, Foldable<T> {
 
     public abstract AnyM<W,? extends Value<T>> transformerStream();
     protected abstract <R> NonEmptyTransformer<W,R> unitAnyM(AnyM<W,? super MonadicValue<R>> anyM);
@@ -46,7 +45,7 @@ public abstract class NonEmptyTransformer<W extends WitnessType<W>,T> implements
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Traversable#forEachAsync(org.reactivestreams.Subscriber)
+     * @see cyclops.types.Traversable#forEachAsync(org.reactivestreams.Subscriber)
      */
      @Override
     public void subscribe(final Subscriber<? super T> s) {

@@ -1,7 +1,5 @@
 package cyclops.monads;
 
-import cyclops.monads.AnyM;
-
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

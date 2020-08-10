@@ -5,8 +5,8 @@ import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.control.Option;
-import cyclops.control.Try;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
 
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.tryType;

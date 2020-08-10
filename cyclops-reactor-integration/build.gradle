@@ -11,14 +11,6 @@ jar {
     }
 }
 
-if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
-        }
-    }
-}
-
 dependencies {
     implementation project(':cyclops')
     compileClasspath project(':cyclops-pure')
@@ -26,13 +18,16 @@ dependencies {
     compileClasspath project(':cyclops-futurestream')
     implementation project(':cyclops-reactive-collections')
     compileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
-    testCompileClasspath project(':cyclops-anym')
-    testCompileClasspath project(':cyclops')
+    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
-    testImplementation project(':cyclops')
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    testCompileClasspath project(':cyclops-anym')
+    testCompileClasspath project(':cyclops').tasks.matching({ Task t -> t.name.contains('compileTestJava') }).first().outputs.files
     testImplementation project(':cyclops-reactive-collections')
     testImplementation project(':cyclops-anym')
+    testCompileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     testCompileClasspath 'commons-io:commons-io:2.4'
     testCompileClasspath group: 'junit', name: 'junit', version: '4.12'

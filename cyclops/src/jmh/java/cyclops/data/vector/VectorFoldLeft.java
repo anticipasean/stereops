@@ -1,6 +1,6 @@
-package cyclops.data.vector;
+package cyclops.container.vector;
 
-import cyclops.data.Vector;
+import cyclops.container.Vector;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

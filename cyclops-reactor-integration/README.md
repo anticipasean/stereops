@@ -32,7 +32,7 @@ The ListX only blocks on first access to the data.
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.companion.rx.ObservableReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.rx.ObservableReactiveSeq.reactiveSeq;
 AtomicBoolean complete = new AtomicBoolean(false);
 
 
@@ -96,7 +96,7 @@ With an Flux-back ReactiveSeq we can create Reactive Xtended Collections e.g. an
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.companion.reactor.FluxReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.reactor.FluxReactiveSeq.reactiveSeq;
 
 ListX<Integer> asyncList = listX(reactiveSeq(flux))
                                         .map(i->i+1);
@@ -106,7 +106,7 @@ Or a reactive Cyclops Vector
 
 ```java
 
-import static cyclops.companion.reactor.FluxReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.reactor.FluxReactiveSeq.reactiveSeq;
 
 VectorX<Integer> asyncList = VectorX.vectorX(reactiveSeq(flux))
                                     .map(i->i+1);
@@ -146,7 +146,7 @@ String type = seq.fold(sync->"synchronous",rs->"reactive-streams",async->"pure a
 Use Reactor to extend cyclops-react's array of operations for and from Flux
 
 ```java
-import static cyclops.streams.ReactorOperators.flux;
+import static cyclops.reactor.stream.operator.ReactorOperators.flux;
 
 ReactiveSeq<List<Integer>> seq = FluxReactiveSeq.of(1,2,3)
                                       .map(i->i+1)
@@ -156,7 +156,7 @@ ReactiveSeq<List<Integer>> seq = FluxReactiveSeq.of(1,2,3)
 For and from Mono
 
 ```java
-import static cyclops.streams.ReactorOperators.mono;
+import static cyclops.reactor.stream.operator.ReactorOperators.mono;
 
 Future<Integer> future;
 Future<Integer> useMonoLogOp = future.to(mono(m->m.log()));

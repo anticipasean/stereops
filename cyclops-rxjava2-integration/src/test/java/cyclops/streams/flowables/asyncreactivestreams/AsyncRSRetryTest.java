@@ -8,8 +8,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.reactive.FlowableReactiveSeq;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.pure.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import java.io.IOException;
 import java.net.SocketException;
