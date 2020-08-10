@@ -1,4 +1,4 @@
-package cyclops.container.comparative;
+package cyclops.container.relational;
 
 import cyclops.container.foldable.Foldable;
 import java.util.Objects;

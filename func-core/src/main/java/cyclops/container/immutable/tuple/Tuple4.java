@@ -1,7 +1,7 @@
 package cyclops.container.immutable.tuple;
 
 
-import cyclops.container.comparative.EqualTo;
+import cyclops.container.relational.EqualTo;
 import cyclops.container.ordering.OrderedBy;
 import cyclops.container.transformable.To;
 import cyclops.function.cacheable.Memoize;

@@ -1,7 +1,7 @@
 package cyclops.container.immutable;
 
 
-import cyclops.container.comparative.Contains;
+import cyclops.container.relational.Contains;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;

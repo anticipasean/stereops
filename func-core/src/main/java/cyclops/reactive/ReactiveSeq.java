@@ -7,7 +7,7 @@ import cyclops.async.queue.QueueFactory;
 import cyclops.async.queue.Signal;
 import cyclops.async.queue.Topic;
 import cyclops.async.companion.QueueFactories;
-import cyclops.container.comparative.Contains;
+import cyclops.container.relational.Contains;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.container.control.LazyEither;

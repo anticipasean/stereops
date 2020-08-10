@@ -1,7 +1,7 @@
 package cyclops.container.immutable.tuple;
 
 
-import cyclops.container.comparative.EqualTo;
+import cyclops.container.relational.EqualTo;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
 import cyclops.container.filterable.Filterable;

@@ -3,7 +3,7 @@ package cyclops.container.immutable;
 import static cyclops.matching.Api.Case;
 import static cyclops.matching.Api.MatchType;
 
-import cyclops.container.comparative.Contains;
+import cyclops.container.relational.Contains;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
 import cyclops.container.foldable.Deconstructable.Deconstructable2;

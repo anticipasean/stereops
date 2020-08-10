@@ -1,7 +1,7 @@
 package cyclops.stream.type;
 
 
-import cyclops.container.comparative.Contains;
+import cyclops.container.relational.Contains;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.factory.Unit;
