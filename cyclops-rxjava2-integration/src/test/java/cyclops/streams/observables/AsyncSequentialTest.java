@@ -11,7 +11,7 @@ import cyclops.async.adapters.Topic;
 import com.oath.cyclops.streams.BaseSequentialTest;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
-import cyclops.companion.rx2.Observables;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.container.control.Either;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;

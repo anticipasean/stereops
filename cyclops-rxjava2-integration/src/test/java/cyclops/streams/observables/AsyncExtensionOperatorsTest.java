@@ -16,7 +16,7 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
-import cyclops.companion.rx2.Observables;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;

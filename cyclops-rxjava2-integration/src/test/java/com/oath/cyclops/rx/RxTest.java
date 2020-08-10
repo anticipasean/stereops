@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.companion.rx2.Observables;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.monads.ObservableAnyM;
 import cyclops.monads.Rx2Witness.observable;
 import cyclops.reactive.FlowableCollections;

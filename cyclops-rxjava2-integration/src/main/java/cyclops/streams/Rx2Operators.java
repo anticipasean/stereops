@@ -1,8 +1,8 @@
 package cyclops.streams;
 
-import cyclops.companion.rx2.Flowables;
-import cyclops.companion.rx2.Maybes;
-import cyclops.companion.rx2.Observables;
+import cyclops.async.reactive.futurestream.companion.rx2.Flowables;
+import cyclops.async.reactive.futurestream.companion.rx2.Maybes;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.async.Future;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ObservableReactiveSeq;

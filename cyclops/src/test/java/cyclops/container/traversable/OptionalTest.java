@@ -4,7 +4,7 @@ package cyclops.container.traversable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Optionals;
+import cyclops.async.reactive.futurestream.companion.Optionals;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import org.junit.Test;

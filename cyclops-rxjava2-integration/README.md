@@ -63,7 +63,7 @@ Completed? true
 
 
 ```java
-import static cyclops.companion.rx2.Observables.*;
+import static cyclops.async.reactive.futurestream.companion.rx2.Observables.*;
  Observable<Integer> result = Observables.forEach(Observable.just(10, 20),
                                                    a -> Observable.<Integer> just(a + 10),
                                                    (a, b) -> a + b);
@@ -107,7 +107,7 @@ With an Observable-back ReactiveSeq we can create Reactive Xtended Collections e
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.companion.rx2.ObservableReactiveSeq.reactiveSeq
+import static cyclops.async.reactive.futurestream.companion.rx2.ObservableReactiveSeq.reactiveSeq
 
 ListX<Integer> asyncList = listX(reactiveSeq(observable))
                                         .map(i->i+1);
@@ -117,7 +117,7 @@ Or a reactive Vavr Vector
 
 ```java
 import static cyclops.collections.vavr.VavrVectorX;
-import static cyclops.companion.rx2.FlowableReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.rx2.FlowableReactiveSeq.reactiveSeq;
 
 VectorX<Integer> asyncList = vectorX(reactiveSeq(flowable))
                                         .map(i->i+1);

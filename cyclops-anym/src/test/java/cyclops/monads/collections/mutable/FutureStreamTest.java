@@ -11,11 +11,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import cyclops.reactive.companion.ThreadPools;
-import cyclops.futurestream.LazyReact;
+import cyclops.async.reactive.futurestream.LazyReact;
 
 
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
-import cyclops.futurestream.FutureStream;
+import cyclops.async.reactive.futurestream.FutureStream;
 import org.junit.Test;
 
 import java.util.stream.Stream;

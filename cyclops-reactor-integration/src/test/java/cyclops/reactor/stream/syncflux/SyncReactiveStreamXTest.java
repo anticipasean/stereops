@@ -10,7 +10,7 @@ import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.function.combiner.Monoid;
-import cyclops.futurestream.LazyReact;
+import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;

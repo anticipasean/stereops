@@ -32,7 +32,7 @@ The ListX only blocks on first access to the data.
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.companion.rx.ObservableReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.rx.ObservableReactiveSeq.reactiveSeq;
 AtomicBoolean complete = new AtomicBoolean(false);
 
 
@@ -96,7 +96,7 @@ With an Flux-back ReactiveSeq we can create Reactive Xtended Collections e.g. an
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.companion.reactor.FluxReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.reactor.FluxReactiveSeq.reactiveSeq;
 
 ListX<Integer> asyncList = listX(reactiveSeq(flux))
                                         .map(i->i+1);
@@ -106,7 +106,7 @@ Or a reactive Cyclops Vector
 
 ```java
 
-import static cyclops.companion.reactor.FluxReactiveSeq.reactiveSeq;
+import static cyclops.async.reactive.futurestream.companion.reactor.FluxReactiveSeq.reactiveSeq;
 
 VectorX<Integer> asyncList = VectorX.vectorX(reactiveSeq(flux))
                                     .map(i->i+1);

@@ -1,7 +1,7 @@
 package cyclops.reactive;
 
 import com.oath.cyclops.rx2.adapter.FlowableReactiveSeqImpl;
-import cyclops.companion.rx2.Flowables;
+import cyclops.async.reactive.futurestream.companion.rx2.Flowables;
 import io.reactivex.Flowable;
 import java.util.stream.Stream;
 import org.reactivestreams.Publisher;

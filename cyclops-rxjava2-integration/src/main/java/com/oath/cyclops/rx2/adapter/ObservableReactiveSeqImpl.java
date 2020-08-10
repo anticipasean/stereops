@@ -1,7 +1,7 @@
 package com.oath.cyclops.rx2.adapter;
 
 import cyclops.container.persistent.PersistentCollection;
-import cyclops.companion.rx2.Observables;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
@@ -38,7 +38,6 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.experimental.Wither;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;

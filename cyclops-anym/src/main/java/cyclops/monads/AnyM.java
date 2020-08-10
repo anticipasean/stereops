@@ -58,7 +58,7 @@ import cyclops.container.control.*;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;
-import cyclops.futurestream.FutureStream;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.monads.function.AnyMFunction1;
 import cyclops.reactor.container.transformer.FutureT;
@@ -90,7 +90,7 @@ import cyclops.monads.Witness.*;
 import cyclops.monads.Witness.future;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 import cyclops.stream.type.ToStream;
-import cyclops.companion.Optionals;
+import cyclops.async.reactive.futurestream.companion.Optionals;
 
 import static cyclops.function.evaluation.Evaluation.LAZY;
 

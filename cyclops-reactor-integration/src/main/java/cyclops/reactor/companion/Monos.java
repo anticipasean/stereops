@@ -1,8 +1,8 @@
 package cyclops.reactor.companion;
 
-import com.oath.cyclops.react.Status;
+import cyclops.async.reactive.futurestream.pipeline.Status;
 import cyclops.container.Value;
-import cyclops.companion.Futures;
+import cyclops.async.reactive.futurestream.companion.Futures;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.async.Future;

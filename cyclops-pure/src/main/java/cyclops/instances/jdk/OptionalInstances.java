@@ -7,7 +7,7 @@ import cyclops.function.higherkinded.DataWitness.optional;
 import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.MonoidK;
 import cyclops.arrow.MonoidKs;
-import cyclops.companion.Optionals;
+import cyclops.async.reactive.futurestream.companion.Optionals;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
@@ -31,7 +31,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
-import lombok.experimental.Wither;
 
 /**
  * Companion class for creating Type Class instances for working with Optionals

@@ -3,7 +3,7 @@ package cyclops.monads.anym.value;
 import cyclops.function.companion.Semigroups;
 import cyclops.async.Future;
 import cyclops.function.combiner.Monoid;
-import cyclops.companion.FutureStreamSemigroups;
+import cyclops.async.reactive.futurestream.companion.FutureStreamSemigroups;
 
 import cyclops.monads.Witness.future;
 import org.junit.Before;

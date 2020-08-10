@@ -23,7 +23,7 @@ import com.oath.cyclops.anym.internal.adapters.*;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.control.*;
 import cyclops.async.Future;
-import cyclops.futurestream.FutureStream;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
 import cyclops.reactive.collection.container.mutable.DequeX;

@@ -5,7 +5,7 @@ import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
 import cyclops.function.companion.Semigroups;
 import cyclops.async.Future;
 import cyclops.container.immutable.impl.Seq;
-import cyclops.futurestream.LazyReact;
+import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.reactor.container.transformer.VectorT;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.SetX;

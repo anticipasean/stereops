@@ -1,6 +1,6 @@
 package cyclops.monads.anym;
 
-import cyclops.companion.Optionals;
+import cyclops.async.reactive.futurestream.companion.Optionals;
 import cyclops.container.control.Eval;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.*;

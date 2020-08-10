@@ -412,7 +412,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | CompletableEither5     | Reactive Either type maybe one of five values.  Create via Either5.either5()            | Reactive,Lazy, tail recursive, sum type                 |
 
 
-## cyclops.companion
+## cyclops.async.reactive.futurestream.companion
 
 | type | description | characteristics |
 |------|-------------|-----------------|

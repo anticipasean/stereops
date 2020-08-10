@@ -27,7 +27,7 @@ import cyclops.monads.function.AnyMFunction1;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.reactor.container.transformer.ListT;
 import cyclops.reactor.container.transformer.FutureT;
-import cyclops.futurestream.FutureStream;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
 

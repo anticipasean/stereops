@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import cyclops.monads.AnyM;
-import cyclops.futurestream.FutureStream;
+import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.companion.Streams;
 import cyclops.monads.Witness;

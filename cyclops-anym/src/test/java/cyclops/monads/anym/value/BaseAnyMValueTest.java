@@ -8,7 +8,7 @@ import cyclops.container.mutable.Mutable;
 import cyclops.function.companion.Semigroups;
 import cyclops.async.Future;
 import cyclops.container.immutable.impl.Seq;
-import cyclops.futurestream.LazyReact;
+import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.container.control.*;
 import cyclops.container.control.Maybe;
 import cyclops.function.combiner.Monoid;

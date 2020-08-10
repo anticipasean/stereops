@@ -1,10 +1,10 @@
 package cyclops.async.adapters;
 
-import static cyclops.stream.async.BaseSimpleReactStream.parallel;
+import static cyclops.async.reactive.futurestream.pipeline.stream.BaseSimpleReactStream.parallel;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import cyclops.futurestream.SimpleReact;
+import cyclops.async.reactive.futurestream.SimpleReact;
 import java.util.stream.Stream;
 import org.junit.Before;
 import org.junit.Test;

@@ -41,7 +41,7 @@ import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;
-import cyclops.futurestream.LazyReact;
+import cyclops.async.reactive.futurestream.LazyReact;
 
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;

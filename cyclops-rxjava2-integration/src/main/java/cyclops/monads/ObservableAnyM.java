@@ -1,9 +1,9 @@
 package cyclops.monads;
 
-import static cyclops.companion.rx2.Observables.anyM;
+import static cyclops.async.reactive.futurestream.companion.rx2.Observables.anyM;
 
 import com.oath.cyclops.rx2.adapter.ObservableReactiveSeqImpl;
-import cyclops.companion.rx2.Observables;
+import cyclops.async.reactive.futurestream.companion.rx2.Observables;
 import cyclops.monads.Rx2Witness.observable;
 import cyclops.reactor.container.transformer.StreamT;
 import cyclops.reactive.ReactiveSeq;

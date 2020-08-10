@@ -38,7 +38,7 @@ new LazyReact(100,100).generate(()->"data") //100 active tasks, 100 threads
 ```
 
 
-## cyclops.futurestream
+## cyclops.async.reactive.futurestream
 
 | type | description | characteristics |
 |------|-------------|-----------------|

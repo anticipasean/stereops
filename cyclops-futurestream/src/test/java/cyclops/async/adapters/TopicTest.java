@@ -1,15 +1,15 @@
 package cyclops.async.adapters;
 
-import static cyclops.stream.async.BaseSimpleReactStream.parallel;
+import static cyclops.async.reactive.futurestream.pipeline.stream.BaseSimpleReactStream.parallel;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import cyclops.async.QueueFactories;
-import cyclops.stream.async.BaseSimpleReactStream;
-import cyclops.futurestream.FutureStream;
-import cyclops.futurestream.SimpleReact;
+import cyclops.async.reactive.futurestream.pipeline.stream.BaseSimpleReactStream;
+import cyclops.async.reactive.futurestream.FutureStream;
+import cyclops.async.reactive.futurestream.SimpleReact;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Arrays;
