@@ -1,9 +1,6 @@
 package cyclops.monads.anym;
 
-import cyclops.function.Curry;
-import cyclops.function.CurryVariance;
-import cyclops.function.FluentFunctions;
-import cyclops.function.Uncurry;
+import cyclops.function.companion.FluentFunctions;
 import cyclops.monads.AnyM;
 import cyclops.monads.function.AnyMFunction0;
 import cyclops.monads.function.AnyMFunction1;
@@ -16,7 +13,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-import cyclops.monads.Witness;
+
 import cyclops.monads.Witness.*;
 
 public class FunctionsTest {

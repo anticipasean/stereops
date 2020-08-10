@@ -1,11 +1,11 @@
 package cyclops;
 
 
-import com.oath.cyclops.types.persistent.PersistentMap;
+import cyclops.container.persistent.PersistentMap;
 import cyclops.companion.Comparators;
-import cyclops.data.HashMap;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.OrderedSetX;

@@ -8,11 +8,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.reactive.Spouts;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.CollectionXTestsWithNulls;
 import cyclops.reactive.collections.immutable.VectorX;
 import java.util.concurrent.Executors;

@@ -2,15 +2,15 @@ package cyclops.instances.jdk;
 
 import static cyclops.kinds.CompletableFutureKind.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.completableFuture;
-import com.oath.cyclops.hkt.DataWitness.future;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.completableFuture;
+import cyclops.function.hkt.DataWitness.future;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.MonoidK;
 import cyclops.arrow.MonoidKs;
 import cyclops.control.Either;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.instances.control.FutureInstances;
 import cyclops.kinds.CompletableFutureKind;
 import cyclops.typeclasses.InstanceDefinitions;

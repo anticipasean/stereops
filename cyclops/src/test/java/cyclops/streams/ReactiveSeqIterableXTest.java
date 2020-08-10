@@ -1,9 +1,9 @@
 package cyclops.streams;
 
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.control.Option;
-import cyclops.data.basetests.AbstractIterableXTest;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.basetests.AbstractIterableXTest;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.Function;
 import java.util.function.Supplier;

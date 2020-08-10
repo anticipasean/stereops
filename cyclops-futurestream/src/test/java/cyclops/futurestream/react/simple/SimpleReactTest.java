@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.types.futurestream.BaseSimpleReactStream;
+import cyclops.stream.async.BaseSimpleReactStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.SimpleReact;
 import java.util.ArrayList;

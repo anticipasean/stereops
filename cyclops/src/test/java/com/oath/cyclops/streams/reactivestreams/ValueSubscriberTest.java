@@ -5,10 +5,10 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.types.reactive.ValueSubscriber;
+import cyclops.reactive.subscriber.ValueSubscriber;
 import cyclops.control.Either;
 import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Ior;
 import cyclops.control.Maybe;
 import cyclops.control.Try;

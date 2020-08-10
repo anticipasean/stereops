@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import cyclops.companion.Streamable;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.Seq;
+import cyclops.container.Vector;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.react.lazy.DuplicationTest;
 import cyclops.reactive.ReactiveSeq;

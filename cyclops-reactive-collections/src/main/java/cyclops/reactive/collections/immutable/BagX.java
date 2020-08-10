@@ -4,28 +4,28 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.lazy.immutable.LazyPBagX;
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.persistent.PersistentBag;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.foldable.To;
+import cyclops.container.persistent.PersistentBag;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.companion.Reducers;
 import cyclops.control.Either;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
-import cyclops.data.Bag;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Bag;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -446,7 +446,7 @@ public interface BagX<T> extends To<BagX<T>>, PersistentBag<T>, LazyCollectionX<
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Pure#unit(java.lang.Object)
+     * @see cyclops.types.Pure#unit(java.lang.Object)
      */
     @Override
     default <R> BagX<R> unit(final R value) {
@@ -454,7 +454,7 @@ public interface BagX<T> extends To<BagX<T>>, PersistentBag<T>, LazyCollectionX<
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.IterableFunctor#unitIterable(java.util.Iterator)
+     * @see cyclops.types.IterableFunctor#unitIterable(java.util.Iterator)
      */
     @Override
     default <R> BagX<R> unitIterable(final Iterable<R> it) {

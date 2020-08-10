@@ -1,11 +1,9 @@
 package cyclops.typeclasses.taglessfinal;
 
 
-import com.oath.cyclops.hkt.DataWitness;
-import com.oath.cyclops.hkt.DataWitness.identity;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.identity;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Identity;
-import cyclops.reactive.IO;
 
 public class LogID implements LogAlgebra<identity> {
 

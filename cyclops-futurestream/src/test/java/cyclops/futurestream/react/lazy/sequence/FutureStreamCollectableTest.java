@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.lazy.sequence;
 
-import com.oath.cyclops.types.foldable.Folds;
+import cyclops.container.foldable.Folds;
 import cyclops.futurestream.LazyReact;
 import cyclops.streams.CollectableTest;
 

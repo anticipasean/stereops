@@ -1,6 +1,6 @@
 package com.oath.cyclops.react.collectors.lazy;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
+import cyclops.internal.react.async.future.FastFuture;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;

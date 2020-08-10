@@ -9,12 +9,12 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.control.Eval;
 import cyclops.control.Eval.CompletableEval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Try;
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
 import cyclops.reactive.ReactiveSeq;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Executors;

@@ -1,8 +1,8 @@
 package cyclops.monads.transformers.seq;
 
-import com.oath.cyclops.types.AbstractTraversableTest;
+import cyclops.types.AbstractTraversableTest;
 import cyclops.reactive.collections.mutable.ListX;
-import com.oath.cyclops.types.traversable.Traversable;
+import cyclops.container.traversable.Traversable;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness.list;
 

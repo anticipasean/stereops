@@ -8,8 +8,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.control.Option;
-import cyclops.data.LazySeq;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.Supplier;
 import org.junit.Test;

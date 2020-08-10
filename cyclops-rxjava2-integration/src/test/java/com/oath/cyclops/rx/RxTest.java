@@ -12,7 +12,7 @@ import cyclops.monads.Rx2Witness.observable;
 import cyclops.reactive.FlowableCollections;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;

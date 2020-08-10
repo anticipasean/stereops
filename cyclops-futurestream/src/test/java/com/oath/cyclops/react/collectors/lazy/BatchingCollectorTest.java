@@ -1,6 +1,6 @@
 package com.oath.cyclops.react.collectors.lazy;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
+import cyclops.internal.react.async.future.FastFuture;
 import cyclops.futurestream.LazyReact;
 import java.util.ArrayList;
 import java.util.HashSet;

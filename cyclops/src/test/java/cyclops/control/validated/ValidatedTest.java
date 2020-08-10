@@ -6,11 +6,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.companion.Monoids;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Validated;
-import cyclops.data.NonEmptyList;
-import cyclops.data.Seq;
-import cyclops.reactive.Spouts;
+import cyclops.container.persistent.impl.NonEmptyList;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.reactive.companion.Spouts;
 import org.junit.Test;
 
 public class ValidatedTest {

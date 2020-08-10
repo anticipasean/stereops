@@ -2,7 +2,7 @@ package cyclops;
 
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
 import cyclops.companion.Comparators;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.OrderedSetX;

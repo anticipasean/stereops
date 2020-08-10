@@ -1,12 +1,12 @@
 package cyclops.futurestream.react.async.vertx;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.wait.WaitStrategy;
+import cyclops.async.QueueFactories;
+import cyclops.async.adapters.Queue;
+import cyclops.async.wait.WaitStrategy;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.SimpleReact;
 import cyclops.reactive.ReactiveSeq;

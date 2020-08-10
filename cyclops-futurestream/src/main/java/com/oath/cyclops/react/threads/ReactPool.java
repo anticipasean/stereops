@@ -1,7 +1,7 @@
 package com.oath.cyclops.react.threads;
 
-import com.oath.cyclops.internal.react.stream.ReactBuilder;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.internal.react.stream.ReactBuilder;
+import cyclops.exception.ExceptionSoftener;
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

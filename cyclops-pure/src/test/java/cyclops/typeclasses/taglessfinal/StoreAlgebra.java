@@ -1,6 +1,6 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Option;
 
 public interface StoreAlgebra<W,K,V> {

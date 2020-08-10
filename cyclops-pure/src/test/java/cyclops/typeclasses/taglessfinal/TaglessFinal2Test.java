@@ -1,7 +1,7 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.DataWitness.io;
-import cyclops.data.tuple.Tuple2;
+import cyclops.function.hkt.DataWitness.io;
+import cyclops.container.tuple.Tuple2;
 import cyclops.instances.reactive.IOInstances;
 import cyclops.reactive.IO;
 import org.junit.Before;

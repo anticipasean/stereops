@@ -12,19 +12,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Topic;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Topic;
 import cyclops.companion.Streams;
 import cyclops.control.Maybe;
-import cyclops.data.HashMap;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.function.Monoid;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,7 +112,7 @@ public class CoreReactiveSeqTest {
 
     @Test
     public void publishToAndMerge() {
-        com.oath.cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
+        cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
 
         Thread t = new Thread(() -> {
 

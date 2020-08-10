@@ -1,6 +1,6 @@
 package cyclops.streams.push;
 
-import static cyclops.reactive.Spouts.of;
+import static cyclops.reactive.companion.Spouts.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

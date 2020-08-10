@@ -1,16 +1,14 @@
 package cyclops.streams.syncflux;
 
-import cyclops.companion.reactor.Fluxs;
 import cyclops.control.Option;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.data.tuple.Tuple2;
+import cyclops.reactive.companion.Spouts;
+import cyclops.container.tuple.Tuple2;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.util.Arrays.asList;

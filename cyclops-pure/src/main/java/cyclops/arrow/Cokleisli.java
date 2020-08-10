@@ -1,9 +1,9 @@
 package cyclops.arrow;
 
 
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.types.functor.Transformable;
-import cyclops.data.tuple.Tuple2;
+import cyclops.function.hkt.Higher;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.tuple.Tuple2;
 import cyclops.function.Function1;
 import java.util.function.Function;
 import lombok.AccessLevel;

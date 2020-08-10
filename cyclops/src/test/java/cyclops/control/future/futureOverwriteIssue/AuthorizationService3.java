@@ -2,8 +2,8 @@ package cyclops.control.future.futureOverwriteIssue;
 
 
 import cyclops.control.Either;
-import cyclops.data.NonEmptyList;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.NonEmptyList;
+import cyclops.container.persistent.impl.Vector;
 
 public class AuthorizationService3 {
 

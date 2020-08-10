@@ -1,6 +1,6 @@
 package cyclops.typeclasses;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.typeclasses.monad.MonadZero;
 import org.junit.Test;
 

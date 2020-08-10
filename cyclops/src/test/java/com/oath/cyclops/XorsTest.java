@@ -3,8 +3,8 @@ package com.oath.cyclops;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Adapter;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Adapter;
 import cyclops.companion.Eithers;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.agrona.concurrent.ManyToManyConcurrentArrayQueue;

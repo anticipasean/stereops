@@ -1,8 +1,7 @@
 package cyclops.monads.transformers;
 
-import com.oath.cyclops.types.AbstractTraversableTest;
-import com.oath.cyclops.types.traversable.Traversable;
-import cyclops.companion.reactor.Fluxs;
+import cyclops.types.AbstractTraversableTest;
+import cyclops.container.traversable.Traversable;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;
 import cyclops.reactive.FluxReactiveSeq;

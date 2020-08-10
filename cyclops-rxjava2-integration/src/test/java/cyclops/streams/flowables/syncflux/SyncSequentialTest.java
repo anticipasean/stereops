@@ -7,13 +7,13 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.async.adapters.Topic;
+import cyclops.async.adapters.Topic;
 import com.oath.cyclops.streams.BaseSequentialTest;
 import cyclops.companion.Streamable;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;

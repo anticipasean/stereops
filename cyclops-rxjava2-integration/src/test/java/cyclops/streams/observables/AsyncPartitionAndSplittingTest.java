@@ -9,7 +9,7 @@ import cyclops.companion.rx2.Observables;
 import cyclops.control.Option;
 import cyclops.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.function.Supplier;
 import org.junit.Test;
 

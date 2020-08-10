@@ -1,6 +1,6 @@
 package cyclops.typeclasses.monad;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.functor.Functor;
 import java.util.function.BiFunction;

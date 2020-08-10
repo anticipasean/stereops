@@ -1,7 +1,7 @@
 package cyclops.kinds;
 
-import com.oath.cyclops.hkt.DataWitness.predicate;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.predicate;
+import cyclops.function.hkt.Higher;
 import java.util.function.Predicate;
 
 public interface PredicateKind<T> extends Higher<predicate, T>, Predicate<T> {

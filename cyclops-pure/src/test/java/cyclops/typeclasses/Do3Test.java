@@ -1,9 +1,9 @@
 package cyclops.typeclasses;
 
-import com.oath.cyclops.hkt.DataWitness;
+import cyclops.function.hkt.DataWitness;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.function.Lambda;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import cyclops.instances.data.SeqInstances;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import static cyclops.control.Option.some;
 import static cyclops.function.Function2._1;
 import static cyclops.function.Function2._2;
 import static cyclops.function.Function3.*;
-import static cyclops.function.Function4.___1;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 

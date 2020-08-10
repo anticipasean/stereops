@@ -1,9 +1,9 @@
 package cyclops.stream;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Adapter;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.QueueFactory;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Adapter;
+import cyclops.async.adapters.Queue;
+import cyclops.async.adapters.QueueFactory;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;

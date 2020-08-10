@@ -1,10 +1,9 @@
 package cyclops.typeclasses;
 
-import com.oath.cyclops.hkt.DataWitness;
-import com.oath.cyclops.hkt.DataWitness.option;
+import cyclops.function.hkt.DataWitness.option;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.function.Lambda;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import cyclops.instances.data.SeqInstances;
 import org.junit.Test;

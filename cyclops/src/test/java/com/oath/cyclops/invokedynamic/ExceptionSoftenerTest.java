@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.exception.ExceptionSoftener;
 import java.io.IOException;
 import java.util.function.Supplier;
 import org.junit.Test;

@@ -1,7 +1,9 @@
 package cyclops.function;
 
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.control.Future;
+import cyclops.function.cacheable.Memoize;
+import cyclops.function.companion.FluentFunctions;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.async.Future;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

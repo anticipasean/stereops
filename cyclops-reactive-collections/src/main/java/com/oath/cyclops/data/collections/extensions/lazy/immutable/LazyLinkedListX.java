@@ -1,11 +1,11 @@
 package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
 
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.persistent.PersistentList;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.persistent.PersistentList;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import java.util.Iterator;

@@ -1,9 +1,9 @@
 package cyclops.instances.control.transformers;
 
-import com.oath.cyclops.hkt.DataWitness.option;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.option;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Maybe;
-import cyclops.hkt.Nested;
+import cyclops.function.hkt.Nested;
 import cyclops.transformers.Transformer;
 import cyclops.transformers.TransformerFactory;
 import cyclops.typeclasses.monad.Monad;

@@ -1,7 +1,7 @@
 package cyclops.companion;
 
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import cyclops.function.Monoid;
+import cyclops.stream.async.SimpleReactStream;
+import cyclops.function.combiner.Monoid;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.SimpleReact;
 

@@ -2,16 +2,16 @@ package com.oath.cyclops.data.collections.extensions.standard;
 
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
-import com.oath.cyclops.types.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentCollection;
 import cyclops.companion.Streams;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.Comparator;
@@ -440,7 +440,7 @@ public interface LazyCollectionX<T> extends FluentCollectionX<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#ofType(java.lang.Class)
+     * @see cyclops.function.companion.Filters#ofType(java.lang.Class)
      */
     @Override
     default <U> LazyCollectionX<U> ofType(final Class<? extends U> type) {

@@ -1,19 +1,20 @@
 package cyclops.monads.transformers.reactor;
 
 
+import cyclops.function.companion.Filters;
+import cyclops.container.MonadicValue;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.function.*;
 
 
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.ReactiveTransformable;
+import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.ReactiveTransformable;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
-import com.oath.cyclops.types.*;
-import cyclops.data.tuple.Tuple;
+import cyclops.container.tuple.Tuple;
 
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;

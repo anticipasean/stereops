@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.oath.cyclops.anym.AnyMValue;
-import com.oath.cyclops.types.MonadicValue;
+import cyclops.container.MonadicValue;
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
@@ -19,7 +19,6 @@ import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.typeclasses.monad.Monad;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

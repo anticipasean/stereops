@@ -3,7 +3,7 @@ package cyclops.typeclasses;
 import cyclops.arrow.MonoidK;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.function.Eq;
+import cyclops.container.comparative.Eq;
 import cyclops.typeclasses.comonad.Comonad;
 import cyclops.typeclasses.foldable.Foldable;
 import cyclops.typeclasses.foldable.Unfoldable;

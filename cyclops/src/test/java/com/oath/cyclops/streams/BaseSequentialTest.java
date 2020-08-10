@@ -1,6 +1,6 @@
 package com.oath.cyclops.streams;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -14,21 +14,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Topic;
-import com.oath.cyclops.react.ThreadPools;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Topic;
+import cyclops.reactive.companion.ThreadPools;
 import cyclops.companion.Semigroups;
 import cyclops.control.LazyEither;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.HashMap;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -443,7 +443,7 @@ public class BaseSequentialTest {
     public void publishToAndMerge() {
         for (int k = 0; k < ITERATIONS; k++) {
             System.out.println("Publish toNested and zip iteration " + k);
-            com.oath.cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
+            cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
 
             Thread t = new Thread(() -> {
 

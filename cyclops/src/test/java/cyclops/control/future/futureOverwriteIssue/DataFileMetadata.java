@@ -1,6 +1,6 @@
 package cyclops.control.future.futureOverwriteIssue;
 
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.control.Either;
 import cyclops.control.LazyEither;
 import java.io.IOException;

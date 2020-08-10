@@ -4,9 +4,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.streams.BaseSequentialTest;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
 import org.junit.Test;
 

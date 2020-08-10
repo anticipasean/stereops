@@ -1,6 +1,5 @@
 package cyclops.control.reader;
 
-import cyclops.function.FluentFunctions;
 import cyclops.control.Reader;
 import org.junit.Test;
 

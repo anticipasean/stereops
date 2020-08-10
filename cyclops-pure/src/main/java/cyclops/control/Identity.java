@@ -1,16 +1,16 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.identity;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.matching.Deconstruct;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple1;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.data.tuple.Tuple5;
-import cyclops.data.tuple.Tuple6;
-import cyclops.data.tuple.Tuple7;
+import cyclops.function.hkt.DataWitness.identity;
+import cyclops.function.hkt.Higher;
+import cyclops.matching.Deconstruct;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple1;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.container.tuple.Tuple5;
+import cyclops.container.tuple.Tuple6;
+import cyclops.container.tuple.Tuple7;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;

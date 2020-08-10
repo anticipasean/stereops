@@ -1,22 +1,17 @@
 package cyclops.typeclasses;
 
-import com.oath.cyclops.hkt.DataWitness;
+import cyclops.function.hkt.DataWitness;
 import cyclops.control.Option;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.Lambda;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
-import cyclops.instances.data.LazySeqInstances;
 import cyclops.instances.data.SeqInstances;
-import cyclops.instances.data.VectorInstances;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static cyclops.control.Option.some;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static cyclops.function.Function2._1;
 import static cyclops.function.Function2._2;
 import static org.hamcrest.core.IsEqual.equalTo;

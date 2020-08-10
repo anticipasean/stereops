@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.control.Trampoline;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

@@ -1,18 +1,19 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.either;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.reactive.Completable;
+import cyclops.async.Future;
+import cyclops.function.hkt.DataWitness.either;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
+import cyclops.container.MonadicValue;
+import cyclops.reactive.Completable;
 import cyclops.companion.Semigroups;
-import cyclops.data.LazySeq;
-import cyclops.function.FluentFunctions;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.function.companion.FluentFunctions;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.InvalidObjectException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -583,7 +584,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.MonadicValue#nest()
+     * @see cyclops.container.MonadicValue#nest()
      */
 
     default LazyEither<LT, Either<LT, RT>> nest() {
@@ -606,7 +607,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.MonadicValue#unit(java.lang.Object)
+     * @see cyclops.container.MonadicValue#unit(java.lang.Object)
      */
     @Override
     default <T> LazyEither<LT, T> unit(final T unit) {
@@ -641,7 +642,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.MonadicValue#transform(java.util.function.Function)
+     * @see cyclops.container.MonadicValue#transform(java.util.function.Function)
      */
     @Override
     <R> LazyEither<LT, R> map(Function<? super RT, ? extends R> fn);
@@ -657,7 +658,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Functor#peek(java.util.function.Consumer)
+     * @see cyclops.types.Functor#peek(java.util.function.Consumer)
      */
     @Override
     LazyEither<LT, RT> peek(Consumer<? super RT> action);
@@ -687,7 +688,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Value#toIor()
+     * @see cyclops.container.Value#toIor()
      */
     @Override
     Ior<LT, RT> toIor();
@@ -695,7 +696,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.foldable.Convertable#isPresent()
+     * @see cyclops.data.foldable.Convertable#isPresent()
      */
     @Override
     default boolean isPresent() {
@@ -706,7 +707,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Value#toLazyEither(java.lang.Object)
+     * @see cyclops.container.Value#toLazyEither(java.lang.Object)
      */
     @Override
     default <ST2> Either<ST2, RT> toEither(final ST2 secondary) {
@@ -746,7 +747,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.BiTransformable#bimap(java.util.function.Function,
+     * @see cyclops.data.transformable.BiTransformable#bimap(java.util.function.Function,
      * java.util.function.Function)
      */
     @Override
@@ -762,7 +763,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.BiTransformable#bipeek(java.util.function.Consumer,
+     * @see cyclops.data.transformable.BiTransformable#bipeek(java.util.function.Consumer,
      * java.util.function.Consumer)
      */
     @Override

@@ -1,8 +1,8 @@
 package cyclops.monads.transformers;
 
 import cyclops.control.Maybe;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.monads.Witness.list;
 import cyclops.monads.Witness.maybe;
 import cyclops.reactive.collections.mutable.ListX;

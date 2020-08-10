@@ -1,24 +1,24 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.ior;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.BiTransformable;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.reactive.ValueSubscriber;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.FluentFunctions;
+import cyclops.function.hkt.DataWitness.ior;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
+import cyclops.function.companion.Filters;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.Transformable;
+import cyclops.reactive.subscriber.ValueSubscriber;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.companion.FluentFunctions;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
-import cyclops.function.Semigroup;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
+import cyclops.function.combiner.Semigroup;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.Optional;
@@ -536,7 +536,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#unit(java.lang.Object)
+     * @see cyclops.container.MonadicValue#unit(java.lang.Object)
      */
     @Override
     default <T> Ior<LT, T> unit(final T unit) {
@@ -544,13 +544,13 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#filter(java.util.function.Predicate)
+     * @see cyclops.function.companion.Filters#filter(java.util.function.Predicate)
      */
     @Override
     Option<RT> filter(Predicate<? super RT> test);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Value#toLazyEither()
+     * @see cyclops.container.Value#toLazyEither()
      */
     Either<LT, RT> toEither();
 
@@ -560,7 +560,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     Either<LT, RT> toEitherDropRight(); //drop PT
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Value#toLazyEither(java.lang.Object)
+     * @see cyclops.container.Value#toLazyEither(java.lang.Object)
      */
     @Override
     default <ST2> Either<ST2, RT> toEither(final ST2 secondary) {
@@ -577,7 +577,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     Ior<LT, RT> peekLeft(Consumer<? super LT> action);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.functor.Transformable#peek(java.util.function.Consumer)
+     * @see cyclops.data.transformable.Transformable#peek(java.util.function.Consumer)
      */
     @Override
     Ior<LT, RT> peek(Consumer<? super RT> action);
@@ -604,7 +604,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     Option<Tuple2<LT, RT>> both();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.functor.BiTransformable#bimap(java.util.function.Function, java.util.function.Function)
+     * @see cyclops.data.transformable.BiTransformable#bimap(java.util.function.Function, java.util.function.Function)
      */
     @Override
     <R1, R2> Ior<R1, R2> bimap(final Function<? super LT, ? extends R1> fn1,
@@ -648,7 +648,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     Option<RT> get();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.foldable.Convertable#isPresent()
+     * @see cyclops.data.foldable.Convertable#isPresent()
      */
     @Override
     default boolean isPresent() {

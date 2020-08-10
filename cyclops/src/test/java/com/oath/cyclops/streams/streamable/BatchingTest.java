@@ -12,11 +12,11 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.util.SimpleTimer;
+import cyclops.util.SimpleTimer;
 import cyclops.companion.Streamable;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.Vector;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

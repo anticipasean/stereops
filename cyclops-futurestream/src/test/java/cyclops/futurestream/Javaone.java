@@ -1,7 +1,7 @@
 package cyclops.futurestream;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.QueueFactories;
+import cyclops.async.adapters.Queue;
 import cyclops.companion.Streams;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;

@@ -2,10 +2,12 @@ package cyclops.function;
 
 
 import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
 import cyclops.control.Try;
+import cyclops.function.curry.Curry;
+import cyclops.function.curry.CurryVariance;
 import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 

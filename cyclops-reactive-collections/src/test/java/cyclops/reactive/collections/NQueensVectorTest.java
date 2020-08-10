@@ -4,8 +4,8 @@ import static cyclops.reactive.collections.immutable.VectorX.range;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.ImmutableList;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.ImmutableList;
+import cyclops.container.persistent.impl.Vector;
 import org.junit.Test;
 
 public class NQueensVectorTest {

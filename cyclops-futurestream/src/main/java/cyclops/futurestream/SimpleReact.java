@@ -1,10 +1,10 @@
 package cyclops.futurestream;
 
-import com.oath.cyclops.internal.react.SimpleReactStreamImpl;
-import com.oath.cyclops.internal.react.stream.ReactBuilder;
-import com.oath.cyclops.react.ThreadPools;
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import cyclops.reactive.Spouts;
+import cyclops.internal.react.SimpleReactStreamImpl;
+import cyclops.internal.react.stream.ReactBuilder;
+import cyclops.reactive.companion.ThreadPools;
+import cyclops.stream.async.SimpleReactStream;
+import cyclops.reactive.companion.Spouts;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;

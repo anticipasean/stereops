@@ -1,63 +1,64 @@
 package cyclops.reactive;
 
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Adapter;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.QueueFactory;
-import com.oath.cyclops.async.adapters.Signal;
-import com.oath.cyclops.async.adapters.Topic;
-import com.oath.cyclops.hkt.DataWitness.reactiveSeq;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.internal.stream.OneShotStreamX;
-import com.oath.cyclops.internal.stream.spliterators.ArrayConcatonatingSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.ConcatonatingSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.FillSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.IteratableSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.IteratePredicateSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.IterateSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.ReversingArraySpliterator;
-import com.oath.cyclops.internal.stream.spliterators.ReversingListSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.SingleSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.UnfoldSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.doubles.ReversingDoubleArraySpliterator;
-import com.oath.cyclops.internal.stream.spliterators.ints.ReversingIntArraySpliterator;
-import com.oath.cyclops.internal.stream.spliterators.ints.ReversingRangeIntSpliterator;
-import com.oath.cyclops.internal.stream.spliterators.longs.ReversingLongArraySpliterator;
-import com.oath.cyclops.internal.stream.spliterators.longs.ReversingRangeLongSpliterator;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Contains;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.ReactiveTransformable;
-import com.oath.cyclops.types.futurestream.Continuation;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.reactive.QueueBasedSubscriber;
-import com.oath.cyclops.types.reactive.QueueBasedSubscriber.Counter;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.types.stream.Connectable;
-import com.oath.cyclops.types.stream.PausableConnectable;
-import com.oath.cyclops.types.stream.ToStream;
-import com.oath.cyclops.types.traversable.IterableX;
-import com.oath.cyclops.types.traversable.RecoverableTraversable;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Adapter;
+import cyclops.async.adapters.Queue;
+import cyclops.async.adapters.QueueFactory;
+import cyclops.async.adapters.Signal;
+import cyclops.async.adapters.Topic;
+import cyclops.function.hkt.DataWitness.reactiveSeq;
+import cyclops.function.hkt.Higher;
+import cyclops.reactive.companion.Spouts;
+import cyclops.reactive.subscriber.QueueBasedSubscriber;
+import cyclops.stream.type.impl.OneShotStreamX;
+import cyclops.stream.spliterator.ArrayConcatonatingSpliterator;
+import cyclops.stream.spliterator.ConcatonatingSpliterator;
+import cyclops.stream.spliterator.FillSpliterator;
+import cyclops.stream.spliterator.IteratableSpliterator;
+import cyclops.stream.spliterator.IteratePredicateSpliterator;
+import cyclops.stream.spliterator.IterateSpliterator;
+import cyclops.stream.spliterator.ReversingArraySpliterator;
+import cyclops.stream.spliterator.ReversingListSpliterator;
+import cyclops.stream.spliterator.SingleSpliterator;
+import cyclops.stream.spliterator.UnfoldSpliterator;
+import cyclops.stream.spliterator.doubles.ReversingDoubleArraySpliterator;
+import cyclops.stream.spliterator.ints.ReversingIntArraySpliterator;
+import cyclops.stream.spliterator.ints.ReversingRangeIntSpliterator;
+import cyclops.stream.spliterator.longs.ReversingLongArraySpliterator;
+import cyclops.stream.spliterator.longs.ReversingRangeLongSpliterator;
+import cyclops.container.factory.Unit;
+import cyclops.container.comparative.Contains;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.ReactiveTransformable;
+import cyclops.stream.async.Continuation;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.reactive.subscriber.QueueBasedSubscriber.Counter;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.stream.type.Connectable;
+import cyclops.stream.type.PausableConnectable;
+import cyclops.stream.type.ToStream;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.RecoverableTraversable;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.companion.Streams;
 import cyclops.control.Either;
 import cyclops.control.Eval;
 import cyclops.control.LazyEither;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.Enumeration;
-import cyclops.data.HashMap;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Enumeration;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
@@ -1473,7 +1474,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
     <R> ReactiveSeq<R> coflatMap(Function<? super ReactiveSeq<T>, ? extends R> fn);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Pure#unit(java.lang.Object)
+     * @see cyclops.types.Pure#unit(java.lang.Object)
      */
     @Override
     public <T> ReactiveSeq<T> unit(T unit);
@@ -2363,7 +2364,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
     ReactiveSeq<T> sorted();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#combine(java.util.function.BiPredicate, java.util.function.BinaryOperator)
+     * @see cyclops.data.traversable.Traversable#combine(java.util.function.BiPredicate, java.util.function.BinaryOperator)
      */
     @Override
     default ReactiveSeq<T> combine(final BiPredicate<? super T, ? super T> predicate,

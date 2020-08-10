@@ -179,7 +179,7 @@ Eval<String> chained = lazy.map(this::process)
 
 # Replace mutable java maps with HashMap
 
-cyclops.data.HashMap is a performant persistent HashMap (implemented via a Hash Array mapped Trie)
+cyclops.data.persistent.impl.HashMap is a performant persistent HashMap (implemented via a Hash Array mapped Trie)
 
 ```java
 Map<String,Integer> map = new j.u.HashMap<>();
@@ -187,7 +187,7 @@ map.put("key",10)
 map.put("key2",200);
 map.remove("key");
 
-HashMap<String,Integer> map = cyclops.data.HashMap.of("key",10,"key2",200);
+HashMap<String,Integer> map = cyclops.data.persistent.impl.HashMap.of("key",10,"key2",200);
 Immutable<String,Integer> removed = map.remove("key");
 
 
@@ -462,7 +462,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Generator     | Kotlinesque Sequence Generator              |             |
 
 
-## com.oath.cyclops.async
+## cyclops.async
 
 | type | description | characteristics |
 |------|-------------|-----------------|

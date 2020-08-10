@@ -1,6 +1,6 @@
 package cyclops.typeclasses.functor;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

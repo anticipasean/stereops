@@ -1,37 +1,37 @@
 package cyclops.reactive.collections.immutable;
 
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.lazy.immutable.LazyPOrderedSetX;
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.persistent.PersistentSortedSet;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.foldable.To;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentSortedSet;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.ReactiveReducers;
 import cyclops.companion.Comparators;
 import cyclops.companion.Reducers;
 import cyclops.control.Either;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -879,7 +879,7 @@ public interface OrderedSetX<T> extends To<OrderedSetX<T>>, PersistentSortedSet<
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.recoverable.OnEmptySwitch#onEmptySwitch(java.util.function.Supplier)
+     * @see cyclops.data.recoverable.OnEmptySwitch#onEmptySwitch(java.util.function.Supplier)
      */
     @Override
     default OrderedSetX<T> onEmptySwitch(final Supplier<? extends PersistentSortedSet<T>> supplier) {

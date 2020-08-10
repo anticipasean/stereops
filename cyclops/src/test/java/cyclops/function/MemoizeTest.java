@@ -3,6 +3,8 @@ package cyclops.function;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import cyclops.function.cacheable.Memoize;
+import cyclops.function.companion.Lambda;
 import java.util.concurrent.Executors;
 import org.junit.Test;
 

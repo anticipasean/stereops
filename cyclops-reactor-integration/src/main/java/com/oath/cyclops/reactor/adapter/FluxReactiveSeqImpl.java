@@ -1,23 +1,23 @@
 package com.oath.cyclops.reactor.adapter;
 
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentCollection;
 
 import cyclops.control.*;
 
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Wither;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;

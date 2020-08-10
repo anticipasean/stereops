@@ -1,15 +1,15 @@
 package cyclops.typeclasses.cyclops;
 
-import com.oath.cyclops.hkt.DataWitness.option;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.option;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.MonoidKs;
 import cyclops.control.Option;
 import cyclops.function.Function1;
-import cyclops.function.Lambda;
+import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import org.junit.Test;
 
-import static cyclops.function.Lambda.l1;
+import static cyclops.function.companion.Lambda.l1;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 

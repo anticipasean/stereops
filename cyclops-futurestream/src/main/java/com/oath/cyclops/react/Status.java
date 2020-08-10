@@ -1,6 +1,6 @@
 package com.oath.cyclops.react;
 
-import com.oath.cyclops.types.persistent.PersistentList;
+import cyclops.container.persistent.PersistentList;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import lombok.AllArgsConstructor;
 

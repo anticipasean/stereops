@@ -1,9 +1,9 @@
 package com.oath.cyclops.streams;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.function.Supplier;

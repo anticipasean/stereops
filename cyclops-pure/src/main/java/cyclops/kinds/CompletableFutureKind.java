@@ -1,14 +1,14 @@
 package cyclops.kinds;
 
-import com.oath.cyclops.hkt.DataWitness;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
-import cyclops.control.Future;
-import cyclops.hkt.Active;
-import cyclops.hkt.Coproduct;
-import cyclops.hkt.Nested;
-import cyclops.hkt.Product;
+import cyclops.async.Future;
+import cyclops.function.hkt.Active;
+import cyclops.function.hkt.Coproduct;
+import cyclops.function.hkt.Nested;
+import cyclops.function.hkt.Product;
 import cyclops.instances.jdk.CompletableFutureInstances;
 import cyclops.typeclasses.InstanceDefinitions;
 import java.util.concurrent.CompletableFuture;

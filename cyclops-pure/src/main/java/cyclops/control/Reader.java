@@ -1,14 +1,14 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.reader;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.types.functor.Transformable;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.function.hkt.DataWitness.reader;
+import cyclops.function.hkt.Higher;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.function.Function1;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -69,7 +69,7 @@ public interface Reader<T, R> extends Function1<T, R>, Transformable<R>, Higher<
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.functor.Transformable#transform(java.util.function.Function)
+     * @see cyclops.data.transformable.Transformable#transform(java.util.function.Function)
      */
     @Override
     default <R1> Reader<T, R1> mapFn(final Function<? super R, ? extends R1> f2) {

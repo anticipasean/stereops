@@ -1,25 +1,25 @@
 package cyclops.companion;
 
 
-import com.oath.cyclops.types.persistent.PersistentBag;
-import com.oath.cyclops.types.persistent.PersistentList;
-import com.oath.cyclops.types.persistent.PersistentMap;
-import com.oath.cyclops.types.persistent.PersistentQueue;
-import com.oath.cyclops.types.persistent.PersistentSet;
-import com.oath.cyclops.types.persistent.PersistentSortedSet;
-import cyclops.data.Bag;
-import cyclops.data.BankersQueue;
-import cyclops.data.HashMap;
-import cyclops.data.HashSet;
-import cyclops.data.IntMap;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.TrieSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.PersistentBag;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.persistent.PersistentMap;
+import cyclops.container.persistent.PersistentQueue;
+import cyclops.container.persistent.PersistentSet;
+import cyclops.container.persistent.PersistentSortedSet;
+import cyclops.container.persistent.impl.Bag;
+import cyclops.container.persistent.impl.BankersQueue;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.persistent.impl.HashSet;
+import cyclops.container.persistent.impl.IntMap;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.TrieSet;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import java.util.Comparator;
 import lombok.experimental.UtilityClass;
 

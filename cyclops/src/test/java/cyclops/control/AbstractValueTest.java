@@ -6,8 +6,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.util.box.Mutable;
+import cyclops.container.MonadicValue;
+import cyclops.container.box.Mutable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.reactivestreams.Publisher;

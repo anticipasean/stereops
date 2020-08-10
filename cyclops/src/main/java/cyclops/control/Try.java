@@ -1,18 +1,18 @@
 package cyclops.control;
 
 
-import com.oath.cyclops.hkt.DataWitness.tryType;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
-import com.oath.cyclops.matching.Sealed2;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.recoverable.RecoverableFrom;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.function.hkt.DataWitness.tryType;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
+import cyclops.container.foldable.Sealed2;
+import cyclops.function.companion.Filters;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.recoverable.RecoverableFrom;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.reactive.ReactiveSeq;

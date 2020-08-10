@@ -5,7 +5,7 @@ import com.oath.cyclops.data.collections.extensions.lazy.LazyListX;
 import com.oath.cyclops.data.collections.extensions.lazy.LazyQueueX;
 import com.oath.cyclops.data.collections.extensions.lazy.LazySetX;
 import com.oath.cyclops.data.collections.extensions.lazy.LazySortedSetX;
-import com.oath.cyclops.types.foldable.Evaluation;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.collections.mutable.DequeX;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.QueueX;

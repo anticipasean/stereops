@@ -8,9 +8,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;

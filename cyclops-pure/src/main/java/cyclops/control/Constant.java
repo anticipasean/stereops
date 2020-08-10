@@ -1,12 +1,12 @@
 package cyclops.control;
 
 
-import com.oath.cyclops.hkt.DataWitness.constant;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
-import com.oath.cyclops.matching.Deconstruct;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple1;
+import cyclops.function.hkt.DataWitness.constant;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
+import cyclops.matching.Deconstruct;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple1;
 import java.io.Serializable;
 import java.util.function.Function;
 import java.util.function.Supplier;

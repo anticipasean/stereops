@@ -1,7 +1,7 @@
 package com.oath.cyclops.data.collections.extensions;
 
-import com.oath.cyclops.types.persistent.PersistentMap;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.PersistentMap;
+import cyclops.container.tuple.Tuple2;
 import java.util.Collection;
 import java.util.Map;
 

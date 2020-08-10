@@ -2,13 +2,13 @@ package cyclops.instances.control;
 
 import static cyclops.control.Constant.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.constant;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.constant;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.MonoidK;
 import cyclops.arrow.SemigroupK;
 import cyclops.control.Constant;
-import cyclops.function.Monoid;
-import cyclops.function.Semigroup;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Semigroup;
 import cyclops.typeclasses.monad.Applicative;
 import java.util.function.Function;
 

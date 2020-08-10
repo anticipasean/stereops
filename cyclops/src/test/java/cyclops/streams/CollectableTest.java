@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.types.foldable.Folds;
+import cyclops.container.foldable.Folds;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Executor;

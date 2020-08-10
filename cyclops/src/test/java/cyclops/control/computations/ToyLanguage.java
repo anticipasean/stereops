@@ -1,6 +1,6 @@
 package cyclops.control.computations;
 
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.LazyEither3;
 import cyclops.control.Unrestricted;
 import cyclops.function.Function1;

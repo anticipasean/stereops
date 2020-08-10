@@ -1,7 +1,7 @@
 package cyclops;
 
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
-import cyclops.function.Semigroup;
+import cyclops.function.combiner.Semigroup;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.OrderedSetX;

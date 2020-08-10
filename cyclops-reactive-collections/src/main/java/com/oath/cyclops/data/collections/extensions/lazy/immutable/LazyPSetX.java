@@ -1,10 +1,10 @@
 package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
 
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.persistent.PersistentSet;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.persistent.PersistentSet;
 import cyclops.control.Option;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.PersistentSetX;
 import java.util.function.Function;

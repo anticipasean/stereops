@@ -1,9 +1,9 @@
 package cyclops.typeclasses.instances;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.MonoidK;
 import cyclops.function.Function3;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.ComonadByPure;
 import cyclops.typeclasses.foldable.Foldable;

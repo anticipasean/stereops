@@ -2,18 +2,18 @@ package cyclops.instances.reactive;
 
 import static cyclops.reactive.ReactiveSeq.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.reactiveSeq;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.react.ThreadPools;
+import cyclops.function.hkt.DataWitness.reactiveSeq;
+import cyclops.function.hkt.Higher;
+import cyclops.reactive.companion.ThreadPools;
 import cyclops.arrow.MonoidK;
 import cyclops.arrow.MonoidKs;
 import cyclops.control.Either;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.Monoid;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

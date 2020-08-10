@@ -1,12 +1,12 @@
 package cyclops.typeclasses.foldable;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.MonoidK;
 import cyclops.companion.Monoids;
 import cyclops.control.Option;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.function.Monoid;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;

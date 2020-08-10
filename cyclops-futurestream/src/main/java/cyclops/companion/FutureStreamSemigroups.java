@@ -1,8 +1,8 @@
 package cyclops.companion;
 
-import com.oath.cyclops.types.futurestream.EagerFutureStreamFunctions;
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import cyclops.function.Semigroup;
+import cyclops.stream.async.EagerFutureStreamFunctions;
+import cyclops.stream.async.SimpleReactStream;
+import cyclops.function.combiner.Semigroup;
 import cyclops.futurestream.FutureStream;
 
 /**

@@ -4,10 +4,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.reactive.AsyncSubscriber;
-import com.oath.cyclops.types.reactive.ReactiveSubscriber;
+import cyclops.reactive.subscriber.AsyncSubscriber;
+import cyclops.reactive.subscriber.ReactiveSubscriber;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

@@ -1,13 +1,13 @@
 package cyclops.control;
 
-import com.oath.cyclops.types.functor.Transformable;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.data.tuple.Tuple5;
-import cyclops.data.tuple.Tuple6;
-import cyclops.data.tuple.Tuple7;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.container.tuple.Tuple5;
+import cyclops.container.tuple.Tuple6;
+import cyclops.container.tuple.Tuple7;
 import cyclops.function.Function3;
 import java.util.function.BiFunction;
 import java.util.function.Function;

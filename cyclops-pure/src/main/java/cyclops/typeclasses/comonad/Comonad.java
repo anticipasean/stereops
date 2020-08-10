@@ -1,7 +1,7 @@
 package cyclops.typeclasses.comonad;
 
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import java.util.function.Function;
 
 /**

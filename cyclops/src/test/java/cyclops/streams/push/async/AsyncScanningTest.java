@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import org.junit.Test;
 
 public class AsyncScanningTest {

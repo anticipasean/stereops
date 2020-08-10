@@ -1,22 +1,23 @@
 package com.oath.cyclops.data.collections.extensions;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.types.Unwrappable;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.functor.ReactiveTransformable;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.traversable.IterableX;
-import com.oath.cyclops.types.traversable.RecoverableTraversable;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.unwrappable.Unwrappable;
+import cyclops.container.factory.Unit;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.transformable.ReactiveTransformable;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.RecoverableTraversable;
 import cyclops.control.Maybe;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.SetX;
@@ -240,7 +241,7 @@ public interface CollectionX<T> extends IterableX<T>, Collection<T>, Unwrappable
     <T1> CollectionX<T1> from(Iterable<T1> c);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#reverse()
+     * @see cyclops.data.traversable.Traversable#reverse()
      */
     @Override
     CollectionX<T> reverse();
@@ -280,7 +281,7 @@ public interface CollectionX<T> extends IterableX<T>, Collection<T>, Unwrappable
 
 
     @Override
-    default <K> cyclops.data.HashMap<K, Vector<T>> groupBy(final Function<? super T, ? extends K> classifier) {
+    default <K> HashMap<K, Vector<T>> groupBy(final Function<? super T, ? extends K> classifier) {
         return stream().groupBy(classifier);
     }
 
@@ -379,7 +380,7 @@ public interface CollectionX<T> extends IterableX<T>, Collection<T>, Unwrappable
                                 int increment);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#scanLeft(cyclops2.function.Monoid)
+     * @see cyclops.data.traversable.Traversable#scanLeft(cyclops2.function.Monoid)
      */
     @Override
     CollectionX<T> scanLeft(Monoid<T> monoid);

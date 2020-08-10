@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.data.ImmutableList;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.ImmutableList;
+import cyclops.container.persistent.impl.Seq;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.MapX;
 import cyclops.reactive.collections.mutable.SetX;

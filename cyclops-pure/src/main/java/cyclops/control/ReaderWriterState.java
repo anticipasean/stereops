@@ -1,17 +1,17 @@
 package cyclops.control;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 
-import com.oath.cyclops.hkt.DataWitness.rws;
-import com.oath.cyclops.hkt.DataWitness.supplier;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher4;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple3;
+import cyclops.function.hkt.DataWitness.rws;
+import cyclops.function.hkt.DataWitness.supplier;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher4;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple3;
 import cyclops.free.Free;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.kinds.SupplierKind;
 import java.util.function.BiFunction;
 import java.util.function.Function;

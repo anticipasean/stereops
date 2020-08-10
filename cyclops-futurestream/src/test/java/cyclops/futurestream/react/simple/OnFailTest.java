@@ -3,7 +3,7 @@ package cyclops.futurestream.react.simple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
+import cyclops.async.adapters.Queue.ClosedQueueException;
 import cyclops.futurestream.SimpleReact;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;

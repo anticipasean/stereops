@@ -3,7 +3,7 @@ package cyclops.function;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
 import cyclops.control.Try;

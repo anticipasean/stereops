@@ -1,6 +1,6 @@
 package cyclops.companion;
 
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.reactive.ReactiveSeq;

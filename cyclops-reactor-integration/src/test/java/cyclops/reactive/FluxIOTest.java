@@ -1,9 +1,9 @@
 package cyclops.reactive;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Try;
 
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Vector;
 import org.hamcrest.MatcherAssert;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -1,8 +1,8 @@
 package cyclops.transformers;
 
 
-import com.oath.cyclops.hkt.Higher;
-import cyclops.hkt.Nested;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Nested;
 import java.util.function.Function;
 
 public interface Transformer<W1, W2, T> {

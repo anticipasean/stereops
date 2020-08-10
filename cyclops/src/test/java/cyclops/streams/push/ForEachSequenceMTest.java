@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;

@@ -1,12 +1,12 @@
 package cyclops.arrow;
 
-import com.oath.cyclops.hkt.DataWitness.kleisli;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher3;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.function.hkt.DataWitness.kleisli;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher3;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.Either;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.function.Function1;
 import cyclops.function.Function3;
 import cyclops.function.Function4;

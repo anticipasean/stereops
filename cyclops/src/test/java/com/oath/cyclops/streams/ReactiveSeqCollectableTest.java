@@ -1,6 +1,6 @@
 package com.oath.cyclops.streams;
 
-import com.oath.cyclops.types.foldable.Folds;
+import cyclops.container.foldable.Folds;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.streams.CollectableTest;
 

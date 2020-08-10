@@ -1,17 +1,17 @@
 package cyclops.instances.data.tuple;
 
-import static cyclops.data.tuple.Tuple1.narrowK;
+import static cyclops.container.tuple.Tuple1.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.tuple1;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.tuple1;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
 import cyclops.control.Either;
 import cyclops.control.Identity;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple1;
-import cyclops.function.Monoid;
+import cyclops.container.tuple.Tuple1;
+import cyclops.function.combiner.Monoid;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

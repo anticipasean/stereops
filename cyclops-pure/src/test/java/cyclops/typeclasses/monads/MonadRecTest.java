@@ -1,8 +1,8 @@
 package cyclops.typeclasses.monads;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.hkt.Higher;
-import cyclops.control.Future;
+import cyclops.function.hkt.Higher;
+import cyclops.async.Future;
 import cyclops.instances.reactive.IterableInstances;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.SetX;
@@ -10,7 +10,7 @@ import cyclops.reactive.collections.mutable.SetX;
 import cyclops.control.Maybe;
 import cyclops.control.Reader;
 import cyclops.control.Either;
-import com.oath.cyclops.hkt.DataWitness.*;
+import cyclops.function.hkt.DataWitness.*;
 import com.oath.cyclops.data.ReactiveWitness.*;
 import cyclops.instances.control.FutureInstances;
 import cyclops.instances.control.MaybeInstances;

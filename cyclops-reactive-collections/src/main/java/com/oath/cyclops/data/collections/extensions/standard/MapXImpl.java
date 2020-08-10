@@ -2,7 +2,7 @@ package com.oath.cyclops.data.collections.extensions.standard;
 
 import static cyclops.reactive.collections.mutable.MapX.defaultCollector;
 
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.collections.mutable.MapX;
 import java.util.Collection;
 import java.util.Map;

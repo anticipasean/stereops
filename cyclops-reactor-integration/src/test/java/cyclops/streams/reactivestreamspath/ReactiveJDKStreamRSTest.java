@@ -2,7 +2,7 @@ package cyclops.streams.reactivestreamspath;
 
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.companion.Streamable;
 import org.junit.Test;
 

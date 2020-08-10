@@ -1,7 +1,7 @@
 package cyclops.typeclasses.jdk;
 
 import static cyclops.kinds.CompletableFutureKind.widen;
-import static cyclops.function.Lambda.l1;
+import static cyclops.function.companion.Lambda.l1;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
@@ -9,13 +9,13 @@ import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.CompletableFuture;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 
 import cyclops.control.Maybe;
 import cyclops.function.Function1;
-import cyclops.function.Lambda;
+import cyclops.function.companion.Lambda;
 
-import com.oath.cyclops.hkt.DataWitness.completableFuture;
+import cyclops.function.hkt.DataWitness.completableFuture;
 import cyclops.instances.control.MaybeInstances;
 import cyclops.instances.jdk.CompletableFutureInstances;
 import cyclops.kinds.CompletableFutureKind;

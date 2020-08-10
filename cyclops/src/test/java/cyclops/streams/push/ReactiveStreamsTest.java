@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.companion.Streamable;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
 import org.junit.Test;
 import reactor.core.publisher.Flux;

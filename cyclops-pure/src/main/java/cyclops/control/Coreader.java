@@ -1,7 +1,7 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.coreader;
-import com.oath.cyclops.hkt.Higher2;
+import cyclops.function.hkt.DataWitness.coreader;
+import cyclops.function.hkt.Higher2;
 import java.io.Serializable;
 import java.util.function.Function;
 import lombok.AccessLevel;

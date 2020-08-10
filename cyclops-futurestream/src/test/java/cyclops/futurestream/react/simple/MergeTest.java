@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
+import cyclops.stream.async.SimpleReactStream;
 import cyclops.futurestream.SimpleReact;
 import java.util.List;
 import java.util.concurrent.ExecutionException;

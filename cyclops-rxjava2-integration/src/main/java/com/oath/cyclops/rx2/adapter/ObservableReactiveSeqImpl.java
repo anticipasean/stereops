@@ -1,18 +1,18 @@
 package com.oath.cyclops.rx2.adapter;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentCollection;
 import cyclops.companion.rx2.Observables;
 import cyclops.control.LazyEither;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import io.reactivex.Observable;
 import io.reactivex.Single;

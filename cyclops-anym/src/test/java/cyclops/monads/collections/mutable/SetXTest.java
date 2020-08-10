@@ -3,7 +3,7 @@ package cyclops.monads.collections.mutable;
 import com.oath.cyclops.anym.AnyMSeq;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.monads.Witness.set;
 import cyclops.monads.collections.AbstractAnyMSeqTest;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static java.util.Comparator.comparing;
 import static org.hamcrest.Matchers.equalTo;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 

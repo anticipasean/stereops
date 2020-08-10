@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Try;
 import cyclops.reactive.ManagedTest.Resource;
 import org.junit.Before;

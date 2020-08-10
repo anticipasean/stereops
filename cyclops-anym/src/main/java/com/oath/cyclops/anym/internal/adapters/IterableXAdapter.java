@@ -3,14 +3,13 @@ package com.oath.cyclops.anym.internal.adapters;
 import static cyclops.monads.AnyM.fromIterableX;
 import static cyclops.monads.Witness.iterableX;
 
-import java.util.Iterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.monads.AnyM;
 
 import cyclops.monads.Witness;

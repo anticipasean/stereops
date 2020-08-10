@@ -2,7 +2,7 @@ package cyclops.monads.data;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import cyclops.companion.Reducers;
-import cyclops.data.HashSet;
+import cyclops.container.persistent.impl.HashSet;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.hashSet;

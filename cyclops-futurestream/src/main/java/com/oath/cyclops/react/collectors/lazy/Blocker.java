@@ -1,8 +1,8 @@
 package com.oath.cyclops.react.collectors.lazy;
 
 import com.oath.cyclops.react.Status;
-import com.oath.cyclops.util.SimpleTimer;
-import com.oath.cyclops.util.ThrowsSoftened;
+import cyclops.util.SimpleTimer;
+import cyclops.exception.ThrowsSoftened;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.LinkedList;

@@ -1,6 +1,6 @@
 package cyclops.reactive.collections.persistent;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
 import static org.hamcrest.Matchers.equalTo;
@@ -11,13 +11,13 @@ import static org.junit.Assert.assertTrue;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.traversable.IterableX;
 import cyclops.companion.Semigroups;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.AbstractSetTest;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.mutable.SetX;

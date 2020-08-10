@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import cyclops.monads.AnyM;
 import cyclops.control.Either;
-import com.oath.cyclops.util.box.Mutable;
+import cyclops.container.box.Mutable;
 
 public class XorAnyMValueTest extends BaseAnyMValueTest<either> {
     @Before

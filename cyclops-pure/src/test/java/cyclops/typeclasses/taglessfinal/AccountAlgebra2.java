@@ -1,6 +1,6 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Option;
 import cyclops.typeclasses.Do;
 import cyclops.typeclasses.taglessfinal.Cases.Account;

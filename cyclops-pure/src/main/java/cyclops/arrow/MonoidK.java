@@ -1,8 +1,8 @@
 package cyclops.arrow;
 
 
-import com.oath.cyclops.hkt.Higher;
-import cyclops.function.Monoid;
+import cyclops.function.hkt.Higher;
+import cyclops.function.combiner.Monoid;
 
 public interface MonoidK<W> extends SemigroupK<W> {
 

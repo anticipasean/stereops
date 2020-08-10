@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import cyclops.companion.Reducers;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.BagX;
 import java.util.Arrays;

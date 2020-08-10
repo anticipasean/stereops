@@ -1,9 +1,8 @@
 package cyclops.monads.anym.value;
 
-import com.oath.cyclops.util.box.Mutable;
+import cyclops.container.box.Mutable;
 import cyclops.monads.AnyM;
 import cyclops.control.Maybe;
-import cyclops.monads.Witness;
 import cyclops.monads.Witness.maybe;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,8 +1,8 @@
 package cyclops.arrow;
 
 
-import com.oath.cyclops.hkt.Higher;
-import cyclops.function.Group;
+import cyclops.function.hkt.Higher;
+import cyclops.function.combiner.Group;
 
 public interface GroupK<W> extends MonoidK<W> {
 

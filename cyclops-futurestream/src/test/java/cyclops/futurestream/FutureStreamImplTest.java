@@ -5,9 +5,9 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.adapters.Topic;
-import com.oath.cyclops.internal.react.FutureStreamImpl;
-import com.oath.cyclops.types.reactive.ReactiveSubscriber;
+import cyclops.async.adapters.Topic;
+import cyclops.internal.react.FutureStreamImpl;
+import cyclops.types.reactive.ReactiveSubscriber;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.Spouts;
 import java.util.concurrent.CompletableFuture;

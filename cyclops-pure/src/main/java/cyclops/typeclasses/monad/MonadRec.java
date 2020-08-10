@@ -1,7 +1,7 @@
 package cyclops.typeclasses.monad;
 
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Either;
 import java.util.function.Function;
 

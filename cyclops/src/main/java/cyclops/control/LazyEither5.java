@@ -1,19 +1,20 @@
 package cyclops.control;
 
-import com.oath.cyclops.matching.Sealed5;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.BiTransformable;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.reactive.Completable;
+import cyclops.async.Future;
+import cyclops.container.foldable.Sealed5;
+import cyclops.function.companion.Filters;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.Transformable;
+import cyclops.reactive.Completable;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
@@ -498,7 +499,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     public boolean isLeft4();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#ofType(java.lang.Class)
+     * @see cyclops.function.companion.Filters#ofType(java.lang.Class)
      */
     @Override
     default <U> Maybe<U> ofType(Class<? extends U> type) {
@@ -507,7 +508,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#filterNot(java.util.function.Predicate)
+     * @see cyclops.function.companion.Filters#filterNot(java.util.function.Predicate)
      */
     @Override
     default Maybe<RT> filterNot(Predicate<? super RT> predicate) {
@@ -516,7 +517,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#notNull()
+     * @see cyclops.function.companion.Filters#notNull()
      */
     @Override
     default Maybe<RT> notNull() {
@@ -527,7 +528,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.BiTransformable#bimap(java.util.function.Function,
+     * @see cyclops.data.transformable.BiTransformable#bimap(java.util.function.Function,
      * java.util.function.Function)
      */
     @Override
@@ -537,7 +538,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.Transformable#transform(java.util.function.Function)
+     * @see cyclops.data.transformable.Transformable#transform(java.util.function.Function)
      */
     @Override
     <R> LazyEither5<LT1, LT2, LT3, LT4, R> map(Function<? super RT, ? extends R> fn);
@@ -637,7 +638,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Pure#unit(java.lang.Object)
+     * @see cyclops.types.Pure#unit(java.lang.Object)
      */
     @Override
     <T> LazyEither5<LT1, LT2, LT3, LT4, T> unit(T unit);
@@ -645,7 +646,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.BiTransformable#bipeek(java.util.function.Consumer,
+     * @see cyclops.data.transformable.BiTransformable#bipeek(java.util.function.Consumer,
      * java.util.function.Consumer)
      */
     @Override
@@ -659,7 +660,7 @@ public interface LazyEither5<LT1, LT2, LT3, LT4, RT> extends Transformable<RT>, 
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.Transformable#peek(java.util.function.Consumer)
+     * @see cyclops.data.transformable.Transformable#peek(java.util.function.Consumer)
      */
     @Override
     default LazyEither5<LT1, LT2, LT3, LT4, RT> peek(final Consumer<? super RT> c) {

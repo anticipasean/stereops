@@ -2,7 +2,7 @@ package cyclops.streams.flowables.reactivestreamspath;
 
 import static cyclops.reactive.FlowableReactiveSeq.just;
 import static cyclops.reactive.FlowableReactiveSeq.of;
-import static cyclops.reactive.Spouts.iterate;
+import static cyclops.reactive.companion.Spouts.iterate;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -12,8 +12,8 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.util.SimpleTimer;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.util.SimpleTimer;
 import cyclops.companion.Streamable;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;

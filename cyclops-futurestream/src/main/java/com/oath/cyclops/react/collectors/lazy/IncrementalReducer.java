@@ -1,8 +1,8 @@
 package com.oath.cyclops.react.collectors.lazy;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
-import com.oath.cyclops.internal.react.stream.MissingValue;
-import com.oath.cyclops.types.futurestream.BlockingStream;
+import cyclops.internal.react.async.future.FastFuture;
+import cyclops.internal.react.stream.MissingValue;
+import cyclops.stream.async.BlockingStream;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;
 import java.util.Optional;

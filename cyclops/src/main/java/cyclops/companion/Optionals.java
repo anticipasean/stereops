@@ -1,13 +1,13 @@
 package cyclops.companion;
 
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.control.Either;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.Optional;

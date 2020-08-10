@@ -2,7 +2,7 @@ package com.oath.cyclops.streams.hotstream;
 
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.stream.PausableConnectable;
+import cyclops.stream.type.PausableConnectable;
 import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;

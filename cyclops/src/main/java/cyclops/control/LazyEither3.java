@@ -1,22 +1,23 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.lazyEither3;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher3;
-import com.oath.cyclops.matching.Sealed3;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.BiTransformable;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.reactive.Completable;
+import cyclops.async.Future;
+import cyclops.function.hkt.DataWitness.lazyEither3;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher3;
+import cyclops.container.foldable.Sealed3;
+import cyclops.function.companion.Filters;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.Transformable;
+import cyclops.reactive.Completable;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
@@ -546,7 +547,7 @@ public interface LazyEither3<LT1, LT2, RT> extends Value<RT>, OrElseValue<RT, La
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.BiTransformable#bimap(java.util.function.Function,
+     * @see cyclops.data.transformable.BiTransformable#bimap(java.util.function.Function,
      * java.util.function.Function)
      */
     @Override
@@ -556,7 +557,7 @@ public interface LazyEither3<LT1, LT2, RT> extends Value<RT>, OrElseValue<RT, La
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Functor#transform(java.util.function.Function)
+     * @see cyclops.types.Functor#transform(java.util.function.Function)
      */
     @Override
     <R> LazyEither3<LT1, LT2, R> map(Function<? super RT, ? extends R> fn);
@@ -564,7 +565,7 @@ public interface LazyEither3<LT1, LT2, RT> extends Value<RT>, OrElseValue<RT, La
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Pure#unit(java.lang.Object)
+     * @see cyclops.types.Pure#unit(java.lang.Object)
      */
     @Override
     <T> LazyEither3<LT1, LT2, T> unit(T unit);
@@ -572,7 +573,7 @@ public interface LazyEither3<LT1, LT2, RT> extends Value<RT>, OrElseValue<RT, La
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.functor.BiTransformable#bipeek(java.util.function.Consumer,
+     * @see cyclops.data.transformable.BiTransformable#bipeek(java.util.function.Consumer,
      * java.util.function.Consumer)
      */
     @Override
@@ -586,7 +587,7 @@ public interface LazyEither3<LT1, LT2, RT> extends Value<RT>, OrElseValue<RT, La
     /*
      * (non-Javadoc)
      *
-     * @see com.oath.cyclops.types.Functor#peek(java.util.function.Consumer)
+     * @see cyclops.types.Functor#peek(java.util.function.Consumer)
      */
     @Override
     default LazyEither3<LT1, LT2, RT> peek(final Consumer<? super RT> c) {

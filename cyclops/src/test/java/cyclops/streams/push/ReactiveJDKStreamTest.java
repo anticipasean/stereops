@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

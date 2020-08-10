@@ -1,9 +1,7 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.DataWitness.io;
-import com.oath.cyclops.hkt.Higher;
-import cyclops.control.Either;
-import cyclops.control.Option;
+import cyclops.function.hkt.DataWitness.io;
+import cyclops.function.hkt.Higher;
 import cyclops.reactive.IO;
 
 import cyclops.typeclasses.taglessfinal.Cases.Account;

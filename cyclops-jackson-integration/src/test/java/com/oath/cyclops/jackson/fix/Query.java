@@ -1,6 +1,6 @@
 package com.oath.cyclops.jackson.fix;
 
-import cyclops.data.Seq;
+import cyclops.container.Seq;
 import javax.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

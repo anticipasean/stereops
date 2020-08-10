@@ -12,7 +12,7 @@ import cyclops.control.Unrestricted;
 import cyclops.control.computations.ToyLanguage.Bell;
 import cyclops.control.computations.ToyLanguage.Done;
 import cyclops.control.computations.ToyLanguage.Output;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import org.junit.Test;
 
 public final class UnrestrictedTest {

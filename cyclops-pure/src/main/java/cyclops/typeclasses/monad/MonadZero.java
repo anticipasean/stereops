@@ -1,6 +1,6 @@
 package cyclops.typeclasses.monad;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.typeclasses.Filterable;
 import java.util.function.Predicate;
 

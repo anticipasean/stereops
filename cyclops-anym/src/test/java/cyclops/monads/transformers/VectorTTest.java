@@ -1,15 +1,12 @@
 package cyclops.monads.transformers;
 
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.reactive.companion.Converters;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.equalTo;

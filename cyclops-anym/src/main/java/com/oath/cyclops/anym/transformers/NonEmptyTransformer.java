@@ -1,11 +1,11 @@
 package com.oath.cyclops.anym.transformers;
 
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Unwrappable;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.container.MonadicValue;
+import cyclops.container.unwrappable.Unwrappable;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.Folds;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
@@ -46,7 +46,7 @@ public abstract class NonEmptyTransformer<W extends WitnessType<W>,T> implements
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Traversable#forEachAsync(org.reactivestreams.Subscriber)
+     * @see cyclops.types.Traversable#forEachAsync(org.reactivestreams.Subscriber)
      */
      @Override
     public void subscribe(final Subscriber<? super T> s) {

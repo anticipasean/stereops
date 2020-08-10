@@ -1,6 +1,6 @@
 package cyclops.control.future.futureOverwriteIssue;
 
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

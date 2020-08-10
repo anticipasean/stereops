@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.OrElseValue;
+import cyclops.container.foldable.OrElseValue;
 import org.junit.Test;
 
 public abstract class AbstractOrElseValueTest {

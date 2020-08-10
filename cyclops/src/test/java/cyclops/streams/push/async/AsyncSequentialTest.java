@@ -1,27 +1,27 @@
 package cyclops.streams.push.async;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.async.adapters.Topic;
+import cyclops.async.adapters.Topic;
 import com.oath.cyclops.streams.BaseSequentialTest;
 import cyclops.companion.Semigroups;
 import cyclops.companion.Streamable;
 import cyclops.control.LazyEither;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

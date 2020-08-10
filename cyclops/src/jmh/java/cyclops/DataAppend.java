@@ -2,7 +2,7 @@ package cyclops;
 
 
 import com.google.common.collect.ImmutableList;
-import cyclops.data.Vector;
+import cyclops.container.Vector;
 import io.vavr.collection.Stream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

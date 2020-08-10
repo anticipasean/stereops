@@ -3,7 +3,7 @@ package com.oath.cyclops.lambda.functions;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.function.Curry;
+import cyclops.function.curry.Curry;
 import java.util.function.BiFunction;
 import org.junit.Test;
 

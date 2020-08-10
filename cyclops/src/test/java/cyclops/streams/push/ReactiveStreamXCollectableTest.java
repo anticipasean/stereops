@@ -1,7 +1,7 @@
 package cyclops.streams.push;
 
-import com.oath.cyclops.types.foldable.Folds;
-import cyclops.reactive.Spouts;
+import cyclops.container.foldable.Folds;
+import cyclops.reactive.companion.Spouts;
 import cyclops.streams.CollectableTest;
 
 

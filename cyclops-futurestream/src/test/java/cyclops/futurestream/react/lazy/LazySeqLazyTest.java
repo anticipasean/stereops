@@ -4,7 +4,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.react.base.BaseSeqLazyTest;

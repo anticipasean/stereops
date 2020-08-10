@@ -1,6 +1,6 @@
 package cyclops.reactive.collections;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -11,14 +11,14 @@ import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.companion.Monoids;
 import cyclops.companion.Reducers;
 import cyclops.companion.Semigroups;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.SetX;

@@ -1,19 +1,19 @@
 package com.oath.cyclops.anym;
 
-import com.oath.cyclops.types.Filters;
+import cyclops.function.companion.Filters;
 import cyclops.control.Option;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.control.Either;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Value;
-import cyclops.function.Predicates;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.MonadicValue;
+import cyclops.container.Value;
+import cyclops.function.companion.Predicates;
+import cyclops.container.tuple.Tuple2;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 

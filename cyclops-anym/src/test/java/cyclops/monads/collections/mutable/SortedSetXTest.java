@@ -6,7 +6,7 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.reactive.collections.mutable.SortedSetX;
 import cyclops.monads.AnyM;
 
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.monads.Witness.sortedSet;
 import cyclops.monads.collections.AbstractAnyMSeqTest;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static java.util.Comparator.comparing;
 import static org.hamcrest.Matchers.equalTo;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 

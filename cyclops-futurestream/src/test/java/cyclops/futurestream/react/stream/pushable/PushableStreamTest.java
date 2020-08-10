@@ -5,11 +5,11 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Signal;
+import cyclops.async.QueueFactories;
+import cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Signal;
 import com.oath.cyclops.react.threads.SequentialElasticPools;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;

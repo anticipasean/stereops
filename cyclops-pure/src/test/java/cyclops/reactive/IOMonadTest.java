@@ -1,12 +1,13 @@
 package cyclops.reactive;
 
-import com.oath.cyclops.hkt.DataWitness.reactiveSeq;
-import com.oath.cyclops.hkt.Higher;
-import cyclops.control.Future;
+import cyclops.function.hkt.DataWitness.reactiveSeq;
+import cyclops.function.hkt.Higher;
+import cyclops.async.Future;
 import cyclops.control.Try;
 import cyclops.instances.reactive.PublisherInstances;
 import cyclops.reactive.IOMonad.FromPublsher;
 import cyclops.reactive.IOMonad.ToPublsher;
+import cyclops.reactive.companion.Spouts;
 import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,7 +49,7 @@ public class IOMonadTest {
         }, new FromPublsher<reactiveSeq>() {
             @Override
             public <T> Function<? super Publisher<? extends T>, ? extends Higher<reactiveSeq, T>> fromPublisherFn() {
-                return p->Spouts.from(p);
+                return p-> Spouts.from(p);
             }
         })
             .map(i->i+1)

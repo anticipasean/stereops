@@ -1,16 +1,13 @@
 package cyclops.monads.data;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.companion.Reducers;
-import cyclops.data.LazySeq;
+import cyclops.container.persistent.impl.LazySeq;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.lazySeq;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 

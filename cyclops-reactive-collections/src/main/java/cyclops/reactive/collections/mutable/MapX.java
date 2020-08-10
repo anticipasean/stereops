@@ -3,19 +3,19 @@ package cyclops.reactive.collections.mutable;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.FluentMapX;
 import com.oath.cyclops.data.collections.extensions.standard.MapXImpl;
-import com.oath.cyclops.types.Unwrappable;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.BiTransformable;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.persistent.PersistentMap;
-import com.oath.cyclops.types.reactive.ReactiveStreamsTerminalOperations;
-import com.oath.cyclops.types.recoverable.OnEmpty;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.types.traversable.IterableFilterable;
+import cyclops.container.unwrappable.Unwrappable;
+import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.persistent.PersistentMap;
+import cyclops.reactive.operation.ReactiveStreamsTerminalOperations;
+import cyclops.container.recoverable.OnEmpty;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.container.traversable.IterableFilterable;
 import cyclops.companion.Streams;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;
 import java.util.Collections;
@@ -124,7 +124,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     <K, V> Collector<Tuple2<? extends K, ? extends V>, ?, Map<K, V>> getCollector();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.foldable.Folds#stream()
+     * @see cyclops.data.foldable.Folds#stream()
      */
     @Override
     default ReactiveSeq<Tuple2<K, V>> stream() {
@@ -199,7 +199,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     boolean isEmpty();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.stream.CyclopsCollectable#allMatch(java.util.function.Predicate)
+     * @see cyclops.types.stream.CyclopsCollectable#allMatch(java.util.function.Predicate)
      */
     @Override
     default boolean allMatch(final Predicate<? super Tuple2<K, V>> c) {
@@ -207,7 +207,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.stream.CyclopsCollectable#anyMatch(java.util.function.Predicate)
+     * @see cyclops.types.stream.CyclopsCollectable#anyMatch(java.util.function.Predicate)
      */
     @Override
     default boolean anyMatch(final Predicate<? super Tuple2<K, V>> c) {
@@ -215,7 +215,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.stream.CyclopsCollectable#noneMatch(java.util.function.Predicate)
+     * @see cyclops.types.stream.CyclopsCollectable#noneMatch(java.util.function.Predicate)
      */
     @Override
     default boolean noneMatch(final Predicate<? super Tuple2<K, V>> c) {
@@ -234,7 +234,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     }
 
     /* (non-Javadoc)
-     * @see FluentMapX#plusAll(com.oath.cyclops.types.persistent.PersistentMap)
+     * @see FluentMapX#plusAll(cyclops.data.persistent.PersistentMap)
      */
     @Override
     default MapX<K, V> plusAll(final PersistentMap<? extends K, ? extends V> map) {
@@ -361,7 +361,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.functor.BiTransformable#bipeek(java.util.function.Consumer, java.util.function.Consumer)
+     * @see cyclops.data.transformable.BiTransformable#bipeek(java.util.function.Consumer, java.util.function.Consumer)
      */
     @Override
     default MapX<K, V> bipeek(final Consumer<? super K> c1,
@@ -373,7 +373,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.traversable.Traversable#forEachAsync(org.reactivestreams.Subscriber)
+     * @see cyclops.data.traversable.Traversable#forEachAsync(org.reactivestreams.Subscriber)
      */
     @Override
     default void subscribe(final Subscriber<? super Tuple2<K, V>> s) {
@@ -382,7 +382,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.recoverable.OnEmpty#onEmpty(java.lang.Object)
+     * @see cyclops.data.recoverable.OnEmpty#onEmpty(java.lang.Object)
      */
     @Override
     default MapX<K, V> onEmpty(final Tuple2<K, V> value) {
@@ -391,7 +391,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.recoverable.OnEmpty#onEmptyGet(java.util.function.Supplier)
+     * @see cyclops.data.recoverable.OnEmpty#onEmptyGet(java.util.function.Supplier)
      */
     @Override
     default MapX<K, V> onEmptyGet(final Supplier<? extends Tuple2<K, V>> supplier) {
@@ -401,7 +401,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.recoverable.OnEmptySwitch#onEmptySwitch(java.util.function.Supplier)
+     * @see cyclops.data.recoverable.OnEmptySwitch#onEmptySwitch(java.util.function.Supplier)
      */
     @Override
     default MapX<K, V> onEmptySwitch(final Supplier<? extends Map<K, V>> supplier) {

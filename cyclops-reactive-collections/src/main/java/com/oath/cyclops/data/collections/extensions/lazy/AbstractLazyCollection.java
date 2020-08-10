@@ -1,8 +1,8 @@
 package com.oath.cyclops.data.collections.extensions.lazy;
 
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;
 import java.util.Iterator;

@@ -2,16 +2,16 @@ package cyclops.monads.transformers;
 
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.types.mixins.Printable;
-import com.oath.cyclops.util.box.Mutable;
+import cyclops.util.mixins.Printable;
+import cyclops.container.box.Mutable;
 import cyclops.ReactiveReducers;
 import cyclops.companion.Reducers;
 import cyclops.companion.Semigroups;
 import cyclops.companion.Streams;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.function.Monoid;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.optional;
 import cyclops.monads.transformers.reactor.MonoT;

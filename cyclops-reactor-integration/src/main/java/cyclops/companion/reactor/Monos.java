@@ -1,16 +1,14 @@
 package cyclops.companion.reactor;
 
 import com.oath.cyclops.react.Status;
-import com.oath.cyclops.types.Value;
+import cyclops.container.Value;
 import cyclops.companion.Futures;
 import cyclops.control.Either;
 import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Maybe;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.instances.control.FutureInstances;
-import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 import io.kindedj.Hk;
 import lombok.experimental.UtilityClass;
@@ -21,11 +19,9 @@ import reactor.core.publisher.Mono;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 
 /**

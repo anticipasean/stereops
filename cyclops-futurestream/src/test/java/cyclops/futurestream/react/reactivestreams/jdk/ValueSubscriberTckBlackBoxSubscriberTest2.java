@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.reactivestreams.jdk;
 
-import com.oath.cyclops.types.reactive.ValueSubscriber;
+import cyclops.types.reactive.ValueSubscriber;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.tck.SubscriberBlackboxVerification;
 import org.reactivestreams.tck.TestEnvironment;

@@ -1,0 +1,12 @@
+package cyclops.reactive.policy;
+
+import cyclops.control.Option;
+
+public enum BufferOverflowPolicy {
+    DROP,
+    BLOCK;
+
+    public <T> Option<T> match(T value) {
+        return this == DROP ? Option.none() : Option.some(value);
+    }
+}

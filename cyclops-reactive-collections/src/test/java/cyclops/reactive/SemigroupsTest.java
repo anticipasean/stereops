@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.ReactiveSemigroups;
 import cyclops.companion.Semigroups;
-import cyclops.function.Semigroup;
+import cyclops.function.combiner.Semigroup;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.OrderedSetX;

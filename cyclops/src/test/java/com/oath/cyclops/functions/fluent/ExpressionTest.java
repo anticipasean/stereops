@@ -3,8 +3,8 @@ package com.oath.cyclops.functions.fluent;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.tuple.Tuple;
-import cyclops.function.FluentFunctions;
+import cyclops.container.tuple.Tuple;
+import cyclops.function.companion.FluentFunctions;
 import java.io.IOException;
 import org.junit.Test;
 

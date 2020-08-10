@@ -1,15 +1,13 @@
 package cyclops.companion;
 
 import cyclops.companion.reactor.Fluxs;
-import cyclops.companion.reactor.Monos;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 

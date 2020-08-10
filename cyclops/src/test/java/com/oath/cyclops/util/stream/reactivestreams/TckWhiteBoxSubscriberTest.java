@@ -1,6 +1,6 @@
 package com.oath.cyclops.util.stream.reactivestreams;
 
-import com.oath.cyclops.types.reactive.QueueBasedSubscriber;
+import cyclops.reactive.subscriber.QueueBasedSubscriber;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.reactivestreams.tck.SubscriberWhiteboxVerification;

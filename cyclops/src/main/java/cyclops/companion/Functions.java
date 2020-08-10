@@ -1,15 +1,22 @@
 package cyclops.companion;
 
-import com.oath.cyclops.internal.stream.spliterators.doubles.ReversingDoubleArraySpliterator;
-import com.oath.cyclops.internal.stream.spliterators.ints.ReversingIntArraySpliterator;
-import com.oath.cyclops.types.factory.Unit;
+import cyclops.function.cacheable.Memoize;
+import cyclops.function.companion.FluentFunctions;
+import cyclops.function.companion.Predicates;
+import cyclops.function.curry.Curry;
+import cyclops.function.curry.CurryConsumer;
+import cyclops.function.curry.CurryVariance;
+import cyclops.function.partial.PartialApplicator;
+import cyclops.stream.spliterator.doubles.ReversingDoubleArraySpliterator;
+import cyclops.stream.spliterator.ints.ReversingIntArraySpliterator;
+import cyclops.container.factory.Unit;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
 import cyclops.function.Function1;
 import cyclops.function.Function2;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -28,9 +35,9 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 /**
- * Collection of useful arrow Also see {@link Semigroups} {@link Monoids} {@link cyclops.function.Predicates} {@link
- * cyclops.function.Curry} {@link cyclops.function.CurryVariance} {@link cyclops.function.CurryConsumer} {@link
- * cyclops.function.PartialApplicator} {@link cyclops.function.Memoize} {@link cyclops.function.FluentFunctions} {@link Function1}
+ * Collection of useful arrow Also see {@link Semigroups} {@link Monoids} {@link Predicates} {@link
+ * Curry} {@link CurryVariance} {@link CurryConsumer} {@link
+ * PartialApplicator} {@link Memoize} {@link FluentFunctions} {@link Function1}
  * {@link Function2} {@link Function3} {@link Function4}
  */
 public class Functions {

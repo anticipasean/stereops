@@ -1,13 +1,10 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.DataWitness;
-import com.oath.cyclops.hkt.DataWitness.io;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.io;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Option;
-import cyclops.data.HashMap;
+import cyclops.container.persistent.impl.HashMap;
 import cyclops.reactive.IO;
-
-import java.util.Map;
 
 public class StoreIO<K,V> implements StoreAlgebra<io,K,V> {
     private  HashMap<K,V> map = HashMap.empty();

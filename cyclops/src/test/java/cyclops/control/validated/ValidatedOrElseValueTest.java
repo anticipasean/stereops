@@ -1,9 +1,9 @@
 package cyclops.control.validated;
 
-import com.oath.cyclops.types.OrElseValue;
+import cyclops.container.foldable.OrElseValue;
 import cyclops.control.AbstractOrElseValueTest;
 import cyclops.control.Validated;
-import cyclops.data.NonEmptyList;
+import cyclops.container.persistent.impl.NonEmptyList;
 
 public class ValidatedOrElseValueTest extends AbstractOrElseValueTest {
 

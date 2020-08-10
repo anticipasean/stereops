@@ -1,12 +1,12 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.state;
-import com.oath.cyclops.hkt.DataWitness.supplier;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
+import cyclops.function.hkt.DataWitness.state;
+import cyclops.function.hkt.DataWitness.supplier;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
 import cyclops.control.Maybe.Nothing;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.free.Free;
 import cyclops.function.Function1;
 import cyclops.function.Function3;

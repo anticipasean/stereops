@@ -1,10 +1,7 @@
 package cyclops.companion;
 
 import cyclops.companion.reactor.Monos;
-import cyclops.control.Future;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.async.Future;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;

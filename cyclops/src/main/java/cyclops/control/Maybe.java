@@ -1,26 +1,27 @@
 package cyclops.control;
 
 
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.hkt.DataWitness.option;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Present;
-import com.oath.cyclops.types.reactive.Completable;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.data.tuple.Tuple5;
-import cyclops.data.tuple.Tuple6;
-import cyclops.data.tuple.Tuple7;
+import cyclops.async.Future;
+import cyclops.async.adapters.Queue;
+import cyclops.function.hkt.DataWitness.option;
+import cyclops.function.hkt.Higher;
+import cyclops.container.MonadicValue;
+import cyclops.container.foldable.Present;
+import cyclops.reactive.Completable;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.container.tuple.Tuple5;
+import cyclops.container.tuple.Tuple6;
+import cyclops.container.tuple.Tuple7;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.function.checked.CheckedSupplier;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.InvalidObjectException;
 import java.util.Iterator;
 import java.util.Objects;
@@ -551,7 +552,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#concatMap(java.util.function.Function)
+     * @see cyclops.container.MonadicValue#concatMap(java.util.function.Function)
      */
     @Override
     default <R> Maybe<R> concatMap(final Function<? super T, ? extends Iterable<? extends R>> mapper) {
@@ -623,7 +624,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#forEach4(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.QuadFunction)
+     * @see cyclops.container.MonadicValue#forEach4(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.QuadFunction)
      */
     @Override
     default <T2, R1, R2, R3, R> Maybe<R> forEach4(Function<? super T, ? extends MonadicValue<R1>> value1,
@@ -637,7 +638,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#forEach4(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.QuadFunction, com.oath.cyclops.util.function.QuadFunction)
+     * @see cyclops.container.MonadicValue#forEach4(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.QuadFunction, com.oath.cyclops.util.function.QuadFunction)
      */
     @Override
     default <T2, R1, R2, R3, R> Maybe<R> forEach4(Function<? super T, ? extends MonadicValue<R1>> value1,
@@ -654,7 +655,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#forEach3(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction)
+     * @see cyclops.container.MonadicValue#forEach3(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction)
      */
     @Override
     default <T2, R1, R2, R> Maybe<R> forEach3(Function<? super T, ? extends MonadicValue<R1>> value1,
@@ -667,7 +668,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#forEach3(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.TriFunction)
+     * @see cyclops.container.MonadicValue#forEach3(java.util.function.Function, java.util.function.BiFunction, com.oath.cyclops.util.function.TriFunction, com.oath.cyclops.util.function.TriFunction)
      */
     @Override
     default <T2, R1, R2, R> Maybe<R> forEach3(Function<? super T, ? extends MonadicValue<R1>> value1,
@@ -682,7 +683,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#forEach2(java.util.function.Function, java.util.function.BiFunction)
+     * @see cyclops.container.MonadicValue#forEach2(java.util.function.Function, java.util.function.BiFunction)
      */
     @Override
     default <R1, R> Maybe<R> forEach2(Function<? super T, ? extends MonadicValue<R1>> value1,
@@ -693,7 +694,7 @@ public interface Maybe<T> extends Option<T> {
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#forEach2(java.util.function.Function, java.util.function.BiFunction, java.util.function.BiFunction)
+     * @see cyclops.container.MonadicValue#forEach2(java.util.function.Function, java.util.function.BiFunction, java.util.function.BiFunction)
      */
     @Override
     default <R1, R> Maybe<R> forEach2(Function<? super T, ? extends MonadicValue<R1>> value1,

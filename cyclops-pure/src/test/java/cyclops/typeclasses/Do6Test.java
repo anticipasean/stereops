@@ -1,9 +1,9 @@
 package cyclops.typeclasses;
 
-import com.oath.cyclops.hkt.DataWitness.option;
+import cyclops.function.hkt.DataWitness.option;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.function.Lambda;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import cyclops.instances.data.SeqInstances;
 import org.junit.Test;
@@ -11,32 +11,6 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static cyclops.control.Option.some;
-import static cyclops.function.Function2._1;
-import static cyclops.function.Function2._2;
-import static cyclops.function.Function3.__1;
-import static cyclops.function.Function3.__12;
-import static cyclops.function.Function3.__2;
-import static cyclops.function.Function3.__23;
-import static cyclops.function.Function3.__3;
-import static cyclops.function.Function4.___1;
-import static cyclops.function.Function4.___12;
-import static cyclops.function.Function4.___13;
-import static cyclops.function.Function4.___14;
-import static cyclops.function.Function4.___2;
-import static cyclops.function.Function4.___23;
-import static cyclops.function.Function4.___24;
-import static cyclops.function.Function4.___3;
-import static cyclops.function.Function4.___34;
-import static cyclops.function.Function4.___4;
-import static cyclops.function.Function5.____1;
-import static cyclops.function.Function5.____12;
-import static cyclops.function.Function5.____13;
-import static cyclops.function.Function5.____14;
-import static cyclops.function.Function5.____2;
-import static cyclops.function.Function5.____23;
-import static cyclops.function.Function5.____3;
-import static cyclops.function.Function5.____34;
-import static cyclops.function.Function5.____4;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 

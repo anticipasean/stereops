@@ -1,5 +1,11 @@
 package cyclops.monads;
 
+import cyclops.container.persistent.impl.BankersQueue;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Lambda;
+import cyclops.function.companion.Predicates;
+import cyclops.reactive.companion.Spouts;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -22,33 +28,32 @@ import com.oath.cyclops.anym.AnyMValue2;
 import com.oath.cyclops.anym.internal.adapters.StreamAdapter;
 import com.oath.cyclops.anym.internal.monads.AnyMValue2Impl;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.internal.stream.ReactiveStreamX;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Unwrappable;
+import cyclops.stream.type.impl.ReactiveStreamX;
+import cyclops.function.companion.Filters;
+import cyclops.container.MonadicValue;
+import cyclops.container.unwrappable.Unwrappable;
 
-import com.oath.cyclops.types.factory.EmptyUnit;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.factory.EmptyUnit;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.Transformable;
+import cyclops.container.traversable.IterableX;
 import cyclops.companion.Streamable;
 import cyclops.control.*;
-import cyclops.data.*;
-import cyclops.data.HashSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
+import cyclops.container.persistent.impl.HashSet;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
 import cyclops.futurestream.FutureStream;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.monads.function.AnyMFunction1;
 import cyclops.monads.transformers.FutureT;
 import cyclops.monads.transformers.ListT;
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.function.*;
 import cyclops.reactive.*;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.collections.immutable.*;
 import cyclops.reactive.collections.mutable.*;
 import org.reactivestreams.Publisher;
@@ -73,10 +78,10 @@ import cyclops.monads.Witness.either;
 import cyclops.monads.Witness.*;
 import cyclops.monads.Witness.future;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import com.oath.cyclops.types.stream.ToStream;
+import cyclops.stream.type.ToStream;
 import cyclops.companion.Optionals;
 
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import static cyclops.function.evaluation.Evaluation.LAZY;
 
 /**
  *
@@ -264,7 +269,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.factory.EmptyUnit#emptyUnit()
+     * @see cyclops.container.factory.EmptyUnit#emptyUnit()
      */
     @Override
     default <T> Unit<T> emptyUnit(){
@@ -389,7 +394,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
         ReactiveSeq<T> s = matchable().fold(value -> value.stream(), seq -> seq.stream());
         ReactiveSeq<T> s2 = next.matchable().fold(value -> value.stream(), seq -> seq.stream());
         Seq<T> ag = ReactiveSeq.concat(s, s2)
-            .seq();
+                               .seq();
         return unit(ag);
     }
 
@@ -595,7 +600,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
      * @return AnyMSeq that wraps a Publisher
      */
     public static <T> AnyMSeq<reactiveSeq,T> fromPublisher(final Publisher<T> publisher) {
-        return AnyMFactory.instance.seq(Spouts.from(publisher),reactiveSeq.REACTIVE);
+        return AnyMFactory.instance.seq(Spouts.from(publisher), reactiveSeq.REACTIVE);
     }
     /**
      * Create an AnyM instance that wraps a Stream

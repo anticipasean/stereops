@@ -1,17 +1,17 @@
 package cyclops.typeclasses.cyclops;
 
-import static cyclops.function.Lambda.l1;
+import static cyclops.function.companion.Lambda.l1;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Eval;
 import cyclops.control.Maybe;
 import cyclops.control.Either;
 import cyclops.control.LazyEither;
 import cyclops.function.Function1;
-import com.oath.cyclops.hkt.DataWitness.eval;
+import cyclops.function.hkt.DataWitness.eval;
 import cyclops.instances.control.EvalInstances;
 import cyclops.instances.control.MaybeInstances;
 import org.junit.Test;

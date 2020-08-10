@@ -1,6 +1,6 @@
 package com.oath.cyclops.anym.extensability;
 
-import cyclops.function.PartialApplicator;
+import cyclops.function.partial.PartialApplicator;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;

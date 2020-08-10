@@ -1,7 +1,7 @@
 package com.oath.cyclops.react;
 
-import com.oath.cyclops.types.futurestream.ConfigurableStream;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.stream.async.ConfigurableStream;
+import cyclops.exception.ExceptionSoftener;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;

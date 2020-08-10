@@ -3,17 +3,17 @@ package cyclops.futurestream.react.lazy;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.QueueFactories;
+import cyclops.async.adapters.Queue;
 import com.oath.cyclops.react.SimpleReactFailedStageException;
 import com.oath.cyclops.react.threads.SequentialElasticPools;
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import com.oath.cyclops.types.persistent.PersistentCollection;
+import cyclops.stream.async.SimpleReactStream;
+import cyclops.container.persistent.PersistentCollection;
 import cyclops.control.Eval;
 import cyclops.control.Future;
-import cyclops.data.HashMap;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.HashMap;
+import cyclops.container.Seq;
+import cyclops.container.Vector;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.SimpleReact;
@@ -380,8 +380,8 @@ public class Tutorial {
                             () -> 3)
                    .then(it -> it + 100)
                    .peek(System.out::println)
-                   .allOf(c -> cyclops.data.HashMap.of("numbers",
-                                                       c))
+                   .allOf(c -> cyclops.container.HashMap.of("numbers",
+                                                            c))
                    .peek(System.out::println)
                    .block();
     }

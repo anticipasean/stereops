@@ -1,7 +1,7 @@
 package cyclops.stream.pushable;
 
-import com.oath.cyclops.async.adapters.Adapter;
-import cyclops.data.tuple.Tuple2;
+import cyclops.async.adapters.Adapter;
+import cyclops.container.tuple.Tuple2;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Stream;

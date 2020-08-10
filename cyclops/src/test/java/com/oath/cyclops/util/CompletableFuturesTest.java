@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.companion.CompletableFutures;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;

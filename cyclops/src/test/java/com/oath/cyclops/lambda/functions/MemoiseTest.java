@@ -1,18 +1,18 @@
 package com.oath.cyclops.lambda.functions;
 
-import static cyclops.function.Memoize.memoizeBiFunction;
-import static cyclops.function.Memoize.memoizeCallable;
-import static cyclops.function.Memoize.memoizeFunction;
-import static cyclops.function.Memoize.memoizePredicate;
-import static cyclops.function.Memoize.memoizeQuadFunction;
-import static cyclops.function.Memoize.memoizeSupplier;
+import static cyclops.function.cacheable.Memoize.memoizeBiFunction;
+import static cyclops.function.cacheable.Memoize.memoizeCallable;
+import static cyclops.function.cacheable.Memoize.memoizeFunction;
+import static cyclops.function.cacheable.Memoize.memoizePredicate;
+import static cyclops.function.cacheable.Memoize.memoizeQuadFunction;
+import static cyclops.function.cacheable.Memoize.memoizeSupplier;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Memoize;
+import cyclops.function.cacheable.Memoize;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

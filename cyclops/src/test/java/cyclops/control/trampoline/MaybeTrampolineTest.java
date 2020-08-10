@@ -2,12 +2,12 @@ package cyclops.control.trampoline;
 
 import static cyclops.control.Eval.now;
 import static cyclops.control.Maybe.just;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 
 import cyclops.control.Eval;
 import cyclops.control.Maybe;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
 import org.junit.Test;
 
 

@@ -2,12 +2,12 @@ package cyclops.reactive;
 
 import static cyclops.reactive.FlowableIO.just;
 
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.control.Future;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.async.Future;
 import cyclops.control.Try;
-import cyclops.data.Seq;
-import cyclops.function.Monoid;
-import cyclops.function.Semigroup;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Semigroup;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;

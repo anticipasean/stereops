@@ -1,11 +1,11 @@
 package cyclops.monads;
 
 
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.Either;
 import cyclops.function.*;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

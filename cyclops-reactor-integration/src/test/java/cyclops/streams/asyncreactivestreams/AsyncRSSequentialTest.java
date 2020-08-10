@@ -1,12 +1,12 @@
 package cyclops.streams.asyncreactivestreams;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.async.adapters.Topic;
+import cyclops.async.adapters.Topic;
 import com.oath.cyclops.streams.BaseSequentialTest;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.companion.Streamable;

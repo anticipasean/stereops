@@ -1,8 +1,8 @@
 package cyclops.streams.push.asyncreactivestreams;
 
 
-import com.oath.cyclops.types.foldable.Folds;
-import cyclops.reactive.Spouts;
+import cyclops.container.foldable.Folds;
+import cyclops.reactive.companion.Spouts;
 import cyclops.streams.CollectableTest;
 import java.util.concurrent.ForkJoinPool;
 import reactor.core.publisher.Flux;

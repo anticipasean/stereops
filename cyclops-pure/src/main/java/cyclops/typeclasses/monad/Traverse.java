@@ -1,16 +1,16 @@
 package cyclops.typeclasses.monad;
 
 import static cyclops.control.State.state;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Constant;
 import cyclops.control.Maybe;
 import cyclops.control.State;
-import cyclops.data.LazySeq;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.Monoid;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.combiner.Monoid;
 import cyclops.instances.control.ConstantInstances;
 import cyclops.instances.control.StateInstances;
 import cyclops.typeclasses.foldable.Foldable;

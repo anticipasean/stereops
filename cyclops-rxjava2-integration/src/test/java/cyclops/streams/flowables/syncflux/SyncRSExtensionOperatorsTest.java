@@ -21,7 +21,7 @@ import cyclops.control.Maybe;
 import cyclops.monads.AnyM;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import java.io.Serializable;
 import java.util.Arrays;

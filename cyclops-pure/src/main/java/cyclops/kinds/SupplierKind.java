@@ -1,8 +1,8 @@
 package cyclops.kinds;
 
-import com.oath.cyclops.hkt.DataWitness.supplier;
-import com.oath.cyclops.hkt.Higher;
-import cyclops.control.Future;
+import cyclops.function.hkt.DataWitness.supplier;
+import cyclops.function.hkt.Higher;
+import cyclops.async.Future;
 import cyclops.free.Free;
 import cyclops.function.Function0;
 import cyclops.instances.jdk.SupplierInstances;

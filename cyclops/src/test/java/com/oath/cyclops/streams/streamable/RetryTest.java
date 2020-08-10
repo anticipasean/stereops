@@ -3,7 +3,7 @@ package com.oath.cyclops.streams.streamable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.companion.Streamable;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;

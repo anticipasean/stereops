@@ -1,11 +1,12 @@
 package cyclops.reactive;
 
-import com.oath.cyclops.hkt.DataWitness.future;
-import com.oath.cyclops.hkt.DataWitness.reactiveSeq;
-import com.oath.cyclops.hkt.Higher;
-import cyclops.control.Future;
+import cyclops.function.hkt.DataWitness.future;
+import cyclops.function.hkt.DataWitness.reactiveSeq;
+import cyclops.function.hkt.Higher;
+import cyclops.async.Future;
 import cyclops.instances.control.FutureInstances;
 import cyclops.instances.reactive.PublisherInstances;
+import cyclops.reactive.companion.Spouts;
 import cyclops.typeclasses.monad.Monad;
 import java.util.function.Function;
 import lombok.AccessLevel;

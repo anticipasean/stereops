@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Try;
 import java.io.IOException;
 import java.net.SocketException;

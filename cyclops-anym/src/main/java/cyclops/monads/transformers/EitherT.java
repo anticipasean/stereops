@@ -1,15 +1,15 @@
 package cyclops.monads.transformers;
 
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.MonadicValue;
+import cyclops.function.companion.Filters;
+import cyclops.container.MonadicValue;
 import com.oath.cyclops.anym.transformers.NonEmptyTransformer;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.Either;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.data.tuple.Tuple;
+import cyclops.container.tuple.Tuple;
 
 import java.util.Iterator;
 import java.util.function.*;

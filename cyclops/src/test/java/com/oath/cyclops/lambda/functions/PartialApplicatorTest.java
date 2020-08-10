@@ -1,11 +1,11 @@
 package com.oath.cyclops.lambda.functions;
 
-import static cyclops.function.PartialApplicator.partial3;
-import static cyclops.function.PartialApplicator.partial4;
-import static cyclops.function.PartialApplicator.partial5;
-import static cyclops.function.PartialApplicator.partial6;
-import static cyclops.function.PartialApplicator.partial7;
-import static cyclops.function.PartialApplicator.partial8;
+import static cyclops.function.partial.PartialApplicator.partial3;
+import static cyclops.function.partial.PartialApplicator.partial4;
+import static cyclops.function.partial.PartialApplicator.partial5;
+import static cyclops.function.partial.PartialApplicator.partial6;
+import static cyclops.function.partial.PartialApplicator.partial7;
+import static cyclops.function.partial.PartialApplicator.partial8;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 

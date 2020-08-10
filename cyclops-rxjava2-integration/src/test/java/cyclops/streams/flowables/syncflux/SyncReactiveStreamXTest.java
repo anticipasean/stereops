@@ -15,14 +15,15 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.companion.Streams;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.function.Monoid;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.function.combiner.Monoid;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -875,10 +876,10 @@ public class SyncReactiveStreamXTest {
 
     @Test
     public void testGroupByEager() {
-        cyclops.data.HashMap<Integer, Vector<Integer>> map1 = of(1,
-                                                                 2,
-                                                                 3,
-                                                                 4).groupBy(i -> i % 2);
+        HashMap<Integer, Vector<Integer>> map1 = of(1,
+                                                    2,
+                                                    3,
+                                                    4).groupBy(i -> i % 2);
         assertEquals(Option.some(Vector.of(2,
                                            4)),
                      map1.get(0));

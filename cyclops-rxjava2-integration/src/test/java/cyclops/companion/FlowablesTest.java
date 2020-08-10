@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.companion.rx2.Flowables;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.Arrays;

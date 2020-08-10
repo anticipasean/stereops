@@ -1,6 +1,6 @@
 package cyclops.reactive.collections.standard;
 
-import com.oath.cyclops.types.foldable.Folds;
+import cyclops.container.foldable.Folds;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.streams.CollectableTest;
 

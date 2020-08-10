@@ -10,26 +10,26 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.persistent.PersistentList;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.control.Maybe;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.list;
 import cyclops.monads.WitnessType;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.traversable.Traversable;
+import cyclops.container.foldable.To;
+import cyclops.container.traversable.Traversable;
 import com.oath.cyclops.anym.transformers.FoldableTransformerSeq;
 import org.reactivestreams.Publisher;
 

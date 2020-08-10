@@ -3,7 +3,7 @@ package cyclops.companion;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.Bag;
+import cyclops.container.persistent.impl.Bag;
 import java.util.Arrays;
 import java.util.stream.Stream;
 import org.junit.Test;

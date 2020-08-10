@@ -1,9 +1,8 @@
 package cyclops.monads.transformers;
 
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.Reader;
-import cyclops.control.Trampoline;
 import cyclops.function.*;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;

@@ -9,15 +9,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Queue;
 import cyclops.companion.Semigroups;
 import cyclops.companion.Streamable;
 import cyclops.companion.Streams;
 import cyclops.control.Maybe;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,7 +48,7 @@ public class AsyncExtensionOperatorsTest {
 
     @Test
     public void queueTest() {
-        com.oath.cyclops.async.adapters.Queue<Integer> q = new Queue<>();
+        cyclops.async.adapters.Queue<Integer> q = new Queue<>();
         q.add(1);
         q.add(2);
         q.add(3);

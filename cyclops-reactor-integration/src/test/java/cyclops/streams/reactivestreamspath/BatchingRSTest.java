@@ -1,9 +1,9 @@
 package cyclops.streams.reactivestreamspath;
 
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.util.SimpleTimer;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.util.SimpleTimer;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.companion.Streamable;
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static cyclops.reactive.FluxReactiveSeq.of;
-import static cyclops.reactive.Spouts.iterate;
+import static cyclops.reactive.companion.Spouts.iterate;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;

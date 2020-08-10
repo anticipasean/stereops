@@ -1,7 +1,7 @@
 package cyclops.streams.push.asyncreactivestreams;
 
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.streams.AbstractReactiveSeqTest;
 import java.util.concurrent.ForkJoinPool;
 import org.junit.Ignore;

@@ -1,8 +1,8 @@
 package cyclops.free;
 
-import com.oath.cyclops.hkt.DataWitness.coyoneda;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher3;
+import cyclops.function.hkt.DataWitness.coyoneda;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher3;
 import cyclops.typeclasses.functor.Functor;
 import java.util.function.Function;
 import lombok.AccessLevel;

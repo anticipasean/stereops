@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.streams.AbstractReactiveSeqTest;

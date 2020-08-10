@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.types.mixins.Printable;
+import cyclops.util.mixins.Printable;
 import cyclops.companion.Semigroups;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.collections.mutable.ListX;

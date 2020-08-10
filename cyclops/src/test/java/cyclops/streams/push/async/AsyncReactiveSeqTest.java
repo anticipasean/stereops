@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.streams.AbstractReactiveSeqTest;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;

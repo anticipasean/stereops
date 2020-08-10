@@ -1,14 +1,14 @@
 package cyclops.futurestream.react.simple;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.futurestream.BaseSimpleReactStream;
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import cyclops.data.tuple.Tuple2;
+import cyclops.stream.async.BaseSimpleReactStream;
+import cyclops.stream.async.SimpleReactStream;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.SimpleReact;
 import java.util.List;
 import java.util.function.Supplier;

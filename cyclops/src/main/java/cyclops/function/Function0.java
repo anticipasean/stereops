@@ -2,13 +2,15 @@ package cyclops.function;
 
 
 import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
 import cyclops.control.Try;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.function.cacheable.Cacheable;
+import cyclops.function.cacheable.Memoize;
 import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

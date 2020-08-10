@@ -1,14 +1,14 @@
 package cyclops.typeclasses.cyclops;
 
-import static cyclops.function.Lambda.l1;
+import static cyclops.function.companion.Lambda.l1;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Maybe;
 import cyclops.function.Function1;
-import cyclops.function.Lambda;
-import com.oath.cyclops.hkt.DataWitness.option;
+import cyclops.function.companion.Lambda;
+import cyclops.function.hkt.DataWitness.option;
 import cyclops.arrow.MonoidKs;
 import cyclops.instances.control.MaybeInstances;
 import org.junit.Test;

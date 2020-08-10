@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Vector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;

@@ -4,17 +4,19 @@ import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import com.oath.cyclops.types.Unwrappable;
+import cyclops.function.companion.Lambda;
+import cyclops.function.companion.Predicates;
+import cyclops.container.unwrappable.Unwrappable;
 
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import com.oath.cyclops.types.factory.EmptyUnit;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.stream.ToStream;
-import cyclops.control.Future;
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.factory.EmptyUnit;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.Folds;
+import cyclops.container.transformable.Transformable;
+import cyclops.stream.type.ToStream;
+import cyclops.async.Future;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.control.*;
 import cyclops.control.Maybe;
@@ -34,7 +36,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.*;
 import java.util.stream.*;
 
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import static cyclops.function.evaluation.Evaluation.LAZY;
 
 /**
  *
@@ -246,7 +248,7 @@ public interface AnyM2<W extends WitnessType<W>,T2,T> extends   AnyM<W,T>,
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.factory.EmptyUnit#emptyUnit()
+     * @see cyclops.container.factory.EmptyUnit#emptyUnit()
      */
     @Override
     default <T> Unit<T> emptyUnit(){

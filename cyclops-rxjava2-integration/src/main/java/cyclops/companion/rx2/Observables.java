@@ -8,7 +8,7 @@ import cyclops.monads.AnyM;
 import cyclops.monads.Rx2Witness.observable;
 import cyclops.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;

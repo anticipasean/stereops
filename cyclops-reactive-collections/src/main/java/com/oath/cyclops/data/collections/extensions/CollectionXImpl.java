@@ -1,7 +1,7 @@
 package com.oath.cyclops.data.collections.extensions;
 
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.Collection;

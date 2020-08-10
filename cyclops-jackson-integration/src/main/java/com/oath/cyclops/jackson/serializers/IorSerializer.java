@@ -3,7 +3,7 @@ package com.oath.cyclops.jackson.serializers;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.control.Ior;
 import java.io.IOException;
 import lombok.AllArgsConstructor;

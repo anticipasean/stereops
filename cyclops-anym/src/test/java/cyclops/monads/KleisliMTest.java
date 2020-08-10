@@ -6,8 +6,8 @@ import cyclops.control.Either;
 import cyclops.monads.Witness.stream;
 import cyclops.monads.Witness.reactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import org.junit.Test;
 
 import java.util.stream.Collectors;

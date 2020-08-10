@@ -8,11 +8,11 @@ import static org.junit.Assert.assertThat;
 import cyclops.companion.Monoids;
 import cyclops.companion.Semigroups;
 import cyclops.control.Either;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import java.util.Arrays;
 import org.junit.Test;
 

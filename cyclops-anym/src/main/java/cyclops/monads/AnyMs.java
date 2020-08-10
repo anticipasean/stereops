@@ -2,6 +2,7 @@ package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.anym.AnyMValue;
+import cyclops.async.Future;
 import cyclops.control.*;
 import cyclops.monads.transformers.jdk.CompletableFutureT;
 import cyclops.monads.transformers.jdk.OptionalT;

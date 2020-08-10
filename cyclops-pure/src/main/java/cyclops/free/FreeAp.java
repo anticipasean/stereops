@@ -1,12 +1,12 @@
 package cyclops.free;
 
-import com.oath.cyclops.hkt.DataWitness.free;
-import com.oath.cyclops.hkt.DataWitness.freeAp;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
+import cyclops.function.hkt.DataWitness.free;
+import cyclops.function.hkt.DataWitness.freeAp;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
 import cyclops.companion.Functions;
-import cyclops.function.Lambda;
-import cyclops.function.NaturalTransformation;
+import cyclops.function.companion.Lambda;
+import cyclops.function.hkt.NaturalTransformation;
 import cyclops.instances.free.FreeApInstances;
 import cyclops.instances.free.FreeInstances;
 import cyclops.typeclasses.monad.Applicative;

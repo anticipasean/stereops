@@ -2,17 +2,17 @@ package cyclops.instances.control;
 
 import static cyclops.control.LazyEither4.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.lazyEither4;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.lazyEither4;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
 import cyclops.control.Either;
 import cyclops.control.LazyEither4;
 import cyclops.control.Option;
-import cyclops.function.Monoid;
-import cyclops.hkt.Active;
-import cyclops.hkt.Nested;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.hkt.Active;
+import cyclops.function.hkt.Nested;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;
@@ -26,7 +26,6 @@ import cyclops.typeclasses.monad.MonadRec;
 import cyclops.typeclasses.monad.MonadZero;
 import cyclops.typeclasses.monad.Traverse;
 import java.util.function.Function;
-import lombok.AllArgsConstructor;
 
 public class LazyEither4Instances {
 

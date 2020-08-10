@@ -1,8 +1,8 @@
 package cyclops.monads.anym.value;
 
 import cyclops.companion.Semigroups;
-import cyclops.control.Future;
-import cyclops.function.Monoid;
+import cyclops.async.Future;
+import cyclops.function.combiner.Monoid;
 import cyclops.companion.FutureStreamSemigroups;
 
 import cyclops.monads.Witness.future;

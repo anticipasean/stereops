@@ -1,31 +1,31 @@
 package cyclops.reactive.collections.mutable;
 
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
+import static cyclops.function.evaluation.Evaluation.LAZY;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.ReactiveWitness.set;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.lazy.LazySetX;
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.function.hkt.Higher;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.foldable.To;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.control.Either;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -595,7 +595,7 @@ public interface SetX<T> extends To<SetX<T>>, Set<T>, LazyCollectionX<T>, Higher
     }
 
     @Override
-    default SetX<cyclops.data.Vector<T>> grouped(final int groupSize) {
+    default SetX<Vector<T>> grouped(final int groupSize) {
         return (SetX) LazyCollectionX.super.grouped(groupSize);
     }
 
@@ -904,7 +904,7 @@ public interface SetX<T> extends To<SetX<T>>, Set<T>, LazyCollectionX<T>, Higher
     }
 
     @Override
-    default SetX<cyclops.data.Vector<T>> groupedUntil(final Predicate<? super T> predicate) {
+    default SetX<Vector<T>> groupedUntil(final Predicate<? super T> predicate) {
 
         return (SetX<Vector<T>>) LazyCollectionX.super.groupedUntil(predicate);
     }

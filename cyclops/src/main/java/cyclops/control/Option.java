@@ -1,28 +1,29 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.option;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.matching.Sealed2;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Present;
-import com.oath.cyclops.types.Zippable;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.recoverable.Recoverable;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.data.tuple.Tuple5;
-import cyclops.data.tuple.Tuple6;
-import cyclops.data.tuple.Tuple7;
+import cyclops.async.Future;
+import cyclops.function.hkt.DataWitness.option;
+import cyclops.function.hkt.Higher;
+import cyclops.container.foldable.Sealed2;
+import cyclops.container.MonadicValue;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.foldable.Present;
+import cyclops.function.combiner.Zippable;
+import cyclops.container.foldable.To;
+import cyclops.container.recoverable.Recoverable;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.container.tuple.Tuple5;
+import cyclops.container.tuple.Tuple6;
+import cyclops.container.tuple.Tuple7;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.function.checked.CheckedSupplier;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
@@ -616,7 +617,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     <R> Option<R> flatMap(Function<? super T, ? extends MonadicValue<? extends R>> mapper);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.foldable.Convertable#visit(java.util.function.Function, java.util.function.Supplier)
+     * @see cyclops.data.foldable.Convertable#visit(java.util.function.Function, java.util.function.Supplier)
      */
     @Override
     <R> R fold(Function<? super T, ? extends R> some,

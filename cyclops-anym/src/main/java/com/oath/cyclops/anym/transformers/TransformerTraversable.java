@@ -3,14 +3,11 @@ package com.oath.cyclops.anym.transformers;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.monads.Witness.reactiveSeq;
-import cyclops.monads.Witness;
 import cyclops.monads.transformers.SeqT;
 import cyclops.monads.transformers.VectorT;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.monads.transformers.ListT;
-import cyclops.reactive.collections.mutable.ListX;
 
 /**
  * Represents a Traversable Monad Transformer, the monad transformer instance manipulates a nested non-scalar data type

@@ -1,10 +1,10 @@
 package cyclops.control;
 
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.foldable.To;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
+import cyclops.container.Value;
+import cyclops.container.foldable.To;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
 import cyclops.function.Function0;
 import cyclops.function.Function3;
 import cyclops.reactive.ReactiveSeq;

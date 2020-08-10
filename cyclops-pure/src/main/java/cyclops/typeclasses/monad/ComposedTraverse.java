@@ -1,6 +1,6 @@
 package cyclops.typeclasses.monad;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

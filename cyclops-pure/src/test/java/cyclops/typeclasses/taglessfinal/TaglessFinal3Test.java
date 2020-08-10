@@ -1,12 +1,11 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.DataWitness;
-import com.oath.cyclops.hkt.DataWitness.identity;
-import com.oath.cyclops.hkt.DataWitness.io;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.identity;
+import cyclops.function.hkt.DataWitness.io;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Identity;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.NaturalTransformation;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.hkt.NaturalTransformation;
 import cyclops.instances.reactive.IOInstances;
 import cyclops.reactive.IO;
 import org.junit.Before;

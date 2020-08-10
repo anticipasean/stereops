@@ -1,15 +1,15 @@
 package com.oath.cyclops.util.function;
 
-import static cyclops.function.Predicates.anyOf;
-import static cyclops.function.Predicates.eq;
-import static cyclops.function.Predicates.eqv;
-import static cyclops.function.Predicates.eqv2;
-import static cyclops.function.Predicates.greaterThan;
-import static cyclops.function.Predicates.greaterThanOrEquals;
-import static cyclops.function.Predicates.in;
-import static cyclops.function.Predicates.lessThan;
-import static cyclops.function.Predicates.lessThanOrEquals;
-import static cyclops.function.Predicates.not;
+import static cyclops.function.companion.Predicates.anyOf;
+import static cyclops.function.companion.Predicates.eq;
+import static cyclops.function.companion.Predicates.eqv;
+import static cyclops.function.companion.Predicates.eqv2;
+import static cyclops.function.companion.Predicates.greaterThan;
+import static cyclops.function.companion.Predicates.greaterThanOrEquals;
+import static cyclops.function.companion.Predicates.in;
+import static cyclops.function.companion.Predicates.lessThan;
+import static cyclops.function.companion.Predicates.lessThanOrEquals;
+import static cyclops.function.companion.Predicates.not;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.control.Eval;
 import cyclops.control.Maybe;
-import cyclops.function.Predicates;
+import cyclops.function.companion.Predicates;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;

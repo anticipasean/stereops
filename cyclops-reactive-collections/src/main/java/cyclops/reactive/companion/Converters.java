@@ -1,12 +1,12 @@
 package cyclops.reactive.companion;
 
 import com.oath.cyclops.data.collections.extensions.CollectionX;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.persistent.PersistentBag;
-import com.oath.cyclops.types.persistent.PersistentList;
-import com.oath.cyclops.types.persistent.PersistentQueue;
-import com.oath.cyclops.types.persistent.PersistentSet;
-import com.oath.cyclops.types.persistent.PersistentSortedSet;
+import cyclops.container.foldable.To;
+import cyclops.container.persistent.PersistentBag;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.persistent.PersistentQueue;
+import cyclops.container.persistent.PersistentSet;
+import cyclops.container.persistent.PersistentSortedSet;
 import cyclops.companion.Reducers;
 import cyclops.reactive.collections.mutable.MapX;
 import java.util.ArrayDeque;

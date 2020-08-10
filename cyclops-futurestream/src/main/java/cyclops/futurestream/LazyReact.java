@@ -1,15 +1,15 @@
 package cyclops.futurestream;
 
-import com.oath.cyclops.async.adapters.Adapter;
-import com.oath.cyclops.internal.react.FutureStreamImpl;
-import com.oath.cyclops.internal.react.stream.InfiniteClosingSpliteratorFromSupplier;
-import com.oath.cyclops.internal.react.stream.ReactBuilder;
-import com.oath.cyclops.react.ThreadPools;
-import com.oath.cyclops.react.async.subscription.Subscription;
+import cyclops.async.adapters.Adapter;
+import cyclops.internal.react.FutureStreamImpl;
+import cyclops.internal.react.stream.InfiniteClosingSpliteratorFromSupplier;
+import cyclops.internal.react.stream.ReactBuilder;
+import cyclops.reactive.companion.ThreadPools;
+import cyclops.reactive.subscription.Subscription;
 import com.oath.cyclops.react.collectors.lazy.MaxActive;
-import cyclops.function.Cacheable;
+import cyclops.function.cacheable.Cacheable;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;

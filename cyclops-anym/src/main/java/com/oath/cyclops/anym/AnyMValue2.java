@@ -1,13 +1,15 @@
 package com.oath.cyclops.anym;
 
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Value;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Predicates;
+import cyclops.function.companion.Filters;
+import cyclops.container.MonadicValue;
+import cyclops.container.Value;
 import cyclops.control.Option;
 import cyclops.control.Either;
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.tuple.Tuple2;
 import cyclops.function.*;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyM2;
@@ -87,7 +89,7 @@ public interface AnyMValue2<W extends WitnessType<W>,T2,T> extends AnyM2<W,T2,T>
 
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue2#combine(cyclops2.function.Monoid, com.oath.cyclops.types.MonadicValue2)
+     * @see cyclops.types.MonadicValue2#combine(cyclops2.function.Monoid, cyclops.types.MonadicValue2)
      */
     default AnyMValue2<W,T2,T> combineEager(final Monoid<T> monoid, final AnyMValue<W, ? extends T> v2) {
         return unit(this.<T> flatMap(t1 -> v2.map(t2 -> monoid.apply(t1, t2)))

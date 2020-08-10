@@ -1,6 +1,6 @@
 package cyclops.free;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.LazyEither3;
 import cyclops.function.Function1;
 import cyclops.function.Function2;

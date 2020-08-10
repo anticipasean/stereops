@@ -1,6 +1,6 @@
 package cyclops.companion;
 
-import cyclops.function.Group;
+import cyclops.function.combiner.Group;
 import java.math.BigInteger;
 
 

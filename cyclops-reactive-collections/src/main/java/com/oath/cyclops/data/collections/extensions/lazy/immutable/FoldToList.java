@@ -1,6 +1,6 @@
 package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
-import com.oath.cyclops.types.persistent.PersistentList;
+import cyclops.container.persistent.PersistentList;
 import java.util.Iterator;
 
 

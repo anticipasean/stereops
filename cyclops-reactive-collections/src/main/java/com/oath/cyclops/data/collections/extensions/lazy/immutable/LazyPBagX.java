@@ -1,11 +1,11 @@
 package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
 
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.persistent.PersistentBag;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.persistent.PersistentBag;
 import cyclops.control.Option;
-import cyclops.data.Bag;
-import cyclops.function.Reducer;
+import cyclops.container.persistent.impl.Bag;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.BagX;
 import java.util.function.Function;

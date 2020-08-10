@@ -1,7 +1,7 @@
 package cyclops.instances.free;
 
-import com.oath.cyclops.hkt.DataWitness.free;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.free;
+import cyclops.function.hkt.Higher;
 import cyclops.free.Free;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.functor.Functor;

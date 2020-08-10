@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -33,10 +33,10 @@ import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.data.HashMap;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
 import cyclops.companion.*;
 import cyclops.futurestream.LazyReact;
 
@@ -44,18 +44,18 @@ import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.companion.Streamable;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.collections.mutable.ListX;
 
-import com.oath.cyclops.util.SimpleTimer;
+import cyclops.util.SimpleTimer;
 
 public abstract class AbstractAnyMSeqTest<W extends WitnessType<W>> {//@TODO extends AbstractIterableXTest{
 	public abstract <T> AnyMSeq<W,T> empty();

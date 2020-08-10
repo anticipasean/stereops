@@ -1,9 +1,9 @@
 package cyclops.typeclasses;
 
 import cyclops.control.Maybe;
-import com.oath.cyclops.hkt.DataWitness.option;
-import com.oath.cyclops.hkt.DataWitness.stream;
-import cyclops.hkt.Coproduct;
+import cyclops.function.hkt.DataWitness.option;
+import cyclops.function.hkt.DataWitness.stream;
+import cyclops.function.hkt.Coproduct;
 import cyclops.instances.jdk.StreamInstances;
 import cyclops.kinds.StreamKind;
 import org.junit.Test;

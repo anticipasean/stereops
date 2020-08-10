@@ -1,7 +1,7 @@
 package cyclops.streams.push.syncflux;
 
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.streams.AbstractReactiveSeqTest;
 
 public class SyncRSReactiveSeqTest extends AbstractReactiveSeqTest {

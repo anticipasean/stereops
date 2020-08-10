@@ -2,14 +2,14 @@ package cyclops.typeclasses;
 
 import com.oath.cyclops.data.ReactiveWitness;
 import com.oath.cyclops.data.ReactiveWitness.list;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.companion.Monoids;
-import com.oath.cyclops.hkt.DataWitness.future;
+import cyclops.function.hkt.DataWitness.future;
 
-import com.oath.cyclops.hkt.DataWitness.optional;
-import com.oath.cyclops.hkt.DataWitness.reactiveSeq;
-import cyclops.hkt.Nested;
+import cyclops.function.hkt.DataWitness.optional;
+import cyclops.function.hkt.DataWitness.reactiveSeq;
+import cyclops.function.hkt.Nested;
 import cyclops.instances.control.FutureInstances;
 import cyclops.instances.jdk.OptionalInstances;
 import cyclops.instances.reactive.PublisherInstances;

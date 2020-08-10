@@ -1,7 +1,7 @@
 package com.oath.cyclops.data.collections.extensions.lazy;
 
 
-import com.oath.cyclops.types.foldable.Evaluation;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.DequeX;
 import java.util.Deque;

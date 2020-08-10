@@ -1,8 +1,8 @@
 package cyclops.arrow;
 
 
-import com.oath.cyclops.hkt.Higher;
-import cyclops.function.Semigroup;
+import cyclops.function.hkt.Higher;
+import cyclops.function.combiner.Semigroup;
 
 @FunctionalInterface
 public interface SemigroupK<W> {

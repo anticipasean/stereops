@@ -1,9 +1,9 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.Higher;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.NaturalTransformation;
+import cyclops.function.hkt.Higher;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.hkt.NaturalTransformation;
 import cyclops.typeclasses.Do;
 import cyclops.typeclasses.monad.Monad;
 import cyclops.typeclasses.taglessfinal.Cases.Account;
@@ -11,12 +11,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.function.Function;
 
-import static cyclops.function.Function2._0;
-import static cyclops.function.Function2._1;
 import static cyclops.function.Function2._2;
 import static cyclops.function.Function3.__1;
-import static cyclops.function.Function3.__3;
-import static cyclops.function.Function4.___13;
 import static cyclops.function.Function4.___4;
 import static cyclops.function.Function5.____24;
 

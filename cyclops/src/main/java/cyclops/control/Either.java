@@ -1,26 +1,26 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.either;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
-import com.oath.cyclops.matching.Sealed2;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.factory.Unit;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.BiTransformable;
-import com.oath.cyclops.types.functor.Transformable;
-import com.oath.cyclops.types.reactive.ValueSubscriber;
+import cyclops.function.hkt.DataWitness.either;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
+import cyclops.container.foldable.Sealed2;
+import cyclops.function.companion.Filters;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.Value;
+import cyclops.container.factory.Unit;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.Transformable;
+import cyclops.reactive.subscriber.ValueSubscriber;
 import cyclops.companion.Semigroups;
-import cyclops.data.LazySeq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.function.FluentFunctions;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple2;
+import cyclops.function.companion.FluentFunctions;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Iterator;
@@ -605,14 +605,14 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
 
     //cojoin
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#nest()
+     * @see cyclops.container.MonadicValue#nest()
      */
     default Either<LT, Either<LT, RT>> nest() {
         return this.map(t -> unit(t));
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#unit(java.lang.Object)
+     * @see cyclops.container.MonadicValue#unit(java.lang.Object)
      */
     @Override
     default <T> Either<LT, T> unit(final T unit) {
@@ -620,7 +620,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#filter(java.util.function.Predicate)
+     * @see cyclops.function.companion.Filters#filter(java.util.function.Predicate)
      */
     @Override
     Option<RT> filter(Predicate<? super RT> test);
@@ -645,7 +645,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     <R> Either<R, RT> mapLeft(Function<? super LT, ? extends R> fn);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.MonadicValue#transform(java.util.function.Function)
+     * @see cyclops.container.MonadicValue#transform(java.util.function.Function)
      */
     @Override
     <R> Either<LT, R> map(Function<? super RT, ? extends R> fn);
@@ -659,7 +659,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     Either<LT, RT> peekLeft(Consumer<? super LT> action);
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Functor#peek(java.util.function.Consumer)
+     * @see cyclops.types.Functor#peek(java.util.function.Consumer)
      */
     @Override
     Either<LT, RT> peek(Consumer<? super RT> action);
@@ -686,7 +686,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     Either<RT, LT> swap();
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.foldable.Convertable#isPresent()
+     * @see cyclops.data.foldable.Convertable#isPresent()
      */
     @Override
     default boolean isPresent() {
@@ -694,7 +694,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Value#toLazyEither(java.lang.Object)
+     * @see cyclops.container.Value#toLazyEither(java.lang.Object)
      */
     @Override
     default <ST2> Either<ST2, RT> toEither(final ST2 left) {
@@ -741,7 +741,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.functor.BiTransformable#bipeek(java.util.function.Consumer, java.util.function.Consumer)
+     * @see cyclops.data.transformable.BiTransformable#bipeek(java.util.function.Consumer, java.util.function.Consumer)
      */
     @Override
     default Either<LT, RT> bipeek(Consumer<? super LT> c1,

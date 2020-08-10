@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.control.Option;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.function.Supplier;
 import org.junit.Test;
 

@@ -1,15 +1,15 @@
 package cyclops.monads.transformers.rx2;
 
 
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.ReactiveTransformable;
+import cyclops.function.companion.Filters;
+import cyclops.container.MonadicValue;
+import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.ReactiveTransformable;
 import cyclops.companion.rx2.Functions;
 import cyclops.companion.rx2.Maybes;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple;
+import cyclops.container.tuple.Tuple;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.monads.AnyM;

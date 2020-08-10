@@ -1,50 +1,50 @@
 package cyclops.futurestream;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Adapter;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Queue.ClosedQueueException;
-import com.oath.cyclops.async.adapters.Queue.QueueTimeoutException;
-import com.oath.cyclops.async.adapters.QueueFactory;
-import com.oath.cyclops.internal.react.async.future.FastFuture;
-import com.oath.cyclops.internal.react.exceptions.SimpleReactProcessingException;
-import com.oath.cyclops.internal.react.stream.CloseableIterator;
-import com.oath.cyclops.internal.react.stream.LazyStreamWrapper;
-import com.oath.cyclops.internal.react.stream.traits.future.operators.LazyFutureStreamUtils;
-import com.oath.cyclops.internal.react.stream.traits.future.operators.OperationsOnFuturesImpl;
-import com.oath.cyclops.internal.stream.FutureOpterationsImpl;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Adapter;
+import cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Queue.ClosedQueueException;
+import cyclops.async.adapters.Queue.QueueTimeoutException;
+import cyclops.async.adapters.QueueFactory;
+import cyclops.internal.react.async.future.FastFuture;
+import cyclops.exception.SimpleReactProcessingException;
+import cyclops.internal.react.stream.CloseableIterator;
+import cyclops.internal.react.stream.LazyStreamWrapper;
+import cyclops.internal.react.stream.traits.future.operators.LazyFutureStreamUtils;
+import cyclops.internal.react.stream.traits.future.operators.OperationsOnFuturesImpl;
+import cyclops.stream.FutureOpterationsImpl;
 import com.oath.cyclops.react.SimpleReactFailedStageException;
-import com.oath.cyclops.react.async.subscription.Continueable;
+import cyclops.reactive.subscription.Continueable;
 import com.oath.cyclops.react.collectors.lazy.LazyResultConsumer;
-import com.oath.cyclops.types.futurestream.ConfigurableStream;
-import com.oath.cyclops.types.futurestream.LazyFutureStreamFunctions;
-import com.oath.cyclops.types.futurestream.LazySimpleReactStream;
-import com.oath.cyclops.types.futurestream.LazyStream;
-import com.oath.cyclops.types.futurestream.LazyToQueue;
-import com.oath.cyclops.types.futurestream.OperationsOnFutures;
-import com.oath.cyclops.types.futurestream.SimpleReactStream;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.reactive.FutureStreamSynchronousPublisher;
-import com.oath.cyclops.types.reactive.ReactiveStreamsTerminalFutureOperations;
-import com.oath.cyclops.types.stream.Connectable;
-import com.oath.cyclops.types.traversable.IterableX;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.stream.async.ConfigurableStream;
+import cyclops.stream.async.LazyFutureStreamFunctions;
+import cyclops.stream.async.LazySimpleReactStream;
+import cyclops.stream.async.LazyStream;
+import cyclops.stream.async.LazyToQueue;
+import cyclops.stream.async.OperationsOnFutures;
+import cyclops.stream.async.SimpleReactStream;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.reactive.FutureStreamSynchronousPublisher;
+import cyclops.reactive.operation.ReactiveStreamsTerminalFutureOperations;
+import cyclops.stream.type.Connectable;
+import cyclops.container.traversable.IterableX;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.companion.Streamable;
 import cyclops.companion.Streams;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.LazyEither;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Lambda;
-import cyclops.function.Monoid;
+import cyclops.function.companion.Lambda;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.ArrayList;
@@ -529,7 +529,7 @@ public interface FutureStream<U> extends LazySimpleReactStream<U>, LazyStream<U>
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Zippable#zip(java.util.function.BiFunction, org.reactivestreams.Publisher)
+     * @see cyclops.function.combiner.Zippable#zip(java.util.function.BiFunction, org.reactivestreams.Publisher)
      */
     @Override
     default <T2, R> FutureStream<R> zip(BiFunction<? super U, ? super T2, ? extends R> fn,

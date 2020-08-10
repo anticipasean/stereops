@@ -1,7 +1,6 @@
 package cyclops.streams.asyncreactivestreams;
 
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.companion.reactor.Fluxs;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Before;

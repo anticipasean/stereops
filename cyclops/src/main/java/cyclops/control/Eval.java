@@ -1,29 +1,30 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.eval;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.matching.Deconstruct.Deconstruct1;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.reactive.Completable;
-import com.oath.cyclops.util.ExceptionSoftener;
-import com.oath.cyclops.util.box.Mutable;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple1;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.data.tuple.Tuple5;
-import cyclops.data.tuple.Tuple6;
-import cyclops.data.tuple.Tuple7;
+import cyclops.async.Future;
+import cyclops.function.hkt.DataWitness.eval;
+import cyclops.function.hkt.Higher;
+import cyclops.matching.Deconstruct.Deconstruct1;
+import cyclops.container.MonadicValue;
+import cyclops.container.foldable.To;
+import cyclops.reactive.Completable;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.container.box.Mutable;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple1;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.container.tuple.Tuple5;
+import cyclops.container.tuple.Tuple6;
+import cyclops.container.tuple.Tuple7;
 import cyclops.function.Function0;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Memoize;
-import cyclops.function.Monoid;
-import cyclops.function.Reducer;
+import cyclops.function.cacheable.Memoize;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -486,7 +487,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstruct1<T>, Mon
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.Filters#filterNot(java.util.function.Predicate)
+     * @see cyclops.function.companion.Filters#filterNot(java.util.function.Predicate)
      */
     @Override
     default Maybe<T> filterNot(final Predicate<? super T> fn) {

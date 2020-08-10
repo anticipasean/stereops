@@ -1,7 +1,7 @@
 package com.oath.cyclops.react.collectors.lazy;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
-import com.oath.cyclops.types.futurestream.BlockingStream;
+import cyclops.internal.react.async.future.FastFuture;
+import cyclops.stream.async.BlockingStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

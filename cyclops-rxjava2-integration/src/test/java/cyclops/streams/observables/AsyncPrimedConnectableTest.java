@@ -4,11 +4,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.types.stream.PausableConnectable;
+import cyclops.stream.type.PausableConnectable;
 import cyclops.companion.rx2.Observables;
 import cyclops.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;

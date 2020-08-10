@@ -12,16 +12,15 @@ import cyclops.reactive.collections.mutable.QueueX;
 import cyclops.reactive.collections.mutable.SetX;
 import cyclops.reactive.collections.mutable.SortedSetX;
 
+import cyclops.reactive.companion.Spouts;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
@@ -37,7 +36,7 @@ public class FluxCollectionsTest {
     @Before
     public void setup(){
         complete = new AtomicBoolean(false);
-        async =  Flux.from(Spouts.reactive(Stream.of(100,100,100), ex))
+        async =  Flux.from(Spouts.reactive(Stream.of(100, 100, 100), ex))
             .map(i->{
                 try {
                     Thread.sleep(500);

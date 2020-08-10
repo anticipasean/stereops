@@ -13,9 +13,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.control.Option;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;
@@ -799,10 +799,10 @@ public class BaseSequentialTest {
 
     @Test
     public void testGroupByEager() {
-        cyclops.data.HashMap<Integer, Vector<Integer>> map1 = of(1,
-                                                                 2,
-                                                                 3,
-                                                                 4).groupBy(i -> i % 2);
+        cyclops.container.HashMap<Integer, Vector<Integer>> map1 = of(1,
+                                                                      2,
+                                                                      3,
+                                                                      4).groupBy(i -> i % 2);
         assertEquals(Option.some(Vector.of(2,
                                            4)),
                      map1.get(0));

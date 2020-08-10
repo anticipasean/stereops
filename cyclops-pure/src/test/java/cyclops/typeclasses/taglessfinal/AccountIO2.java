@@ -1,7 +1,6 @@
 package cyclops.typeclasses.taglessfinal;
 
-import com.oath.cyclops.hkt.DataWitness;
-import com.oath.cyclops.hkt.DataWitness.io;
+import cyclops.function.hkt.DataWitness.io;
 import cyclops.instances.reactive.IOInstances;
 import cyclops.typeclasses.Do;
 import cyclops.typeclasses.taglessfinal.Cases.Account;

@@ -1,7 +1,7 @@
 package com.oath.cyclops.comprehensions;
 
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

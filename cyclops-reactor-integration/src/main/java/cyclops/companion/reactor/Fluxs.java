@@ -1,11 +1,10 @@
 package cyclops.companion.reactor;
 
 import cyclops.control.Either;
-import cyclops.control.Future;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import lombok.experimental.UtilityClass;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;

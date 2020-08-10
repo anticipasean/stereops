@@ -12,10 +12,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.Vector;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Monoid;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
@@ -506,10 +506,10 @@ public class LFSNoOrderTest {
 
     @Test
     public void testGroupByEager() {
-        cyclops.data.HashMap<Integer, Vector<Integer>> map1 = of(1,
-                                                                 2,
-                                                                 3,
-                                                                 4).groupBy(i -> i % 2);
+        cyclops.container.HashMap<Integer, Vector<Integer>> map1 = of(1,
+                                                                      2,
+                                                                      3,
+                                                                      4).groupBy(i -> i % 2);
 
         assertThat(map1.getOrElse(0,
                                   Vector.empty())

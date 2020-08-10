@@ -3,13 +3,13 @@ package cyclops.companion;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.Chain;
-import cyclops.data.IntMap;
-import cyclops.data.LazySeq;
-import cyclops.data.NonEmptyChain;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.function.Semigroup;
+import cyclops.container.persistent.impl.Chain;
+import cyclops.container.persistent.impl.IntMap;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.NonEmptyChain;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.function.combiner.Semigroup;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ public class SemigroupsTest {
 
     @Test
     public void testChainConcat() {
-        Chain<Integer> list = cyclops.data.Chain.empty();
+        Chain<Integer> list = Chain.empty();
         list = list.plus(1);
         list = list.plus(2);
         list = list.plus(4);
@@ -61,7 +61,7 @@ public class SemigroupsTest {
 
     @Test
     public void testCollectionConcatPVector() {
-        cyclops.data.Vector<Integer> list = cyclops.data.Vector.empty();
+        Vector<Integer> list = Vector.empty();
         list = list.plus(1);
         list = list.plus(2);
         list = list.plus(4);
@@ -138,7 +138,7 @@ public class SemigroupsTest {
 
     @Test
     public void testCollectionConcatPVector2() {
-        cyclops.data.Vector<Integer> list = cyclops.data.Vector.empty();
+        Vector<Integer> list = Vector.empty();
         list = list.plus(1);
         list = list.plus(2);
         list = list.plus(4);

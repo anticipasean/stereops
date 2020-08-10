@@ -1,12 +1,9 @@
 package cyclops.typeclasses;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Option;
-import cyclops.instances.control.OptionInstances;
-import cyclops.typeclasses.monad.MonadZero;
 import org.junit.Test;
 
-import static cyclops.control.Option.some;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 

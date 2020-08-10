@@ -9,7 +9,7 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.companion.rx2.Observables;
 import cyclops.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.ArrayList;
 import java.util.Arrays;

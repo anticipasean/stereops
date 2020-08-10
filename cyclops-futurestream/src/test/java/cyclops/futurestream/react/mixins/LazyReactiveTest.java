@@ -2,7 +2,7 @@ package cyclops.futurestream.react.mixins;
 
 import static org.junit.Assert.assertFalse;
 
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Queue;
 import cyclops.futurestream.Pipes;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;

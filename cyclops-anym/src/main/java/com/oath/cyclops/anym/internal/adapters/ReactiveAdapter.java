@@ -1,12 +1,12 @@
 package com.oath.cyclops.anym.internal.adapters;
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
-import com.oath.cyclops.internal.stream.ReactiveStreamX;
+import cyclops.stream.type.impl.ReactiveStreamX;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.StreamWitness;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 

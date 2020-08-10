@@ -3,7 +3,7 @@ import cyclops.control.Eval;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.reactive.collections.mutable.ListX;
 import com.oath.cyclops.anym.transformers.ValueTransformer;
 import org.junit.Test;

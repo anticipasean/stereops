@@ -1,10 +1,10 @@
 package cyclops.streams.push;
 
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.control.Option;
-import cyclops.data.basetests.AbstractIterableXTest;
-import cyclops.data.tuple.Tuple2;
-import cyclops.reactive.Spouts;
+import cyclops.container.basetests.AbstractIterableXTest;
+import cyclops.container.tuple.Tuple2;
+import cyclops.reactive.companion.Spouts;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;

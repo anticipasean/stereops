@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.base;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
 import static org.hamcrest.Matchers.equalTo;
@@ -16,14 +16,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Queue;
 import com.oath.cyclops.util.SimpleTimer;
 import cyclops.control.Option;
-import cyclops.data.ImmutableMap;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.ImmutableMap;
+import cyclops.container.TreeSet;
+import cyclops.container.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.MapX;
@@ -454,9 +454,9 @@ public abstract class BaseSeqTest {
         //for(int index=0;index<100;index++)
         {
 
-            ImmutableMap<Integer, Queue<Integer>> shards = cyclops.data.HashMap.of(0,
-                                                                                   new Queue<Integer>())
-                                                                               .put(1,
+            ImmutableMap<Integer, Queue<Integer>> shards = cyclops.container.HashMap.of(0,
+                                                                                        new Queue<Integer>())
+                                                                                    .put(1,
                                                                                     new Queue());
 
             Map<Integer, ? extends FutureStream<Integer>> sharded = of(1,

@@ -2,9 +2,9 @@ package com.oath.cyclops;
 
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.CollectionXImpl;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.foldable.ConvertableSequence;
-import com.oath.cyclops.types.foldable.Evaluation;
+import cyclops.container.Value;
+import cyclops.container.persistent.impl.ConvertableSequence;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.companion.Streamable;
 import cyclops.companion.Streams;
 import cyclops.control.Eval;

@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.async.adapters.Queue;
-import cyclops.data.tuple.Tuple2;
+import cyclops.async.adapters.Queue;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.LazyReact;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;

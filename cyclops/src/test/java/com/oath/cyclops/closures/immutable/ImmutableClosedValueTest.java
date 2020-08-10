@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.util.box.LazyImmutable;
+import cyclops.container.box.LazyImmutable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;

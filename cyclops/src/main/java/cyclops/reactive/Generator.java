@@ -1,10 +1,10 @@
 package cyclops.reactive;
 
-import com.oath.cyclops.types.foldable.ConvertableSequence;
-import com.oath.cyclops.types.stream.ToStream;
+import cyclops.container.persistent.impl.ConvertableSequence;
+import cyclops.stream.type.ToStream;
 import cyclops.control.Ior;
 import cyclops.control.Maybe;
-import cyclops.function.BooleanFunction0;
+import cyclops.function.predicate.BooleanFunction0;
 import cyclops.function.Function0;
 import cyclops.function.Function1;
 import java.util.Arrays;

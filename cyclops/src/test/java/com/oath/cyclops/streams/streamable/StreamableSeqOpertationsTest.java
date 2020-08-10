@@ -11,10 +11,10 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.companion.Streamable;
 import cyclops.control.Option;
-import cyclops.data.HashMap;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.base;
 
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -15,14 +15,14 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Queue;
 import com.oath.cyclops.util.SimpleTimer;
 import cyclops.control.Option;
-import cyclops.data.ImmutableMap;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.ImmutableMap;
+import cyclops.container.Seq;
+import cyclops.container.TreeSet;
+import cyclops.container.Vector;
+import cyclops.container.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
@@ -485,9 +485,9 @@ public abstract class BaseSequentialSeqTest {
     public void shardStreams() {
 
         for (int index = 0; index < 100; index++) {
-            ImmutableMap<Integer, Queue<Integer>> shards = cyclops.data.HashMap.of(0,
-                                                                                   new Queue<Integer>())
-                                                                               .put(1,
+            ImmutableMap<Integer, Queue<Integer>> shards = cyclops.container.HashMap.of(0,
+                                                                                        new Queue<Integer>())
+                                                                                    .put(1,
                                                                                     new Queue());
 
             Map<Integer, ? extends FutureStream<Integer>> sharded = of(1,
@@ -911,10 +911,10 @@ public abstract class BaseSequentialSeqTest {
 
     @Test
     public void testGroupByEager() {
-        cyclops.data.HashMap<Integer, Vector<Integer>> map1 = of(1,
-                                                                 2,
-                                                                 3,
-                                                                 4).groupBy(i -> i % 2);
+        cyclops.container.HashMap<Integer, Vector<Integer>> map1 = of(1,
+                                                                      2,
+                                                                      3,
+                                                                      4).groupBy(i -> i % 2);
         assertEquals(Option.some(Vector.of(2,
                                            4)),
                      map1.get(0));

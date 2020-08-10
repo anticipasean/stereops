@@ -12,15 +12,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Topic;
-import com.oath.cyclops.types.reactive.AsyncSubscriber;
-import com.oath.cyclops.types.reactive.ReactiveSubscriber;
+import cyclops.async.companion.QueueFactories;
+import cyclops.async.adapters.Topic;
 import cyclops.companion.Monoids;
 import cyclops.companion.Semigroups;
-import cyclops.data.Seq;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.tuple.Tuple2;
 import cyclops.function.Effect;
+import cyclops.reactive.companion.Spouts;
+import cyclops.reactive.subscriber.AsyncSubscriber;
+import cyclops.reactive.subscriber.ReactiveSubscriber;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -1144,7 +1145,7 @@ public class SpoutsTest {
 
     @Test
     public void publishToAndMerge() {
-        com.oath.cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
+        cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
 
         Thread t = new Thread(() -> {
 

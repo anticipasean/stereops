@@ -1,13 +1,12 @@
 package cyclops.streams.asyncreactivestreams;
 
-import cyclops.companion.reactor.Fluxs;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.reactive.companion.Spouts;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.container.tuple.Tuple.tuple;
 import static org.junit.Assert.*;
 
 public class AsyncRSZippingTest {

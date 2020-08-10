@@ -1,6 +1,6 @@
 package cyclops.monads.transformers;
 
-import cyclops.data.LazySeq;
+import cyclops.container.persistent.impl.LazySeq;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import org.junit.Test;

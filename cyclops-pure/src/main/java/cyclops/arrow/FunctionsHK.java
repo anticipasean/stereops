@@ -1,6 +1,6 @@
 package cyclops.arrow;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.function.Function1;
 import cyclops.typeclasses.functor.Functor;
 import cyclops.typeclasses.monad.Monad;

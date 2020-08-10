@@ -1,9 +1,9 @@
 package cyclops.monads;
 
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.foldable.Folds;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.function.companion.Filters;
+import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.Transformable;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.PersistentSetX;
 import cyclops.reactive.collections.immutable.VectorX;

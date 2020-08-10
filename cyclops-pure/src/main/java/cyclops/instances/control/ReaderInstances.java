@@ -2,19 +2,19 @@ package cyclops.instances.control;
 
 import static cyclops.control.Reader.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.reader;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.reader;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
 import cyclops.control.Either;
 import cyclops.control.Option;
 import cyclops.control.Reader;
-import cyclops.function.Monoid;
-import cyclops.hkt.Active;
-import cyclops.hkt.Coproduct;
-import cyclops.hkt.Nested;
-import cyclops.hkt.Product;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.hkt.Active;
+import cyclops.function.hkt.Coproduct;
+import cyclops.function.hkt.Nested;
+import cyclops.function.hkt.Product;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

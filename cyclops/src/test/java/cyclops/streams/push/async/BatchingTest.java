@@ -1,6 +1,6 @@
 package cyclops.streams.push.async;
 
-import static cyclops.reactive.Spouts.iterate;
+import static cyclops.reactive.companion.Spouts.iterate;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -10,11 +10,11 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.util.SimpleTimer;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
+import cyclops.util.SimpleTimer;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

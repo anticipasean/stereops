@@ -16,6 +16,7 @@ import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.QueueX;
 import cyclops.reactive.collections.mutable.SetX;
 import cyclops.reactive.collections.mutable.SortedSetX;
+import cyclops.reactive.companion.Spouts;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
 import java.util.concurrent.Executor;

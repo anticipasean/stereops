@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
+import cyclops.internal.react.async.future.FastFuture;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.BDDMockito;

@@ -3,7 +3,7 @@ package com.oath.cyclops.react.collectors.lazy;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
+import cyclops.internal.react.async.future.FastFuture;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;

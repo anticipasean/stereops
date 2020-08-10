@@ -3,7 +3,7 @@ package com.oath.cyclops.invokedynamic;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.exception.ExceptionSoftener;
 import java.io.IOException;
 import org.junit.Test;
 

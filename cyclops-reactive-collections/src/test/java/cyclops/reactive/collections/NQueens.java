@@ -1,7 +1,7 @@
 package cyclops.reactive.collections;
 
-import cyclops.data.ImmutableList;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.ImmutableList;
+import cyclops.container.persistent.impl.Seq;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.VectorX;
 import org.junit.Test;

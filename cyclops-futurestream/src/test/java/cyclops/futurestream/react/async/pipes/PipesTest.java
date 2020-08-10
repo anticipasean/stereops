@@ -6,9 +6,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.types.reactive.QueueBasedSubscriber;
+import cyclops.async.QueueFactories;
+import cyclops.async.adapters.Queue;
+import cyclops.reactive.QueueBasedSubscriber;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.Pipes;
 import cyclops.reactive.ReactiveSeq;

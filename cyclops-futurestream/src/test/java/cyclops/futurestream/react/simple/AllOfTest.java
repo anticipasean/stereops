@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.HashMap;
+import cyclops.container.HashMap;
 import cyclops.futurestream.SimpleReact;
 import java.util.Arrays;
 import java.util.Collections;

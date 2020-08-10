@@ -1,8 +1,8 @@
 package cyclops.reactive;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Try;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import io.reactivex.Flowable;
 import io.reactivex.Scheduler;
 import java.util.function.BiFunction;

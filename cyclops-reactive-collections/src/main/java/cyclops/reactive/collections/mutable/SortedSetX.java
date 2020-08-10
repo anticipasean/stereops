@@ -1,31 +1,31 @@
 package cyclops.reactive.collections.mutable;
 
-import static com.oath.cyclops.types.foldable.Evaluation.LAZY;
-import static cyclops.data.tuple.Tuple.tuple;
+import static cyclops.function.evaluation.Evaluation.LAZY;
+import static cyclops.container.tuple.Tuple.tuple;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.lazy.LazySortedSetX;
 import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
-import com.oath.cyclops.types.foldable.Evaluation;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.persistent.PersistentCollection;
-import com.oath.cyclops.types.recoverable.OnEmptySwitch;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.container.foldable.To;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.control.Either;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
-import cyclops.function.Monoid;
+import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -853,7 +853,7 @@ public interface SortedSetX<T> extends To<SortedSetX<T>>, SortedSet<T>, LazyColl
     }
 
     /* (non-Javadoc)
-     * @see com.oath.cyclops.types.recoverable.OnEmptySwitch#onEmptySwitch(java.util.function.Supplier)
+     * @see cyclops.data.recoverable.OnEmptySwitch#onEmptySwitch(java.util.function.Supplier)
      */
     @Override
     default SortedSetX<T> onEmptySwitch(final Supplier<? extends SortedSet<T>> supplier) {

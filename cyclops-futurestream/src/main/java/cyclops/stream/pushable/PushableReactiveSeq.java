@@ -1,6 +1,6 @@
 package cyclops.stream.pushable;
 
-import com.oath.cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Queue;
 import cyclops.reactive.ReactiveSeq;
 
 /**

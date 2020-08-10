@@ -2,14 +2,14 @@ package cyclops.companion.rx2;
 
 
 import com.oath.cyclops.react.Status;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.Value;
+import cyclops.container.MonadicValue;
+import cyclops.container.Value;
 import cyclops.companion.Futures;
 import cyclops.control.Either;
 import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.LazyEither;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import io.reactivex.Maybe;

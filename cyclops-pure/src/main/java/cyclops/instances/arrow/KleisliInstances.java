@@ -2,8 +2,8 @@ package cyclops.instances.arrow;
 
 import static cyclops.arrow.Kleisli.narrowK;
 
-import com.oath.cyclops.hkt.DataWitness.kleisli;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.kleisli;
+import cyclops.function.hkt.Higher;
 import cyclops.arrow.Kleisli;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.functor.Functor;

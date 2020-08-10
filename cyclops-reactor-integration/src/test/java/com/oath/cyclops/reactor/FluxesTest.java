@@ -2,8 +2,8 @@ package com.oath.cyclops.reactor;
 
 import com.oath.cyclops.reactor.adapter.FluxReactiveSeqImpl;
 import cyclops.companion.reactor.Fluxs;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyMs;
 import cyclops.monads.FluxAnyM;
@@ -11,14 +11,12 @@ import cyclops.monads.Witness;
 import cyclops.monads.Witness.optional;
 import cyclops.monads.transformers.StreamT;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.Optional;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 

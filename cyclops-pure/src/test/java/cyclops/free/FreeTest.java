@@ -7,8 +7,8 @@ import static cyclops.free.CharToy.output;
 import static cyclops.kinds.SupplierKind.λK;
 
 import cyclops.control.Either;
-import com.oath.cyclops.hkt.DataWitness.supplier;
-import cyclops.data.tuple.Tuple2;
+import cyclops.function.hkt.DataWitness.supplier;
+import cyclops.container.tuple.Tuple2;
 import cyclops.kinds.SupplierKind;
 import org.junit.Test;
 

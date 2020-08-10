@@ -1,7 +1,7 @@
 package cyclops.stream.pushable;
 
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Topic;
+import cyclops.async.adapters.Queue;
+import cyclops.async.adapters.Topic;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;

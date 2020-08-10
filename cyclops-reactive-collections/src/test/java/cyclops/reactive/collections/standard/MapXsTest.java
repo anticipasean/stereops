@@ -3,7 +3,7 @@ package cyclops.reactive.collections.standard;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.data.tuple.Tuple;
+import cyclops.container.tuple.Tuple;
 import cyclops.reactive.collections.mutable.DequeX;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.MapX;

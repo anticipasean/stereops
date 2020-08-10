@@ -1,15 +1,15 @@
 package cyclops.monads.transformers;
 
 import com.oath.cyclops.anym.transformers.ValueTransformer;
-import com.oath.cyclops.types.Filters;
-import com.oath.cyclops.types.MonadicValue;
-import com.oath.cyclops.types.foldable.To;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.function.companion.Filters;
+import cyclops.container.MonadicValue;
+import cyclops.container.foldable.To;
+import cyclops.container.transformable.Transformable;
 import cyclops.control.Option;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.monads.AnyM;

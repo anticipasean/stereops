@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.companion.rx2.Singles;
-import cyclops.control.Future;
-import cyclops.reactive.Spouts;
+import cyclops.async.Future;
+import cyclops.reactive.companion.Spouts;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.Arrays;

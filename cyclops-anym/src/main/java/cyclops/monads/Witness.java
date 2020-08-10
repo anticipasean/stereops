@@ -1,5 +1,10 @@
 package cyclops.monads;
 
+import cyclops.container.persistent.impl.BankersQueue;
+import cyclops.container.persistent.impl.HashSet;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.Queue;
@@ -9,10 +14,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.internal.adapters.*;
-import com.oath.cyclops.types.traversable.IterableX;
+import cyclops.container.traversable.IterableX;
 import cyclops.control.*;
-import cyclops.control.Future;
-import cyclops.data.*;
+import cyclops.async.Future;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.companion.Streamable;
@@ -22,7 +26,7 @@ import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.QueueX;
 import cyclops.reactive.collections.mutable.SetX;
 import cyclops.reactive.collections.mutable.SortedSetX;
-import com.oath.cyclops.types.MonadicValue;
+import cyclops.container.MonadicValue;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 
 public interface Witness {
@@ -305,7 +309,8 @@ public interface Witness {
       @Override
       public MonadAdapter<seq> adapter() {
         return new IterableXAdapter<seq>(Seq::empty,
-          Seq::of,Seq::fromIterable,this);
+                                         Seq::of,
+                                         Seq::fromIterable, this);
       }
 
     }
@@ -315,7 +320,7 @@ public interface Witness {
       @Override
       public MonadAdapter<lazySeq> adapter() {
         return new IterableXAdapter<lazySeq>(LazySeq::empty,
-          LazySeq::of, LazySeq::fromIterable,this);
+                                             LazySeq::of, LazySeq::fromIterable, this);
       }
 
     }
@@ -325,7 +330,7 @@ public interface Witness {
       @Override
       public MonadAdapter<vector> adapter() {
         return new IterableXAdapter<vector>(Vector::empty,
-          Vector::of, Vector::fromIterable,this);
+                                            Vector::of, Vector::fromIterable, this);
       }
 
     }
@@ -335,7 +340,7 @@ public interface Witness {
       @Override
       public MonadAdapter<hashSet> adapter() {
         return new IterableXAdapter<hashSet>(HashSet::empty,
-          HashSet::of, HashSet::fromIterable,this);
+                                             HashSet::of, HashSet::fromIterable, this);
       }
 
     }
@@ -345,7 +350,7 @@ public interface Witness {
       @Override
       public MonadAdapter<bankersQueue> adapter() {
         return new IterableXAdapter<bankersQueue>(BankersQueue::empty,
-          BankersQueue::of, BankersQueue::fromIterable,this);
+                                                  BankersQueue::of, BankersQueue::fromIterable, this);
       }
 
     }

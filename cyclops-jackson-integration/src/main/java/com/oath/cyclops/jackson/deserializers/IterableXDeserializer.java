@@ -11,19 +11,19 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
-import com.oath.cyclops.types.traversable.IterableX;
-import com.oath.cyclops.util.ExceptionSoftener;
+import cyclops.container.persistent.impl.HashSet;
+import cyclops.container.traversable.IterableX;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.companion.Streamable;
-import cyclops.data.Bag;
-import cyclops.data.BankersQueue;
-import cyclops.data.HashSet;
-import cyclops.data.IntMap;
-import cyclops.data.LazySeq;
-import cyclops.data.LazyString;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.TrieSet;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Bag;
+import cyclops.container.persistent.impl.BankersQueue;
+import cyclops.container.persistent.impl.IntMap;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.LazyString;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.persistent.impl.TrieSet;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.io.IOException;
 import java.lang.invoke.CallSite;
@@ -137,13 +137,13 @@ public class IterableXDeserializer extends StdDeserializer<IterableX<?>> impleme
         if (Bag.class.isAssignableFrom(elementType)) {
             return Bag.fromIterable(multi);
         }
-        if (cyclops.data.HashSet.class.isAssignableFrom(elementType)) {
+        if (HashSet.class.isAssignableFrom(elementType)) {
             return HashSet.fromIterable(multi);
         }
-        if (cyclops.data.TrieSet.class.isAssignableFrom(elementType)) {
+        if (TrieSet.class.isAssignableFrom(elementType)) {
             return TrieSet.fromIterable(multi);
         }
-        if (cyclops.data.TreeSet.class.isAssignableFrom(elementType)) {
+        if (TreeSet.class.isAssignableFrom(elementType)) {
             return TreeSet.fromIterable(multi,
                                         (Comparator) Comparator.naturalOrder());
         }

@@ -2,8 +2,7 @@ package com.oath.cyclops.reactor.adapter;
 
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.companion.reactor.Monos;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Option;
 import cyclops.monads.MonoAnyM;
 import cyclops.monads.ReactorWitness.mono;

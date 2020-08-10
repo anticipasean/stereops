@@ -3,8 +3,7 @@ package cyclops.monads.anym.value;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.util.box.Mutable;
-import cyclops.monads.Witness;
+import cyclops.container.box.Mutable;
 import cyclops.monads.Witness.tryType;
 import org.junit.Before;
 import org.junit.Test;

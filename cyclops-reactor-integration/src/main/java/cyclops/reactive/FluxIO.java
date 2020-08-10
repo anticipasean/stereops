@@ -1,9 +1,9 @@
 package cyclops.reactive;
 
 import cyclops.companion.reactor.Fluxs;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Try;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;

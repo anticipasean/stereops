@@ -4,11 +4,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.types.persistent.PersistentBag;
-import com.oath.cyclops.types.persistent.PersistentList;
-import com.oath.cyclops.types.persistent.PersistentQueue;
-import com.oath.cyclops.types.persistent.PersistentSet;
-import com.oath.cyclops.types.persistent.PersistentSortedSet;
+import cyclops.container.persistent.PersistentBag;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.persistent.PersistentQueue;
+import cyclops.container.persistent.PersistentSet;
+import cyclops.container.persistent.PersistentSortedSet;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.immutable.OrderedSetX;

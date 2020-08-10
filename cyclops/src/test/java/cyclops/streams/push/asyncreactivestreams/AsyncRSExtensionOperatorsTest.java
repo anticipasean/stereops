@@ -14,7 +14,7 @@ import cyclops.companion.Streamable;
 import cyclops.companion.Streams;
 import cyclops.control.Maybe;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;

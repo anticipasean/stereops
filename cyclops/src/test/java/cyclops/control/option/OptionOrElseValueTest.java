@@ -1,6 +1,6 @@
 package cyclops.control.option;
 
-import com.oath.cyclops.types.OrElseValue;
+import cyclops.container.foldable.OrElseValue;
 import cyclops.control.AbstractOrElseValueTest;
 import cyclops.control.Option;
 

@@ -4,11 +4,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.types.reactive.AsyncSubscriber;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.reactive.subscriber.AsyncSubscriber;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.concurrent.ForkJoinPool;
 import org.junit.Test;

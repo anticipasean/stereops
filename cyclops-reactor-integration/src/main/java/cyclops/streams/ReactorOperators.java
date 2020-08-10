@@ -4,11 +4,11 @@ package cyclops.streams;
 import cyclops.companion.reactor.Fluxs;
 import cyclops.companion.reactor.Monos;
 
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

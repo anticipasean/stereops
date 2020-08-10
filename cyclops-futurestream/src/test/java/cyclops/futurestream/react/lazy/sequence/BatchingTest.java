@@ -10,9 +10,9 @@ import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.react.ThreadPools;
 import com.oath.cyclops.util.SimpleTimer;
-import cyclops.data.Seq;
-import cyclops.data.TreeSet;
-import cyclops.data.Vector;
+import cyclops.container.Seq;
+import cyclops.container.TreeSet;
+import cyclops.container.Vector;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.react.lazy.DuplicationTest;
 import java.util.ArrayList;

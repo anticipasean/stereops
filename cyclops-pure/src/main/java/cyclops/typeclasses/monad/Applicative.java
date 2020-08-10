@@ -1,9 +1,9 @@
 package cyclops.typeclasses.monad;
 
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.Higher;
 import cyclops.control.Eval;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.functor.Functor;
 import java.util.function.BiFunction;

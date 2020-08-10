@@ -1,9 +1,9 @@
 package cyclops.futurestream;
 
-import com.oath.cyclops.util.ExceptionSoftener;
-import cyclops.control.Future;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.async.Future;
 import cyclops.control.Try;
-import cyclops.data.Seq;
+import cyclops.container.persistent.impl.Seq;
 import cyclops.reactive.IO;
 import cyclops.reactive.Managed;
 import cyclops.reactive.ReactiveSeq;

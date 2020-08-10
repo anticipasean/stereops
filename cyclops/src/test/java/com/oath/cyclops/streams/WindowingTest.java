@@ -7,10 +7,10 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import cyclops.companion.Streamable;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
+import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;

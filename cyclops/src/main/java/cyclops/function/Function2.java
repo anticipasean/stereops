@@ -1,15 +1,19 @@
 package cyclops.function;
 
 
-import com.oath.cyclops.types.foldable.To;
+import cyclops.function.cacheable.Cacheable;
+import cyclops.function.cacheable.Memoize;
+import cyclops.function.curry.Curry;
+import cyclops.function.curry.CurryVariance;
+import cyclops.container.foldable.To;
 import cyclops.control.Eval;
-import cyclops.control.Future;
+import cyclops.async.Future;
 import cyclops.control.Maybe;
 import cyclops.control.Option;
 import cyclops.control.Try;
-import cyclops.data.LazySeq;
-import cyclops.data.Seq;
-import cyclops.data.Vector;
+import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.container.persistent.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;

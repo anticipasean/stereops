@@ -1,17 +1,17 @@
 package cyclops.free;
 
-import com.oath.cyclops.hkt.DataWitness.free;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.hkt.Higher2;
+import cyclops.function.hkt.DataWitness.free;
+import cyclops.function.hkt.Higher;
+import cyclops.function.hkt.Higher2;
 import cyclops.control.Either;
 import cyclops.control.LazyEither3;
-import cyclops.data.tuple.Tuple;
-import cyclops.data.tuple.Tuple2;
-import cyclops.data.tuple.Tuple3;
-import cyclops.data.tuple.Tuple4;
-import cyclops.data.tuple.Tuple5;
-import cyclops.data.tuple.Tuple6;
-import cyclops.data.tuple.Tuple7;
+import cyclops.container.tuple.Tuple;
+import cyclops.container.tuple.Tuple2;
+import cyclops.container.tuple.Tuple3;
+import cyclops.container.tuple.Tuple4;
+import cyclops.container.tuple.Tuple5;
+import cyclops.container.tuple.Tuple6;
+import cyclops.container.tuple.Tuple7;
 import cyclops.function.Function3;
 import cyclops.function.Function4;
 import cyclops.function.Function5;

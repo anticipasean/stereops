@@ -1,7 +1,7 @@
 package cyclops.instances.jdk;
 
-import com.oath.cyclops.hkt.DataWitness.supplier;
-import com.oath.cyclops.hkt.Higher;
+import cyclops.function.hkt.DataWitness.supplier;
+import cyclops.function.hkt.Higher;
 import cyclops.kinds.SupplierKind;
 import cyclops.typeclasses.functor.Functor;
 import java.util.function.Function;

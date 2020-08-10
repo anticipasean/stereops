@@ -7,9 +7,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.internal.react.async.future.FastFuture;
-import com.oath.cyclops.internal.react.async.future.FinalPipeline;
-import com.oath.cyclops.internal.react.async.future.PipelineBuilder;
+import cyclops.internal.react.async.future.FastFuture;
+import cyclops.internal.react.async.future.FinalPipeline;
+import cyclops.internal.react.async.future.PipelineBuilder;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;

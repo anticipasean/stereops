@@ -2,35 +2,22 @@ package cyclops.monads.collections.mutable;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import com.oath.cyclops.async.QueueFactories;
-import com.oath.cyclops.async.adapters.Queue;
-import com.oath.cyclops.async.adapters.Topic;
-import com.oath.cyclops.types.reactive.ReactiveSubscriber;
 import cyclops.companion.Monoids;
-import cyclops.control.Future;
-import cyclops.data.Seq;
 import cyclops.monads.Witness.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.react.ThreadPools;
+import cyclops.reactive.companion.ThreadPools;
 import cyclops.futurestream.LazyReact;
 
 
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
 import cyclops.futurestream.FutureStream;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.Spouts;
 import org.junit.Test;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 import cyclops.monads.AnyM;

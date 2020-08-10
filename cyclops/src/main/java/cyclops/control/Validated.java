@@ -1,16 +1,16 @@
 package cyclops.control;
 
-import com.oath.cyclops.hkt.DataWitness.validated;
-import com.oath.cyclops.hkt.Higher;
-import com.oath.cyclops.matching.Sealed2;
-import com.oath.cyclops.types.OrElseValue;
-import com.oath.cyclops.types.Value;
-import com.oath.cyclops.types.functor.Transformable;
+import cyclops.function.hkt.DataWitness.validated;
+import cyclops.function.hkt.Higher;
+import cyclops.container.foldable.Sealed2;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.Value;
+import cyclops.container.transformable.Transformable;
 import cyclops.companion.Semigroups;
-import cyclops.data.NonEmptyList;
-import cyclops.data.Seq;
-import cyclops.function.Monoid;
-import cyclops.function.Semigroup;
+import cyclops.container.persistent.impl.NonEmptyList;
+import cyclops.container.persistent.impl.Seq;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Semigroup;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,8 +20,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.EqualsAndHashCode.Include;
 import org.reactivestreams.Publisher;
 
 public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transformable<T>, Iterable<T>,
