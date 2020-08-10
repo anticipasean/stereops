@@ -7,18 +7,18 @@ sourceCompatibility = javaSourceCompatibility
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'cyclops-anym', 'Implementation-Version': version
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
     }
 }
 
 dependencies {
-    implementation project(':cyclops')
-    compileClasspath project(':cyclops-futurestream')
-    compileClasspath project(':cyclops-reactive-collections')
-    compileClasspath project(':cyclops-pure')
+    implementation project(':func-core')
+    compileClasspath project(':func-futurestream')
+    compileClasspath project(':func-reactive-collection')
+    compileClasspath project(':func-pure')
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    testImplementation project(':cyclops')
+    testImplementation project(':func-core')
     testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     testCompileClasspath group: 'junit', name: 'junit', version: '4.12'
     testCompileClasspath 'org.hamcrest:hamcrest-all:1.3'

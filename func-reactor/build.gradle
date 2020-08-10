@@ -7,26 +7,26 @@ sourceCompatibility = javaSourceCompatibility
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Cyclops Reactor', 'Implementation-Version': version
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
     }
 }
 
 dependencies {
-    implementation project(':cyclops')
-    compileClasspath project(':cyclops-pure')
-    compileClasspath project(':cyclops-anym')
-    compileClasspath project(':cyclops-futurestream')
-    implementation project(':cyclops-reactive-collections')
+    implementation project(':func-core')
+    compileClasspath project(':func-pure')
+    compileClasspath project(':func-anym')
+    compileClasspath project(':func-futurestream')
+    implementation project(':func-reactive-collection')
     compileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
-    testCompileClasspath project(':cyclops-anym')
-    testCompileClasspath project(':cyclops').tasks.matching({ Task t -> t.name.contains('compileTestJava') }).first().outputs.files
-    testImplementation project(':cyclops-reactive-collections')
-    testImplementation project(':cyclops-anym')
+    testCompileClasspath project(':func-anym')
+    testCompileClasspath project(':func-core').tasks.matching({ Task t -> t.name.contains('compileTestJava') }).first().outputs.files
+    testImplementation project(':func-reactive-collection')
+    testImplementation project(':func-anym')
     testCompileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     testCompileClasspath 'commons-io:commons-io:2.4'

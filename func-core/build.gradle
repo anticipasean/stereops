@@ -8,7 +8,7 @@ targetCompatibility = javaTargetCompatibility
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'cyclops', 'Implementation-Version': version
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
     }
 }
 

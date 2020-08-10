@@ -4,24 +4,25 @@ plugins {
 }
 
 sourceCompatibility = javaSourceCompatibility
+
 jar {
     manifest {
-        attributes 'Implementation-Title': 'cyclops-futurestream', 'Implementation-Version': version
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
     }
 }
 
 dependencies {
 
-    compileClasspath project(':cyclops')
-    compileClasspath project(':cyclops-reactive-collections')
-    compileClasspath "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
-    compileClasspath "org.reactivestreams:reactive-streams-tck:${reactiveStreamsVersion}"
+
+    compileClasspath project(':func-core')
+    compileClasspath project(':func-reactive-collection')
     compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    compileClasspath "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    compileClasspath "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
-    testCompileClasspath project(':cyclops').sourceSets.test.output
+    testCompileClasspath project(':func-core')
     testCompileClasspath 'org.reactivestreams:reactive-streams-tck:1.0.0'
     testCompileClasspath 'org.mockito:mockito-core:1.9.5'
     testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
@@ -30,14 +31,15 @@ dependencies {
     testCompileClasspath 'org.testng:testng:5.14.10'
     testCompileClasspath 'com.github.stefanbirkner:system-rules:1.10.0'
     testCompileClasspath 'io.vertx:vertx-core:3.0.0'
-    testCompileClasspath(group: 'org.hibernate', name: 'hibernate-core', version: '5.1.0.Final')
-    testCompileClasspath(group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.1.0.Final')
+
 }
 
 test {
-    forkEvery = 1
+
+//  forkEvery = 1
     testLogging {
         events "started", "passed", "skipped", "failed"//, "standardOut", "standardError"
     }
 }
+
 

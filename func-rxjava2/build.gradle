@@ -7,21 +7,21 @@ sourceCompatibility = javaSourceCompatibility
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Cyclops Rx Java 2', 'Implementation-Version': version
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
     }
 }
 
 dependencies {
-    compileClasspath project(':cyclops')
-    compileClasspath project(':cyclops-anym')
-    compileClasspath project(':cyclops-futurestream')
-    compileClasspath project(':cyclops-reactive-collections')
+    compileClasspath project(':func-core')
+    compileClasspath project(':func-anym')
+    compileClasspath project(':func-futurestream')
+    compileClasspath project(':func-reactive-collection')
     compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
     compileClasspath group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxJava2Version
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
-    testCompileClasspath project(':cyclops-anym')
-    testCompileClasspath project(':cyclops')
+    testCompileClasspath project(':func-anym')
+    testCompileClasspath project(':func-core')
     testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
     testCompileClasspath 'commons-io:commons-io:2.4'
     testCompileClasspath group: 'junit', name: 'junit', version: '4.12'
