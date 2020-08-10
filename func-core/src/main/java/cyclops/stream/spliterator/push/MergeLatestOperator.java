@@ -1,6 +1,6 @@
 package cyclops.stream.spliterator.push;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

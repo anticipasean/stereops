@@ -1,4 +1,4 @@
-package cyclops.async.wait;
+package cyclops.async.strategy.wait;
 
 /**
  * An interface that defines a Waiting strategy to be employed when an async.Queue is full or zero

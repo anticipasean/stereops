@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream.pushable;
 
-import cyclops.async.adapters.Adapter;
+import cyclops.async.queue.Adapter;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;

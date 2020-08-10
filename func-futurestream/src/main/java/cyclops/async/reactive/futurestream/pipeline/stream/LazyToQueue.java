@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.Queue.ClosedQueueException;
+import cyclops.async.queue.Queue;
+import cyclops.async.exception.ClosedQueueException;
 import cyclops.async.reactive.futurestream.pipeline.CompletedException;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;

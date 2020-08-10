@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
-import cyclops.async.adapters.Queue.ClosedQueueException;
+import cyclops.async.exception.ClosedQueueException;
 import cyclops.reactive.subscription.Continueable;
 import java.util.Objects;
 import java.util.Spliterator;

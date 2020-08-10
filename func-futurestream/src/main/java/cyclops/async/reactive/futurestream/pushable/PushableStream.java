@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream.pushable;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import java.util.stream.Stream;
 
 /**

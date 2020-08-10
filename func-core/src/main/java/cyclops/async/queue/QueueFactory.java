@@ -1,4 +1,4 @@
-package cyclops.async.adapters;
+package cyclops.async.queue;
 
 /**
  * Interface for Factories of async.Queues {@see QueueFactories}

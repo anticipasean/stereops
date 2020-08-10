@@ -15,8 +15,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.Topic;
 import cyclops.reactive.companion.ThreadPools;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.control.LazyEither;
@@ -443,7 +443,7 @@ public class BaseSequentialTest {
     public void publishToAndMerge() {
         for (int k = 0; k < ITERATIONS; k++) {
             System.out.println("Publish toNested and zip iteration " + k);
-            cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
+            Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
 
             Thread t = new Thread(() -> {
 

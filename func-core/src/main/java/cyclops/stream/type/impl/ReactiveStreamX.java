@@ -7,10 +7,11 @@ import static cyclops.stream.type.impl.ReactiveStreamX.Type.BACKPRESSURE;
 import static cyclops.stream.type.impl.ReactiveStreamX.Type.SYNC;
 
 import cyclops.async.Future;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
-import cyclops.async.adapters.Signal;
-import cyclops.async.adapters.Topic;
+import cyclops.async.exception.ClosedQueueException;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
+import cyclops.async.queue.Signal;
+import cyclops.async.queue.Topic;
 import cyclops.async.companion.QueueFactories;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
@@ -122,7 +123,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
     public ReactiveStreamX(Operator<T> source) {
         this.source = source;
         this.defaultErrorHandler = e -> {
-            if (!(e instanceof Queue.ClosedQueueException)) {
+            if (!(e instanceof ClosedQueueException)) {
                 throw ExceptionSoftener.throwSoftenedException(e);
             }
         };
@@ -134,7 +135,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                            Type async) {
         this.source = source;
         this.defaultErrorHandler = e -> {
-            if (!(e instanceof Queue.ClosedQueueException)) {
+            if (!(e instanceof ClosedQueueException)) {
                 throw ExceptionSoftener.throwSoftenedException(e);
             }
         };
@@ -156,7 +157,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
         if (stream.async == Type.NO_BACKPRESSURE) {
             stream.source.subscribeAll(e -> {
                                            result.complete(e);
-                                           throw new Queue.ClosedQueueException();
+                                           throw new ClosedQueueException();
                                        },
                                        t -> {
                                            result.completeExceptionally(t);
@@ -291,14 +292,14 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
             Future<T> result = Future.future();
             source.subscribeAll(e -> {
                                     result.complete(e);
-                                    throw new Queue.ClosedQueueException();
+                                    throw new ClosedQueueException();
                                 },
                                 t -> {
                                     result.completeExceptionally(t);
                                 },
                                 () -> {
                                     if (!result.isDone()) {
-                                        result.completeExceptionally(new Queue.ClosedQueueException());
+                                        result.completeExceptionally(new ClosedQueueException());
                                     }
                                 });
 
@@ -313,7 +314,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
             Future<T> result = Future.future();
             source.subscribeAll(e -> {
                                     result.complete(e);
-                                    throw new Queue.ClosedQueueException();
+                                    throw new ClosedQueueException();
                                 },
                                 t -> {
                                     result.completeExceptionally(t);
@@ -337,7 +338,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
         if (async == Type.NO_BACKPRESSURE) {
             source.subscribeAll(e -> {
                                     result.complete(e);
-                                    throw new Queue.ClosedQueueException();
+                                    throw new ClosedQueueException();
                                 },
                                 t -> {
                                     result.completeExceptionally(t);
@@ -830,7 +831,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
                 private Object nilsafeIn(Object o) {
                     if (o == null) {
-                        return cyclops.async.adapters.Queue.NILL;
+                        return Queue.NILL;
                     }
                     return o;
                 }
@@ -1790,7 +1791,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
             ReactiveStreamX<T> filtered = (ReactiveStreamX<T>) filter(c.negate());
             filtered.source.subscribeAll(e -> {
                                              result.complete(false);
-                                             throw new Queue.ClosedQueueException();
+                                             throw new ClosedQueueException();
                                          },
                                          t -> {
                                              result.completeExceptionally(t);
@@ -1829,7 +1830,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
         if (async == Type.NO_BACKPRESSURE) {
             filtered.source.subscribeAll(e -> {
                                              result.complete(true);
-                                             throw new Queue.ClosedQueueException();
+                                             throw new ClosedQueueException();
                                          },
                                          t -> {
 

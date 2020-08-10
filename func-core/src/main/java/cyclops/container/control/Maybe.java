@@ -2,7 +2,7 @@ package cyclops.container.control;
 
 
 import cyclops.async.Future;
-import cyclops.async.adapters.Queue;
+import cyclops.async.exception.ClosedQueueException;
 import cyclops.container.MonadicValue;
 import cyclops.container.foldable.Present;
 import cyclops.container.immutable.tuple.Tuple;
@@ -865,7 +865,7 @@ public interface Maybe<T> extends Option<T> {
 
 
         public boolean completeAsNone() {
-            return completeExceptionally(new Queue.ClosedQueueException());
+            return completeExceptionally(new ClosedQueueException());
         }
 
         @Override

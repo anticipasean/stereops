@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream;
 
-import cyclops.async.adapters.Adapter;
+import cyclops.async.queue.Adapter;
 import cyclops.async.reactive.futurestream.pipeline.stream.FutureStreamImpl;
 import cyclops.async.reactive.futurestream.pipeline.stream.InfiniteClosingSpliteratorFromSupplier;
 import cyclops.async.reactive.futurestream.pipeline.stream.ReactBuilder;

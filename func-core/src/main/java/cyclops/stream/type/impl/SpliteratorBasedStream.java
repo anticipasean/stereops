@@ -1,8 +1,9 @@
 package cyclops.stream.type.impl;
 
 
-import cyclops.async.adapters.Signal;
+import cyclops.async.queue.Signal;
 import cyclops.async.companion.QueueFactories;
+import cyclops.async.queue.Queue;
 import cyclops.container.control.Eval;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
@@ -558,7 +559,7 @@ public abstract class SpliteratorBasedStream<T> extends BaseExtendedStream<T> {
 
     public ReactiveSeq<T> changes() {
         return ReactiveSeq.defer(() -> {
-            cyclops.async.adapters.Queue<T> queue = QueueFactories.<T>unboundedNonBlockingQueue().build();
+            Queue<T> queue = QueueFactories.<T>unboundedNonBlockingQueue().build();
 
             Spliterator<T> copy = copy();
 

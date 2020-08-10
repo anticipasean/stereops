@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Topic;
 import com.oath.cyclops.streams.BaseSequentialTest;
 import cyclops.stream.type.Streamable;
 import cyclops.container.control.Maybe;

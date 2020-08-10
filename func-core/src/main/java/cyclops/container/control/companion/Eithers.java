@@ -1,8 +1,8 @@
 package cyclops.container.control.companion;
 
-import cyclops.async.adapters.Adapter;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Adapter;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.Topic;
 import cyclops.container.control.Either;
 import java.util.concurrent.BlockingQueue;
 

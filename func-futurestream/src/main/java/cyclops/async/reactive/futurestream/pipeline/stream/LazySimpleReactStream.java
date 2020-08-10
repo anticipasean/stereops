@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
 import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.QueueFactory;
 import cyclops.async.reactive.futurestream.pipeline.FastFuture;
 import cyclops.async.reactive.futurestream.pipeline.PipelineBuilder;
 import cyclops.async.reactive.futurestream.exception.FilteredExecutionPathException;

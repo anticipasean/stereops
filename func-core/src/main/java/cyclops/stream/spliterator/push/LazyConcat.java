@@ -1,7 +1,7 @@
 package cyclops.stream.spliterator.push;
 
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import cyclops.container.immutable.impl.Seq;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

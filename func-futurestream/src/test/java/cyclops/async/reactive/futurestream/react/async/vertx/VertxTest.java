@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.async.QueueFactories;
 import cyclops.async.adapters.Queue;
-import cyclops.async.wait.WaitStrategy;
+import cyclops.async.strategy.wait.WaitStrategy;
 import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.async.reactive.futurestream.SimpleReact;
 import cyclops.pure.reactive.ReactiveSeq;

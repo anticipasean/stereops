@@ -1,9 +1,9 @@
 package cyclops.async.companion;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
-import cyclops.async.wait.NoWaitRetry;
-import cyclops.async.wait.WaitStrategy;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
+import cyclops.async.strategy.wait.NoWaitRetry;
+import cyclops.async.strategy.wait.WaitStrategy;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SynchronousQueue;

@@ -17,7 +17,7 @@ import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.container.control.Maybe;
 import cyclops.monads.Witness;
-import cyclops.async.reactive.futurestream.companion.Optionals;
+import cyclops.companion.Optionals;
 
 import lombok.AllArgsConstructor;
 

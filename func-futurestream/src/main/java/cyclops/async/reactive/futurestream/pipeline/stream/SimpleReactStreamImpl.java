@@ -1,8 +1,8 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
 import cyclops.reactive.subscription.AlwaysContinue;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.async.reactive.futurestream.SimpleReact;

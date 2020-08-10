@@ -1,4 +1,4 @@
-package cyclops.async.adapters;
+package cyclops.async.strategy.continuation;
 
 import cyclops.stream.async.Continuation;
 

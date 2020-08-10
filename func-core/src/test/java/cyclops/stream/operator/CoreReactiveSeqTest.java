@@ -13,7 +13,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Topic;
+import cyclops.async.queue.Queue;
 import cyclops.stream.companion.Streams;
 import cyclops.container.control.Maybe;
 import cyclops.container.immutable.impl.HashMap;
@@ -112,7 +113,7 @@ public class CoreReactiveSeqTest {
 
     @Test
     public void publishToAndMerge() {
-        cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
+        Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
 
         Thread t = new Thread(() -> {
 

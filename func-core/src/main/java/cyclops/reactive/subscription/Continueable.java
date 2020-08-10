@@ -1,6 +1,6 @@
 package cyclops.reactive.subscription;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 
 public interface Continueable {
 

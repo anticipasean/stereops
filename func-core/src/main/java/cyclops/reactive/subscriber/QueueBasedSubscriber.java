@@ -1,8 +1,8 @@
 package cyclops.reactive.subscriber;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.Queue.ClosedQueueException;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Queue;
+import cyclops.async.exception.ClosedQueueException;
+import cyclops.async.queue.QueueFactory;
 import cyclops.container.control.Eval;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.Continueable;

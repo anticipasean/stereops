@@ -250,7 +250,7 @@ public class ConcurrentFlatMapper<T, R> {
                     return true;
                 }
 
-                onNext.accept(cyclops.async.adapters.Queue.nillSafe(raw));
+                onNext.accept(cyclops.async.queue.Queue.nillSafe(raw));
 
                 pendingRequests++;
             }
@@ -357,14 +357,14 @@ public class ConcurrentFlatMapper<T, R> {
                     sub.get()
                        .request(1);
                 } else {
-                    queue.offer(cyclops.async.adapters.Queue.nullSafe(t)); //queue full! handle somehow
+                    queue.offer(cyclops.async.queue.Queue.nullSafe(t)); //queue full! handle somehow
                 }
                 if (wip.decrementAndGet() == 0) {
                     return;
                 }
                 populateFromQueuesAndCleanup();
             } else {
-                queue.offer(cyclops.async.adapters.Queue.nullSafe(t)); //queue full! handle somehow
+                queue.offer(cyclops.async.queue.Queue.nullSafe(t)); //queue full! handle somehow
                 handleMainPublisher();
             }
         }

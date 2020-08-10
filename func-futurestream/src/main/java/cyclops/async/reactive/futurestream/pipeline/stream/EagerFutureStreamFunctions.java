@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.Queue.QueueReader;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.Queue.QueueReader;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;

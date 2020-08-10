@@ -7,4 +7,5 @@ include ':func-reactive-collection'
 include ':func-reactor'
 include ':func-rxjava2'
 include ':func-jackson'
+include ':func-container'
 

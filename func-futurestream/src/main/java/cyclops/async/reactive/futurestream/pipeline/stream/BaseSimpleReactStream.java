@@ -3,8 +3,8 @@ package cyclops.async.reactive.futurestream.pipeline.stream;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
 import cyclops.async.reactive.futurestream.exception.SimpleReactFailedStageException;
 import cyclops.reactive.companion.ThreadPools;
 import cyclops.reactive.subscription.Continueable;

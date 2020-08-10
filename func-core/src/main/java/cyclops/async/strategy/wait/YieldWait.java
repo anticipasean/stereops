@@ -1,14 +1,12 @@
-package cyclops.async.wait;
-
-import java.util.concurrent.locks.LockSupport;
+package cyclops.async.strategy.wait;
 
 /**
- * Repeatedly retry to take or offer element to Queue if full or data unavailable, with a wait of 1 nano second between retries
+ * Repeatedly retry to take or offer element to Queue if full or data unavailable, calling Thread.yield in between attempts
  *
  * @param <T> Data type of elements in the async.Queue
  * @author johnmcclean
  */
-public class SpinWait<T> implements WaitStrategy<T> {
+public class YieldWait<T> implements WaitStrategy<T> {
 
     /* (non-Javadoc)
      * @see cyclops2.async.wait.WaitStrategy#take(cyclops2.async.wait.WaitStrategy.Takeable)
@@ -18,7 +16,7 @@ public class SpinWait<T> implements WaitStrategy<T> {
         T result;
 
         while ((result = t.take()) == null) {
-            LockSupport.parkNanos(1l);
+            Thread.yield();
         }
 
         return result;
@@ -30,7 +28,7 @@ public class SpinWait<T> implements WaitStrategy<T> {
     @Override
     public boolean offer(final WaitStrategy.Offerable o) throws InterruptedException {
         while (!o.offer()) {
-            LockSupport.parkNanos(1l);
+            Thread.yield();
         }
         return true;
     }

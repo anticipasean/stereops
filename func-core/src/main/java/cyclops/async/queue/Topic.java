@@ -1,4 +1,4 @@
-package cyclops.async.adapters;
+package cyclops.async.queue;
 
 import cyclops.async.companion.QueueFactories;
 import cyclops.container.control.Option;

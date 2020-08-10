@@ -1,5 +1,7 @@
-package cyclops.async.adapters;
+package cyclops.async.queue;
 
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.Topic;
 import cyclops.container.control.Either;
 import cyclops.container.foldable.Sealed2;
 import cyclops.reactive.ReactiveSeq;

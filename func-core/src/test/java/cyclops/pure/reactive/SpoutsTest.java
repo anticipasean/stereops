@@ -13,7 +13,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Topic;
+import cyclops.async.queue.Queue;
 import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;
@@ -1146,7 +1147,7 @@ public class SpoutsTest {
 
     @Test
     public void publishToAndMerge() {
-        cyclops.async.adapters.Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
+        Queue<Integer> queue = QueueFactories.<Integer>boundedNonBlockingQueue(10).build();
 
         Thread t = new Thread(() -> {
 

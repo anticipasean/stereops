@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
@@ -48,7 +48,7 @@ public class AsyncExtensionOperatorsTest {
 
     @Test
     public void queueTest() {
-        cyclops.async.adapters.Queue<Integer> q = new Queue<>();
+        Queue<Integer> q = new Queue<>();
         q.add(1);
         q.add(2);
         q.add(3);

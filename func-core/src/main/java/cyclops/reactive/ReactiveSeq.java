@@ -1,11 +1,11 @@
 package cyclops.reactive;
 
 
-import cyclops.async.adapters.Adapter;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
-import cyclops.async.adapters.Signal;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Adapter;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
+import cyclops.async.queue.Signal;
+import cyclops.async.queue.Topic;
 import cyclops.async.companion.QueueFactories;
 import cyclops.container.comparative.Contains;
 import cyclops.container.control.Either;

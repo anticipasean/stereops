@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.QueueFactory;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.reactive.subscription.Subscription;
 import cyclops.async.reactive.futurestream.pipeline.collector.BatchingCollector;

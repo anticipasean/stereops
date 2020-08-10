@@ -92,7 +92,7 @@ import cyclops.monads.Witness.*;
 import cyclops.monads.Witness.future;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 import cyclops.stream.type.ToStream;
-import cyclops.async.reactive.futurestream.companion.Optionals;
+import cyclops.companion.Optionals;
 
 import static cyclops.function.evaluation.Evaluation.LAZY;
 

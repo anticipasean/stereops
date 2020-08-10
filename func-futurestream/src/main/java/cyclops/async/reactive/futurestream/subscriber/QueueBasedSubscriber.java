@@ -1,8 +1,8 @@
 package cyclops.async.reactive.futurestream.subscriber;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.Queue.ClosedQueueException;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Queue;
+import cyclops.async.exception.ClosedQueueException;
+import cyclops.async.queue.QueueFactory;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.container.control.Eval;

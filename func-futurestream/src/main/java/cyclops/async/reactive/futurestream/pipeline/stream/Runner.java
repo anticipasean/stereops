@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
-import cyclops.async.adapters.Queue.ClosedQueueException;
+import cyclops.async.exception.ClosedQueueException;
 import cyclops.async.reactive.futurestream.pipeline.FastFuture;
 import cyclops.async.reactive.futurestream.exception.FilteredExecutionPathException;
 import cyclops.exception.SimpleReactProcessingException;

@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.Adapter;
+import cyclops.async.queue.Adapter;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.agrona.concurrent.ManyToManyConcurrentArrayQueue;
 import org.junit.Test;

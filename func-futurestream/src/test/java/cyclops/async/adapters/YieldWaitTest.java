@@ -3,9 +3,9 @@ package cyclops.async.adapters;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.async.wait.WaitStrategy.Offerable;
-import cyclops.async.wait.WaitStrategy.Takeable;
-import cyclops.async.wait.YieldWait;
+import cyclops.async.strategy.wait.WaitStrategy.Offerable;
+import cyclops.async.strategy.wait.WaitStrategy.Takeable;
+import cyclops.async.strategy.wait.YieldWait;
 import org.agrona.concurrent.ManyToOneConcurrentArrayQueue;
 import org.junit.Test;
 

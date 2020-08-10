@@ -1,6 +1,6 @@
 package cyclops.reactive.subscription;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import cyclops.reactive.ReactiveSeq;
 import java.util.HashMap;
 import java.util.LinkedList;

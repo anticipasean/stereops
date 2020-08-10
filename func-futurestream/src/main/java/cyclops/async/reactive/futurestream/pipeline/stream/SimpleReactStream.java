@@ -1,8 +1,8 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
 import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
 import cyclops.async.reactive.futurestream.exception.FilteredExecutionPathException;
 import cyclops.async.reactive.futurestream.exception.SimpleReactFailedStageException;
 import cyclops.async.reactive.futurestream.pipeline.StageWithResults;

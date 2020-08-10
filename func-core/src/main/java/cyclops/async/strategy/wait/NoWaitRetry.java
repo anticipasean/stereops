@@ -1,22 +1,22 @@
-package cyclops.async.wait;
+package cyclops.async.strategy.wait;
 
 /**
- * Repeatedly retry to take or offer element to Queue if full or data unavailable, calling Thread.yield in between attempts
+ * Repeatedly retry to take or offer element to Queue if full or data unavailable
  *
  * @param <T> Data type of elements in the async.Queue
  * @author johnmcclean
  */
-public class YieldWait<T> implements WaitStrategy<T> {
+public class NoWaitRetry<T> implements WaitStrategy<T> {
 
     /* (non-Javadoc)
      * @see cyclops2.async.wait.WaitStrategy#take(cyclops2.async.wait.WaitStrategy.Takeable)
      */
     @Override
-    public T take(final WaitStrategy.Takeable<T> t) throws InterruptedException {
+    public T take(final cyclops.async.strategy.wait.WaitStrategy.Takeable<T> t) throws InterruptedException {
         T result;
 
         while ((result = t.take()) == null) {
-            Thread.yield();
+
         }
 
         return result;
@@ -28,7 +28,7 @@ public class YieldWait<T> implements WaitStrategy<T> {
     @Override
     public boolean offer(final WaitStrategy.Offerable o) throws InterruptedException {
         while (!o.offer()) {
-            Thread.yield();
+
         }
         return true;
     }

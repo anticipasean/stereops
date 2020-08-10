@@ -1,11 +1,18 @@
-package cyclops.async.adapters;
+package cyclops.async.queue;
 
+import cyclops.async.queue.AdaptersModule.ClosingSpliterator;
+import cyclops.async.queue.AdaptersModule.QueueToBlockingQueueWrapper;
+import cyclops.async.queue.AdaptersModule.SingleContinuation;
+import cyclops.async.queue.AdaptersModule.StreamOfContinuations;
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.wait.DirectWaitStrategy;
-import cyclops.async.wait.WaitStrategy;
+import cyclops.async.exception.ClosedQueueException;
+import cyclops.async.exception.Error;
+import cyclops.async.exception.QueueTimeoutException;
+import cyclops.async.strategy.continuation.ContinuationStrategy;
+import cyclops.async.strategy.wait.DirectWaitStrategy;
+import cyclops.async.strategy.wait.WaitStrategy;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.exception.SimpleReactProcessingException;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.AlwaysContinue;
 import cyclops.reactive.subscription.Continueable;
@@ -163,14 +170,14 @@ public class Queue<T> implements Adapter<T> {
     public Queue(final java.util.Queue<T> q,
                  final WaitStrategy<T> consumer,
                  final WaitStrategy<T> producer) {
-        this(new AdaptersModule.QueueToBlockingQueueWrapper(q),
+        this(new QueueToBlockingQueueWrapper(q),
              consumer,
              producer);
     }
 
     public static <T> Queue<T> createMergeQueue() {
         final Queue<T> q = new Queue<>();
-        q.continuationStrategy = new AdaptersModule.StreamOfContinuations(q);
+        q.continuationStrategy = new StreamOfContinuations(q);
         return q;
     }
 
@@ -316,13 +323,13 @@ public class Queue<T> implements Adapter<T> {
 
                                                    result.add(next);
                                                }
-                                           } catch (Queue.QueueTimeoutException e) {
+                                           } catch (QueueTimeoutException e) {
 
                                            }
 
 
                                        }
-                                   } catch (Queue.ClosedQueueException e) {
+                                   } catch (ClosedQueueException e) {
                                        if (result.size() > 0) {
                                            List list = new ArrayList<>();
                                            list.add(result);
@@ -357,10 +364,10 @@ public class Queue<T> implements Adapter<T> {
     private Stream<Collection<T>> closingStreamBatch(final Supplier<Collection<T>> s,
                                                      final Continueable sub) {
 
-        final Stream<Collection<T>> st = StreamSupport.stream(new AdaptersModule.ClosingSpliterator<>(Long.MAX_VALUE,
-                                                                                                      s,
-                                                                                                      sub,
-                                                                                                      this),
+        final Stream<Collection<T>> st = StreamSupport.stream(new ClosingSpliterator<>(Long.MAX_VALUE,
+                                                                                       s,
+                                                                                       sub,
+                                                                                       this),
                                                               false);
 
         return st;
@@ -369,10 +376,10 @@ public class Queue<T> implements Adapter<T> {
     private Stream<T> closingStream(final Supplier<T> s,
                                     final Continueable sub) {
 
-        final Stream<T> st = StreamSupport.stream(new AdaptersModule.ClosingSpliterator<T>(Long.MAX_VALUE,
-                                                                                           s,
-                                                                                           sub,
-                                                                                           this),
+        final Stream<T> st = StreamSupport.stream(new ClosingSpliterator<T>(Long.MAX_VALUE,
+                                                                            s,
+                                                                            sub,
+                                                                            this),
                                                   false);
 
         return st;
@@ -381,10 +388,10 @@ public class Queue<T> implements Adapter<T> {
     private Stream<CompletableFuture<T>> closingStreamFutures(final Supplier<CompletableFuture<T>> s,
                                                               final Continueable sub) {
 
-        final Stream<CompletableFuture<T>> st = StreamSupport.stream(new AdaptersModule.ClosingSpliterator<>(Long.MAX_VALUE,
-                                                                                                             s,
-                                                                                                             sub,
-                                                                                                             this),
+        final Stream<CompletableFuture<T>> st = StreamSupport.stream(new ClosingSpliterator<>(Long.MAX_VALUE,
+                                                                                              s,
+                                                                                              sub,
+                                                                                              this),
                                                                      false);
 
         return st;
@@ -692,7 +699,7 @@ public class Queue<T> implements Adapter<T> {
 
     public void addContinuation(final Continuation c) {
         if (this.continuationStrategy == null) {
-            continuationStrategy = new AdaptersModule.SingleContinuation(this);
+            continuationStrategy = new SingleContinuation(this);
         }
         this.continuationStrategy.addContinuation(c);
     }
@@ -711,65 +718,8 @@ public class Queue<T> implements Adapter<T> {
         return "Q " + queue;
     }
 
-    /**
-     * Exception thrown if Queue closed
-     *
-     * @author johnmcclean
-     */
-    public static class ClosedQueueException extends SimpleReactProcessingException {
-
-        private static final long serialVersionUID = 1L;
-        @Getter
-        private final List currentData;
-
-        public ClosedQueueException(List currentData) {
-            this.currentData = currentData;
-        }
-
-        public ClosedQueueException() {
-            currentData = null;
-
-        }
-
-        public boolean isDataPresent() {
-            return currentData != null;
-        }
-
-        @Override
-        public Throwable fillInStackTrace() {
-            return this;
-        }
-    }
-
-    /**
-     * Exception thrown if Queue polling timesout
-     *
-     * @author johnmcclean
-     */
-    public static class QueueTimeoutException extends SimpleReactProcessingException {
-
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Throwable fillInStackTrace() {
-
-            return this;
-        }
-    }
-
     private static class PoisonPill {
 
-    }
-
-    @AllArgsConstructor
-    public static final class Error extends RuntimeException {
-
-        Throwable t;
-
-        @Override
-        public synchronized Throwable fillInStackTrace() {
-            return this;
-        }
     }
 
     public static class NIL {

@@ -4,9 +4,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.async.wait.DirectWaitStrategy;
-import cyclops.async.wait.WaitStrategy.Offerable;
-import cyclops.async.wait.WaitStrategy.Takeable;
+import cyclops.async.strategy.wait.DirectWaitStrategy;
+import cyclops.async.strategy.wait.WaitStrategy.Offerable;
+import cyclops.async.strategy.wait.WaitStrategy.Takeable;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;

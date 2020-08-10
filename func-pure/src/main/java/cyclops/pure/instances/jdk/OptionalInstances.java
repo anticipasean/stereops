@@ -7,7 +7,7 @@ import cyclops.function.higherkinded.DataWitness.optional;
 import cyclops.function.higherkinded.Higher;
 import cyclops.pure.arrow.MonoidK;
 import cyclops.pure.arrow.MonoidKs;
-import cyclops.async.reactive.futurestream.companion.Optionals;
+import cyclops.companion.Optionals;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;

@@ -1,4 +1,4 @@
-package cyclops.async.reactive.futurestream.companion;
+package cyclops.companion;
 
 import cyclops.container.traversable.IterableX;
 import cyclops.function.enhanced.Function3;

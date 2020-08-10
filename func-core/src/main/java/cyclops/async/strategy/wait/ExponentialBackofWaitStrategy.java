@@ -1,4 +1,4 @@
-package cyclops.async.wait;
+package cyclops.async.strategy.wait;
 
 import java.util.concurrent.locks.LockSupport;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream.publisher;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import cyclops.exception.SimpleReactProcessingException;
 import cyclops.async.reactive.futurestream.pipeline.stream.LazyStreamWrapper;
 import java.util.ArrayList;

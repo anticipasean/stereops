@@ -1,6 +1,6 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
-import cyclops.async.adapters.Queue;
+import cyclops.async.queue.Queue;
 import cyclops.reactive.subscription.Continueable;
 import java.util.Iterator;
 import lombok.AllArgsConstructor;

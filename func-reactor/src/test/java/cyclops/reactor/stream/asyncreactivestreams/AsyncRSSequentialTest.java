@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.streams.BaseSequentialTest;
-import cyclops.async.adapters.Topic;
+import cyclops.async.queue.Topic;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;

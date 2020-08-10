@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.pipeline.stream;
 
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
 import java.util.Map;
 import java.util.function.Function;
 

@@ -693,11 +693,15 @@ public class ExceptionSoftener {
      * }
      * </pre>
      *
+     *
+     * Note: to trick the compiler, the calls to "uncheck" that returns a RuntimeException in the "throw*" methods of this class
+     * must have RuntimeException as an explicit type parameter to "uncheck", e.g. {@code ExceptionSoftener.<RuntimeException>uncheck(e)},
+     * which some IDE settings may remove when formatting the code (smccarron)
      * @param e
      * @return
      */
     public static RuntimeException throwSoftenedException(final Throwable e) {
-        throw ExceptionSoftener.uncheck(e);
+        throw ExceptionSoftener.<RuntimeException>uncheck(e);
     }
 
     /**
@@ -709,7 +713,7 @@ public class ExceptionSoftener {
     public static <X extends Throwable> void throwIf(final X e,
                                                      final Predicate<X> p) {
         if (p.test(e)) {
-            throw ExceptionSoftener.uncheck(e);
+            throw ExceptionSoftener.<RuntimeException>uncheck(e);
         }
     }
 
@@ -724,7 +728,7 @@ public class ExceptionSoftener {
                                                            final Predicate<X> p,
                                                            final Consumer<X> handler) {
         if (p.test(e)) {
-            throw ExceptionSoftener.uncheck(e);
+            throw ExceptionSoftener.<RuntimeException>uncheck(e);
         } else {
             handler.accept(e);
         }

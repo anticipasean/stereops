@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream;
 
 import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.async.adapters.Adapter;
+import cyclops.async.queue.Adapter;
 import cyclops.async.reactive.futurestream.threading.SequentialElasticPools;
 import cyclops.reactive.subscriber.ValueSubscriber;
 import cyclops.container.immutable.LazyImmutable;

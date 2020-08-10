@@ -1,9 +1,9 @@
 package cyclops.async.reactive.futurestream;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.async.adapters.Adapter;
-import cyclops.async.adapters.Queue;
-import cyclops.async.adapters.QueueFactory;
+import cyclops.async.queue.Adapter;
+import cyclops.async.queue.Queue;
+import cyclops.async.queue.QueueFactory;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.async.reactive.futurestream.pushable.MultipleStreamSource;
 import cyclops.async.reactive.futurestream.pushable.PushableFutureStream;

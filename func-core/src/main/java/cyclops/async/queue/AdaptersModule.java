@@ -1,6 +1,10 @@
-package cyclops.async.adapters;
+package cyclops.async.queue;
 
 
+import cyclops.async.exception.ClosedQueueException;
+import cyclops.async.exception.Error;
+import cyclops.async.exception.QueueTimeoutException;
+import cyclops.async.strategy.continuation.ContinuationStrategy;
 import cyclops.container.control.Option;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.reactive.ReactiveSeq;
@@ -57,7 +61,7 @@ public interface AdaptersModule {
                                               }
 
                                               return Option.some(next);
-                                          } catch (final Queue.ClosedQueueException e) {
+                                          } catch (final ClosedQueueException e) {
                                               return Option.none();
                                           }
 
@@ -67,7 +71,7 @@ public interface AdaptersModule {
             if (continuation.size() == 0) {
 
                 queue.close();
-                throw new Queue.ClosedQueueException();
+                throw new ClosedQueueException();
             }
         }
 
@@ -363,7 +367,7 @@ public interface AdaptersModule {
                     action.accept(s.get());
                     subscription.closeQueueIfFinished(queue);
                     return true;
-                } catch (final Queue.ClosedQueueException e) {
+                } catch (final ClosedQueueException e) {
 
                     if (e.isDataPresent()) {
 
@@ -374,10 +378,10 @@ public interface AdaptersModule {
 
                     closed.set(true);
                     return false;
-                } catch (Queue.QueueTimeoutException e) {
+                } catch (QueueTimeoutException e) {
                     timeoutRetry = true;
-                } catch (Queue.Error e) {
-                    throw ExceptionSoftener.throwSoftenedException(e.t);
+                } catch (Error e) {
+                    throw ExceptionSoftener.throwSoftenedException(e.throwable());
 
                 } catch (final Exception e) {
 

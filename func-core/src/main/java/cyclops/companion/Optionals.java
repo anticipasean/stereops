@@ -1,4 +1,4 @@
-package cyclops.async.reactive.futurestream.companion;
+package cyclops.companion;
 
 import cyclops.container.control.Either;
 import cyclops.container.control.Maybe;
