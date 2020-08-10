@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import cyclops.reactor.container.higherkinded.FluxAnyM;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.SetX;
+import cyclops.reactive.collection.container.mutable.SetX;
 import org.junit.Test;
 
 

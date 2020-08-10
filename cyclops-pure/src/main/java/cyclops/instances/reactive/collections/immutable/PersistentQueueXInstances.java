@@ -1,7 +1,7 @@
 package cyclops.instances.reactive.collections.immutable;
 
-import static com.oath.cyclops.data.ReactiveWitness.persistentQueueX;
-import static cyclops.reactive.collections.immutable.PersistentQueueX.narrowK;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.persistentQueueX;
+import static cyclops.reactive.collection.container.immutable.PersistentQueueX.narrowK;
 
 import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
@@ -16,7 +16,7 @@ import cyclops.function.higherkinded.Active;
 import cyclops.function.higherkinded.Coproduct;
 import cyclops.function.higherkinded.Nested;
 import cyclops.function.higherkinded.Product;
-import cyclops.reactive.collections.immutable.PersistentQueueX;
+import cyclops.reactive.collection.container.immutable.PersistentQueueX;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;
@@ -35,7 +35,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
-import lombok.experimental.Wither;
 
 /**
  * Companion class for creating Type Class instances for working with PersistentQueues

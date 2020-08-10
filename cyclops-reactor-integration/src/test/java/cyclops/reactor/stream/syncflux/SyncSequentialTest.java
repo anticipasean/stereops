@@ -1,7 +1,7 @@
 package cyclops.reactor.stream.syncflux;
 
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.async.adapters.Topic;
 import com.oath.cyclops.streams.BaseSequentialTest;
 import cyclops.container.control.Maybe;
@@ -11,7 +11,7 @@ import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import reactor.core.publisher.Flux;

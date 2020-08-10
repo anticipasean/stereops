@@ -1,6 +1,6 @@
 package cyclops.stream.async;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.async.adapters.QueueFactory;
 import cyclops.internal.react.async.future.FastFuture;
 import cyclops.internal.react.async.future.PipelineBuilder;
@@ -11,7 +11,7 @@ import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.companion.Streams;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Spliterator;

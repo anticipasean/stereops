@@ -1,13 +1,13 @@
 package cyclops.arrow;
 
-import static com.oath.cyclops.data.ReactiveWitness.deque;
-import static com.oath.cyclops.data.ReactiveWitness.linkedListX;
-import static com.oath.cyclops.data.ReactiveWitness.list;
-import static com.oath.cyclops.data.ReactiveWitness.persistentQueueX;
-import static com.oath.cyclops.data.ReactiveWitness.persistentSetX;
-import static com.oath.cyclops.data.ReactiveWitness.queue;
-import static com.oath.cyclops.data.ReactiveWitness.set;
-import static com.oath.cyclops.data.ReactiveWitness.vectorX;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.deque;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.linkedListX;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.list;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.persistentQueueX;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.persistentSetX;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.queue;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.set;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.vectorX;
 
 import cyclops.function.higherkinded.DataWitness.completableFuture;
 import cyclops.function.higherkinded.DataWitness.either;
@@ -38,14 +38,14 @@ import cyclops.kinds.StreamKind;
 import cyclops.reactive.IO;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.immutable.PersistentQueueX;
-import cyclops.reactive.collections.immutable.PersistentSetX;
-import cyclops.reactive.collections.immutable.VectorX;
-import cyclops.reactive.collections.mutable.DequeX;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.QueueX;
-import cyclops.reactive.collections.mutable.SetX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.PersistentQueueX;
+import cyclops.reactive.collection.container.immutable.PersistentSetX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.DequeX;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.QueueX;
+import cyclops.reactive.collection.container.mutable.SetX;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 

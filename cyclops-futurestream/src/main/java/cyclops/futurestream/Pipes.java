@@ -1,6 +1,6 @@
 package cyclops.futurestream;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.async.adapters.Adapter;
 import com.oath.cyclops.react.threads.SequentialElasticPools;
 import cyclops.reactive.subscriber.ValueSubscriber;
@@ -17,7 +17,7 @@ import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple0;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;

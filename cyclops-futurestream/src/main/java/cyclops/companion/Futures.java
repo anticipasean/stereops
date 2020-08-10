@@ -7,7 +7,7 @@ import cyclops.exception.ExceptionSoftener;
 import cyclops.container.control.Either;
 import cyclops.async.Future;
 import cyclops.futurestream.SimpleReact;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;

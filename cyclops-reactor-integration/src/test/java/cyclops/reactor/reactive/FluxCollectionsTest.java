@@ -1,16 +1,16 @@
 package cyclops.reactor.reactive;
 
-import cyclops.reactive.collections.immutable.BagX;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.immutable.OrderedSetX;
-import cyclops.reactive.collections.immutable.PersistentQueueX;
-import cyclops.reactive.collections.immutable.PersistentSetX;
-import cyclops.reactive.collections.immutable.VectorX;
-import cyclops.reactive.collections.mutable.DequeX;
-import cyclops.reactive.collections.mutable.ListX;
-import cyclops.reactive.collections.mutable.QueueX;
-import cyclops.reactive.collections.mutable.SetX;
-import cyclops.reactive.collections.mutable.SortedSetX;
+import cyclops.reactive.collection.container.immutable.BagX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.OrderedSetX;
+import cyclops.reactive.collection.container.immutable.PersistentQueueX;
+import cyclops.reactive.collection.container.immutable.PersistentSetX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.DequeX;
+import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.QueueX;
+import cyclops.reactive.collection.container.mutable.SetX;
+import cyclops.reactive.collection.container.mutable.SortedSetX;
 
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactor.companion.FluxCollections;

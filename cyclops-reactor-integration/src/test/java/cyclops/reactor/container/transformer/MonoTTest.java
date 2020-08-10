@@ -1,10 +1,10 @@
 package cyclops.reactor.container.transformer;
 
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.container.printable.Printable;
 import cyclops.container.mutable.Mutable;
-import cyclops.ReactiveReducers;
+import cyclops.reactive.collection.function.reducer.ReactiveReducers;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.companion.Streams;
@@ -15,8 +15,8 @@ import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.optional;
 import cyclops.reactor.container.MonoT;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Mono;

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
@@ -21,7 +21,7 @@ import cyclops.monads.AnyM;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;

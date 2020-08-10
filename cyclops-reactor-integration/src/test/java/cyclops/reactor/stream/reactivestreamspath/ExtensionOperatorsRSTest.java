@@ -1,7 +1,7 @@
 package cyclops.reactor.stream.reactivestreamspath;
 
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.companion.Streams;
 import cyclops.container.control.Maybe;
@@ -10,7 +10,7 @@ import cyclops.monads.AnyM;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

@@ -46,7 +46,7 @@ import cyclops.function.enhanced.Function4;
 import cyclops.function.companion.Lambda;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;

@@ -1,6 +1,6 @@
 package cyclops.stream.async;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.QueueFactory;
 import cyclops.internal.react.exceptions.FilteredExecutionPathException;
@@ -18,7 +18,7 @@ import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.SimpleReact;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

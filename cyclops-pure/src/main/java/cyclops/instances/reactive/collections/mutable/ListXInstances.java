@@ -1,6 +1,6 @@
 package cyclops.instances.reactive.collections.mutable;
 
-import static com.oath.cyclops.data.ReactiveWitness.list;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.list;
 
 import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
@@ -16,7 +16,7 @@ import cyclops.function.higherkinded.Active;
 import cyclops.function.higherkinded.Coproduct;
 import cyclops.function.higherkinded.Nested;
 import cyclops.function.higherkinded.Product;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;
@@ -35,7 +35,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
-import lombok.experimental.Wither;
 
 @UtilityClass
 public class ListXInstances {

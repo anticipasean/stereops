@@ -1052,7 +1052,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      * @param publisher to construct ReactiveSeq from
      * @return ReactiveSeq
      */
-    public static <T> ReactiveSeq<T> fromPublisher(final Publisher<? extends T> publisher) {
+    public static <T> ReactiveSeq<T> fromPublisher(final Publisher<T> publisher) {
         Objects.requireNonNull(publisher);
         if (publisher instanceof ReactiveSeq) {
             return (ReactiveSeq) publisher;

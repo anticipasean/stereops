@@ -8,7 +8,7 @@ import cyclops.stream.async.Continuation;
 import cyclops.container.control.Eval;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
-import cyclops.reactive.collections.mutable.QueueX;
+import cyclops.reactive.collection.container.mutable.QueueX;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -231,7 +231,7 @@ public class SimpleReact implements ReactBuilder {
      * @param publisher to construct SimpleReactStream from
      * @return SimpleReactStream
      */
-    public <T> SimpleReactStream<T> fromPublisher(final Publisher<? extends T> publisher) {
+    public <T> SimpleReactStream<T> fromPublisher(final Publisher<T> publisher) {
         Objects.requireNonNull(publisher);
         Publisher<T> narrowed = (Publisher<T>) publisher;
         return from(Spouts.from(narrowed));

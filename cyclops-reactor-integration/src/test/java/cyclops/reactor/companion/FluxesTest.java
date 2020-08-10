@@ -1,7 +1,6 @@
 package cyclops.reactor.companion;
 
 import cyclops.reactor.stream.impl.FluxReactiveSeqImpl;
-import cyclops.reactor.companion.Fluxs;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.monads.AnyM;
@@ -11,7 +10,7 @@ import cyclops.monads.Witness;
 import cyclops.monads.Witness.optional;
 import cyclops.reactor.container.transformer.StreamT;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;

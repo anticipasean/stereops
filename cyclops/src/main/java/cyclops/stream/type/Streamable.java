@@ -97,7 +97,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param publisher to construct ReactiveSeq from
      * @return FutureStream
      */
-    public static <T> Streamable<T> fromPublisher(final Publisher<? extends T> publisher) {
+    public static <T> Streamable<T> fromPublisher(final Publisher<T> publisher) {
         Objects.requireNonNull(publisher);
 
         return fromStream(Spouts.from(publisher));

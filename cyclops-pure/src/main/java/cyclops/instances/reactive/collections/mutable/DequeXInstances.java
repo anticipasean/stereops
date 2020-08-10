@@ -1,8 +1,8 @@
 package cyclops.instances.reactive.collections.mutable;
 
 
-import static com.oath.cyclops.data.ReactiveWitness.deque;
-import static cyclops.reactive.collections.mutable.DequeX.narrowK;
+import static cyclops.reactive.collection.function.higherkinded.ReactiveWitness.deque;
+import static cyclops.reactive.collection.container.mutable.DequeX.narrowK;
 
 import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
@@ -18,7 +18,7 @@ import cyclops.function.higherkinded.Active;
 import cyclops.function.higherkinded.Coproduct;
 import cyclops.function.higherkinded.Nested;
 import cyclops.function.higherkinded.Product;
-import cyclops.reactive.collections.mutable.DequeX;
+import cyclops.reactive.collection.container.mutable.DequeX;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;
@@ -37,7 +37,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
-import lombok.experimental.Wither;
 
 @UtilityClass
 public class DequeXInstances {

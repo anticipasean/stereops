@@ -508,7 +508,7 @@ public class LazyReact implements ReactBuilder {
      * @param publisher to construct FutureStream from
      * @return FutureStream
      */
-    public <T> FutureStream<T> fromPublisher(final Publisher<? extends T> publisher) {
+    public <T> FutureStream<T> fromPublisher(final Publisher<T> publisher) {
         Objects.requireNonNull(publisher);
         Publisher<T> narrowed = (Publisher<T>) publisher;
         return fromStream(Spouts.from(narrowed));

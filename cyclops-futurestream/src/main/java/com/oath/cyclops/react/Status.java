@@ -1,7 +1,7 @@
 package com.oath.cyclops.react;
 
 import cyclops.container.persistent.PersistentList;
-import cyclops.reactive.collections.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
 import lombok.AllArgsConstructor;
 
 /**

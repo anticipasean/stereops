@@ -1,6 +1,6 @@
 package cyclops.reactor.stream.syncflux;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.stream.companion.Streams;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
@@ -14,7 +14,7 @@ import cyclops.futurestream.LazyReact;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;

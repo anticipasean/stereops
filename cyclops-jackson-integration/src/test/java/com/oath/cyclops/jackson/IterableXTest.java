@@ -7,7 +7,7 @@ import cyclops.container.LazySeq;
 import cyclops.container.Seq;
 import cyclops.container.Vector;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.junit.Test;
 
 public class IterableXTest {

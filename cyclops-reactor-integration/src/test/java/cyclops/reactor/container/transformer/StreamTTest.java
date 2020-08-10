@@ -10,7 +10,7 @@ import cyclops.monads.Witness.optional;
 import cyclops.reactor.container.MonoT;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

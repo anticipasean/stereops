@@ -29,8 +29,8 @@ import cyclops.container.immutable.tuple.Tuple4;
 
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
-import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.IndexedSequenceX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.container.transformable.To;
 import cyclops.container.traversable.Traversable;
 import com.oath.cyclops.anym.transformers.FoldableTransformerSeq;

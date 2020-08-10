@@ -7,9 +7,9 @@ import cyclops.free.Free;
 import cyclops.function.enhanced.Function0;
 import cyclops.instances.jdk.SupplierInstances;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.reactive.collections.immutable.VectorX;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.function.Function;
 import java.util.function.Supplier;
 

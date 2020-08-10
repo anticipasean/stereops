@@ -7,7 +7,7 @@ import cyclops.monads.AnyMs;
 import cyclops.monads.WitnessType;
 import cyclops.reactor.container.transformer.FutureT;
 import cyclops.reactor.container.transformer.ListT;
-import cyclops.reactive.collections.mutable.ListX;
+import cyclops.reactive.collection.container.mutable.ListX;
 
 import java.util.function.Supplier;
 
