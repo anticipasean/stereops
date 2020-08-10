@@ -3,9 +3,9 @@ package com.oath.cyclops.util;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.CompletableFutures;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.async.companion.CompletableFutures;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;

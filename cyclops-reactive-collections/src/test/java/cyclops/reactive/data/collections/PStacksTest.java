@@ -3,8 +3,8 @@ package cyclops.reactive.data.collections;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Reducers;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import java.util.Arrays;

@@ -1,7 +1,7 @@
 package com.oath.cyclops.comprehensions;
 
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ public class ForPublishersTest {
     @Test
     public void publishers() {
 
-        // import static com.oath.cyclops.control.For.*;
+        // import static com.oath.cyclops.container.control.For.*;
 
         ReactiveSeq<Tuple2<Integer, Integer>> stream = ReactiveSeq.of(1,
                                                                       2,

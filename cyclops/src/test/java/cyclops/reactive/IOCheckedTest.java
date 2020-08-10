@@ -8,7 +8,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.Future;
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 import cyclops.function.checked.CheckedFunction;
 import cyclops.reactive.companion.Spouts;
 import java.io.IOException;

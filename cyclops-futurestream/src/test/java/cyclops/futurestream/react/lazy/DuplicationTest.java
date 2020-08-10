@@ -3,9 +3,9 @@ package cyclops.futurestream.react.lazy;
 
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;

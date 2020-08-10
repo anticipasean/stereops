@@ -9,12 +9,12 @@ import static cyclops.function.partial.PartialApplicator.partial8;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.function.Function3;
-import cyclops.function.Function4;
-import cyclops.function.Function5;
-import cyclops.function.Function6;
-import cyclops.function.Function7;
-import cyclops.function.Function8;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function5;
+import cyclops.function.enhanced.Function6;
+import cyclops.function.enhanced.Function7;
+import cyclops.function.enhanced.Function8;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import org.junit.Test;

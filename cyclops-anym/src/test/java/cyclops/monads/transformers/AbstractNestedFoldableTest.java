@@ -22,18 +22,18 @@ import com.oath.cyclops.anym.transformers.FoldableTransformerSeq;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.WitnessType;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 
-import cyclops.companion.Reducers;
-import cyclops.control.Maybe;
+import cyclops.function.companion.Reducers;
+import cyclops.container.control.Maybe;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;
 

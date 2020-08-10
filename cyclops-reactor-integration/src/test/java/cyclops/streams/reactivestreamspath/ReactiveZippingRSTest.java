@@ -3,10 +3,10 @@ package cyclops.streams.reactivestreamspath;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.companion.Streamable;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static cyclops.reactive.FluxReactiveSeq.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.junit.Assert.*;
 
 public class ReactiveZippingRSTest {

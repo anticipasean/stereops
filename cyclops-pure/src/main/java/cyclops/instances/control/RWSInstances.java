@@ -1,20 +1,20 @@
 package cyclops.instances.control;
 
-import static cyclops.control.ReaderWriterState.narrowK;
-import static cyclops.control.ReaderWriterState.rws;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.control.ReaderWriterState.narrowK;
+import static cyclops.container.control.ReaderWriterState.rws;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.function.hkt.DataWitness.rws;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.rws;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
-import cyclops.control.Either;
-import cyclops.control.Option;
-import cyclops.control.ReaderWriterState;
+import cyclops.container.control.Either;
+import cyclops.container.control.Option;
+import cyclops.container.control.ReaderWriterState;
 import cyclops.function.combiner.Monoid;
-import cyclops.function.hkt.Active;
-import cyclops.function.hkt.Nested;
+import cyclops.function.higherkinded.Active;
+import cyclops.function.higherkinded.Nested;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

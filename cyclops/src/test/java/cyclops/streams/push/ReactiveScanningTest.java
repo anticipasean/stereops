@@ -5,7 +5,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
+import cyclops.function.companion.Reducers;
 import org.junit.Test;
 
 public class ReactiveScanningTest {

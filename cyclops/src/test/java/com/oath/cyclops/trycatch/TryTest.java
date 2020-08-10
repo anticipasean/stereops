@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

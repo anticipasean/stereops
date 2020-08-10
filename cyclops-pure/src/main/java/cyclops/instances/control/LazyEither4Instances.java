@@ -1,18 +1,18 @@
 package cyclops.instances.control;
 
-import static cyclops.control.LazyEither4.narrowK;
+import static cyclops.container.control.LazyEither4.narrowK;
 
-import cyclops.function.hkt.DataWitness.lazyEither4;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.lazyEither4;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
-import cyclops.control.Either;
-import cyclops.control.LazyEither4;
-import cyclops.control.Option;
+import cyclops.container.control.Either;
+import cyclops.container.control.LazyEither4;
+import cyclops.container.control.Option;
 import cyclops.function.combiner.Monoid;
-import cyclops.function.hkt.Active;
-import cyclops.function.hkt.Nested;
+import cyclops.function.higherkinded.Active;
+import cyclops.function.higherkinded.Nested;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

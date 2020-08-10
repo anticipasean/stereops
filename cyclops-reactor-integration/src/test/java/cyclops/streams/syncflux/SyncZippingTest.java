@@ -2,9 +2,9 @@ package cyclops.streams.syncflux;
 
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.junit.Assert.*;
 
 public class SyncZippingTest {

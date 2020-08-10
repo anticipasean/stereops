@@ -1,7 +1,7 @@
 package com.oath.cyclops.streams.streamable;
 
 
-import static cyclops.companion.Streamable.of;
+import static cyclops.stream.type.Streamable.of;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 

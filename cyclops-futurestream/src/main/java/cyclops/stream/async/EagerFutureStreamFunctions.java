@@ -2,8 +2,8 @@ package cyclops.stream.async;
 
 import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.Queue.QueueReader;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.List;

@@ -4,7 +4,7 @@ package cyclops.async.adapters;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Collection;

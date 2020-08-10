@@ -6,11 +6,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.persistent.impl.LazyString;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.LazyString;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;

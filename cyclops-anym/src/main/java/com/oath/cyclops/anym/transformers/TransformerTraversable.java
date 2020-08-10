@@ -3,7 +3,7 @@ package com.oath.cyclops.anym.transformers;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.Witness.reactiveSeq;
 import cyclops.monads.transformers.SeqT;
 import cyclops.monads.transformers.VectorT;

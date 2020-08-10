@@ -1,13 +1,13 @@
 package cyclops.matching;
 
-import static cyclops.control.Option.none;
+import static cyclops.container.control.Option.none;
 
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple1;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.container.tuple.Tuple5;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple1;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple5;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;

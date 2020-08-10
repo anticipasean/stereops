@@ -1,7 +1,7 @@
 package cyclops.container.talk;
 
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.Seq;
 import org.junit.Ignore;
 
 @Ignore

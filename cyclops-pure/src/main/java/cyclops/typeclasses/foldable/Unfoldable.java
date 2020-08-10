@@ -1,10 +1,10 @@
 package cyclops.typeclasses.foldable;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.monad.Applicative;
 import cyclops.typeclasses.monad.Traverse;

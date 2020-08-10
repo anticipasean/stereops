@@ -1,12 +1,10 @@
 package cyclops.streams.reactivestreamspath;
 
-import cyclops.companion.reactor.Fluxs;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import static cyclops.reactive.FluxReactiveSeq.of;

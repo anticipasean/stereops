@@ -9,7 +9,7 @@ import cyclops.async.QueueFactories;
 import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.Signal;
 import com.oath.cyclops.react.threads.SequentialElasticPools;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;

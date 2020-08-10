@@ -3,8 +3,8 @@ package com.oath.cyclops.comprehensions;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.CompletableFutures;
-import cyclops.companion.Streams;
+import cyclops.async.companion.CompletableFutures;
+import cyclops.stream.companion.Streams;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

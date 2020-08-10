@@ -2,9 +2,9 @@ package cyclops;
 
 
 import cyclops.container.persistent.PersistentMap;
-import cyclops.companion.Comparators;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.companion.Comparators;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;

@@ -1,6 +1,6 @@
 package cyclops.stream.iterator;
 
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.List;

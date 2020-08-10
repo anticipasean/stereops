@@ -3,7 +3,7 @@ package com.oath.cyclops.comprehensions;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.CompletableFutures;
+import cyclops.async.companion.CompletableFutures;
 import cyclops.async.Future;
 import java.util.concurrent.CompletableFuture;
 import org.junit.Test;

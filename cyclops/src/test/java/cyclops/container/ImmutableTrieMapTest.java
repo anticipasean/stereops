@@ -1,10 +1,10 @@
 package cyclops.container;
 
 import cyclops.container.basetests.BaseImmutableMapTest;
-import cyclops.container.persistent.impl.ImmutableMap;
-import cyclops.container.persistent.impl.TrieMap;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.ImmutableMap;
+import cyclops.container.immutable.impl.TrieMap;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Map;
 import java.util.stream.Stream;
 

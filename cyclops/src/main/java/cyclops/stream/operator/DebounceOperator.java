@@ -1,6 +1,6 @@
 package cyclops.stream.operator;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;

@@ -1,6 +1,6 @@
 package cyclops.reactive.collections.persistent;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static java.util.Comparator.comparing;
 import static org.hamcrest.Matchers.equalTo;
@@ -13,9 +13,9 @@ import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
 import cyclops.function.evaluation.Evaluation;
 import cyclops.container.traversable.IterableX;
-import cyclops.companion.Semigroups;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.AbstractSetTest;

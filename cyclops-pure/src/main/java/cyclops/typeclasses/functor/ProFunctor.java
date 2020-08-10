@@ -1,6 +1,6 @@
 package cyclops.typeclasses.functor;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import java.util.function.Function;
 
 public interface ProFunctor<CRE> {

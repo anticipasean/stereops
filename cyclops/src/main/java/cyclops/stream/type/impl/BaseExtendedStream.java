@@ -2,8 +2,8 @@ package cyclops.stream.type.impl;
 
 import cyclops.container.unwrappable.Unwrappable;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.companion.Streams;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.stream.companion.Streams;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;

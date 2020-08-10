@@ -3,8 +3,8 @@ package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
 import cyclops.function.evaluation.Evaluation;
 import cyclops.container.persistent.PersistentList;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.LinkedListX;

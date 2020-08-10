@@ -1,6 +1,6 @@
 package com.oath.cyclops.trycatch;
 
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

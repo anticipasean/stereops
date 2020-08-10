@@ -1,29 +1,29 @@
 package cyclops.async;
 
 
-import cyclops.control.Either;
-import cyclops.control.Eval;
-import cyclops.control.Ior;
-import cyclops.control.Maybe;
-import cyclops.control.Try;
-import cyclops.function.hkt.DataWitness.future;
-import cyclops.function.hkt.Higher;
+import cyclops.container.control.Either;
+import cyclops.container.control.Eval;
+import cyclops.container.control.Ior;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Try;
+import cyclops.function.higherkinded.DataWitness.future;
+import cyclops.function.higherkinded.Higher;
 import cyclops.container.MonadicValue;
 import cyclops.container.foldable.OrElseValue;
 import cyclops.function.combiner.Zippable;
-import cyclops.container.foldable.To;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.ReactiveTransformable;
 import cyclops.reactive.Completable;
 import cyclops.reactive.subscriber.ValueSubscriber;
 import cyclops.container.recoverable.RecoverableFrom;
-import cyclops.container.box.Mutable;
-import cyclops.companion.CompletableFutures;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.mutable.Mutable;
+import cyclops.async.companion.CompletableFutures;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
@@ -41,7 +41,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
@@ -56,7 +55,6 @@ import org.reactivestreams.Subscription;
  * @param <T> Type of wrapped future value
  * @author johnmcclean
  */
-@AllArgsConstructor
 @EqualsAndHashCode
 public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>, Higher<future, T>,
                                   RecoverableFrom<Throwable, T>, Zippable<T>, ReactiveTransformable<T>,
@@ -64,6 +62,10 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
 
 
     private final CompletableFuture<T> future;
+
+    public Future(CompletableFuture<T> future) {
+        this.future = future;
+    }
 
     public static <T, R> Future<R> tailRec(T initial,
                                            Function<? super T, ? extends Future<? extends Either<T, R>>> fn) {

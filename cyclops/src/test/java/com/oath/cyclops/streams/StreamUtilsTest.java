@@ -11,11 +11,11 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.reactive.companion.ThreadPools;
 import cyclops.stream.type.Connectable;
-import cyclops.companion.Reducers;
-import cyclops.companion.Streamable;
-import cyclops.companion.Streams;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.function.companion.Reducers;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.companion.Streams;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;

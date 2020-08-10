@@ -1,8 +1,8 @@
 package cyclops.container.talk;
 
 import cyclops.async.Future;
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.Seq;
 import java.util.Collection;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

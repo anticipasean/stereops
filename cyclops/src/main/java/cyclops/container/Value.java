@@ -1,13 +1,13 @@
 package cyclops.container;
 
 import cyclops.container.foldable.SealedOr;
-import cyclops.control.Either;
-import cyclops.control.LazyEither;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.control.Try;
-import cyclops.container.persistent.impl.NonEmptyList;
-import cyclops.function.Function0;
+import cyclops.container.control.Either;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.container.immutable.impl.NonEmptyList;
+import cyclops.function.enhanced.Function0;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;

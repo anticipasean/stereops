@@ -4,8 +4,8 @@ import static cyclops.reactive.collections.immutable.LinkedListX.range;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.collections.immutable.VectorX;
 import org.junit.Test;
 

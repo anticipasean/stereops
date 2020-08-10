@@ -1,6 +1,6 @@
 package cyclops.typeclasses.taglessfinal;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.typeclasses.taglessfinal.Cases.Account;
 
 public interface AccountAlgebra<W> {

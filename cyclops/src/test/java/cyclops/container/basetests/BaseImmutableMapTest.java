@@ -9,13 +9,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.HashSet;
-import cyclops.container.persistent.impl.ImmutableMap;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.persistent.impl.TreeMap;
-import cyclops.container.tuple.Tuple;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.ImmutableMap;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.impl.TreeMap;
+import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -82,7 +82,7 @@ public abstract class BaseImmutableMapTest {
     public void equalsTest() {
 
         assertThat(empty(),
-                   equalTo(cyclops.container.persistent.impl.HashMap.empty()));
+                   equalTo(cyclops.container.immutable.impl.HashMap.empty()));
         assertThat(this.<Integer, Integer>empty(),
                    equalTo(TreeMap.empty(Comparator.<Integer>naturalOrder())));
         assertThat(this.<Integer, Integer>of(1,
@@ -92,8 +92,8 @@ public abstract class BaseImmutableMapTest {
                                       2)));
         assertThat(this.<Integer, Integer>of(1,
                                              2),
-                   equalTo(cyclops.container.persistent.impl.HashMap.of(1,
-                                                                        2)));
+                   equalTo(cyclops.container.immutable.impl.HashMap.of(1,
+                                                                       2)));
         assertThat(this.<Integer, Integer>of(1,
                                              2,
                                              3,
@@ -107,10 +107,10 @@ public abstract class BaseImmutableMapTest {
                                              2,
                                              3,
                                              4),
-                   equalTo(cyclops.container.persistent.impl.HashMap.of(1,
-                                                                        2,
-                                                                        3,
-                                                                        4)));
+                   equalTo(cyclops.container.immutable.impl.HashMap.of(1,
+                                                                       2,
+                                                                       3,
+                                                                       4)));
 
     }
 
@@ -485,7 +485,7 @@ public abstract class BaseImmutableMapTest {
         map2.put("6",
                  6);
         assertThat(of("1",
-                      1).putAll(cyclops.container.persistent.impl.HashMap.fromMap(map2))
+                      1).putAll(cyclops.container.immutable.impl.HashMap.fromMap(map2))
                         .javaMap(),
                    equalTo(map));
     }

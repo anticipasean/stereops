@@ -1,8 +1,8 @@
 package cyclops.stream.spliterator;
 
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;

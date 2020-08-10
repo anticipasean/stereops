@@ -2,8 +2,8 @@ package cyclops.streams.asyncreactivestreams;
 
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.util.SimpleTimer;
-import cyclops.container.persistent.impl.TreeSet;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.TreeSet;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;

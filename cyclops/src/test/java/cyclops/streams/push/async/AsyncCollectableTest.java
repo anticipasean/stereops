@@ -1,6 +1,6 @@
 package cyclops.streams.push.async;
 
-import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.Foldable;
 import cyclops.reactive.companion.Spouts;
 import cyclops.streams.CollectableTest;
 
@@ -8,7 +8,7 @@ import cyclops.streams.CollectableTest;
 public class AsyncCollectableTest extends CollectableTest {
 
 
-    public <T> Folds<T> of(T... values) {
+    public <T> Foldable<T> of(T... values) {
 
         return Spouts.<T>async(s -> {
             Thread t = new Thread(() -> {

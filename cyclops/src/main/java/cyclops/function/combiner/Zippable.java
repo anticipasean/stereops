@@ -1,12 +1,12 @@
 package cyclops.function.combiner;
 
 import cyclops.container.transformable.Transformable;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import java.util.function.BiFunction;
 import org.reactivestreams.Publisher;
 

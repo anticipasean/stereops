@@ -1,7 +1,7 @@
 package cyclops.instances.jdk;
 
-import cyclops.function.hkt.DataWitness.predicate;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.predicate;
+import cyclops.function.higherkinded.Higher;
 import cyclops.kinds.PredicateKind;
 import cyclops.typeclasses.functor.ContravariantFunctor;
 import java.util.function.Function;

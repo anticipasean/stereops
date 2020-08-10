@@ -4,12 +4,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Comparators;
+import cyclops.function.companion.Comparators;
 import cyclops.container.basetests.BaseImmutableMapTest;
-import cyclops.container.persistent.impl.ImmutableMap;
-import cyclops.container.persistent.impl.TreeMap;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.ImmutableMap;
+import cyclops.container.immutable.impl.TreeMap;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.Ignore;

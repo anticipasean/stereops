@@ -3,6 +3,7 @@ package cyclops.companion;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import cyclops.function.companion.BiFunctions;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;

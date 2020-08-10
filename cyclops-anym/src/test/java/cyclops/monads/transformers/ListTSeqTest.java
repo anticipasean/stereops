@@ -1,7 +1,7 @@
 package cyclops.monads.transformers;
 
 import cyclops.monads.Witness;
-import cyclops.control.Maybe;
+import cyclops.container.control.Maybe;
 import cyclops.reactive.collections.mutable.ListX;
 import org.junit.Before;
 import org.junit.Test;

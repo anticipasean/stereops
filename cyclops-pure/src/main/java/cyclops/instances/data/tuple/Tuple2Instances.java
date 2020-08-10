@@ -1,19 +1,19 @@
 package cyclops.instances.data.tuple;
 
-import static cyclops.container.tuple.Tuple2.narrowK;
-import static cyclops.container.tuple.Tuple2.of;
+import static cyclops.container.immutable.tuple.Tuple2.narrowK;
+import static cyclops.container.immutable.tuple.Tuple2.of;
 
-import cyclops.function.hkt.DataWitness.tuple2;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.tuple2;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
-import cyclops.control.Either;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Either;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.combiner.Monoid;
-import cyclops.function.hkt.Active;
+import cyclops.function.higherkinded.Active;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

@@ -1,6 +1,6 @@
 package cyclops.container.talk;
 
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.Vector;
 
 public class VectorExample {
 

@@ -3,7 +3,7 @@ package com.oath.cyclops.data.collections.extensions.lazy.immutable;
 
 import cyclops.function.evaluation.Evaluation;
 import cyclops.container.persistent.PersistentQueue;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.PersistentQueueX;

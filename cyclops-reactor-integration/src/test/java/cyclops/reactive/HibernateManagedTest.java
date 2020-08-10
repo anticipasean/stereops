@@ -1,6 +1,6 @@
 package cyclops.reactive;
 
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 import cyclops.futurestream.FutureStreamIO;
 import org.hibernate.Query;
 import org.hibernate.Session;

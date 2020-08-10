@@ -2,8 +2,8 @@ package com.oath.cyclops.reactor;
 
 import com.oath.cyclops.reactor.adapter.FluxReactiveSeqImpl;
 import cyclops.companion.reactor.Fluxs;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyMs;
 import cyclops.monads.FluxAnyM;

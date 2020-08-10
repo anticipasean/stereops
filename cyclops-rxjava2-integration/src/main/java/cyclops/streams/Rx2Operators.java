@@ -69,15 +69,15 @@ public class Rx2Operators {
         return s -> Single.fromPublisher(fn.apply(Future.fromPublisher(s.toFlowable())));
     }
 
-    public static <T, R> Function<cyclops.control.Maybe<T>, cyclops.control.Maybe<R>> rxMaybe(final Function<? super Maybe<? super T>, ? extends Maybe<? extends R>> fn) {
+    public static <T, R> Function<cyclops.container.control.Maybe<T>, cyclops.container.control.Maybe<R>> rxMaybe(final Function<? super Maybe<? super T>, ? extends Maybe<? extends R>> fn) {
 
-        return s -> cyclops.control.Maybe.<R>fromPublisher(Flowables.narrow(fn.apply(Single.fromPublisher(s)
-                                                                                           .toMaybe())
-                                                                              .toFlowable()));
+        return s -> cyclops.container.control.Maybe.<R>fromPublisher(Flowables.narrow(fn.apply(Single.fromPublisher(s)
+                                                                                                     .toMaybe())
+                                                                                        .toFlowable()));
     }
 
-    public static <T, R> Function<Maybe<T>, Maybe<R>> maybe(final Function<? super cyclops.control.Maybe<? super T>, ? extends cyclops.control.Maybe<? extends R>> fn) {
-        return s -> Maybes.narrow(Flowable.fromPublisher(fn.apply(cyclops.control.Maybe.fromPublisher(s.toFlowable())))
+    public static <T, R> Function<Maybe<T>, Maybe<R>> maybe(final Function<? super cyclops.container.control.Maybe<? super T>, ? extends cyclops.container.control.Maybe<? extends R>> fn) {
+        return s -> Maybes.narrow(Flowable.fromPublisher(fn.apply(cyclops.container.control.Maybe.fromPublisher(s.toFlowable())))
                                           .firstElement());
     }
 }

@@ -14,8 +14,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.util.SimpleTimer;
-import cyclops.container.persistent.impl.TreeSet;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.TreeSet;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.io.IOException;
 import java.util.ArrayList;

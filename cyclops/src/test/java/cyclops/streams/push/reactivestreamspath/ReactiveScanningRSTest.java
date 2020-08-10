@@ -6,8 +6,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
-import cyclops.companion.Streamable;
+import cyclops.function.companion.Reducers;
+import cyclops.stream.type.Streamable;
 import java.util.Arrays;
 import org.junit.Test;
 

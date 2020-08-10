@@ -1,6 +1,6 @@
 package cyclops.exception;
 
-import cyclops.control.Try.CheckedRunnable;
+import cyclops.container.control.Try.CheckedRunnable;
 import cyclops.function.checked.CheckedBiConsumer;
 import cyclops.function.checked.CheckedBiFunction;
 import cyclops.function.checked.CheckedBiPredicate;

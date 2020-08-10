@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.companion.Futures;
-import cyclops.control.Future;
+import cyclops.container.control.Future;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.SimpleReact;
 import cyclops.reactive.ReactiveSeq;

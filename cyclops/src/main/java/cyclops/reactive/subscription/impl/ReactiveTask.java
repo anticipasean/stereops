@@ -1,6 +1,6 @@
 package cyclops.reactive.subscription.impl;
 
-import cyclops.container.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple3;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import lombok.Value;

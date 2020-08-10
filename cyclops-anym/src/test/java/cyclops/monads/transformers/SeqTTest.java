@@ -1,6 +1,6 @@
 package cyclops.monads.transformers;
 
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import org.junit.Test;

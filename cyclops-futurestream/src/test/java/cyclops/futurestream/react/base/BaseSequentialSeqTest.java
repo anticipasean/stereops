@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.base;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -17,12 +17,12 @@ import static org.junit.Assert.assertTrue;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.async.adapters.Queue;
 import com.oath.cyclops.util.SimpleTimer;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.container.ImmutableMap;
 import cyclops.container.Seq;
 import cyclops.container.TreeSet;
 import cyclops.container.Vector;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;

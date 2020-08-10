@@ -5,8 +5,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.reactive.subscriber.AsyncSubscriber;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.mutable.ListX;

@@ -3,7 +3,7 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import java.util.Optional;
 import org.junit.Test;
 

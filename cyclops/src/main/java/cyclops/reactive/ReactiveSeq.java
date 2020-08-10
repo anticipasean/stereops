@@ -7,8 +7,8 @@ import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.QueueFactory;
 import cyclops.async.adapters.Signal;
 import cyclops.async.adapters.Topic;
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.subscriber.QueueBasedSubscriber;
 import cyclops.stream.type.impl.OneShotStreamX;
@@ -29,7 +29,7 @@ import cyclops.stream.spliterator.longs.ReversingLongArraySpliterator;
 import cyclops.stream.spliterator.longs.ReversingRangeLongSpliterator;
 import cyclops.container.factory.Unit;
 import cyclops.container.comparative.Contains;
-import cyclops.container.foldable.To;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.ReactiveTransformable;
 import cyclops.stream.async.Continuation;
 import cyclops.container.persistent.PersistentCollection;
@@ -41,22 +41,22 @@ import cyclops.stream.type.ToStream;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.traversable.RecoverableTraversable;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.companion.Streams;
-import cyclops.control.Either;
-import cyclops.control.Eval;
-import cyclops.control.LazyEither;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.Enumeration;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.Either;
+import cyclops.container.control.Eval;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Enumeration;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import java.io.PrintStream;
@@ -364,7 +364,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Integer>, ? extends ReactiveSeq<Integer>> limitInts(long maxSize) {
 
         return a -> a.ints(i -> i,
@@ -386,7 +386,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Integer>, ? extends ReactiveSeq<Integer>> skipInts(long skip) {
 
         return a -> a.ints(i -> i,
@@ -408,7 +408,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Integer>, ? extends ReactiveSeq<Integer>> mapInts(IntUnaryOperator b) {
 
         return a -> a.ints(i -> i,
@@ -430,7 +430,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Integer>, ? extends ReactiveSeq<Integer>> filterInts(IntPredicate b) {
 
         return a -> a.ints(i -> i,
@@ -452,7 +452,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Integer>, ? extends ReactiveSeq<Integer>> concatMapnts(IntFunction<? extends IntStream> b) {
 
         return a -> a.ints(i -> i,
@@ -474,7 +474,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Integer>, ? extends ReactiveSeq<Integer>> concatInts(ReactiveSeq<Integer> b) {
         return a -> fromSpliterator(IntStream.concat(a.mapToInt(i -> i),
                                                      b.mapToInt(i -> i))
@@ -507,7 +507,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Long>, ? extends ReactiveSeq<Long>> limitLongs(long maxSize) {
 
         return a -> a.longs(i -> i,
@@ -529,7 +529,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Long>, ? extends ReactiveSeq<Long>> skipLongs(long skip) {
 
         return a -> a.longs(i -> i,
@@ -551,7 +551,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Long>, ? extends ReactiveSeq<Long>> mapLongs(LongUnaryOperator b) {
 
         return a -> a.longs(i -> i,
@@ -573,7 +573,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Long>, ? extends ReactiveSeq<Long>> filterLongs(LongPredicate b) {
 
         return a -> a.longs(i -> i,
@@ -595,7 +595,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Long>, ? extends ReactiveSeq<Long>> flatMapLongs(LongFunction<? extends LongStream> b) {
 
         return a -> a.longs(i -> i,
@@ -617,7 +617,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Long>, ? extends ReactiveSeq<Long>> concatLongs(ReactiveSeq<Long> b) {
         return a -> fromSpliterator(LongStream.concat(a.mapToLong(i -> i),
                                                       b.mapToLong(i -> i))
@@ -650,7 +650,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Double>, ? extends ReactiveSeq<Double>> limitDouble(long maxSize) {
 
         return a -> a.doubles(i -> i,
@@ -672,7 +672,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Double>, ? extends ReactiveSeq<Double>> skipDoubles(long skip) {
 
         return a -> a.doubles(i -> i,
@@ -694,7 +694,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Double>, ? extends ReactiveSeq<Double>> mapDoubles(DoubleUnaryOperator b) {
 
         return a -> a.doubles(i -> i,
@@ -716,7 +716,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Double>, ? extends ReactiveSeq<Double>> filterLongs(DoublePredicate b) {
 
         return a -> a.doubles(i -> i,
@@ -738,7 +738,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Double>, ? extends ReactiveSeq<Double>> flatMapDoubles(DoubleFunction<? extends DoubleStream> b) {
 
         return a -> a.doubles(i -> i,
@@ -760,7 +760,7 @@ public interface ReactiveSeq<T> extends To<ReactiveSeq<T>>, Stream<T>, OnEmptySw
      *  </pre>
      *
      */
-    @Deprecated //moved to cyclops.companion.Functions
+    @Deprecated //moved to cyclops.function.companion.Functions
     public static Function<? super ReactiveSeq<Double>, ? extends ReactiveSeq<Double>> concatDoubles(ReactiveSeq<Double> b) {
 
         return a -> fromSpliterator(DoubleStream.concat(a.mapToDouble(i -> i),

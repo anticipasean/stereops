@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
-import cyclops.control.LazyEither;
+import cyclops.container.control.LazyEither;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

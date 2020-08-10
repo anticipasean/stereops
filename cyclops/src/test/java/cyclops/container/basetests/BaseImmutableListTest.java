@@ -7,11 +7,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Monoids;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple;
+import cyclops.function.companion.Monoids;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

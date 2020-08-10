@@ -1,11 +1,11 @@
 package cyclops.matching.sample;
 
-import cyclops.matching.Deconstruct;
-import cyclops.container.tuple.Tuple3;
+import cyclops.container.foldable.Deconstructable.Deconstructable3;
+import cyclops.container.immutable.tuple.Tuple3;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public interface Pet extends Deconstruct.Deconstruct3<String, Integer, String> {
+public interface Pet extends Deconstructable3<String, Integer, String> {
 
     String getName();
 

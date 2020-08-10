@@ -3,7 +3,7 @@ package com.oath.cyclops.lambda.functions;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.function.curry.UncurryConsumer;
+import cyclops.function.currying.UncurryConsumer;
 import org.junit.Before;
 import org.junit.Test;
 

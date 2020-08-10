@@ -7,9 +7,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.Supplier;
 import org.junit.Test;

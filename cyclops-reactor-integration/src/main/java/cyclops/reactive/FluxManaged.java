@@ -2,8 +2,8 @@ package cyclops.reactive;
 
 import cyclops.exception.ExceptionSoftener;
 import cyclops.async.Future;
-import cyclops.control.Try;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.control.Try;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Semigroup;
 import org.reactivestreams.Publisher;

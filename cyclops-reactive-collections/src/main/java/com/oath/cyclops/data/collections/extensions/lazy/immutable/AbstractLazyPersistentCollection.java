@@ -6,7 +6,7 @@ import com.oath.cyclops.data.collections.extensions.standard.LazyCollectionX;
 import cyclops.function.evaluation.Evaluation;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;

@@ -1,6 +1,6 @@
 package cyclops.container.transformable;
 
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -10,10 +10,10 @@ import java.util.function.Predicate;
  * @param <T> Data type of the element(s) in this FilterableTransformable
  * @author johnmcclean
  */
-public interface FilterableTransformable<T> extends Filters<T>, Transformable<T> {
+public interface FilterableTransformable<T> extends Filterable<T>, Transformable<T> {
 
     /* (non-Javadoc)
-     * @see cyclops.function.companion.Filters#filter(java.util.function.Predicate)
+     * @see cyclops.container.filterable.Filters#filter(java.util.function.Predicate)
      */
     @Override
     FilterableTransformable<T> filter(Predicate<? super T> fn);

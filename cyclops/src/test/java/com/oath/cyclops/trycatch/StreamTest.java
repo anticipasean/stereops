@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

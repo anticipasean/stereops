@@ -1,6 +1,6 @@
 package cyclops.stream.spliterator.push;
 
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;

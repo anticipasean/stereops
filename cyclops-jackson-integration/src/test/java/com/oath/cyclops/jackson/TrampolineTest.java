@@ -3,7 +3,7 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.control.Trampoline;
+import cyclops.container.control.Trampoline;
 import org.junit.Test;
 
 public class TrampolineTest {

@@ -1,12 +1,12 @@
 package cyclops.instances.control;
 
-import static cyclops.control.Constant.narrowK;
+import static cyclops.container.control.Constant.narrowK;
 
-import cyclops.function.hkt.DataWitness.constant;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.constant;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.MonoidK;
 import cyclops.arrow.SemigroupK;
-import cyclops.control.Constant;
+import cyclops.container.control.Constant;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Semigroup;
 import cyclops.typeclasses.monad.Applicative;

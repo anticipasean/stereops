@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import cyclops.async.adapters.Queue;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.futurestream.LazyReact;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;

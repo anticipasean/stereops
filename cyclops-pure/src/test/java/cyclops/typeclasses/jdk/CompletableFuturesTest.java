@@ -9,13 +9,13 @@ import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.CompletableFuture;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
-import cyclops.control.Maybe;
-import cyclops.function.Function1;
+import cyclops.container.control.Maybe;
+import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 
-import cyclops.function.hkt.DataWitness.completableFuture;
+import cyclops.function.higherkinded.DataWitness.completableFuture;
 import cyclops.instances.control.MaybeInstances;
 import cyclops.instances.jdk.CompletableFutureInstances;
 import cyclops.kinds.CompletableFutureKind;

@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.exception.ExceptionSoftener;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;

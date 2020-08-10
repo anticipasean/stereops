@@ -1,6 +1,6 @@
 package cyclops.container.basetests;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,16 +17,16 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.container.traversable.IterableX;
 import cyclops.Sets;
-import cyclops.companion.Monoids;
-import cyclops.companion.Reducers;
-import cyclops.companion.Semigroups;
-import cyclops.container.persistent.impl.HashSet;
-import cyclops.container.persistent.impl.ImmutableSet;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.TreeSet;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.companion.Monoids;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.ImmutableSet;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.TreeSet;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

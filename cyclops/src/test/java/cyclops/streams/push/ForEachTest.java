@@ -8,7 +8,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import cyclops.reactive.companion.Spouts;
 import java.util.ArrayList;
 import java.util.List;

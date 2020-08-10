@@ -4,11 +4,11 @@ package cyclops.container;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.container.basetests.BaseImmutableListTest;
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.IntMap;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.IntMap;
+import cyclops.container.immutable.tuple.Tuple2;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;

@@ -1,7 +1,7 @@
 package com.oath.cyclops.streams.streamable;
 
 
-import static cyclops.companion.Streamable.of;
+import static cyclops.stream.type.Streamable.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -12,12 +12,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Streamable;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;

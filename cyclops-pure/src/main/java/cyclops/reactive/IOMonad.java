@@ -1,8 +1,8 @@
 package cyclops.reactive;
 
-import cyclops.function.hkt.DataWitness.future;
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.future;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.async.Future;
 import cyclops.instances.control.FutureInstances;
 import cyclops.instances.reactive.PublisherInstances;

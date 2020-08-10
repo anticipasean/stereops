@@ -1,6 +1,6 @@
 package com.oath.cyclops.comprehensions.donotation.typed;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static cyclops.reactive.ReactiveSeq.range;
 
 import cyclops.reactive.ReactiveSeq;

@@ -3,7 +3,7 @@ package cyclops.container;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.HashSet;
+import cyclops.container.immutable.impl.HashSet;
 import org.junit.Test;
 
 public class HashSet2Test {

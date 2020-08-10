@@ -1,14 +1,14 @@
 package cyclops.typeclasses;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.typeclasses.monad.MonadZero;
 import org.junit.Test;
 
-import static cyclops.function.Function2._1;
-import static cyclops.function.Function2._2;
-import static cyclops.function.Function3.__1;
-import static cyclops.function.Function3.__2;
-import static cyclops.function.Function3.__3;
+import static cyclops.function.enhanced.Function2._1;
+import static cyclops.function.enhanced.Function2._2;
+import static cyclops.function.enhanced.Function3.__1;
+import static cyclops.function.enhanced.Function3.__2;
+import static cyclops.function.enhanced.Function3.__3;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 

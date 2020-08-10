@@ -4,7 +4,7 @@ import com.oath.cyclops.react.Status;
 import com.oath.cyclops.react.collectors.lazy.Blocker;
 import com.oath.cyclops.react.threads.SequentialElasticPools;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.control.Either;
+import cyclops.container.control.Either;
 import cyclops.async.Future;
 import cyclops.futurestream.SimpleReact;
 import cyclops.reactive.collections.mutable.ListX;

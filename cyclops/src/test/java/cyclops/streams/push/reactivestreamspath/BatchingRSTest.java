@@ -12,9 +12,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.util.SimpleTimer;
-import cyclops.companion.Streamable;
-import cyclops.container.persistent.impl.TreeSet;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.impl.TreeSet;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.IOException;

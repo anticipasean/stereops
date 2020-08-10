@@ -1,26 +1,26 @@
 package cyclops.monads.transformers.reactor;
 
 
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.function.*;
 
 
-import cyclops.container.foldable.Folds;
-import cyclops.container.foldable.To;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.ReactiveTransformable;
 
 import cyclops.async.Future;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple;
 
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.monads.WitnessType;
-import cyclops.function.Function4;
-import cyclops.function.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function3;
 import reactor.core.publisher.Mono;
 
 /**
@@ -33,7 +33,8 @@ import reactor.core.publisher.Mono;
  *
  * @param <T> Type of data stored inside the nested Mono(s)
  */
-public final class MonoT<W extends WitnessType<W>,T> implements To<MonoT<W,T>>, ReactiveTransformable<T>, Filters<T>, Folds<T> {
+public final class MonoT<W extends WitnessType<W>,T> implements To<MonoT<W,T>>, ReactiveTransformable<T>, Filterable<T>,
+                                                                Foldable<T> {
 
     private final AnyM<W,Mono<T>> run;
 
@@ -287,17 +288,17 @@ public final class MonoT<W extends WitnessType<W>,T> implements To<MonoT<W,T>>, 
 
     @Override
     public <U> MonoT<W,U> ofType(Class<? extends U> type) {
-        return (MonoT<W,U>)Filters.super.ofType(type);
+        return (MonoT<W,U>) Filterable.super.ofType(type);
     }
 
     @Override
     public MonoT<W,T> filterNot(Predicate<? super T> predicate) {
-        return (MonoT<W,T>)Filters.super.filterNot(predicate);
+        return (MonoT<W,T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     public MonoT<W,T> notNull() {
-        return (MonoT<W,T>)Filters.super.notNull();
+        return (MonoT<W,T>) Filterable.super.notNull();
     }
 
 

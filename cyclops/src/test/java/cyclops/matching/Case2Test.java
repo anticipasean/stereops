@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import cyclops.matching.Case.Case2;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import org.junit.Test;
 
 public class Case2Test {

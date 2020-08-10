@@ -1,7 +1,7 @@
 package cyclops.function.combiner;
 
-import cyclops.companion.Semigroups;
-import cyclops.container.persistent.impl.ImmutableList;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

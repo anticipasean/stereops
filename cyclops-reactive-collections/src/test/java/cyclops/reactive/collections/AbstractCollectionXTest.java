@@ -18,10 +18,10 @@ import static org.mockito.Matchers.anyInt;
 
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import com.oath.cyclops.data.collections.extensions.FluentCollectionX;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.TreeSet;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.basetests.AbstractIterableXTest;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.mutable.DequeX;

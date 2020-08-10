@@ -2,15 +2,15 @@ package cyclops.instances.reactive;
 
 import static cyclops.reactive.ReactiveSeq.narrowK;
 
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.companion.ThreadPools;
 import cyclops.arrow.MonoidK;
 import cyclops.arrow.MonoidKs;
-import cyclops.control.Either;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Either;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;

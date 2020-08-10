@@ -1,9 +1,9 @@
 package cyclops.free;
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.LazyEither3;
-import cyclops.function.Function1;
-import cyclops.function.Function2;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.LazyEither3;
+import cyclops.function.enhanced.Function1;
+import cyclops.function.enhanced.Function2;
 import cyclops.typeclasses.functor.Functor;
 
 import java.util.function.Function;

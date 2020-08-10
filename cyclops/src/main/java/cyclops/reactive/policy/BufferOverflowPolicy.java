@@ -1,6 +1,6 @@
 package cyclops.reactive.policy;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 
 public enum BufferOverflowPolicy {
     DROP,

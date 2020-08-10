@@ -10,13 +10,17 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 
+import cyclops.function.companion.Monoids;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.companion.Streams;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,20 +37,19 @@ import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple;
-import cyclops.companion.*;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
 import cyclops.futurestream.LazyReact;
 
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -1108,7 +1111,7 @@ public abstract class AbstractAnyMSeqTest<W extends WitnessType<W>> {//@TODO ext
     @Test
     public void combineNoOrderMonoid(){
         assertThat(of(1,2,3)
-                .combine(Monoids.intSum,(a, b)->a.equals(b))
+                .combine(Monoids.intSum, (a, b)->a.equals(b))
                 .to(ReactiveConvertableSequence::converter).listX(),equalTo(ListX.of(1,2,3)));
 
     }

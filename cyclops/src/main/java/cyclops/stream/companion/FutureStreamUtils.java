@@ -1,9 +1,8 @@
 package cyclops.stream.companion;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.companion.Streams;
-import cyclops.container.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple3;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;

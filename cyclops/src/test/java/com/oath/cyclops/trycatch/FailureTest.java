@@ -6,9 +6,9 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.control.Try;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystemException;

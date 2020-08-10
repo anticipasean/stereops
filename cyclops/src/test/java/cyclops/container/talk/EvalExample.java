@@ -1,6 +1,6 @@
 package cyclops.container.talk;
 
-import cyclops.control.Eval;
+import cyclops.container.control.Eval;
 
 public class EvalExample {
 

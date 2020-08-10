@@ -3,7 +3,7 @@ package cyclops.async.adapters;
 import cyclops.container.foldable.Sealed2;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
-import cyclops.control.Either;
+import cyclops.container.control.Either;
 import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;

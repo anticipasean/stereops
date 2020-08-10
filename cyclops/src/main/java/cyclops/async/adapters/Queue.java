@@ -10,7 +10,7 @@ import cyclops.reactive.subscription.Subscription;
 import cyclops.stream.async.Continuation;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.util.SimpleTimer;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import java.util.AbstractQueue;
 import java.util.ArrayList;

@@ -3,19 +3,22 @@ package cyclops.monads.transformers;
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
-import cyclops.companion.*;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.async.companion.CompletableFutures;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.*;
 
-import cyclops.util.mixins.Printable;
+import cyclops.stream.companion.Streams;
+import cyclops.container.printable.Printable;
 import cyclops.monads.transformers.jdk.CompletableFutureT;
 import cyclops.reactive.collections.immutable.LinkedListX;
-import cyclops.container.box.Mutable;
+import cyclops.container.mutable.Mutable;
 import cyclops.reactive.collections.mutable.ListX;
-import cyclops.control.*;
-import cyclops.control.Maybe;
+import cyclops.container.control.*;
+import cyclops.container.control.Maybe;
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 
@@ -271,7 +274,7 @@ public class CompletableFutureTTest implements Printable {
 
 	@Test
 	public void testReduceStreamOfQextendsMonoidOfT() {
-		Seq<Integer> countAndTotal = just.foldLeft(ListX.of(Reducers.toCountInt(),Reducers.toTotalInt()));
+		Seq<Integer> countAndTotal = just.foldLeft(ListX.of(Reducers.toCountInt(), Reducers.toTotalInt()));
 		assertThat(countAndTotal,equalTo(Seq.of(1,10)));
 	}
 
@@ -285,7 +288,7 @@ public class CompletableFutureTTest implements Printable {
 
 	@Test
 	public void testFoldRightMonoidOfT() {
-		assertThat(just.foldRight(Monoid.of(1, Semigroups.intMult)),equalTo(10));
+		assertThat(just.foldRight(Monoid.of(1, Semigroups.intMult)), equalTo(10));
 	}
 
 	@Test
@@ -348,7 +351,7 @@ public class CompletableFutureTTest implements Printable {
 	@Test
 	public void testIterator1() {
 		assertThat(Streams.stream(just.iterator()).collect(Collectors.toList()),
-				equalTo(Arrays.asList(10)));
+                   equalTo(Arrays.asList(10)));
 	}
 
 	@Test

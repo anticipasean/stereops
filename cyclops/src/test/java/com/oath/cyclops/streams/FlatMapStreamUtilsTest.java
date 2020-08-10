@@ -3,7 +3,7 @@ package com.oath.cyclops.streams;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.Optional;

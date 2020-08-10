@@ -1,7 +1,6 @@
 package cyclops.streams.asyncreactivestreams;
 
-import cyclops.companion.Reducers;
-import cyclops.companion.reactor.Fluxs;
+import cyclops.function.companion.Reducers;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;

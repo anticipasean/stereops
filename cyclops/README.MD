@@ -383,7 +383,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Tuple     | Factory methods for Tuples | Strict, Higher kinded               |
 | Tuple0-Tuple8     | Tuple implementations | Strict, Higher kinded               |
 
-## cyclops.control
+## cyclops.container.control
 
 | type | description | characteristics |
 |------|-------------|-----------------|
@@ -400,7 +400,7 @@ ReactiveSeq<Integer> seq = Observables.of(1,2,3)
 | Unrestricted     | "Java Friendly" implementation of the Free monad for Java, facilitates functional interpreters.         | Lazy, concurrent                |
 | Future     | Potentially asynchronous task that may populate a result in the Future            | Eager async, Higher kinded                 |
 
-### cyclops.control : Reactive Sum Types
+### cyclops.container.control : Reactive Sum Types
 
 
 | type | description | characteristics |

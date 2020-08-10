@@ -1,8 +1,7 @@
 package cyclops.stream.type.impl;
 
 import cyclops.stream.type.Connectable;
-import cyclops.stream.type.impl.BaseConnectableImpl;
-import cyclops.companion.Eithers;
+import cyclops.container.control.companion.Eithers;
 import cyclops.function.companion.FluentFunctions;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

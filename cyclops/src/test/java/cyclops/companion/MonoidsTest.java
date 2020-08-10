@@ -3,8 +3,9 @@ package cyclops.companion;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.Chain;
+import cyclops.container.immutable.impl.Chain;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Monoids;
 import java.util.Arrays;
 import org.junit.Test;
 

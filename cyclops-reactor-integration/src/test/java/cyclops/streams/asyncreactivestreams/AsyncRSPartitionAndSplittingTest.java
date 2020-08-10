@@ -1,14 +1,12 @@
 package cyclops.streams.asyncreactivestreams;
 
-import cyclops.companion.reactor.Fluxs;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.Optional;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 

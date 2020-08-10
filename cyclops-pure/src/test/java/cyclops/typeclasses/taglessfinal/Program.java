@@ -1,8 +1,8 @@
 package cyclops.typeclasses.taglessfinal;
 
-import cyclops.function.hkt.Higher;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.typeclasses.Do;
 import cyclops.typeclasses.monad.Monad;
 import cyclops.typeclasses.taglessfinal.Cases.Account;
@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.function.Function;
 
-import static cyclops.function.Function2._1;
-import static cyclops.function.Function3.__23;
+import static cyclops.function.enhanced.Function2._1;
+import static cyclops.function.enhanced.Function3.__23;
 
 @AllArgsConstructor
 public class Program<W> {

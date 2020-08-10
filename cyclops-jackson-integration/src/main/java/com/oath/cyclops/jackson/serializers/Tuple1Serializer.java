@@ -3,7 +3,7 @@ package com.oath.cyclops.jackson.serializers;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import cyclops.container.tuple.Tuple1;
+import cyclops.container.immutable.tuple.Tuple1;
 import java.io.IOException;
 
 public class Tuple1Serializer extends JsonSerializer<Tuple1<?>> {

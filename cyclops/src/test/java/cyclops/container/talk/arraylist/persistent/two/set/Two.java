@@ -1,6 +1,6 @@
 package cyclops.container.talk.arraylist.persistent.two.set;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import java.util.Arrays;
 
 public class Two<E> {

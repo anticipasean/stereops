@@ -2,9 +2,9 @@ package cyclops.monads;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.companion.Semigroups;
+import cyclops.function.companion.Semigroups;
 import cyclops.async.Future;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.futurestream.LazyReact;
 import cyclops.monads.transformers.VectorT;
 import cyclops.reactive.collections.mutable.ListX;

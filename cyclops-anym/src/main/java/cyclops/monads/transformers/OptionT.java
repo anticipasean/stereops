@@ -1,17 +1,17 @@
 package cyclops.monads.transformers;
 
 import com.oath.cyclops.anym.transformers.ValueTransformer;
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
-import cyclops.container.foldable.To;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
@@ -23,8 +23,7 @@ import java.util.function.*;
 
 public final class OptionT<W extends WitnessType<W>,T> extends ValueTransformer<W,T>
                                                        implements To<OptionT<W,T>>,
-                                                                  Transformable<T>,
-                                                                  Filters<T> {
+                                                                  Transformable<T>, Filterable<T> {
 
     private final AnyM<W,Option<T>> run;
 
@@ -347,17 +346,17 @@ public final class OptionT<W extends WitnessType<W>,T> extends ValueTransformer<
 
     @Override
     public <U> OptionT<W,U> ofType(Class<? extends U> type) {
-        return (OptionT<W,U>)Filters.super.ofType(type);
+        return (OptionT<W,U>) Filterable.super.ofType(type);
     }
 
     @Override
     public OptionT<W,T> filterNot(Predicate<? super T> predicate) {
-        return (OptionT<W,T>)Filters.super.filterNot(predicate);
+        return (OptionT<W,T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     public OptionT<W,T> notNull() {
-        return (OptionT<W,T>)Filters.super.notNull();
+        return (OptionT<W,T>) Filterable.super.notNull();
     }
 
 

@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.Foldable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.Executor;
@@ -18,10 +18,10 @@ import org.junit.Test;
 public abstract class CollectableTest {
 
     static final Executor exec = Executors.newFixedThreadPool(1);
-    Folds<Integer> empty;
-    Folds<Integer> nonEmpty;
+    Foldable<Integer> empty;
+    Foldable<Integer> nonEmpty;
 
-    public abstract <T> Folds<T> of(T... values);
+    public abstract <T> Foldable<T> of(T... values);
 
     @Before
     public void setup() {
@@ -169,12 +169,12 @@ public abstract class CollectableTest {
 
     @Test
     public void testMinByMaxBy() {
-        Supplier<Folds<Integer>> s = () -> of(1,
-                                              2,
-                                              3,
-                                              4,
-                                              5,
-                                              6);
+        Supplier<Foldable<Integer>> s = () -> of(1,
+                                                 2,
+                                                 3,
+                                                 4,
+                                                 5,
+                                                 6);
 
         assertEquals(1,
                      (int) s.get()

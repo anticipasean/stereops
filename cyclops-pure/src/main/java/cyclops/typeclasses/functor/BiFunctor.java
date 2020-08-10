@@ -1,6 +1,6 @@
 package cyclops.typeclasses.functor;
 
-import cyclops.function.hkt.Higher2;
+import cyclops.function.higherkinded.Higher2;
 import java.util.function.Function;
 
 

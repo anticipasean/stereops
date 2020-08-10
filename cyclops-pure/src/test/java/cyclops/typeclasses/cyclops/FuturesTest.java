@@ -1,12 +1,12 @@
 package cyclops.typeclasses.cyclops;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.async.Future;
-import cyclops.control.Maybe;
-import cyclops.function.Function1;
+import cyclops.container.control.Maybe;
+import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
-import cyclops.function.hkt.DataWitness.future;
+import cyclops.function.higherkinded.DataWitness.future;
 import cyclops.arrow.MonoidKs;
 import cyclops.instances.control.FutureInstances;
 import cyclops.instances.control.MaybeInstances;

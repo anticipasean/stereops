@@ -1,21 +1,21 @@
 package cyclops.instances.control;
 
-import static cyclops.control.Ior.narrowK;
+import static cyclops.container.control.Ior.narrowK;
 
-import cyclops.function.hkt.DataWitness.ior;
-import cyclops.function.hkt.Higher;
-import cyclops.function.hkt.Higher2;
+import cyclops.function.higherkinded.DataWitness.ior;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher2;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
 import cyclops.arrow.MonoidK;
-import cyclops.control.Either;
-import cyclops.control.Ior;
-import cyclops.control.Option;
+import cyclops.container.control.Either;
+import cyclops.container.control.Ior;
+import cyclops.container.control.Option;
 import cyclops.function.combiner.Monoid;
-import cyclops.function.hkt.Active;
-import cyclops.function.hkt.Coproduct;
-import cyclops.function.hkt.Nested;
-import cyclops.function.hkt.Product;
+import cyclops.function.higherkinded.Active;
+import cyclops.function.higherkinded.Coproduct;
+import cyclops.function.higherkinded.Nested;
+import cyclops.function.higherkinded.Product;
 import cyclops.typeclasses.InstanceDefinitions;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.Comonad;

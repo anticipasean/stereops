@@ -1,17 +1,17 @@
 package cyclops.function.cacheable;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.function.Function0;
-import cyclops.function.Function1;
-import cyclops.function.Function2;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.function.enhanced.Function0;
+import cyclops.function.enhanced.Function1;
+import cyclops.function.enhanced.Function2;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.container.box.LazyImmutable;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.container.immutable.LazyImmutable;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Map;
 import java.util.concurrent.Callable;

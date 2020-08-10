@@ -1,9 +1,9 @@
 package cyclops.companion.rx2;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.control.Either;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Either;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.Rx2Witness.observable;
 import cyclops.reactive.ObservableReactiveSeq;

@@ -1,6 +1,6 @@
 package cyclops.typeclasses;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 

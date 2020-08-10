@@ -1,21 +1,21 @@
 package cyclops.container.traversable;
 
-import cyclops.container.persistent.impl.ConvertableSequence;
-import cyclops.container.foldable.Folds;
+import cyclops.container.immutable.impl.ConvertableSequence;
+import cyclops.container.foldable.Foldable;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.reactive.operation.ReactiveStreamsTerminalOperations;
-import cyclops.control.Eval;
+import cyclops.container.control.Eval;
 import cyclops.async.Future;
-import cyclops.control.Try;
-import cyclops.container.persistent.impl.HashSet;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.function.Function1;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Try;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.enhanced.Function1;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import org.reactivestreams.Subscription;
  * Iterable on steroids. Created by johnmcclean on 17/12/2016.
  */
 @FunctionalInterface
-public interface IterableX<T> extends Traversable<T>, Folds<T>, Iterable<T>, ReactiveStreamsTerminalOperations<T> {
+public interface IterableX<T> extends Traversable<T>, Foldable<T>, Iterable<T>, ReactiveStreamsTerminalOperations<T> {
 
 
     default int size() {

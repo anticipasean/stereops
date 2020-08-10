@@ -1,9 +1,9 @@
 package cyclops.typeclasses.taglessfinal;
 
-import cyclops.function.hkt.DataWitness.io;
-import cyclops.function.hkt.Higher;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.HashMap;
+import cyclops.function.higherkinded.DataWitness.io;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.HashMap;
 import cyclops.reactive.IO;
 
 public class StoreIO<K,V> implements StoreAlgebra<io,K,V> {

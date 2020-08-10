@@ -1,15 +1,15 @@
 package cyclops.typeclasses.monad;
 
-import static cyclops.control.State.state;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.control.State.state;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.Constant;
-import cyclops.control.Maybe;
-import cyclops.control.State;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Constant;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.State;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.combiner.Monoid;
 import cyclops.instances.control.ConstantInstances;
 import cyclops.instances.control.StateInstances;

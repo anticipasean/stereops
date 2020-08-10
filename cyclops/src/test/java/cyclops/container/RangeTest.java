@@ -1,6 +1,6 @@
 package cyclops.container;
 
-import static cyclops.container.persistent.impl.Enumeration.enums;
+import static cyclops.container.immutable.impl.Enumeration.enums;
 import static cyclops.container.EnumerationTest.Days.Friday;
 import static cyclops.container.EnumerationTest.Days.Monday;
 import static cyclops.container.EnumerationTest.Days.Saturday;
@@ -14,12 +14,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Comparators;
-import cyclops.control.Option;
+import cyclops.function.companion.Comparators;
+import cyclops.container.control.Option;
 import cyclops.container.EnumerationTest.Days;
-import cyclops.container.persistent.impl.Range;
-import cyclops.container.tuple.Tuple2;
-import cyclops.function.order.Ord;
+import cyclops.container.immutable.impl.Range;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.ordering.Ord;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

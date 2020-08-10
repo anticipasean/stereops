@@ -3,8 +3,8 @@ package com.oath.cyclops.comprehensions;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Streams;
-import cyclops.control.Trampoline;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.Trampoline;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

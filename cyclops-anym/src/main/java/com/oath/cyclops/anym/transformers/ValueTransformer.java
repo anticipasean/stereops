@@ -3,26 +3,25 @@ package com.oath.cyclops.anym.transformers;
 import java.util.function.*;
 
 import cyclops.container.factory.Unit;
-import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.Foldable;
 import cyclops.container.MonadicValue;
 import cyclops.container.unwrappable.Unwrappable;
 import cyclops.function.combiner.Zippable;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.monads.WitnessType;
-import cyclops.function.Function4;
-import cyclops.function.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function3;
 
 @Deprecated
 public abstract class ValueTransformer<W extends WitnessType<W>,T> implements Publisher<T>,
   Unwrappable,
-  Unit<T>,
-  Folds<T>,
+  Unit<T>, Foldable<T>,
   Zippable<T> {
     public abstract <R> ValueTransformer<W,R> empty();
    // public abstract <R> ValueTransformer<W,R> flatMap(final Function<? super T, ? extends MonadicValue<? extends R>> f);

@@ -1,11 +1,11 @@
 package cyclops.typeclasses.monad;
 
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.Either;
-import cyclops.control.Eval;
-import cyclops.control.LazyEither;
-import cyclops.function.Function0;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Either;
+import cyclops.container.control.Eval;
+import cyclops.container.control.LazyEither;
+import cyclops.function.enhanced.Function0;
 import java.util.function.Function;
 
 public interface ApplicativeError<W, E> extends Applicative<W> {

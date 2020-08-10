@@ -1,9 +1,9 @@
 package cyclops.typeclasses.taglessfinal;
 
 
-import cyclops.function.hkt.DataWitness.identity;
-import cyclops.function.hkt.Higher;
-import cyclops.control.Identity;
+import cyclops.function.higherkinded.DataWitness.identity;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Identity;
 
 public class LogID implements LogAlgebra<identity> {
 

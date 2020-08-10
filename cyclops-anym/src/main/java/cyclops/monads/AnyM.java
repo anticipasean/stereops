@@ -1,10 +1,13 @@
 package cyclops.monads;
 
-import cyclops.container.persistent.impl.BankersQueue;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.BankersQueue;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.function.companion.Lambda;
 import cyclops.function.companion.Predicates;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function5;
 import cyclops.reactive.companion.Spouts;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -29,21 +32,21 @@ import com.oath.cyclops.anym.internal.adapters.StreamAdapter;
 import com.oath.cyclops.anym.internal.monads.AnyMValue2Impl;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.stream.type.impl.ReactiveStreamX;
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
 import cyclops.container.unwrappable.Unwrappable;
 
 import cyclops.container.factory.EmptyUnit;
 import cyclops.container.factory.Unit;
-import cyclops.container.foldable.Folds;
-import cyclops.container.foldable.To;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
 import cyclops.container.traversable.IterableX;
-import cyclops.companion.Streamable;
-import cyclops.control.*;
-import cyclops.container.persistent.impl.HashSet;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple;
+import cyclops.stream.type.Streamable;
+import cyclops.container.control.*;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
 import cyclops.futurestream.FutureStream;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.monads.function.AnyMFunction1;
@@ -51,9 +54,8 @@ import cyclops.monads.transformers.FutureT;
 import cyclops.monads.transformers.ListT;
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
 import cyclops.async.Future;
-import cyclops.function.*;
 import cyclops.reactive.*;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.collections.immutable.*;
 import cyclops.reactive.collections.mutable.*;
 import org.reactivestreams.Publisher;
@@ -115,12 +117,10 @@ import static cyclops.function.evaluation.Evaluation.LAZY;
 public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
                                                             To<AnyM<W,T>>,
                                                             EmptyUnit<T>,
-                                                            Unit<T>,
-                                                            Folds<T>,
+                                                            Unit<T>, Foldable<T>,
                                                             Transformable<T>,
                                                             ToStream<T>,
-                                                            Publisher<T>,
-                                                            Filters<T> {
+                                                            Publisher<T>, Filterable<T> {
 
 
     /**
@@ -1493,17 +1493,17 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
 
     @Override
     default <U> AnyM<W,U> ofType(final Class<? extends U> type) {
-        return (AnyM<W,U>)Filters.super.ofType(type);
+        return (AnyM<W,U>) Filterable.super.ofType(type);
     }
 
     @Override
     default AnyM<W,T> filterNot(final Predicate<? super T> predicate) {
-        return (AnyM<W,T>)Filters.super.filterNot(predicate);
+        return (AnyM<W,T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     default AnyM<W,T> notNull() {
-        return (AnyM<W,T>)Filters.super.notNull();
+        return (AnyM<W,T>) Filterable.super.notNull();
     }
 
 

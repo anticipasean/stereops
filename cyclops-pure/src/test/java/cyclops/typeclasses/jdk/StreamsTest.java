@@ -1,9 +1,9 @@
 package cyclops.typeclasses.jdk;
 
-import cyclops.function.hkt.DataWitness.stream;
-import cyclops.function.hkt.Higher;
-import cyclops.control.Maybe;
-import cyclops.function.Function1;
+import cyclops.function.higherkinded.DataWitness.stream;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Maybe;
+import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.instances.control.MaybeInstances;
 import cyclops.instances.jdk.StreamInstances;

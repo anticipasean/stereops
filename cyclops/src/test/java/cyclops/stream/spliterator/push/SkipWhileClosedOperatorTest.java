@@ -6,7 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.concurrent.Executor;

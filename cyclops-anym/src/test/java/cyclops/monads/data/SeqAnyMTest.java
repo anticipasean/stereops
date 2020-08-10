@@ -1,7 +1,7 @@
 package cyclops.monads.data;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.seq;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;

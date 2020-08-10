@@ -1,7 +1,7 @@
 package cyclops.typeclasses;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
 public interface Show<W> {
 

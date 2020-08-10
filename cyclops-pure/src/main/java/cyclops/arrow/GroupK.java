@@ -1,7 +1,7 @@
 package cyclops.arrow;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.function.combiner.Group;
 
 public interface GroupK<W> extends MonoidK<W> {

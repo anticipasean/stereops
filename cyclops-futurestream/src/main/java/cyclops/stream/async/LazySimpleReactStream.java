@@ -8,7 +8,7 @@ import cyclops.internal.react.exceptions.FilteredExecutionPathException;
 import cyclops.internal.react.stream.LazyStreamWrapper;
 import com.oath.cyclops.react.SimpleReactFailedStageException;
 import cyclops.reactive.subscription.Continueable;
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.mutable.ListX;

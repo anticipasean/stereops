@@ -1,15 +1,15 @@
 package com.oath.cyclops.streams.streamable;
 
 
-import static cyclops.companion.Streamable.of;
+import static cyclops.stream.type.Streamable.of;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Streamable;
-import cyclops.control.Option;
+import cyclops.stream.type.Streamable;
+import cyclops.container.control.Option;
 import java.util.function.Supplier;
 import org.junit.Test;
 

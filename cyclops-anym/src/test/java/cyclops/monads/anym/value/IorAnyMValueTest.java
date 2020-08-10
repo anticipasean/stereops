@@ -3,13 +3,13 @@ package cyclops.monads.anym.value;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.box.Mutable;
+import cyclops.container.mutable.Mutable;
 import cyclops.monads.Witness.ior;
 import org.junit.Before;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.control.Ior;
+import cyclops.container.control.Ior;
 
 public class IorAnyMValueTest extends BaseAnyMValueTest<ior> {
     @Before

@@ -6,12 +6,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 import cyclops.reactive.subscriber.ValueSubscriber;
-import cyclops.control.Either;
-import cyclops.control.Eval;
+import cyclops.container.control.Either;
+import cyclops.container.control.Eval;
 import cyclops.async.Future;
-import cyclops.control.Ior;
-import cyclops.control.Maybe;
-import cyclops.control.Try;
+import cyclops.container.control.Ior;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Try;
 import cyclops.reactive.ReactiveSeq;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Executor;

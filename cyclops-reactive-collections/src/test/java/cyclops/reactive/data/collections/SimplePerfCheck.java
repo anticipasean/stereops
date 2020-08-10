@@ -1,7 +1,7 @@
 package cyclops.reactive.data.collections;
 
 import cyclops.container.persistent.PersistentList;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.mutable.ListX;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package cyclops.stream.operator;
 
 import cyclops.exception.ExceptionSoftener;
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.stream.Stream;

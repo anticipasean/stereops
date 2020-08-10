@@ -1,12 +1,12 @@
 package cyclops.arrow;
 
-import cyclops.function.hkt.DataWitness.option;
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.DataWitness.seq;
-import cyclops.function.hkt.Higher;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.function.Function1;
-import cyclops.function.hkt.NaturalTransformation;
+import cyclops.function.higherkinded.DataWitness.option;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.DataWitness.seq;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.function.enhanced.Function1;
+import cyclops.function.higherkinded.NaturalTransformation;
 import cyclops.instances.control.MaybeInstances;
 import cyclops.instances.reactive.PublisherInstances;
 import cyclops.reactive.ReactiveSeq;

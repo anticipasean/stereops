@@ -1,6 +1,6 @@
 package com.oath.cyclops.data.collections.extensions;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 

@@ -1,6 +1,6 @@
 package cyclops.streams;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static cyclops.function.companion.Predicates.anyOf;
 import static cyclops.function.companion.Predicates.greaterThan;
 import static cyclops.function.companion.Predicates.hasItems;
@@ -22,12 +22,12 @@ import com.google.common.collect.Lists;
 import cyclops.reactive.subscriber.AsyncSubscriber;
 import cyclops.reactive.subscriber.ReactiveSubscriber;
 import cyclops.util.SimpleTimer;
-import cyclops.companion.Monoids;
-import cyclops.companion.Semigroups;
-import cyclops.companion.Streamable;
-import cyclops.control.Eval;
+import cyclops.function.companion.Monoids;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.type.Streamable;
+import cyclops.container.control.Eval;
 import cyclops.async.Future;
-import cyclops.container.persistent.impl.Bag;
+import cyclops.container.immutable.impl.Bag;
 import cyclops.container.EnumerationTest.Days;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;

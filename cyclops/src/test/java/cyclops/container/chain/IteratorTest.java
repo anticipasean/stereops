@@ -7,12 +7,12 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
 import cyclops.container.traversable.IterableX;
-import cyclops.container.persistent.impl.Chain;
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
+import cyclops.container.immutable.impl.Chain;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

@@ -9,12 +9,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Streamable;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.stream.type.Streamable;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

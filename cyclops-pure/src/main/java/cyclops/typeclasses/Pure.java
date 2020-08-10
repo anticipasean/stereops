@@ -1,7 +1,7 @@
 package cyclops.typeclasses;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
 /**
  * Type class for creating instances of types

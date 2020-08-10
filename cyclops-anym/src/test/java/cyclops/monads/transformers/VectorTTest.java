@@ -1,7 +1,7 @@
 package cyclops.monads.transformers;
 
 import com.oath.cyclops.data.collections.extensions.IndexedSequenceX;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.reactive.companion.Converters;

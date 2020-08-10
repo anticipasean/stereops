@@ -1,15 +1,15 @@
 package cyclops.monads.transformers;
 
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
 import com.oath.cyclops.anym.transformers.NonEmptyTransformer;
-import cyclops.container.foldable.To;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.control.Either;
+import cyclops.container.control.Either;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.container.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple;
 
 import java.util.Iterator;
 import java.util.function.*;
@@ -26,7 +26,7 @@ import java.util.function.*;
  */
 public final class EitherT<W extends WitnessType<W>, ST,T> extends NonEmptyTransformer<W, T> implements  To<EitherT<W, ST,T>>,
                                                                                                     Transformable<T>,
-                                                                                                     Filters<T> {
+                                                                                                         Filterable<T> {
 
     private final AnyM<W,Either<ST,T>> run;
 
@@ -315,17 +315,17 @@ public final class EitherT<W extends WitnessType<W>, ST,T> extends NonEmptyTrans
 
     @Override
     public <U> EitherT<W,ST,U> ofType(Class<? extends U> type) {
-        return (EitherT<W,ST,U>)Filters.super.ofType(type);
+        return (EitherT<W,ST,U>) Filterable.super.ofType(type);
     }
 
     @Override
     public EitherT<W,ST,T> filterNot(Predicate<? super T> predicate) {
-        return (EitherT<W,ST,T>)Filters.super.filterNot(predicate);
+        return (EitherT<W,ST,T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     public EitherT<W,ST,T> notNull() {
-        return (EitherT<W,ST,T>)Filters.super.notNull();
+        return (EitherT<W,ST,T>) Filterable.super.notNull();
     }
 
 

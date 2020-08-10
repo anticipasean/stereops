@@ -10,8 +10,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.cacheable.Memoize;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;

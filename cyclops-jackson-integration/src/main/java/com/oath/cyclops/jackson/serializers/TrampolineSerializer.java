@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.ReferenceTypeSerializer;
 import com.fasterxml.jackson.databind.type.ReferenceType;
 import com.fasterxml.jackson.databind.util.NameTransformer;
-import cyclops.control.Trampoline;
+import cyclops.container.control.Trampoline;
 
 public class TrampolineSerializer extends ReferenceTypeSerializer<Trampoline<?>> {
 

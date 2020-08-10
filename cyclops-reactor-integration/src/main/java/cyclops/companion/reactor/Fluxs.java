@@ -1,8 +1,8 @@
 package cyclops.companion.reactor;
 
-import cyclops.control.Either;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Either;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import lombok.experimental.UtilityClass;

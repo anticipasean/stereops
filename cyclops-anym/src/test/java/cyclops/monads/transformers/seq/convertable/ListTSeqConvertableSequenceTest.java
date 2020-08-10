@@ -1,7 +1,7 @@
 package cyclops.monads.transformers.seq.convertable;
 
 import cyclops.container.foldable.AbstractConvertableSequenceTest;
-import cyclops.container.persistent.impl.ConvertableSequence;
+import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;

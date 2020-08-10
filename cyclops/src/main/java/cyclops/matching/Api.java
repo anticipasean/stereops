@@ -1,23 +1,24 @@
 package cyclops.matching;
 
+import cyclops.container.foldable.Deconstructable;
 import cyclops.matching.Case.Any;
 import cyclops.matching.Case.Case2;
-import cyclops.matching.Deconstruct.Deconstruct1;
-import cyclops.matching.Deconstruct.Deconstruct2;
-import cyclops.matching.Deconstruct.Deconstruct3;
-import cyclops.matching.Deconstruct.Deconstruct4;
-import cyclops.matching.Deconstruct.Deconstruct5;
+import cyclops.container.foldable.Deconstructable.Deconstructable1;
+import cyclops.container.foldable.Deconstructable.Deconstructable2;
+import cyclops.container.foldable.Deconstructable.Deconstructable3;
+import cyclops.container.foldable.Deconstructable.Deconstructable4;
+import cyclops.container.foldable.Deconstructable.Deconstructable5;
 import cyclops.matching.Matching.OptionalMatching;
 import cyclops.matching.Matching.PatternMatching;
 import cyclops.matching.Matching.PatternMatching3;
 import cyclops.matching.Matching.PatternMatching4;
 import cyclops.matching.Matching.PatternMatching5;
 import cyclops.matching.Matching.PatternMatchingOrNone;
-import cyclops.container.tuple.Tuple1;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.container.tuple.Tuple5;
+import cyclops.container.immutable.tuple.Tuple1;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple5;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.foldable.Sealed3;
 import cyclops.container.foldable.Sealed4;
@@ -62,27 +63,27 @@ public final class Api {
         return new PatternMatchingOrNone<>(value);
     }
 
-    public static <T extends Deconstruct<T1>, T1> PatternMatching<T1> Match(T value) {
+    public static <T extends Deconstructable<T1>, T1> PatternMatching<T1> Match(T value) {
         return new PatternMatching<>(value.unapply());
     }
 
-    public static <T extends Deconstruct1<T1>, T1> PatternMatching<Tuple1<T1>> Match(T value) {
+    public static <T extends Deconstructable1<T1>, T1> PatternMatching<Tuple1<T1>> Match(T value) {
         return new PatternMatching<>(value.unapply());
     }
 
-    public static <T extends Deconstruct2<T1, T2>, T1, T2> PatternMatching<Tuple2<T1, T2>> Match(T value) {
+    public static <T extends Deconstructable2<T1, T2>, T1, T2> PatternMatching<Tuple2<T1, T2>> Match(T value) {
         return new PatternMatching<>(value.unapply());
     }
 
-    public static <T extends Deconstruct3<T1, T2, T3>, T1, T2, T3> PatternMatching<Tuple3<T1, T2, T3>> Match(T value) {
+    public static <T extends Deconstructable3<T1, T2, T3>, T1, T2, T3> PatternMatching<Tuple3<T1, T2, T3>> Match(T value) {
         return new PatternMatching<>(value.unapply());
     }
 
-    public static <T extends Deconstruct4<T1, T2, T3, T4>, T1, T2, T3, T4> PatternMatching<Tuple4<T1, T2, T3, T4>> Match(T value) {
+    public static <T extends Deconstructable4<T1, T2, T3, T4>, T1, T2, T3, T4> PatternMatching<Tuple4<T1, T2, T3, T4>> Match(T value) {
         return new PatternMatching<>(value.unapply());
     }
 
-    public static <T extends Deconstruct5<T1, T2, T3, T4, T5>, T1, T2, T3, T4, T5> PatternMatching<Tuple5<T1, T2, T3, T4, T5>> Match(T value) {
+    public static <T extends Deconstructable5<T1, T2, T3, T4, T5>, T1, T2, T3, T4, T5> PatternMatching<Tuple5<T1, T2, T3, T4, T5>> Match(T value) {
         return new PatternMatching<>(value.unapply());
     }
 

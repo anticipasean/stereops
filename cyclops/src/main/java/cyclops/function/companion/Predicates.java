@@ -2,8 +2,8 @@ package cyclops.function.companion;
 
 import cyclops.container.Value;
 import cyclops.util.SimpleTimer;
-import cyclops.control.Maybe;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.control.Maybe;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.Collection;
@@ -238,9 +238,9 @@ public class Predicates {
      *
      * <pre>
      * {@code
-     *  import static com.oath.cyclops.control.Matchable.whenGuard;
-     *  import static com.oath.cyclops.control.Matchable.otherwise;
-     * import static com.oath.cyclops.control.Matchable.transform;
+     *  import static com.oath.cyclops.container.control.Matchable.whenGuard;
+     *  import static com.oath.cyclops.container.control.Matchable.otherwise;
+     * import static com.oath.cyclops.container.control.Matchable.transform;
      *  import static cyclops2.function.Predicates.eq;
      *  import static cyclops2.function.Predicates.any;
      *

@@ -1,7 +1,7 @@
 package cyclops.transformers;
 
 
-import cyclops.function.hkt.Nested;
+import cyclops.function.higherkinded.Nested;
 
 public interface TransformerFactory<W1, W2> {
 

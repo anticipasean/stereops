@@ -4,9 +4,9 @@ import cyclops.container.MonadicValue;
 import cyclops.container.unwrappable.Unwrappable;
 import cyclops.container.Value;
 import cyclops.container.factory.Unit;
-import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.Foldable;
 import cyclops.container.transformable.Transformable;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.monads.transformers.StreamT;
@@ -18,8 +18,7 @@ import java.util.function.*;
 @Deprecated
 public abstract class NonEmptyTransformer<W extends WitnessType<W>,T> implements Publisher<T>,
                                                                             Unwrappable,Transformable<T>,
-                                                                            Unit<T>,
-                                                                            Folds<T>{
+                                                                            Unit<T>, Foldable<T> {
 
     public abstract AnyM<W,? extends Value<T>> transformerStream();
     protected abstract <R> NonEmptyTransformer<W,R> unitAnyM(AnyM<W,? super MonadicValue<R>> anyM);

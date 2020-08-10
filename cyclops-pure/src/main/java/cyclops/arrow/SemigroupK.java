@@ -1,7 +1,7 @@
 package cyclops.arrow;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.function.combiner.Semigroup;
 
 @FunctionalInterface

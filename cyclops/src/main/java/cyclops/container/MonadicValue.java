@@ -1,16 +1,16 @@
 package cyclops.container;
 
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.factory.EmptyUnit;
 import cyclops.container.factory.Unit;
 import cyclops.container.transformable.Transformable;
 import cyclops.reactive.subscriber.ValueSubscriber;
 import cyclops.async.Future;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.control.Try;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +25,7 @@ import org.reactivestreams.Publisher;
  * @param <T> Data type of element stored inside this Monad
  * @author johnmcclean
  */
-public interface MonadicValue<T> extends Value<T>, Unit<T>, Transformable<T>, Filters<T>, EmptyUnit<T> {
+public interface MonadicValue<T> extends Value<T>, Unit<T>, Transformable<T>, Filterable<T>, EmptyUnit<T> {
 
     default <R> Future<R> mapAsync(Function<? super T, ? extends R> fn,
                                    Executor ex) {

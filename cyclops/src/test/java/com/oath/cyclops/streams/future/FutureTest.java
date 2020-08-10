@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import cyclops.async.Future;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

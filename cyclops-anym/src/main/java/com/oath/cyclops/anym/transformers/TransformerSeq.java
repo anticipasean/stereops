@@ -9,22 +9,22 @@ import cyclops.container.persistent.PersistentCollection;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.traversable.Traversable;
 import cyclops.container.unwrappable.Unwrappable;
-import cyclops.container.persistent.impl.ConvertableSequence;
+import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.stream.type.ToStream;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.monads.WitnessType;
 
 @Deprecated

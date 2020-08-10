@@ -7,7 +7,7 @@ import cyclops.stream.spliterator.push.IterableSourceOperator;
 import cyclops.stream.spliterator.push.MapOperator;
 import cyclops.stream.spliterator.push.Operator;
 import cyclops.stream.spliterator.push.SlidingOperator;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package cyclops.monads.control;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 
 
 import static cyclops.monads.AnyM.success;
@@ -10,13 +10,12 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import cyclops.monads.Witness;
 import cyclops.monads.Witness.tryType;
 import cyclops.monads.function.AnyMFunction2;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 
 
 public class LiftTryTest {

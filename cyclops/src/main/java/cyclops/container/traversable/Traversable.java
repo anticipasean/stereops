@@ -1,16 +1,17 @@
 package cyclops.container.traversable;
 
+import cyclops.container.filterable.IterableFilterable;
 import cyclops.function.combiner.Zippable;
 import cyclops.container.transformable.FilterableTransformable;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.container.recoverable.OnEmpty;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;

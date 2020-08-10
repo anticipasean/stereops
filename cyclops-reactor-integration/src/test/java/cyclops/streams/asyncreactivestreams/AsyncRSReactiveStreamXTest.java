@@ -1,14 +1,14 @@
 package cyclops.streams.asyncreactivestreams;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Streams;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;

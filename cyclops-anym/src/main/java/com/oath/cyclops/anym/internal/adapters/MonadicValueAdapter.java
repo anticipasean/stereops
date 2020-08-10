@@ -14,7 +14,7 @@ import cyclops.container.MonadicValue;
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 

@@ -1,7 +1,7 @@
 package cyclops.reactive.companion;
 
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.policy.BufferOverflowPolicy;
 import cyclops.reactive.subscriber.AsyncSubscriber;
@@ -28,9 +28,9 @@ import cyclops.stream.spliterator.push.SpliteratorToOperator;
 import cyclops.container.traversable.IterableX;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.async.Future;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.checked.CheckedSupplier;
 import java.util.Queue;
 import java.util.Spliterator;

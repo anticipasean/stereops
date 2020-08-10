@@ -9,24 +9,24 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
-import cyclops.container.foldable.To;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.ReactiveTransformable;
 import cyclops.container.transformable.Transformable;
 import cyclops.async.Future;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import org.reactivestreams.Publisher;
 
 import cyclops.reactive.ReactiveSeq;
 import com.oath.cyclops.anym.transformers.ValueTransformer;
-import cyclops.function.Function4;
-import cyclops.function.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function3;
 
 /**
 * Monad Transformer for Future's nest within another monadic type
@@ -41,8 +41,7 @@ import cyclops.function.Function3;
 public final class FutureT<W extends WitnessType<W>,T> extends ValueTransformer<W,T>
                                                        implements To<FutureT<W,T>>,
                                                                    ReactiveTransformable<T>,
-                                                                  Transformable<T>,
-                                                                  Filters<T> {
+                                                                  Transformable<T>, Filterable<T> {
 
     private final AnyM<W,Future<T>> run;
 
@@ -510,17 +509,17 @@ public final class FutureT<W extends WitnessType<W>,T> extends ValueTransformer<
 
     @Override
     public <U> FutureT<W,U> ofType(Class<? extends U> type) {
-        return (FutureT<W,U>)Filters.super.ofType(type);
+        return (FutureT<W,U>) Filterable.super.ofType(type);
     }
 
     @Override
     public FutureT<W,T> filterNot(Predicate<? super T> predicate) {
-        return (FutureT<W,T>)Filters.super.filterNot(predicate);
+        return (FutureT<W,T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     public FutureT<W,T> notNull() {
-        return (FutureT<W,T>)Filters.super.notNull();
+        return (FutureT<W,T>) Filterable.super.notNull();
     }
 
 

@@ -3,8 +3,8 @@ package cyclops.stream.async;
 import static cyclops.stream.async.NullValue.NULL;
 
 import cyclops.internal.react.stream.CloseableIterator;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.NoSuchElementException;

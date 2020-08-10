@@ -1,7 +1,7 @@
 package com.oath.cyclops.anym.internal.adapters;
 
 import static cyclops.monads.AnyM.fromStream;
-import static cyclops.companion.Streams.zipSequence;
+import static cyclops.stream.companion.Streams.zipSequence;
 import static cyclops.monads.Witness.stream;
 
 import java.util.Iterator;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import cyclops.monads.AnyM;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import cyclops.monads.Witness;
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 

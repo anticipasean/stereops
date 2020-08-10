@@ -1,7 +1,7 @@
 package cyclops.monads.anym.value;
 
-import cyclops.container.box.Mutable;
-import cyclops.control.Option;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.option;
 import org.junit.Before;

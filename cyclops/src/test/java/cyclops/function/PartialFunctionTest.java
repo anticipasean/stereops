@@ -4,7 +4,7 @@ package cyclops.function;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.function.partial.PartialFunction;
 import java.util.function.Function;
 import org.junit.Test;

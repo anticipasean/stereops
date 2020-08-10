@@ -1,6 +1,6 @@
 package cyclops.container;
 
-import cyclops.container.persistent.impl.HList;
+import cyclops.container.immutable.impl.HList;
 import org.junit.Test;
 
 /**

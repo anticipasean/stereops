@@ -1,7 +1,6 @@
 package cyclops.monads.function;
 
-import cyclops.function.Function0;
-import cyclops.function.Function1;
+import cyclops.function.enhanced.Function1;
 import cyclops.monads.AnyMs;
 import cyclops.monads.KleisliM;
 import cyclops.monads.WitnessType;

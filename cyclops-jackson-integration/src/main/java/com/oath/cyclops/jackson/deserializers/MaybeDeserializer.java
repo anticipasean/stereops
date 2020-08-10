@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
-import cyclops.control.Maybe;
+import cyclops.container.control.Maybe;
 import java.io.IOException;
 
 final class MaybeDeserializer extends StdDeserializer<Maybe<?>> implements ResolvableDeserializer {

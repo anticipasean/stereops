@@ -1,7 +1,7 @@
 package cyclops.typeclasses.taglessfinal;
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.Option;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Option;
 import cyclops.typeclasses.Do;
 import cyclops.typeclasses.taglessfinal.Cases.Account;
 

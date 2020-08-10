@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.async.vertx;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 

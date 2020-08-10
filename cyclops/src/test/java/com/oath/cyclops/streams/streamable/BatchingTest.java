@@ -1,9 +1,9 @@
 package com.oath.cyclops.streams.streamable;
 
 
-import static cyclops.companion.Streamable.fromIntStream;
-import static cyclops.companion.Streamable.iterate;
-import static cyclops.companion.Streamable.of;
+import static cyclops.stream.type.Streamable.fromIntStream;
+import static cyclops.stream.type.Streamable.iterate;
+import static cyclops.stream.type.Streamable.of;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
@@ -13,10 +13,10 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 import cyclops.util.SimpleTimer;
-import cyclops.companion.Streamable;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.TreeSet;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.TreeSet;
+import cyclops.container.immutable.impl.Vector;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

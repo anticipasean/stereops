@@ -2,7 +2,7 @@ package cyclops.futurestream.react.base;
 
 import static org.junit.Assert.assertThat;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.futurestream.FutureStream;
 import java.util.function.Supplier;
 import org.junit.Before;

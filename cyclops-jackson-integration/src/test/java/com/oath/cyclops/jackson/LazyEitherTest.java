@@ -3,9 +3,9 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.control.Either;
-import cyclops.control.LazyEither;
-import cyclops.control.Option;
+import cyclops.container.control.Either;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Option;
 import org.junit.Test;
 
 public class LazyEitherTest {

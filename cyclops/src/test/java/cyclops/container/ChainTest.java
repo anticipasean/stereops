@@ -1,12 +1,12 @@
 package cyclops.container;
 
-import static cyclops.container.persistent.impl.Chain.singleton;
+import static cyclops.container.immutable.impl.Chain.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import cyclops.container.persistent.impl.Chain;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Chain;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import java.util.stream.Stream;
 import org.junit.Test;

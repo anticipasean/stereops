@@ -1,7 +1,7 @@
 package cyclops.container.comparative;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
 public interface EqualTo<W, T1, T extends EqualTo<W, T1, ?>> extends Higher<W, T1> {
 

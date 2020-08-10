@@ -2,7 +2,7 @@ package cyclops.monads.collections.persistent;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import cyclops.reactive.collections.immutable.PersistentSetX;
-import cyclops.companion.Reducers;
+import cyclops.function.companion.Reducers;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.collections.AbstractAnyMSeqTest;

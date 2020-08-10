@@ -11,23 +11,25 @@ import cyclops.container.unwrappable.Unwrappable;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 import cyclops.container.factory.EmptyUnit;
 import cyclops.container.factory.Unit;
-import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.Foldable;
 import cyclops.container.transformable.Transformable;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.enhanced.Function5;
 import cyclops.stream.type.ToStream;
 import cyclops.async.Future;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.collections.mutable.ListX;
-import cyclops.control.*;
-import cyclops.control.Maybe;
-import cyclops.function.*;
+import cyclops.container.control.*;
+import cyclops.container.control.Maybe;
 import cyclops.monads.function.AnyMFunction1;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.monads.transformers.ListT;
 import cyclops.monads.transformers.FutureT;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 
 import org.reactivestreams.Publisher;
 
@@ -69,8 +71,7 @@ import static cyclops.function.evaluation.Evaluation.LAZY;
 public interface AnyM2<W extends WitnessType<W>,T2,T> extends   AnyM<W,T>,
                                                                 Unwrappable,
                                                                 EmptyUnit<T>,
-                                                                Unit<T>,
-                                                                Folds<T>,
+                                                                Unit<T>, Foldable<T>,
                                                                 Transformable<T>,
                                                                 ToStream<T>,
                                                                 Publisher<T> {

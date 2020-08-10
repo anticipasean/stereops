@@ -1,9 +1,9 @@
 package cyclops.reactive;
 
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.async.Future;
-import cyclops.control.Try;
+import cyclops.container.control.Try;
 import cyclops.instances.reactive.PublisherInstances;
 import cyclops.reactive.IOMonad.FromPublsher;
 import cyclops.reactive.IOMonad.ToPublsher;

@@ -3,7 +3,7 @@ package cyclops.reactive.data.collections;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
+import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.PersistentQueueX;
 import java.util.Arrays;

@@ -9,13 +9,13 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Optional;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
-import cyclops.control.Maybe;
-import cyclops.function.Function1;
+import cyclops.container.control.Maybe;
+import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 
-import cyclops.function.hkt.DataWitness.optional;
+import cyclops.function.higherkinded.DataWitness.optional;
 import cyclops.arrow.MonoidKs;
 import cyclops.instances.control.MaybeInstances;
 import cyclops.instances.jdk.OptionalInstances;

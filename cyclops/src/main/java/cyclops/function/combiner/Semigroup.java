@@ -1,6 +1,6 @@
 package cyclops.function.combiner;
 
-import cyclops.function.BinaryFunction;
+import cyclops.function.enhanced.BinaryFunction;
 import java.util.function.BinaryOperator;
 
 /**

@@ -1,6 +1,6 @@
 package cyclops.container.talk;
 
-import cyclops.control.Either;
+import cyclops.container.control.Either;
 
 public class EitherExample {
 

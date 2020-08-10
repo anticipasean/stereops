@@ -1,16 +1,16 @@
 package com.oath.cyclops.streams.streamable;
 
 
-import static cyclops.companion.Streamable.of;
+import static cyclops.stream.type.Streamable.of;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Streamable;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.stream.type.Streamable;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.List;

@@ -13,9 +13,9 @@ import java.util.function.Supplier;
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
-import cyclops.control.Maybe;
+import cyclops.container.control.Maybe;
 import cyclops.monads.Witness;
 import cyclops.companion.Optionals;
 

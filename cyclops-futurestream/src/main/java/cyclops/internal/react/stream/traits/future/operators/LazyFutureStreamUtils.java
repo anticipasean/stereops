@@ -1,8 +1,8 @@
 package cyclops.internal.react.stream.traits.future.operators;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.container.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.futurestream.FutureStream;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;

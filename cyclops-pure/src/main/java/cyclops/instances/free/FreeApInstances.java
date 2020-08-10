@@ -1,7 +1,7 @@
 package cyclops.instances.free;
 
-import cyclops.function.hkt.DataWitness;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness;
+import cyclops.function.higherkinded.Higher;
 import cyclops.free.FreeAp;
 import cyclops.typeclasses.functor.Functor;
 import cyclops.typeclasses.monad.Applicative;

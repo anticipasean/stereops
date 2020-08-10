@@ -1,13 +1,13 @@
 package cyclops.kinds;
 
-import cyclops.function.hkt.DataWitness.optional;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.optional;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.Cokleisli;
 import cyclops.arrow.Kleisli;
-import cyclops.function.hkt.Active;
-import cyclops.function.hkt.Coproduct;
-import cyclops.function.hkt.Nested;
-import cyclops.function.hkt.Product;
+import cyclops.function.higherkinded.Active;
+import cyclops.function.higherkinded.Coproduct;
+import cyclops.function.higherkinded.Nested;
+import cyclops.function.higherkinded.Product;
 import cyclops.instances.jdk.OptionalInstances;
 import cyclops.typeclasses.InstanceDefinitions;
 import java.util.Optional;

@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.persistent.impl.ConvertableSequence;
+import cyclops.container.immutable.impl.ConvertableSequence;
 import java.util.Comparator;
 import org.junit.Test;
 

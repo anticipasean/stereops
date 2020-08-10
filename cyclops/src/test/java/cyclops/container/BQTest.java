@@ -3,7 +3,7 @@ package cyclops.container;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.BankersQueue;
+import cyclops.container.immutable.impl.BankersQueue;
 import java.util.stream.Stream;
 import org.junit.Test;
 

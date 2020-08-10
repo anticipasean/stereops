@@ -1,13 +1,13 @@
 package cyclops.typeclasses;
 
-import cyclops.function.hkt.DataWitness.option;
-import cyclops.companion.Monoids;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.function.higherkinded.DataWitness.option;
+import cyclops.function.companion.Monoids;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import cyclops.instances.data.LazySeqInstances;
@@ -19,8 +19,8 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cyclops.control.Option.some;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.control.Option.some;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertFalse;

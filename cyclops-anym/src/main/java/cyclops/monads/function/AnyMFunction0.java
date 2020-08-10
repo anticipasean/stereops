@@ -1,7 +1,7 @@
 package cyclops.monads.function;
 
-import cyclops.function.Function0;
-import cyclops.function.Function1;
+import cyclops.function.enhanced.Function0;
+import cyclops.function.enhanced.Function1;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyMs;
 import cyclops.monads.WitnessType;
@@ -9,8 +9,6 @@ import cyclops.monads.transformers.FutureT;
 import cyclops.monads.transformers.ListT;
 import cyclops.reactive.collections.mutable.ListX;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Supplier;
 
 /**

@@ -3,10 +3,10 @@ package com.oath.cyclops.reactor.adapter;
 
 import cyclops.container.persistent.PersistentCollection;
 
-import cyclops.control.*;
+import cyclops.container.control.*;
 
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
@@ -14,10 +14,10 @@ import cyclops.reactive.companion.Spouts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Wither;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;

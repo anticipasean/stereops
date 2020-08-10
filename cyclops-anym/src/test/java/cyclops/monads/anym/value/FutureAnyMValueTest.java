@@ -1,6 +1,6 @@
 package cyclops.monads.anym.value;
 
-import cyclops.companion.Semigroups;
+import cyclops.function.companion.Semigroups;
 import cyclops.async.Future;
 import cyclops.function.combiner.Monoid;
 import cyclops.companion.FutureStreamSemigroups;

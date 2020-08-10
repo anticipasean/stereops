@@ -1,6 +1,6 @@
 package cyclops.function.consumer;
 
-import cyclops.function.curry.CurryConsumer;
+import cyclops.function.currying.CurryConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

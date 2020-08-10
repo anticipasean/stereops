@@ -1,7 +1,7 @@
 package cyclops.stream.spliterator.push.map;
 
 
-import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.immutable.impl.LazySeq;
 import cyclops.reactive.companion.Spouts;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.tck.PublisherVerification;

@@ -1,15 +1,15 @@
 package cyclops.arrow;
 
-import cyclops.function.hkt.DataWitness.kleisli;
-import cyclops.function.hkt.Higher;
-import cyclops.function.hkt.Higher3;
+import cyclops.function.higherkinded.DataWitness.kleisli;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher3;
 import cyclops.container.transformable.Transformable;
-import cyclops.control.Either;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
-import cyclops.function.Function1;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Either;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.function.enhanced.Function1;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.typeclasses.Do;
 import cyclops.typeclasses.monad.Monad;
 import java.util.function.BiFunction;

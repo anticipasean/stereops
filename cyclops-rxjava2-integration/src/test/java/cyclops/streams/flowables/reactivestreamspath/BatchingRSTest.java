@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.util.SimpleTimer;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.reactive.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import java.io.IOException;

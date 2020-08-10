@@ -1,18 +1,18 @@
 package com.oath.cyclops.anym;
 
-import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.immutable.impl.HashMap;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.*;
 
-import cyclops.container.persistent.impl.ConvertableSequence;
+import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.stream.type.Connectable;
 import cyclops.container.traversable.IterableX;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.monads.AnyM;

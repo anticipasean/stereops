@@ -8,9 +8,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Streamable;
-import cyclops.companion.Streams;
-import cyclops.control.Option;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.Option;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Arrays;

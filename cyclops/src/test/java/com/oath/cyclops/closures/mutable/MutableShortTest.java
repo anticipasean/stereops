@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.box.Mutable;
-import cyclops.container.box.MutableShort;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.mutable.MutableShort;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;

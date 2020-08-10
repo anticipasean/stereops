@@ -1,9 +1,9 @@
 package cyclops.typeclasses.monad;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.MonoidK;
-import cyclops.container.persistent.impl.ImmutableList;
+import cyclops.container.immutable.ImmutableList;
 
 public interface MonadPlus<CRE> extends MonadZero<CRE> {
 

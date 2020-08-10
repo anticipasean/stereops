@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.lazy;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.fail;
 

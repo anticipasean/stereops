@@ -3,13 +3,13 @@ package cyclops.container;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
-import cyclops.function.hkt.DataWitness.reactiveSeq;
-import cyclops.function.hkt.DataWitness.seq;
-import cyclops.function.hkt.DataWitness.vector;
-import cyclops.function.hkt.Higher;
-import cyclops.function.hkt.NaturalTransformation;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.function.higherkinded.DataWitness.reactiveSeq;
+import cyclops.function.higherkinded.DataWitness.seq;
+import cyclops.function.higherkinded.DataWitness.vector;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.NaturalTransformation;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

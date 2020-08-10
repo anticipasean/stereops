@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.companion.Lambda;
+import cyclops.function.enhanced.Function1;
 import java.util.concurrent.Executors;
 import org.junit.Test;
 

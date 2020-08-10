@@ -1,8 +1,8 @@
 package cyclops.companion;
 
 import cyclops.container.traversable.IterableX;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.BiFunction;
 import java.util.function.Function;

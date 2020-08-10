@@ -3,7 +3,7 @@ package cyclops.function;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Monoids;
+import cyclops.function.companion.Monoids;
 import org.junit.Test;
 
 

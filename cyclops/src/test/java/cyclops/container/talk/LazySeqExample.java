@@ -1,6 +1,6 @@
 package cyclops.container.talk;
 
-import cyclops.container.persistent.impl.LazySeq;
+import cyclops.container.immutable.impl.LazySeq;
 import org.junit.Test;
 
 public class LazySeqExample {

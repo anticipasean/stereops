@@ -7,10 +7,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.foldable.Folds;
+import cyclops.container.foldable.Foldable;
 import cyclops.container.traversable.IterableX;
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.Collection;
@@ -237,9 +237,9 @@ public abstract class AbstractFoldableTest {
 
     public void testFoldLeft() {
         for (int i = 0; i < 100; i++) {
-            Supplier<Folds<String>> s = () -> of("a",
-                                                 "b",
-                                                 "c");
+            Supplier<Foldable<String>> s = () -> of("a",
+                                                    "b",
+                                                    "c");
 
             assertTrue(s.get()
                         .foldLeft("",
@@ -268,9 +268,9 @@ public abstract class AbstractFoldableTest {
 
     @Test
     public void testFoldRight() {
-        Supplier<Folds<String>> s = () -> of("a",
-                                             "b",
-                                             "c");
+        Supplier<Foldable<String>> s = () -> of("a",
+                                                "b",
+                                                "c");
 
         assertTrue(s.get()
                     .foldRight("",
@@ -292,9 +292,9 @@ public abstract class AbstractFoldableTest {
 
     @Test
     public void testFoldLeftStringBuilder() {
-        Supplier<Folds<String>> s = () -> of("a",
-                                             "b",
-                                             "c");
+        Supplier<Foldable<String>> s = () -> of("a",
+                                                "b",
+                                                "c");
 
         assertTrue(s.get()
                     .foldLeft(new StringBuilder(),
@@ -331,9 +331,9 @@ public abstract class AbstractFoldableTest {
 
     @Test
     public void testFoldRighttringBuilder() {
-        Supplier<Folds<String>> s = () -> of("a",
-                                             "b",
-                                             "c");
+        Supplier<Foldable<String>> s = () -> of("a",
+                                                "b",
+                                                "c");
 
         assertTrue(s.get()
                     .foldRight(new StringBuilder(),

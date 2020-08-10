@@ -1,6 +1,6 @@
 package cyclops.typeclasses.taglessfinal;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
 public interface LogAlgebra<W> {
 

@@ -1,7 +1,7 @@
 package cyclops.monads.transformers;
 
-import cyclops.control.Maybe;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.control.Maybe;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.Witness.list;
 import cyclops.monads.Witness.maybe;
 import cyclops.reactive.collections.mutable.ListX;

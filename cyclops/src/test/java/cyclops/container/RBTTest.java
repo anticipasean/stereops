@@ -5,9 +5,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Comparators;
-import cyclops.container.persistent.impl.base.RedBlackTree;
-import cyclops.container.persistent.impl.base.redblacktree.Tree;
+import cyclops.function.companion.Comparators;
+import cyclops.container.immutable.impl.base.RedBlackTree;
+import cyclops.container.immutable.impl.base.redblacktree.Tree;
 import org.junit.Test;
 
 public class RBTTest {

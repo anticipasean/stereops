@@ -6,7 +6,7 @@ import cyclops.async.adapters.QueueFactory;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
-import cyclops.control.Eval;
+import cyclops.container.control.Eval;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

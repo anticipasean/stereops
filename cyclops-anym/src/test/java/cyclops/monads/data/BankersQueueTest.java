@@ -3,7 +3,7 @@ package cyclops.monads.data;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import cyclops.reactive.collections.mutable.ListX;
-import cyclops.container.persistent.impl.BankersQueue;
+import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.bankersQueue;
 import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;

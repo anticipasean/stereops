@@ -2,11 +2,11 @@ package cyclops.streams.reactivestreamspath;
 
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.util.SimpleTimer;
-import cyclops.container.persistent.impl.TreeSet;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.TreeSet;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import lombok.Value;
 import org.junit.Test;
 

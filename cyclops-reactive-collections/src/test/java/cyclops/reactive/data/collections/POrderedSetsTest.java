@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
+import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.OrderedSetX;
 import java.util.Arrays;

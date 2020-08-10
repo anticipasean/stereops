@@ -1,7 +1,7 @@
 package com.oath.cyclops.react;
 
 
-import cyclops.control.Either;
+import cyclops.container.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

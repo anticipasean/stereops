@@ -4,18 +4,18 @@ import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.FluentMapX;
 import com.oath.cyclops.data.collections.extensions.standard.MapXImpl;
 import cyclops.container.unwrappable.Unwrappable;
-import cyclops.container.foldable.Folds;
-import cyclops.container.foldable.To;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.BiTransformable;
 import cyclops.container.transformable.Transformable;
 import cyclops.container.persistent.PersistentMap;
 import cyclops.reactive.operation.ReactiveStreamsTerminalOperations;
 import cyclops.container.recoverable.OnEmpty;
 import cyclops.container.recoverable.OnEmptySwitch;
-import cyclops.container.traversable.IterableFilterable;
-import cyclops.companion.Streams;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.filterable.IterableFilterable;
+import cyclops.stream.companion.Streams;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +42,7 @@ import org.reactivestreams.Subscriber;
  */
 public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, FluentMapX<K, V>, BiTransformable<K, V>,
                                     Transformable<V>, IterableFilterable<Tuple2<K, V>>, OnEmpty<Tuple2<K, V>>,
-                                    OnEmptySwitch<Tuple2<K, V>, Map<K, V>>, Publisher<Tuple2<K, V>>, Folds<Tuple2<K, V>>,
+                                    OnEmptySwitch<Tuple2<K, V>, Map<K, V>>, Publisher<Tuple2<K, V>>, Foldable<Tuple2<K, V>>,
                                     ReactiveStreamsTerminalOperations<Tuple2<K, V>> {
 
 
@@ -203,7 +203,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
      */
     @Override
     default boolean allMatch(final Predicate<? super Tuple2<K, V>> c) {
-        return Folds.super.allMatch(c);
+        return Foldable.super.allMatch(c);
     }
 
     /* (non-Javadoc)
@@ -211,7 +211,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
      */
     @Override
     default boolean anyMatch(final Predicate<? super Tuple2<K, V>> c) {
-        return Folds.super.anyMatch(c);
+        return Foldable.super.anyMatch(c);
     }
 
     /* (non-Javadoc)
@@ -219,7 +219,7 @@ public interface MapX<K, V> extends To<MapX<K, V>>, Map<K, V>, Unwrappable, Flue
      */
     @Override
     default boolean noneMatch(final Predicate<? super Tuple2<K, V>> c) {
-        return Folds.super.noneMatch(c);
+        return Foldable.super.noneMatch(c);
     }
 
 

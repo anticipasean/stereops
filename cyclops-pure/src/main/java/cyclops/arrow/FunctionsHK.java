@@ -1,7 +1,7 @@
 package cyclops.arrow;
 
-import cyclops.function.hkt.Higher;
-import cyclops.function.Function1;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.enhanced.Function1;
 import cyclops.typeclasses.functor.Functor;
 import cyclops.typeclasses.monad.Monad;
 import java.util.function.Function;

@@ -1,14 +1,14 @@
 package cyclops.container;
 
-import static cyclops.container.persistent.impl.Range.range;
+import static cyclops.container.immutable.impl.Range.range;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.persistent.impl.DIET;
-import cyclops.container.persistent.impl.Enumeration;
-import cyclops.function.order.Ordering;
+import cyclops.container.immutable.impl.DIET;
+import cyclops.container.immutable.impl.Enumeration;
+import cyclops.container.ordering.Ordering;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;

@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import cyclops.container.Seq;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple1;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple1;
 import org.junit.Test;
 
 public class TupleTest {

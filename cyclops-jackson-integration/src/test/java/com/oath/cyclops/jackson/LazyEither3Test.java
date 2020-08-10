@@ -3,7 +3,7 @@ package com.oath.cyclops.jackson;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-import cyclops.control.LazyEither3;
+import cyclops.container.control.LazyEither3;
 import org.junit.Test;
 
 public class LazyEither3Test {

@@ -6,9 +6,9 @@ import static cyclops.free.CharToy.done;
 import static cyclops.free.CharToy.output;
 import static cyclops.kinds.SupplierKind.λK;
 
-import cyclops.control.Either;
-import cyclops.function.hkt.DataWitness.supplier;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Either;
+import cyclops.function.higherkinded.DataWitness.supplier;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.kinds.SupplierKind;
 import org.junit.Test;
 

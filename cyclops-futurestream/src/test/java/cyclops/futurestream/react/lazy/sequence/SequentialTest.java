@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
 import cyclops.companion.Streamable;
 import cyclops.companion.Streams;
-import cyclops.control.Maybe;
+import cyclops.container.control.Maybe;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;

@@ -1,8 +1,8 @@
 package cyclops.companion.rx2;
 
-import cyclops.control.Either;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Either;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;

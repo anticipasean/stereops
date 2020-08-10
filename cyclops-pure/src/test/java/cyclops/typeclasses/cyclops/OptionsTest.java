@@ -1,10 +1,10 @@
 package cyclops.typeclasses.cyclops;
 
-import cyclops.function.hkt.DataWitness.option;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.option;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.MonoidKs;
-import cyclops.control.Option;
-import cyclops.function.Function1;
+import cyclops.container.control.Option;
+import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package cyclops.container.talk;
 
 
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.immutable.impl.Seq;
 
 public class Example {
 

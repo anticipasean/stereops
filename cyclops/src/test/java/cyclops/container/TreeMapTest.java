@@ -1,8 +1,8 @@
 package cyclops.container;
 
 
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.container.persistent.impl.TreeMap;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.TreeMap;
 import java.util.Comparator;
 import org.junit.Test;
 

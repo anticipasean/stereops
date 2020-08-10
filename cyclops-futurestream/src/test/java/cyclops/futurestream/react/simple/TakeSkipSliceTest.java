@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.simple;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.stream.async.BaseSimpleReactStream;
 import cyclops.stream.async.SimpleReactStream;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.futurestream.SimpleReact;
 import java.util.List;
 import java.util.function.Supplier;

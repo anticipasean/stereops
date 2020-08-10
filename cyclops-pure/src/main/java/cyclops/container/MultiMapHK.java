@@ -1,12 +1,12 @@
 package cyclops.container;
 
 
-import cyclops.container.persistent.impl.HashMap;
-import cyclops.function.hkt.DataWitness.multiMapHK;
-import cyclops.function.hkt.Higher;
-import cyclops.function.hkt.Higher2;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.function.higherkinded.DataWitness.multiMapHK;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher2;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.typeclasses.Pure;
 import java.util.function.Function;
 import lombok.AccessLevel;

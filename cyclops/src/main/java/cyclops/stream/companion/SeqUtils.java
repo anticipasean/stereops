@@ -1,7 +1,7 @@
 package cyclops.stream.companion;
 
-import cyclops.companion.Streamable;
 import cyclops.stream.iterator.ReversedIterator;
+import cyclops.stream.type.Streamable;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -2,10 +2,10 @@ package cyclops.reactive.subscriber;
 
 import cyclops.container.Value;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.control.Either;
+import cyclops.container.control.Either;
 import cyclops.async.Future;
-import cyclops.control.Ior;
-import cyclops.control.Try;
+import cyclops.container.control.Ior;
+import cyclops.container.control.Try;
 import cyclops.function.cacheable.Memoize;
 import java.util.NoSuchElementException;
 import java.util.Objects;

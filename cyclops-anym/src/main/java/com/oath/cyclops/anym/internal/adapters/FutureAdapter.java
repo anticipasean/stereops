@@ -11,13 +11,13 @@ import java.util.function.Supplier;
 
 
 import com.oath.cyclops.anym.AnyMValue;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.monads.AnyM;
 import cyclops.async.Future;
 import cyclops.monads.Witness;
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.companion.CompletableFutures;
+import cyclops.async.companion.CompletableFutures;
 
 import lombok.AllArgsConstructor;
 

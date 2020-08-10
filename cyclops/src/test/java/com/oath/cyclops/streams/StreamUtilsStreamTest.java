@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

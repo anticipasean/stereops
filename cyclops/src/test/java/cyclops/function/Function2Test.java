@@ -4,9 +4,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.async.Future;
-import cyclops.control.Maybe;
-import cyclops.control.Option;
-import cyclops.control.Try;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.function.enhanced.Function2;
 import java.util.concurrent.ForkJoinPool;
 import org.junit.Test;
 

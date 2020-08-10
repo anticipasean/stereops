@@ -14,11 +14,10 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.async.companion.QueueFactories;
 import cyclops.async.adapters.Topic;
-import cyclops.companion.Monoids;
-import cyclops.companion.Semigroups;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple2;
-import cyclops.function.Effect;
+import cyclops.function.companion.Monoids;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.subscriber.AsyncSubscriber;
 import cyclops.reactive.subscriber.ReactiveSubscriber;

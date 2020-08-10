@@ -1,9 +1,11 @@
 package cyclops.monads.transformers;
 
-import cyclops.container.foldable.To;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.control.Reader;
-import cyclops.function.*;
+import cyclops.container.control.Reader;
+import cyclops.function.enhanced.Function1;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 

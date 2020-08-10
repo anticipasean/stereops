@@ -5,7 +5,7 @@ import cyclops.async.adapters.Queue.ClosedQueueException;
 import cyclops.async.adapters.QueueFactory;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
-import cyclops.control.Eval;
+import cyclops.container.control.Eval;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.collections.mutable.QueueX;

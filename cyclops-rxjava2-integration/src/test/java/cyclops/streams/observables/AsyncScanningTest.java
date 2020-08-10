@@ -4,7 +4,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
+import cyclops.function.companion.Reducers;
 import cyclops.companion.rx2.Observables;
 import cyclops.reactive.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;

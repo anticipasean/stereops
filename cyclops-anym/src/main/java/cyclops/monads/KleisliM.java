@@ -2,11 +2,13 @@ package cyclops.monads;
 
 
 import cyclops.container.transformable.Transformable;
-import cyclops.control.Either;
-import cyclops.function.*;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Either;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 
+import cyclops.function.enhanced.Function1;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 

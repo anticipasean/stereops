@@ -2,7 +2,7 @@ package cyclops.container.persistent;
 
 
 import cyclops.container.persistent.views.SortedSetView;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import java.util.Comparator;
 
 public interface PersistentSortedSet<T> extends PersistentSet<T> {

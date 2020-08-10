@@ -1,10 +1,10 @@
 package cyclops.monads;
 
-import cyclops.container.persistent.impl.BankersQueue;
-import cyclops.container.persistent.impl.HashSet;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.immutable.impl.BankersQueue;
+import cyclops.container.immutable.impl.HashSet;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
 import java.util.Deque;
 import java.util.Optional;
 import java.util.Queue;
@@ -15,11 +15,11 @@ import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.internal.adapters.*;
 import cyclops.container.traversable.IterableX;
-import cyclops.control.*;
+import cyclops.container.control.*;
 import cyclops.async.Future;
 import cyclops.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.reactive.collections.immutable.*;
 import cyclops.reactive.collections.mutable.DequeX;
 import cyclops.reactive.collections.mutable.ListX;

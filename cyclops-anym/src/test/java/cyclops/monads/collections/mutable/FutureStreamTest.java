@@ -2,7 +2,7 @@ package cyclops.monads.collections.mutable;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Monoids;
+import cyclops.function.companion.Monoids;
 import cyclops.monads.Witness.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.hasItem;

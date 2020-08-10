@@ -1,8 +1,8 @@
 package cyclops.free;
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.Identity;
-import cyclops.function.hkt.DataWitness.identity;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Identity;
+import cyclops.function.higherkinded.DataWitness.identity;
 import org.junit.Test;
 
 

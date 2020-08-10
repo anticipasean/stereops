@@ -1,19 +1,19 @@
 package cyclops.reactive;
 
-import static cyclops.companion.Monoids.intSum;
-import static cyclops.companion.Monoids.zipFutures;
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.function.companion.Monoids.intSum;
+import static cyclops.function.companion.Monoids.zipFutures;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.Future;
-import cyclops.control.Try;
-import cyclops.container.persistent.impl.Range;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Try;
+import cyclops.container.immutable.impl.Range;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.companion.Spouts;
 import java.util.concurrent.Executors;
 import java.util.function.Function;

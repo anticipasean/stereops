@@ -1,8 +1,8 @@
 package cyclops.typeclasses.instances;
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.arrow.MonoidK;
-import cyclops.function.Function3;
+import cyclops.function.enhanced.Function3;
 import cyclops.function.combiner.Monoid;
 import cyclops.typeclasses.Pure;
 import cyclops.typeclasses.comonad.ComonadByPure;

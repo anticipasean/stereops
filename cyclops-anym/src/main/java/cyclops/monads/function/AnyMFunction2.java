@@ -1,6 +1,6 @@
 package cyclops.monads.function;
 
-import cyclops.function.Function2;
+import cyclops.function.enhanced.Function2;
 import cyclops.monads.WitnessType;
 import cyclops.monads.AnyM;
 import cyclops.monads.transformers.FutureT;

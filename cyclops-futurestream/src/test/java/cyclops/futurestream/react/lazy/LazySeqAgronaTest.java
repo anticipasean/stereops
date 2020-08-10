@@ -1,6 +1,6 @@
 package cyclops.futurestream.react.lazy;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -14,7 +14,7 @@ import cyclops.async.QueueFactories;
 import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.Signal;
 import com.oath.cyclops.react.ThreadPools;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.futurestream.FutureStream;
 import cyclops.futurestream.LazyReact;
 import cyclops.futurestream.react.base.BaseSeqTest;

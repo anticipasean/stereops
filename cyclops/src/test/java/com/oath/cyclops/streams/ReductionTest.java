@@ -4,7 +4,7 @@ package com.oath.cyclops.streams;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Reducers;
+import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

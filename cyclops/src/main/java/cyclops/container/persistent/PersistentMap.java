@@ -1,8 +1,8 @@
 package cyclops.container.persistent;
 
 import cyclops.container.persistent.views.MapView;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Objects;
 import java.util.function.Predicate;

@@ -14,11 +14,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import com.oath.cyclops.data.collections.extensions.CollectionX;
-import cyclops.companion.Semigroups;
-import cyclops.control.Trampoline;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple3;
-import cyclops.container.tuple.Tuple4;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.control.Trampoline;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.reactive.collections.mutable.ListX;
 import java.io.Serializable;
 import java.util.Arrays;

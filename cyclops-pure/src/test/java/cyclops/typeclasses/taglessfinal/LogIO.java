@@ -1,7 +1,7 @@
 package cyclops.typeclasses.taglessfinal;
 
-import cyclops.function.hkt.DataWitness.io;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.io;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.IO;
 
 public class LogIO implements LogAlgebra<io> {

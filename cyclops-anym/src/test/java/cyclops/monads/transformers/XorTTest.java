@@ -1,20 +1,20 @@
 package cyclops.monads.transformers;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
-import cyclops.companion.Semigroups;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.function.companion.Semigroups;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness.*;
 
-import cyclops.util.mixins.Printable;
-import cyclops.container.box.Mutable;
+import cyclops.container.printable.Printable;
+import cyclops.container.mutable.Mutable;
 import cyclops.reactive.collections.immutable.LinkedListX;
 import cyclops.reactive.collections.mutable.ListX;
-import cyclops.companion.Reducers;
-import cyclops.companion.Streams;
-import cyclops.control.*;
-import cyclops.control.LazyEither;
-import cyclops.control.Maybe;
+import cyclops.function.companion.Reducers;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.*;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Maybe;
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 

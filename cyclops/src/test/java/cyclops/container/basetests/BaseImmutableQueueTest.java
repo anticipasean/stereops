@@ -7,10 +7,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.companion.Monoids;
-import cyclops.container.persistent.impl.BankersQueue;
-import cyclops.container.persistent.impl.ImmutableQueue;
-import cyclops.container.tuple.Tuple;
+import cyclops.function.companion.Monoids;
+import cyclops.container.immutable.impl.BankersQueue;
+import cyclops.container.immutable.ImmutableQueue;
+import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.Queue;

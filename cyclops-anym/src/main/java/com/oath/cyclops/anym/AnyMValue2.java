@@ -3,14 +3,15 @@ package com.oath.cyclops.anym;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.companion.Predicates;
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
 import cyclops.container.Value;
-import cyclops.control.Option;
-import cyclops.control.Either;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.tuple.Tuple2;
-import cyclops.function.*;
+import cyclops.container.control.Option;
+import cyclops.container.control.Either;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyM2;
 import cyclops.monads.WitnessType;
@@ -33,8 +34,7 @@ import java.util.stream.Collector;
 @Deprecated //use cyclops-pure Do instead
 public interface AnyMValue2<W extends WitnessType<W>,T2,T> extends AnyM2<W,T2,T>,
                                                                 AnyMValue<W,T>,
-                                                                Value<T>,
-                                                                Filters<T>,
+                                                                Value<T>, Filterable<T>,
                                                                 MonadicValue<T> {
 
     @Override

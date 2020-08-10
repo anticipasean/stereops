@@ -5,7 +5,7 @@ import static cyclops.container.EnumerationTest.Days.Thursday;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.persistent.impl.Enumeration;
+import cyclops.container.immutable.impl.Enumeration;
 import org.junit.Test;
 
 /**

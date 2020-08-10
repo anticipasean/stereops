@@ -2,7 +2,7 @@ package com.oath.cyclops.anym.extensability;
 
 
 import com.oath.cyclops.anym.AnyMValue;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 
 import cyclops.monads.WitnessType;
 

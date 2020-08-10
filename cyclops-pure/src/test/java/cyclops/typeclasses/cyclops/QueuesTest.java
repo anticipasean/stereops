@@ -6,10 +6,10 @@ import static org.junit.Assert.assertThat;
 
 import com.oath.cyclops.data.ReactiveWitness;
 import com.oath.cyclops.data.ReactiveWitness.queue;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.collections.mutable.QueueX;
-import cyclops.control.Maybe;
-import cyclops.function.Function1;
+import cyclops.container.control.Maybe;
+import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.arrow.MonoidKs;
 import cyclops.instances.control.MaybeInstances;

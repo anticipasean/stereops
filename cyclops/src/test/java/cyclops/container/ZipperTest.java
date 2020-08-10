@@ -1,16 +1,16 @@
 package cyclops.container;
 
-import static cyclops.container.tuple.Tuple.tuple;
+import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.persistent.impl.ImmutableList;
-import cyclops.container.persistent.impl.LazySeq;
-import cyclops.container.persistent.impl.Seq;
-import cyclops.container.persistent.impl.Zipper;
-import cyclops.container.tuple.Tuple;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Zipper;
+import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
 import org.junit.Test;
 

@@ -2,14 +2,14 @@ package cyclops.streams.asyncreactivestreams;
 
 
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.companion.Semigroups;
-import cyclops.companion.Streams;
-import cyclops.control.Maybe;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.Maybe;
 import cyclops.monads.AnyM;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.reactive.collections.mutable.ListX;
 import org.hamcrest.Matchers;
 import org.junit.Test;

@@ -1,8 +1,8 @@
 package cyclops.monads.data;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.companion.Reducers;
-import cyclops.container.persistent.impl.HashSet;
+import cyclops.function.companion.Reducers;
+import cyclops.container.immutable.impl.HashSet;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.hashSet;

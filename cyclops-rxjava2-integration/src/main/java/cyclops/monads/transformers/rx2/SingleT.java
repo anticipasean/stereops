@@ -1,17 +1,17 @@
 package cyclops.monads.transformers.rx2;
 
 
-import cyclops.function.companion.Filters;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
-import cyclops.container.foldable.Folds;
-import cyclops.container.foldable.To;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.transformable.To;
 import cyclops.container.transformable.ReactiveTransformable;
 import cyclops.companion.rx2.Functions;
 import cyclops.companion.rx2.Singles;
-import cyclops.control.Option;
-import cyclops.container.tuple.Tuple;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
@@ -25,8 +25,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @Deprecated
-public final class SingleT<W extends WitnessType<W>, T> implements To<SingleT<W, T>>, ReactiveTransformable<T>, Filters<T>,
-                                                                   Folds<T> {
+public final class SingleT<W extends WitnessType<W>, T> implements To<SingleT<W, T>>, ReactiveTransformable<T>, Filterable<T>,
+                                                                   Foldable<T> {
 
     private final AnyM<W, Single<T>> run;
 
@@ -244,17 +244,17 @@ public final class SingleT<W extends WitnessType<W>, T> implements To<SingleT<W,
 
     @Override
     public <U> SingleT<W, U> ofType(Class<? extends U> type) {
-        return (SingleT<W, U>) Filters.super.ofType(type);
+        return (SingleT<W, U>) Filterable.super.ofType(type);
     }
 
     @Override
     public SingleT<W, T> filterNot(Predicate<? super T> predicate) {
-        return (SingleT<W, T>) Filters.super.filterNot(predicate);
+        return (SingleT<W, T>) Filterable.super.filterNot(predicate);
     }
 
     @Override
     public SingleT<W, T> notNull() {
-        return (SingleT<W, T>) Filters.super.notNull();
+        return (SingleT<W, T>) Filterable.super.notNull();
     }
 
     public Option<T> get() {

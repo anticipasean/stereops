@@ -1,7 +1,7 @@
 package cyclops.stream.spliterator;
 
-import cyclops.container.box.Mutable;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.immutable.impl.Seq;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;

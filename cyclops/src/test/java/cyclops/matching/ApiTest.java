@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.matching.sample.Pet.Dog;
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import org.junit.Test;
 
 //import static cyclops.matching.matching.sample.Book.BookPatterns.Author;

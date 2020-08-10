@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;

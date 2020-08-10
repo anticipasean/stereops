@@ -1,6 +1,6 @@
 package cyclops.stream.operator;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import java.util.ArrayList;

@@ -1,12 +1,12 @@
 package cyclops.free;
 
 
-import cyclops.function.hkt.DataWitness.cofree;
-import cyclops.function.hkt.DataWitness.eval;
-import cyclops.function.hkt.Higher;
-import cyclops.function.hkt.Higher2;
-import cyclops.control.Eval;
-import cyclops.function.hkt.NaturalTransformation;
+import cyclops.function.higherkinded.DataWitness.cofree;
+import cyclops.function.higherkinded.DataWitness.eval;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher2;
+import cyclops.container.control.Eval;
+import cyclops.function.higherkinded.NaturalTransformation;
 import cyclops.instances.control.EvalInstances;
 import cyclops.typeclasses.comonad.Comonad;
 import cyclops.typeclasses.functor.Functor;

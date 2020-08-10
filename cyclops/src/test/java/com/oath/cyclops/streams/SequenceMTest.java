@@ -9,10 +9,10 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertNull;
 
-import cyclops.companion.Semigroups;
-import cyclops.companion.Streamable;
-import cyclops.companion.Streams;
-import cyclops.control.Maybe;
+import cyclops.function.companion.Semigroups;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.companion.Streams;
+import cyclops.container.control.Maybe;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Arrays;

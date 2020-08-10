@@ -1,8 +1,8 @@
 package cyclops.typeclasses;
 
-import cyclops.function.hkt.DataWitness.option;
-import cyclops.control.Option;
-import cyclops.container.persistent.impl.Seq;
+import cyclops.function.higherkinded.DataWitness.option;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
 import cyclops.function.companion.Lambda;
 import cyclops.instances.control.OptionInstances;
 import cyclops.instances.data.SeqInstances;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cyclops.control.Option.some;
+import static cyclops.container.control.Option.some;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 

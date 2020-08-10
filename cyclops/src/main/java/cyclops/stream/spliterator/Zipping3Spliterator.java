@@ -1,6 +1,6 @@
 package cyclops.stream.spliterator;
 
-import cyclops.function.Function3;
+import cyclops.function.enhanced.Function3;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;

@@ -2,10 +2,10 @@ package cyclops.monads;
 
 
 import cyclops.container.transformable.Transformable;
-import cyclops.function.Function1;
+import cyclops.function.enhanced.Function1;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 
 import java.util.function.Function;
 

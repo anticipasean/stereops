@@ -1,10 +1,10 @@
 package cyclops.streams.syncflux;
 
-import cyclops.control.Option;
+import cyclops.container.control.Option;
 import cyclops.reactive.FluxReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple2;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 

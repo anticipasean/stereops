@@ -2,7 +2,7 @@ package cyclops.stream.type.impl;
 
 import cyclops.exception.ExceptionSoftener;
 import cyclops.stream.scheduling.cron.CronExpression;
-import cyclops.companion.Eithers;
+import cyclops.container.control.companion.Eithers;
 import cyclops.function.companion.FluentFunctions;
 import java.util.Date;
 import java.util.Iterator;

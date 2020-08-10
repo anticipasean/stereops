@@ -7,8 +7,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.Future;
-import cyclops.control.Try;
-import cyclops.container.persistent.impl.Vector;
+import cyclops.container.control.Try;
+import cyclops.container.immutable.impl.Vector;
 import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.util.concurrent.Executor;

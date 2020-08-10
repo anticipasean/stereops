@@ -1,8 +1,8 @@
 package cyclops.typeclasses;
 
-import cyclops.function.hkt.Higher;
-import cyclops.function.Function3;
-import cyclops.function.Function4;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.typeclasses.monad.Monad;
 import cyclops.typeclasses.monad.MonadZero;
 import java.util.function.BiFunction;

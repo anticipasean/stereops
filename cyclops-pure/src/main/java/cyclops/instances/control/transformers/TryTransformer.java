@@ -1,10 +1,10 @@
 package cyclops.instances.control.transformers;
 
 
-import cyclops.function.hkt.DataWitness.tryType;
-import cyclops.function.hkt.Higher;
-import cyclops.control.Try;
-import cyclops.function.hkt.Nested;
+import cyclops.function.higherkinded.DataWitness.tryType;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Try;
+import cyclops.function.higherkinded.Nested;
 import cyclops.transformers.Transformer;
 import cyclops.transformers.TransformerFactory;
 import cyclops.typeclasses.monad.Monad;

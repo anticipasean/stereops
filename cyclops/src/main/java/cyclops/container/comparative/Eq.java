@@ -1,7 +1,7 @@
 package cyclops.container.comparative;
 
 
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.Higher;
 
 public interface Eq<CRE> {
 

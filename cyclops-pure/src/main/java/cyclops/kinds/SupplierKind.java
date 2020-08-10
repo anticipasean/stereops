@@ -1,10 +1,10 @@
 package cyclops.kinds;
 
-import cyclops.function.hkt.DataWitness.supplier;
-import cyclops.function.hkt.Higher;
+import cyclops.function.higherkinded.DataWitness.supplier;
+import cyclops.function.higherkinded.Higher;
 import cyclops.async.Future;
 import cyclops.free.Free;
-import cyclops.function.Function0;
+import cyclops.function.enhanced.Function0;
 import cyclops.instances.jdk.SupplierInstances;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collections.immutable.LinkedListX;

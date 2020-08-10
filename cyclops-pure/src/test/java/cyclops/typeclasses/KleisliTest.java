@@ -2,7 +2,7 @@ package cyclops.typeclasses;
 
 import cyclops.arrow.Kleisli;
 import cyclops.async.Future;
-import cyclops.function.hkt.DataWitness.future;
+import cyclops.function.higherkinded.DataWitness.future;
 import cyclops.instances.control.FutureInstances;
 import cyclops.typeclasses.monad.Monad;
 import org.junit.Test;

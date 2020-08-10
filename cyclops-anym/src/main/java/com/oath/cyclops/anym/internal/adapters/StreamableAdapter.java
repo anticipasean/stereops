@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import cyclops.monads.AnyM;
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import cyclops.monads.Witness;
 
 import lombok.AllArgsConstructor;

@@ -1,10 +1,8 @@
 package cyclops.monads.function;
 
-import cyclops.function.Function3;
+import cyclops.function.enhanced.Function3;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
-
-import java.util.function.BiFunction;
 
 /**
  * Created by johnmcclean on 18/12/2016.

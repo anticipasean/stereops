@@ -2,7 +2,7 @@ package cyclops.matching;
 
 import static org.junit.Assert.assertFalse;
 
-import cyclops.container.tuple.Tuple5;
+import cyclops.container.immutable.tuple.Tuple5;
 import org.junit.Assert;
 import org.junit.Test;
 

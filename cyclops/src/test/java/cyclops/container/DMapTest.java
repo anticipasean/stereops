@@ -1,15 +1,15 @@
 package cyclops.container;
 
-import static cyclops.control.Either.right;
-import static cyclops.control.LazyEither.left;
-import static cyclops.control.Option.some;
+import static cyclops.container.control.Either.right;
+import static cyclops.container.control.LazyEither.left;
+import static cyclops.container.control.Option.some;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.control.LazyEither3;
-import cyclops.control.LazyEither4;
-import cyclops.container.persistent.impl.DMap;
-import cyclops.container.persistent.impl.HashMap;
+import cyclops.container.control.LazyEither3;
+import cyclops.container.control.LazyEither4;
+import cyclops.container.immutable.impl.DMap;
+import cyclops.container.immutable.impl.HashMap;
 import java.util.Date;
 import org.junit.Test;
 

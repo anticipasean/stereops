@@ -4,7 +4,7 @@ package com.oath.cyclops.streams;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.companion.Streams;
+import cyclops.stream.companion.Streams;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;

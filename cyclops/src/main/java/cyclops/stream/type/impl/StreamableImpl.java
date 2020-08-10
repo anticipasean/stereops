@@ -1,6 +1,6 @@
 package cyclops.stream.type.impl;
 
-import cyclops.companion.Streamable;
+import cyclops.stream.type.Streamable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

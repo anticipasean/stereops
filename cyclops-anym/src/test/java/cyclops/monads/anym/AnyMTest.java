@@ -1,7 +1,7 @@
 package cyclops.monads.anym;
 
 import cyclops.companion.Optionals;
-import cyclops.control.Eval;
+import cyclops.container.control.Eval;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,13 +25,13 @@ import java.util.stream.Stream;
 
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.container.tuple.Tuple;
-import cyclops.container.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.monads.WitnessType;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.control.Maybe;
+import cyclops.container.control.Maybe;
 import cyclops.reactive.collections.mutable.ListX;
 import cyclops.reactive.collections.mutable.QueueX;
 import cyclops.reactive.collections.mutable.SetX;

@@ -1,8 +1,8 @@
 package cyclops.instances.jdk.transformers;
 
-import cyclops.function.hkt.DataWitness.optional;
-import cyclops.function.hkt.Higher;
-import cyclops.function.hkt.Nested;
+import cyclops.function.higherkinded.DataWitness.optional;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Nested;
 import cyclops.kinds.OptionalKind;
 import cyclops.transformers.Transformer;
 import cyclops.transformers.TransformerFactory;

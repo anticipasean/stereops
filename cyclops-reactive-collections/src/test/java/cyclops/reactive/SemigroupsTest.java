@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.ReactiveSemigroups;
-import cyclops.companion.Semigroups;
+import cyclops.function.companion.Semigroups;
 import cyclops.function.combiner.Semigroup;
 import cyclops.reactive.collections.immutable.BagX;
 import cyclops.reactive.collections.immutable.LinkedListX;

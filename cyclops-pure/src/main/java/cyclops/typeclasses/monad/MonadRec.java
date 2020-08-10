@@ -1,8 +1,8 @@
 package cyclops.typeclasses.monad;
 
 
-import cyclops.function.hkt.Higher;
-import cyclops.control.Either;
+import cyclops.function.higherkinded.Higher;
+import cyclops.container.control.Either;
 import java.util.function.Function;
 
 // ref http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free
