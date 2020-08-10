@@ -1,8 +1,8 @@
 package cyclops.function.enhanced;
 
 
-import cyclops.container.control.Eval;
 import cyclops.async.Future;
+import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
@@ -22,15 +22,15 @@ import java.util.function.UnaryOperator;
 @FunctionalInterface
 public interface Function0<R> extends Supplier<R> {
 
-    public static <R> Function0<R> λ(final Supplier<R> triFunc) {
+    static <R> Function0<R> λ(final Supplier<R> triFunc) {
         return () -> triFunc.get();
     }
 
-    public static <R> Function0<R> λ(final Function0<R> triFunc) {
+    static <R> Function0<R> λ(final Function0<R> triFunc) {
         return triFunc;
     }
 
-    public static <R> Function0<? extends R> λv(final Function0<? extends R> triFunc) {
+    static <R> Function0<? extends R> λv(final Function0<? extends R> triFunc) {
         return triFunc;
     }
 

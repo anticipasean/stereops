@@ -47,7 +47,7 @@ public class MergeLatestOperator<IN> implements Operator<IN> {
         AtomicInteger completed = new AtomicInteger(0);
         AtomicInteger index = new AtomicInteger(0);
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
                 while (requested.get() > 0) {
                     if (completed.get() == subs.size() && data.size() == 0) {
 

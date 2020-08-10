@@ -50,7 +50,7 @@ public interface WaitStrategy<T> {
      * @return Data taken
      * @throws InterruptedException
      */
-    public T take(Takeable<T> t) throws InterruptedException;
+    T take(Takeable<T> t) throws InterruptedException;
 
     /**
      * Push data into a recievable type using the provided offerable
@@ -59,7 +59,7 @@ public interface WaitStrategy<T> {
      * @return true if data pushed via Offerable
      * @throws InterruptedException
      */
-    public boolean offer(Offerable o) throws InterruptedException;
+    boolean offer(Offerable o) throws InterruptedException;
 
     /**
      * Represents something that may provide data
@@ -67,7 +67,7 @@ public interface WaitStrategy<T> {
      * @param <T> Data type of elements in Takeable
      * @author johnmcclean
      */
-    public static interface Takeable<T> {
+    interface Takeable<T> {
 
         /**
          * Take data from data provider
@@ -75,7 +75,7 @@ public interface WaitStrategy<T> {
          * @return Data taken
          * @throws InterruptedException
          */
-        public T take() throws InterruptedException;
+        T take() throws InterruptedException;
     }
 
     /**
@@ -83,7 +83,7 @@ public interface WaitStrategy<T> {
      *
      * @author johnmcclean
      */
-    public static interface Offerable {
+    interface Offerable {
 
         /**
          * Offer data to recievable type
@@ -91,6 +91,6 @@ public interface WaitStrategy<T> {
          * @return true if data accepted
          * @throws InterruptedException
          */
-        public boolean offer() throws InterruptedException;
+        boolean offer() throws InterruptedException;
     }
 }

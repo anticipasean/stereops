@@ -3,15 +3,15 @@ package cyclops.async.adapters;
 import cyclops.async.companion.QueueFactories;
 import cyclops.async.wait.DirectWaitStrategy;
 import cyclops.async.wait.WaitStrategy;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.exception.SimpleReactProcessingException;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.AlwaysContinue;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.reactive.subscription.Subscription;
 import cyclops.stream.async.Continuation;
-import cyclops.exception.ExceptionSoftener;
 import cyclops.util.SimpleTimer;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.reactive.ReactiveSeq;
 import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,7 +101,7 @@ public class Queue<T> implements Adapter<T> {
     private volatile Continueable sub;
     @Getter
     private ContinuationStrategy continuationStrategy;
-    private volatile boolean shuttingDown = false;
+    private final boolean shuttingDown = false;
 
     /**
      * Construct a Queue backed by a LinkedBlockingQueue
@@ -442,7 +442,7 @@ public class Queue<T> implements Adapter<T> {
 
                         }
                         if (data != null) {
-                            return (T) nillSafe(ensureNotPoisonPill(ensureClear(data)));
+                            return nillSafe(ensureNotPoisonPill(ensureClear(data)));
                         }
                     } finally {
                     }
@@ -486,7 +486,7 @@ public class Queue<T> implements Adapter<T> {
                 this.sizeSignal.set(queue.size());
             }
 
-            return (T) nillSafe(data);
+            return nillSafe(data);
         } finally {
         }
 
@@ -550,7 +550,7 @@ public class Queue<T> implements Adapter<T> {
     public boolean add(final T data) {
 
         try {
-            final boolean result = queue.add((T) nullSafe(data));
+            final boolean result = queue.add(nullSafe(data));
             if (result) {
                 if (sizeSignal != null) {
                     this.sizeSignal.set(queue.size());
@@ -585,7 +585,7 @@ public class Queue<T> implements Adapter<T> {
         }
 
         try {
-            final boolean result = producerWait.offer(() -> this.queue.offer((T) nullSafe(data),
+            final boolean result = producerWait.offer(() -> this.queue.offer(nullSafe(data),
                                                                              this.offerTimeout,
                                                                              this.offerTimeUnit));
 
@@ -603,10 +603,7 @@ public class Queue<T> implements Adapter<T> {
 
     private boolean timeout(final SimpleTimer timer) {
 
-        if (timer.getElapsedNanoseconds() >= offerTimeUnit.toNanos(this.offerTimeout)) {
-            return true;
-        }
-        return false;
+        return timer.getElapsedNanoseconds() >= offerTimeUnit.toNanos(this.offerTimeout);
     }
 
     /**

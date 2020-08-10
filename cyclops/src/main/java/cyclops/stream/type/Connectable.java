@@ -45,7 +45,7 @@ public interface Connectable<T> {
      *
      * @return Stream connected to the Connectable emitting data
      */
-    public default ReactiveSeq<T> connect() {
+    default ReactiveSeq<T> connect() {
         return connect(new OneToOneConcurrentArrayQueue<T>(256));
     }
 
@@ -74,7 +74,7 @@ public interface Connectable<T> {
      * @param queue Transfer Queue between the Streams
      * @return Stream connected to the Connectable emitting data
      */
-    public ReactiveSeq<T> connect(Queue<T> queue);
+    ReactiveSeq<T> connect(Queue<T> queue);
 
     /**
      * Connect to this Connectable using the provided transfer async.Queue. The transfer Queue can be used to apply backpressure
@@ -85,8 +85,8 @@ public interface Connectable<T> {
      * @param to    Function to convert a ReactiveSeq to desired Stream type
      * @return Stream connected to the Connectable emitting data
      */
-    public default <R> R connectTo(final Queue<T> queue,
-                                   final Function<? super ReactiveSeq<T>, ? extends R> to) {
+    default <R> R connectTo(final Queue<T> queue,
+                            final Function<? super ReactiveSeq<T>, ? extends R> to) {
         return to.apply(connect(queue));
     }
 }

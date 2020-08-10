@@ -1,22 +1,22 @@
 package cyclops.container.immutable;
 
 
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.Foldable;
 import cyclops.container.immutable.impl.DMap.Three;
 import cyclops.container.immutable.impl.DMap.Two;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
-import cyclops.container.filterable.Filterable;
-import cyclops.container.foldable.Foldable;
-import cyclops.container.transformable.BiTransformable;
-import cyclops.container.transformable.Transformable;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.persistent.PersistentMap;
 import cyclops.container.recoverable.OnEmpty;
 import cyclops.container.recoverable.OnEmptySwitch;
-import cyclops.container.control.Option;
-import cyclops.container.control.Try;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
@@ -31,8 +31,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public interface ImmutableMap<K, V> extends Iterable<Tuple2<K, V>>, Foldable<Tuple2<K, V>>, Filterable<Tuple2<K, V>>, Transformable<V>,
-                                            BiTransformable<K, V>, OnEmpty<Tuple2<K, V>>, PersistentMap<K, V>,
+public interface ImmutableMap<K, V> extends Iterable<Tuple2<K, V>>, Foldable<Tuple2<K, V>>, Filterable<Tuple2<K, V>>,
+                                            Transformable<V>, BiTransformable<K, V>, OnEmpty<Tuple2<K, V>>, PersistentMap<K, V>,
                                             OnEmptySwitch<Tuple2<K, V>, ImmutableMap<K, V>> {
 
 

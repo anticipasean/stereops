@@ -1,28 +1,28 @@
 package cyclops.container.immutable;
 
+import cyclops.container.comparative.Contains;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.container.foldable.Deconstructable.Deconstructable2;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.impl.Zipper;
-import cyclops.container.foldable.Deconstructable.Deconstructable2;
-import cyclops.container.foldable.Sealed2;
-import cyclops.container.comparative.Contains;
-import cyclops.container.transformable.To;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentQueue;
-import cyclops.container.recoverable.OnEmptyError;
-import cyclops.container.recoverable.OnEmptySwitch;
-import cyclops.container.traversable.IterableX;
-import cyclops.container.traversable.Traversable;
-import cyclops.container.control.Option;
-import cyclops.container.control.Try;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentQueue;
+import cyclops.container.recoverable.OnEmptyError;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.container.transformable.To;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.Traversable;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -110,7 +110,7 @@ public interface ImmutableQueue<T> extends Sealed2<ImmutableQueue.Some<T>, Immut
     }
 
     default ImmutableQueue<T> removeFirst(Predicate<? super T> pred) {
-        ImmutableQueue<T> res[] = new ImmutableQueue[]{emptyUnit()};
+        ImmutableQueue<T>[] res = new ImmutableQueue[]{emptyUnit()};
         ImmutableQueue<T> rem = this;
         boolean[] found = {false};
         do {
@@ -850,7 +850,7 @@ public interface ImmutableQueue<T> extends Sealed2<ImmutableQueue.Some<T>, Immut
     }
 
 
-    public static interface Some<T> extends Deconstructable2<T, ImmutableQueue<T>>, ImmutableQueue<T> {
+    interface Some<T> extends Deconstructable2<T, ImmutableQueue<T>>, ImmutableQueue<T> {
 
         T head();
 
@@ -864,7 +864,7 @@ public interface ImmutableQueue<T> extends Sealed2<ImmutableQueue.Some<T>, Immut
     }
 
 
-    public interface None<T> extends ImmutableQueue<T> {
+    interface None<T> extends ImmutableQueue<T> {
 
         @Override
         default <R> R fold(Function<? super Some<T>, ? extends R> fn1,

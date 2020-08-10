@@ -1,15 +1,15 @@
 package cyclops.matching;
 
-import cyclops.matching.Case.Any;
 import cyclops.container.control.Option;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple0;
-import cyclops.reactive.ReactiveSeq;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.foldable.Sealed3;
 import cyclops.container.foldable.Sealed4;
 import cyclops.container.foldable.Sealed5;
 import cyclops.container.foldable.SealedOr;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple0;
+import cyclops.matching.Case.Any;
+import cyclops.reactive.ReactiveSeq;
 import java.util.Optional;
 
 

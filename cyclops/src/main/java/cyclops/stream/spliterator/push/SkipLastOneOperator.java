@@ -21,7 +21,7 @@ public class SkipLastOneOperator<T, R> extends BaseOperator<T, T> {
                                         Runnable onComplete) {
 
         Object[] buffer = {UNSET};
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {

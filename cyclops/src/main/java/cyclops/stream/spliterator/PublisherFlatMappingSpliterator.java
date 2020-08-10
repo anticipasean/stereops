@@ -31,7 +31,7 @@ public class PublisherFlatMappingSpliterator<T, R> extends Spliterators.Abstract
                                                                             Function<? super T, ? extends Publisher<? extends R>> mapper) {
         Function<? super T2, ? extends T> fn = fnS.function();
         return new PublisherFlatMappingSpliterator<T2, R>(CopyableSpliterator.copy(fnS.source()),
-                                                          mapper.<T2>compose(fn));
+                                                          mapper.compose(fn));
 
     }
 

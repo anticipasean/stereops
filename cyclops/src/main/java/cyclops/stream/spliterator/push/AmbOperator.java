@@ -101,6 +101,7 @@ public class AmbOperator<IN> implements Operator<IN> {
         private final Runnable onComplete;
         boolean won = false;
         StreamSubscription sub;
+
         public Racer(Consumer<? super IN> onNext,
                      Consumer<? super Throwable> onError,
                      Runnable onComplete) {

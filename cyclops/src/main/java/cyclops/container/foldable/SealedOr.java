@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 public interface SealedOr<T1> {
 
-    public <R> R fold(Function<? super T1, ? extends R> fn1,
-                      Supplier<? extends R> s);
+    <R> R fold(Function<? super T1, ? extends R> fn1,
+               Supplier<? extends R> s);
 
 }

@@ -1,10 +1,10 @@
 package cyclops.reactive;
 
-import cyclops.function.enhanced.Function0;
+import cyclops.async.Future;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.companion.FluentFunctions;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.async.Future;
+import cyclops.function.enhanced.Function0;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

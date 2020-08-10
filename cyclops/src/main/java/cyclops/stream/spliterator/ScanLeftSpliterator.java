@@ -26,7 +26,6 @@ public class ScanLeftSpliterator<T, U> implements CopyableSpliterator<U> {
 
         size = source.estimateSize();
         characteristics = source.characteristics() & ORDERED;
-        ;
     }
 
     /* (non-Javadoc)

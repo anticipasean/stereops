@@ -3,15 +3,15 @@ package cyclops.container.immutable.impl;
 import static cyclops.container.control.Trampoline.done;
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.function.higherkinded.DataWitness.diet;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.foldable.Deconstructable.Deconstructable3;
-import cyclops.container.foldable.Sealed2;
-import cyclops.container.foldable.Foldable;
 import cyclops.container.control.Option;
 import cyclops.container.control.Trampoline;
+import cyclops.container.foldable.Deconstructable.Deconstructable3;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.function.higherkinded.DataWitness.diet;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -23,19 +23,19 @@ import lombok.AllArgsConstructor;
 //Discrete Interval Encoded Tree
 public interface DIET<T> extends Sealed2<DIET.Node<T>, DIET.Nil<T>>, Iterable<T>, Higher<diet, T>, Foldable<T> {
 
-    public static <T> DIET<T> empty() {
+    static <T> DIET<T> empty() {
         return Nil.INSTANCE;
     }
 
-    public static <T> DIET<T> cons(Range<T> focus) {
+    static <T> DIET<T> cons(Range<T> focus) {
         return cons(empty(),
                     focus,
                     empty());
     }
 
-    public static <T> DIET<T> cons(DIET<T> left,
-                                   Range<T> focus,
-                                   DIET<T> right) {
+    static <T> DIET<T> cons(DIET<T> left,
+                            Range<T> focus,
+                            DIET<T> right) {
         return new Node(left,
                         focus,
                         right);
@@ -95,7 +95,7 @@ public interface DIET<T> extends Sealed2<DIET.Node<T>, DIET.Nil<T>>, Iterable<T>
     boolean isEmpty();
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Node<T> implements DIET<T>, Deconstructable3<DIET<T>, Range<T>, DIET<T>>, Serializable {
+    final class Node<T> implements DIET<T>, Deconstructable3<DIET<T>, Range<T>, DIET<T>>, Serializable {
 
         private static final long serialVersionUID = 1L;
         private final DIET<T> left;
@@ -376,7 +376,7 @@ public interface DIET<T> extends Sealed2<DIET.Node<T>, DIET.Nil<T>>, Iterable<T>
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Nil<T> implements DIET<T>, Serializable {
+    final class Nil<T> implements DIET<T>, Serializable {
 
         public final static Nil INSTANCE = new Nil();
 

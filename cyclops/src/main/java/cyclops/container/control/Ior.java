@@ -1,25 +1,25 @@
 package cyclops.container.control;
 
-import cyclops.function.higherkinded.DataWitness.ior;
-import cyclops.function.higherkinded.Higher;
-import cyclops.function.higherkinded.Higher2;
-import cyclops.container.filterable.Filterable;
-import cyclops.container.foldable.OrElseValue;
 import cyclops.container.Value;
 import cyclops.container.factory.Unit;
-import cyclops.container.transformable.To;
-import cyclops.container.transformable.BiTransformable;
-import cyclops.container.transformable.Transformable;
-import cyclops.reactive.subscriber.ValueSubscriber;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.OrElseValue;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.function.companion.FluentFunctions;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.To;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.function.combiner.Semigroup;
+import cyclops.function.companion.FluentFunctions;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.ior;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher2;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.subscriber.ValueSubscriber;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -50,7 +50,7 @@ import org.reactivestreams.Publisher;
 public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT, Ior<LT, RT>>, Unit<RT>, Transformable<RT>,
                                      Filterable<RT>, BiTransformable<LT, RT>, Higher2<ior, LT, RT> {
 
-    public static <L, T> Higher<Higher<ior, L>, T> widen(Ior<L, T> narrow) {
+    static <L, T> Higher<Higher<ior, L>, T> widen(Ior<L, T> narrow) {
         return narrow;
     }
 
@@ -120,7 +120,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param pub Publisher to extract value from
      * @return Ior populated from Publisher
      */
-    public static <T> Ior<Throwable, T> fromPublisher(final Publisher<T> pub) {
+    static <T> Ior<Throwable, T> fromPublisher(final Publisher<T> pub) {
         final ValueSubscriber<T> sub = ValueSubscriber.subscriber();
         pub.subscribe(sub);
         return sub.toEither()
@@ -143,8 +143,8 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param iterable Iterable to extract value from
      * @return Ior populated from Iterable
      */
-    public static <ST, T> Ior<ST, T> fromIterable(final Iterable<T> iterable,
-                                                  T alt) {
+    static <ST, T> Ior<ST, T> fromIterable(final Iterable<T> iterable,
+                                           T alt) {
         final Iterator<T> it = iterable.iterator();
         return Ior.right(it.hasNext() ? it.next() : alt);
     }
@@ -165,7 +165,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param right To construct an Ior from
      * @return Primary type instanceof Ior
      */
-    public static <LT, RT> Ior<LT, RT> right(final RT right) {
+    static <LT, RT> Ior<LT, RT> right(final RT right) {
         return new Primary<>(right);
     }
 
@@ -186,7 +186,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param left to wrap
      * @return Secondary instance of Ior
      */
-    public static <LT, RT> Ior<LT, RT> left(final LT left) {
+    static <LT, RT> Ior<LT, RT> left(final LT left) {
         return new Secondary<>(left);
     }
 
@@ -204,8 +204,8 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param right Primary value
      * @return Ior that contains both the left and the right value
      */
-    public static <ST, PT> Ior<ST, PT> both(final ST left,
-                                            final PT right) {
+    static <ST, PT> Ior<ST, PT> both(final ST left,
+                                     final PT right) {
         return new Both<ST, PT>(left,
                                 right);
     }
@@ -226,7 +226,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param iors Iors to sequence
      * @return Ior sequenced and swapped
      */
-    public static <ST, PT> Ior<PT, ReactiveSeq<ST>> sequenceLeft(final Iterable<? extends Ior<ST, PT>> iors) {
+    static <ST, PT> Ior<PT, ReactiveSeq<ST>> sequenceLeft(final Iterable<? extends Ior<ST, PT>> iors) {
         return sequence(ReactiveSeq.fromIterable(iors)
                                    .filterNot(Ior::isRight)
                                    .map(Ior::swap));
@@ -250,8 +250,8 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param reducer Reducer to accumulate results
      * @return Ior populated with the accumulate left operation
      */
-    public static <ST, PT, R> Ior<PT, R> accumulateLeft(final Iterable<Ior<ST, PT>> iors,
-                                                        final Reducer<R, ST> reducer) {
+    static <ST, PT, R> Ior<PT, R> accumulateLeft(final Iterable<Ior<ST, PT>> iors,
+                                                 final Reducer<R, ST> reducer) {
         return sequenceLeft(iors).map(s -> s.foldMap(reducer));
     }
 
@@ -276,9 +276,9 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param reducer Semigroup to combine values from each Ior
      * @return Ior populated with the accumulate Secondary operation
      */
-    public static <ST, PT, R> Ior<PT, R> accumulateLeft(final Iterable<Ior<ST, PT>> iors,
-                                                        final Function<? super ST, R> mapper,
-                                                        final Monoid<R> reducer) {
+    static <ST, PT, R> Ior<PT, R> accumulateLeft(final Iterable<Ior<ST, PT>> iors,
+                                                 final Function<? super ST, R> mapper,
+                                                 final Monoid<R> reducer) {
         return sequenceLeft(iors).map(s -> s.map(mapper)
                                             .reduce(reducer));
     }
@@ -305,8 +305,8 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param reducer Semigroup to combine values from each Ior
      * @return populated with the accumulate Secondary operation
      */
-    public static <ST, PT> Ior<PT, ST> accumulateLeft(final Monoid<ST> reducer,
-                                                      final Iterable<Ior<ST, PT>> iors) {
+    static <ST, PT> Ior<PT, ST> accumulateLeft(final Monoid<ST> reducer,
+                                               final Iterable<Ior<ST, PT>> iors) {
         return sequenceLeft(iors).map(s -> s.reduce(reducer));
     }
 
@@ -328,12 +328,12 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param iors Iors to sequence
      * @return Ior Sequenced
      */
-    public static <ST, PT> Ior<ST, ReactiveSeq<PT>> sequenceRight(final Iterable<Ior<ST, PT>> iors) {
+    static <ST, PT> Ior<ST, ReactiveSeq<PT>> sequenceRight(final Iterable<Ior<ST, PT>> iors) {
         return sequence(ReactiveSeq.fromIterable(iors)
                                    .filterNot(Ior::isLeft));
     }
 
-    public static <L, T> Ior<L, ReactiveSeq<T>> sequence(ReactiveSeq<? extends Ior<L, T>> stream) {
+    static <L, T> Ior<L, ReactiveSeq<T>> sequence(ReactiveSeq<? extends Ior<L, T>> stream) {
 
         Ior<L, ReactiveSeq<T>> identity = right(ReactiveSeq.empty());
 
@@ -348,16 +348,16 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
                              combineStreams);
     }
 
-    public static <L, T, R> Ior<L, ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
-                                                            ReactiveSeq<Ior<L, T>> stream) {
+    static <L, T, R> Ior<L, ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
+                                                     ReactiveSeq<Ior<L, T>> stream) {
         return sequence(stream.map(h -> h.map(fn)));
     }
 
-    public static <L, T> Ior<ReactiveSeq<L>, ReactiveSeq<T>> sequenceBoth(Iterable<? extends Ior<L, T>> stream) {
+    static <L, T> Ior<ReactiveSeq<L>, ReactiveSeq<T>> sequenceBoth(Iterable<? extends Ior<L, T>> stream) {
         return sequenceBoth(ReactiveSeq.fromIterable(stream));
     }
 
-    public static <L, T> Ior<ReactiveSeq<L>, ReactiveSeq<T>> sequenceBoth(ReactiveSeq<? extends Ior<L, T>> stream) {
+    static <L, T> Ior<ReactiveSeq<L>, ReactiveSeq<T>> sequenceBoth(ReactiveSeq<? extends Ior<L, T>> stream) {
 
         Ior<ReactiveSeq<L>, ReactiveSeq<T>> identity = both(ReactiveSeq.empty(),
                                                             ReactiveSeq.empty());
@@ -405,8 +405,8 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param reducer Reducer to accumulate results
      * @return Ior populated with the accumulate right operation
      */
-    public static <ST, PT, R> Ior<ST, R> accumulateRight(final Iterable<Ior<ST, PT>> iors,
-                                                         final Reducer<R, PT> reducer) {
+    static <ST, PT, R> Ior<ST, R> accumulateRight(final Iterable<Ior<ST, PT>> iors,
+                                                  final Reducer<R, PT> reducer) {
         return sequenceRight(iors).map(s -> s.foldMap(reducer));
     }
 
@@ -430,9 +430,9 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param reducer Reducer to accumulate results
      * @return Ior populated with the accumulate right operation
      */
-    public static <ST, PT, R> Ior<ST, R> accumulateRight(final Iterable<Ior<ST, PT>> iors,
-                                                         final Function<? super PT, R> mapper,
-                                                         final Semigroup<R> reducer) {
+    static <ST, PT, R> Ior<ST, R> accumulateRight(final Iterable<Ior<ST, PT>> iors,
+                                                  final Function<? super PT, R> mapper,
+                                                  final Semigroup<R> reducer) {
         return sequenceRight(iors).map(s -> s.map(mapper)
                                              .reduce(reducer)
                                              .get());
@@ -458,17 +458,17 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
      * @param reducer Reducer to accumulate results
      * @return Ior populated with the accumulate right operation
      */
-    public static <ST, PT> Ior<ST, PT> accumulateRight(final Iterable<Ior<ST, PT>> iors,
-                                                       final Semigroup<PT> reducer) {
+    static <ST, PT> Ior<ST, PT> accumulateRight(final Iterable<Ior<ST, PT>> iors,
+                                                final Semigroup<PT> reducer) {
         return sequenceRight(iors).map(s -> s.reduce(reducer)
                                              .get());
     }
 
-    public static <ST, T> Ior<ST, T> narrowK2(final Higher2<ior, ST, T> ior) {
+    static <ST, T> Ior<ST, T> narrowK2(final Higher2<ior, ST, T> ior) {
         return (Ior<ST, T>) ior;
     }
 
-    public static <ST, T> Ior<ST, T> narrowK(final Higher<Higher<ior, ST>, T> ior) {
+    static <ST, T> Ior<ST, T> narrowK(final Higher<Higher<ior, ST>, T> ior) {
         return (Ior<ST, T>) ior;
     }
 
@@ -657,7 +657,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
 
     Option<LT> getLeft();
 
-    public <RT1> Ior<LT, RT1> flatMap(final Function<? super RT, ? extends Ior<? extends LT, ? extends RT1>> mapper);
+    <RT1> Ior<LT, RT1> flatMap(final Function<? super RT, ? extends Ior<? extends LT, ? extends RT1>> mapper);
 
     /**
      * Perform a flatMap operation on the Secondary type
@@ -671,17 +671,17 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
     /**
      * @return True if this is a right (only) Ior
      */
-    public boolean isRight();
+    boolean isRight();
 
     /**
      * @return True if this was a left (only) Ior
      */
-    public boolean isLeft();
+    boolean isLeft();
 
     /**
      * @return True if this Ior has both left and right types
      */
-    public boolean isBoth();
+    boolean isBoth();
 
     /* (non-Javadoc)
      * @see com.oath.cyclops.lambda.monads.Filters#ofType(java.lang.Class)
@@ -733,7 +733,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @EqualsAndHashCode(of = {"value"})
-    public static class Primary<ST, PT> implements Ior<ST, PT> {
+    class Primary<ST, PT> implements Ior<ST, PT> {
 
         private final PT value;
 
@@ -802,7 +802,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
         @Override
         public <R1, R2> Ior<R1, R2> bimap(final Function<? super ST, ? extends R1> fn1,
                                           final Function<? super PT, ? extends R2> fn2) {
-            return Ior.<R1, R2>right(fn2.apply(value));
+            return Ior.right(fn2.apply(value));
         }
 
         @Override
@@ -881,7 +881,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @EqualsAndHashCode(of = {"value"})
-    public static class Secondary<ST, PT> implements Ior<ST, PT> {
+    class Secondary<ST, PT> implements Ior<ST, PT> {
 
         private final ST value;
 
@@ -956,7 +956,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
         @Override
         public <R1, R2> Ior<R1, R2> bimap(final Function<? super ST, ? extends R1> fn1,
                                           final Function<? super PT, ? extends R2> fn2) {
-            return Ior.<R1, R2>left(fn1.apply(value));
+            return Ior.left(fn1.apply(value));
         }
 
         @Override
@@ -1038,7 +1038,7 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
 
     @AllArgsConstructor(access = AccessLevel.PACKAGE)
     @EqualsAndHashCode
-    public static class Both<ST, PT> implements Ior<ST, PT> {
+    class Both<ST, PT> implements Ior<ST, PT> {
 
         @Include
         private final ST secondary;
@@ -1095,8 +1095,8 @@ public interface Ior<LT, RT> extends To<Ior<LT, RT>>, Value<RT>, OrElseValue<RT,
 
         @Override
         public <R> Ior<ST, R> map(final Function<? super PT, ? extends R> fn) {
-            return Both.<ST, R>both(secondary,
-                                    fn.apply(primary));
+            return Both.both(secondary,
+                             fn.apply(primary));
         }
 
         @Override

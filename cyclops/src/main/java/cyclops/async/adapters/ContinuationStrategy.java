@@ -4,9 +4,9 @@ import cyclops.stream.async.Continuation;
 
 public interface ContinuationStrategy {
 
-    public void addContinuation(Continuation c);
+    void addContinuation(Continuation c);
 
-    public void handleContinuation();
+    void handleContinuation();
 
     default boolean isBlocking() {
         return false;

@@ -1,15 +1,15 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.immutable.ImmutableMap;
-import cyclops.function.higherkinded.DataWitness.hashMap;
-import cyclops.function.higherkinded.Higher2;
-import cyclops.container.persistent.PersistentMap;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.impl.base.HAMT;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.persistent.PersistentMap;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.hashMap;
+import cyclops.function.higherkinded.Higher2;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Iterator;

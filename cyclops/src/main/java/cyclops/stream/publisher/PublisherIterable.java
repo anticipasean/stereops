@@ -138,7 +138,7 @@ public final class PublisherIterable<T> implements Publisher<T> {
     }
 
 
-    static enum EmptySubscription implements Subscription {
+    enum EmptySubscription implements Subscription {
         INSTANCE;
 
         @Override

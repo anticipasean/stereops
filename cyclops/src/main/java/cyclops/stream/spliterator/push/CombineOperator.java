@@ -68,7 +68,7 @@ public class CombineOperator<T, A, R> extends BaseOperator<T, ReactiveSeq<T>> {
 
                                                } else {
                                                    final T result = (T) current[0];
-                                                   current[0] = (T) UNSET;
+                                                   current[0] = UNSET;
                                                    onNext.accept(Spouts.of(result,
                                                                            next));
                                                    return;
@@ -117,7 +117,7 @@ public class CombineOperator<T, A, R> extends BaseOperator<T, ReactiveSeq<T>> {
 
                                     } else {
                                         final T result = (T) current[0];
-                                        current[0] = (T) UNSET;
+                                        current[0] = UNSET;
 
                                         onNext.accept(Spouts.of(result,
                                                                 next));

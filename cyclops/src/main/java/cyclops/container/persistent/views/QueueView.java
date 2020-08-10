@@ -51,7 +51,7 @@ public interface QueueView<T> extends Queue<T> {
     void clear();
 
     @AllArgsConstructor
-    public static class Impl<T> extends AbstractQueue<T> implements QueueView<T> {
+    class Impl<T> extends AbstractQueue<T> implements QueueView<T> {
 
         private final PersistentQueue<T> host;
 

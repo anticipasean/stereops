@@ -1,9 +1,9 @@
 package cyclops.container.immutable.impl;
 
 import cyclops.container.immutable.ImmutableSet;
+import cyclops.container.persistent.PersistentBag;
 import cyclops.function.higherkinded.DataWitness.bag;
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.persistent.PersistentBag;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Iterator;

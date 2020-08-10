@@ -15,8 +15,8 @@ public class BAMT<T> {
 
     public interface NestedArray<T> {
 
-        static final int BITS_IN_INDEX = 5;
-        static final int SIZE = (int) StrictMath.pow(2,
+        int BITS_IN_INDEX = 5;
+        int SIZE = (int) StrictMath.pow(2,
                                                      BITS_IN_INDEX);
 
         static int bitpos(int hash,
@@ -34,7 +34,7 @@ public class BAMT<T> {
             return (hash) & (SIZE - 1);
         }
 
-        public NestedArray<T> append(ActiveTail<T> tail);
+        NestedArray<T> append(ActiveTail<T> tail);
 
         default <R> R match(Function<? super Zero<T>, ? extends R> zeroFn,
                             Function<? super PopulatedArray<T>, ? extends R> popFn) {
@@ -47,32 +47,32 @@ public class BAMT<T> {
 
         ReactiveSeq<T> stream();
 
-        public T getOrElseGet(int pos,
-                              Supplier<T> alt);
+        T getOrElseGet(int pos,
+                       Supplier<T> alt);
 
-        public T getOrElse(int pos,
-                           T alt);
+        T getOrElse(int pos,
+                    T alt);
 
-        public Option<T> get(int pos);
+        Option<T> get(int pos);
 
-        public <R> NestedArray<R> map(Function<? super T, ? extends R> fn);
+        <R> NestedArray<R> map(Function<? super T, ? extends R> fn);
 
     }
 
     public interface PopulatedArray<T> extends NestedArray<T> {
 
-        public T getOrElseGet(int pos,
-                              Supplier<T> alt);
+        T getOrElseGet(int pos,
+                       Supplier<T> alt);
 
-        public T getOrElse(int pos,
-                           T alt);
+        T getOrElse(int pos,
+                    T alt);
 
-        public Option<T> get(int pos);
+        Option<T> get(int pos);
 
-        public T[] getNestedArrayAt(int pos);
+        T[] getNestedArrayAt(int pos);
 
-        public PopulatedArray<T> set(int pos,
-                                     T value);
+        PopulatedArray<T> set(int pos,
+                              T value);
 
     }
 
@@ -186,7 +186,7 @@ public class BAMT<T> {
         public Option<T> get(int pos) {
             int indx = pos & 0x01f;
             if (indx < array.length) {
-                return Option.of((T) array[indx]);
+                return Option.of(array[indx]);
             }
             return Option.none();
         }
@@ -196,7 +196,7 @@ public class BAMT<T> {
                            T alt) {
             int indx = pos & 0x01f;
             if (indx < array.length) {
-                return (T) array[indx];
+                return array[indx];
             }
             return alt;
         }
@@ -206,7 +206,7 @@ public class BAMT<T> {
                               Supplier<T> alt) {
             int indx = pos & 0x01f;
             if (indx < array.length) {
-                return (T) array[indx];
+                return array[indx];
             }
             return alt.get();
         }
@@ -304,7 +304,7 @@ public class BAMT<T> {
         public Option<T> get(int pos) {
             int indx = pos & 0x01f;
             if (indx < array.length) {
-                return Option.of((T) array[indx]);
+                return Option.of(array[indx]);
             }
             return Option.none();
         }
@@ -323,7 +323,7 @@ public class BAMT<T> {
                            T alt) {
             int indx = pos & 0x01f;
             if (indx < array.length) {
-                return (T) array[indx];
+                return array[indx];
             }
             return alt;
         }
@@ -333,7 +333,7 @@ public class BAMT<T> {
                               Supplier<T> alt) {
             int indx = pos & 0x01f;
             if (indx < array.length) {
-                return (T) array[indx];
+                return array[indx];
             }
             return alt.get();
         }
@@ -396,7 +396,7 @@ public class BAMT<T> {
                 }
 
             }
-            return two((Object[][]) res);
+            return two(res);
         }
 
         @Override
@@ -521,7 +521,7 @@ public class BAMT<T> {
                     }
                 }
             }
-            return three((Object[][][]) res);
+            return three(res);
         }
 
         @Override
@@ -678,7 +678,7 @@ public class BAMT<T> {
                     }
                 }
             }
-            return four((Object[][][][]) res);
+            return four(res);
         }
 
         @Override
@@ -878,7 +878,7 @@ public class BAMT<T> {
                     }
                 }
             }
-            return five((Object[][][][][]) res);
+            return five(res);
         }
 
         @Override
@@ -1115,7 +1115,7 @@ public class BAMT<T> {
                     }
                 }
             }
-            return six((Object[][][][][][]) res);
+            return six(res);
         }
 
         @Override

@@ -1,9 +1,5 @@
 package cyclops.reactive;
 
-import cyclops.function.higherkinded.DataWitness.managed;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.transformable.To;
-import cyclops.exception.ExceptionSoftener;
 import cyclops.async.Future;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.impl.Seq;
@@ -14,11 +10,15 @@ import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.container.immutable.tuple.Tuple5;
 import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.combiner.Monoid;
-import cyclops.function.combiner.Semigroup;
+import cyclops.container.transformable.To;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.checked.CheckedFunction;
 import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Semigroup;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.higherkinded.DataWitness.managed;
+import cyclops.function.higherkinded.Higher;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;

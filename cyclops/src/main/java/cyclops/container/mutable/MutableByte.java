@@ -184,7 +184,7 @@ public class MutableByte implements To<MutableByte>, Supplier<Byte>, Consumer<By
         return getAsByte();
     }
 
-    public static interface ByteFunction {
+    public interface ByteFunction {
 
         byte apply(byte var);
     }

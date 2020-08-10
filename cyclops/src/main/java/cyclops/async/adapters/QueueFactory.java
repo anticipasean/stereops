@@ -33,5 +33,5 @@ public interface QueueFactory<T> {
      *
      * @return async.Queue
      */
-    public Queue<T> build();
+    Queue<T> build();
 }

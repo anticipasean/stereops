@@ -33,7 +33,7 @@ public interface Eithers {
      * @param adapter Adapter to fold on
      * @return Structural pattern matcher for Adapter types.
      */
-    public static <T> Either<Queue<T>, Topic<T>> adapter(final Adapter<T> adapter) {
+    static <T> Either<Queue<T>, Topic<T>> adapter(final Adapter<T> adapter) {
         return adapter.matches();
     }
 
@@ -58,9 +58,9 @@ public interface Eithers {
      * @param queue Queue to pattern fold on
      * @return Pattern matchier on the blocking / non-blocking nature of the supplied Queue
      */
-    public static <T> Either<BlockingQueue<T>, java.util.Queue<T>> blocking(final java.util.Queue<T> queue) {
+    static <T> Either<BlockingQueue<T>, java.util.Queue<T>> blocking(final java.util.Queue<T> queue) {
 
-        return queue instanceof BlockingQueue ? Either.<BlockingQueue<T>, java.util.Queue<T>>left((BlockingQueue) queue)
-            : Either.<BlockingQueue<T>, java.util.Queue<T>>right(queue);
+        return queue instanceof BlockingQueue ? Either.left((BlockingQueue) queue)
+            : Either.right(queue);
     }
 }

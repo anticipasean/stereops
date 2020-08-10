@@ -27,7 +27,7 @@ public class SkipWhileClosedOperator<T, R> extends BaseOperator<T, T> {
         boolean[] skipping = {true};
         boolean[] resetSkipping = {false};
         boolean[] first = {true};
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {

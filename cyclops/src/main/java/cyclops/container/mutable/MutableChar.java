@@ -184,7 +184,7 @@ public class MutableChar implements To<MutableChar>, Supplier<Character>, Consum
         return getAsChar();
     }
 
-    public static interface CharFunction {
+    public interface CharFunction {
 
         char apply(char var);
     }

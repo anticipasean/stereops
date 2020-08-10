@@ -1,21 +1,21 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.immutable.ImmutableSet;
-import cyclops.function.higherkinded.DataWitness.trieSet;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentSet;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableSet;
 import cyclops.container.immutable.impl.base.HashedPatriciaTrie;
 import cyclops.container.immutable.impl.base.HashedPatriciaTrie.Node;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentSet;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
+import cyclops.function.higherkinded.DataWitness.trieSet;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;

@@ -1,6 +1,5 @@
 package cyclops.container.control;
 
-import cyclops.container.transformable.Transformable;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
@@ -8,6 +7,7 @@ import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.container.immutable.tuple.Tuple5;
 import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.enhanced.Function3;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -16,8 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
- * Java friendly version of Free (as in Unrestricted) monad for cyclops2 also see {@link cyclops.pure.free.Free} for a more advanced
- * type safe version
+ * Java friendly version of Free (as in Unrestricted) monad for cyclops2 also see {@link cyclops.pure.free.Free} for a more
+ * advanced type safe version
  * <p>
  * Inspiration and heavily influenced by https://github.com/xuwei-k/free-monad-java/blob/master/src/main/java/free/Free.java Other
  * influences incl :- http://www.slideshare.net/kenbot/running-free-with-the-monads and https://github.com/scalaz/scalaz/blob/series/7.2.x/core/src/main/scala/scalaz/Free.scala
@@ -133,7 +133,7 @@ public abstract class Unrestricted<T> {
     public final T go(final Function<? super Transformable<Unrestricted<T>>, ? extends Unrestricted<T>> fn) {
         Unrestricted<T> toUse = this;
         for (; ; ) {
-            Either<Transformable<Unrestricted<T>>, T> xor = (Either) toUse.resume();
+            Either<Transformable<Unrestricted<T>>, T> xor = toUse.resume();
             if (xor.isRight()) {
                 return xor.orElse(null);
             }

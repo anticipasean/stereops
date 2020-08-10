@@ -1,16 +1,16 @@
 package cyclops.container.immutable.tuple;
 
 
-import cyclops.function.higherkinded.DataWitness.tuple4;
-import cyclops.function.higherkinded.Higher;
-import cyclops.function.higherkinded.Higher4;
 import cyclops.container.comparative.EqualTo;
 import cyclops.container.ordering.OrderedBy;
 import cyclops.container.transformable.To;
-import cyclops.function.companion.Comparators;
-import cyclops.function.enhanced.Function4;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Comparators;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.tuple4;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher4;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
@@ -31,9 +31,9 @@ public class Tuple4<T1, T2, T3, T4> implements To<Tuple4<T1, T2, T3, T4>>, Seria
     private final T4 _4;
 
     public Tuple4(T1 t1,
-                     T2 t2,
-                     T3 t3,
-                     T4 t4) {
+                  T2 t2,
+                  T3 t3,
+                  T4 t4) {
         _1 = t1;
         _2 = t2;
         _3 = t3;

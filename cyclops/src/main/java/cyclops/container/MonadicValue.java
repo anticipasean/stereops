@@ -1,16 +1,16 @@
 package cyclops.container;
 
-import cyclops.container.filterable.Filterable;
-import cyclops.container.factory.EmptyUnit;
-import cyclops.container.factory.Unit;
-import cyclops.container.transformable.Transformable;
-import cyclops.reactive.subscriber.ValueSubscriber;
 import cyclops.async.Future;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
+import cyclops.container.factory.EmptyUnit;
+import cyclops.container.factory.Unit;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
+import cyclops.reactive.subscriber.ValueSubscriber;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -77,7 +77,7 @@ public interface MonadicValue<T> extends Value<T>, Unit<T>, Transformable<T>, Fi
 
 
     @Override
-    public <T> MonadicValue<T> unit(T unit);
+    <T> MonadicValue<T> unit(T unit);
 
     @Override
     <T> MonadicValue<T> emptyUnit();

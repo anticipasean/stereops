@@ -43,7 +43,7 @@ public class Zipping4Spliterator<T1, T2, T3, T4, R> implements CopyableSpliterat
 
     @Override
     public boolean tryAdvance(Consumer<? super R> action) {
-        boolean found[] = {false};
+        boolean[] found = {false};
         return left.tryAdvance(l -> middle.tryAdvance(m -> {
             middle2.tryAdvance(m2 -> {
                 right.tryAdvance(r -> {
@@ -86,7 +86,7 @@ public class Zipping4Spliterator<T1, T2, T3, T4, R> implements CopyableSpliterat
 
     @Override
     public int characteristics() {
-        return left.characteristics() & middle.characteristics() & middle2.characteristics() & right.characteristics() & ~(
-            SORTED | DISTINCT);
+        return left.characteristics() & middle.characteristics() & middle2.characteristics() & right.characteristics() & ~(SORTED
+            | DISTINCT);
     }
 }

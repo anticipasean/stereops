@@ -55,7 +55,7 @@ public class SkipWhileSpliterator<T> extends Spliterators.AbstractSpliterator<T>
         if (closed) {
             return true;
         }
-        boolean sent[] = {false};
+        boolean[] sent = {false};
         for (; ; ) {
 
             boolean canAdvance = source.tryAdvance(t -> {

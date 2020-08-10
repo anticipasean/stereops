@@ -28,7 +28,7 @@ public class LimitWhileTimeOperator<T, R> extends BaseOperator<T, T> {
                                         Runnable onComplete) {
         final long toRun = t.toNanos(time);
         final long start = System.nanoTime();
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         sub[0] = source.subscribe(e -> {
                                       try {
 

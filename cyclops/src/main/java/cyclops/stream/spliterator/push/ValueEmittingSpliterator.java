@@ -11,6 +11,7 @@ public class ValueEmittingSpliterator<T> extends AbstractSpliterator<T> {
 
     AtomicReference<T> value = new AtomicReference<T>(null);
     boolean emitted = false;
+
     public ValueEmittingSpliterator(long est,
                                     int additionalCharacteristics,
                                     ReactiveSeq<T> seq) {

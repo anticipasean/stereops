@@ -13,16 +13,16 @@ import java.util.stream.Stream;
  */
 public interface Reducer<T, U> extends Monoid<T> {
 
-    public static <T, U> Reducer<T, U> fromMonoid(final Monoid<T> monoid,
-                                                  final Function<? super U, T> mapper) {
+    static <T, U> Reducer<T, U> fromMonoid(final Monoid<T> monoid,
+                                           final Function<? super U, T> mapper) {
         return of(monoid.zero(),
                   monoid,
                   mapper);
     }
 
-    public static <T, U> Reducer<T, U> of(final T zero,
-                                          final BiFunction<T, T, T> combiner,
-                                          final Function<? super U, T> mapToType) {
+    static <T, U> Reducer<T, U> of(final T zero,
+                                   final BiFunction<T, T, T> combiner,
+                                   final Function<? super U, T> mapToType) {
         return new Reducer<T, U>() {
             @Override
             public T zero() {
@@ -43,9 +43,9 @@ public interface Reducer<T, U> extends Monoid<T> {
         };
     }
 
-    public static <T, U> Reducer<T, U> of(final T zero,
-                                          final Function<T, Function<T, T>> combiner,
-                                          final Function<? super U, T> mapToType) {
+    static <T, U> Reducer<T, U> of(final T zero,
+                                   final Function<T, Function<T, T>> combiner,
+                                   final Function<? super U, T> mapToType) {
         return new Reducer<T, U>() {
             @Override
             public T zero() {

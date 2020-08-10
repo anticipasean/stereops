@@ -49,7 +49,7 @@ public interface SortedSetView<T> extends SortedSet<T> {
     void clear();
 
     @AllArgsConstructor
-    public static class Impl<T> extends AbstractSet<T> implements SortedSetView<T> {
+    class Impl<T> extends AbstractSet<T> implements SortedSetView<T> {
 
         private final PersistentSortedSet<T> host;
 

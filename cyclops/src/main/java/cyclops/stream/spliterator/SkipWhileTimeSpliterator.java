@@ -17,6 +17,7 @@ public class SkipWhileTimeSpliterator<T> extends Spliterators.AbstractSpliterato
     boolean closed = false;
     boolean open = false;
     long start = -1;
+
     public SkipWhileTimeSpliterator(final Spliterator<T> source,
                                     long time,
                                     TimeUnit t) {

@@ -4,23 +4,23 @@ import cyclops.async.adapters.Queue;
 
 public interface Continueable {
 
-    public void closeQueueIfFinished(Queue queue);
+    void closeQueueIfFinished(Queue queue);
 
-    public void addQueue(Queue queue);
+    void addQueue(Queue queue);
 
-    public void registerSkip(long skip);
+    void registerSkip(long skip);
 
-    public void registerLimit(long limit);
+    void registerLimit(long limit);
 
-    public void closeAll(Queue q);
+    void closeAll(Queue q);
 
-    public boolean closed();
+    boolean closed();
 
-    public void closeQueueIfFinishedStateless(Queue queue);
+    void closeQueueIfFinishedStateless(Queue queue);
 
-    public void closeAll();
+    void closeAll();
 
-    public long timeLimit();
+    long timeLimit();
 
-    public void registerTimeLimit(long nanos);
+    void registerTimeLimit(long nanos);
 }

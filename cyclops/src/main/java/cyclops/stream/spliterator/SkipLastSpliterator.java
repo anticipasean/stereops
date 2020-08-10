@@ -16,13 +16,13 @@ public class SkipLastSpliterator<T> extends AbstractSpliterator<T> implements Co
     boolean closed = false;
     boolean canAdvance = true;
     boolean sent = false;
+
     public SkipLastSpliterator(final Spliterator<T> source,
                                final int skip) {
         super(source.estimateSize(),
               source.characteristics() & Spliterator.ORDERED);
         buffer = skip < 1_000 ? new ArrayDeque<>(skip) : new LinkedList<>();
         this.source = source;
-        ;
         this.skip = skip;
     }
 

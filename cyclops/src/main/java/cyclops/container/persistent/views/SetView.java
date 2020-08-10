@@ -43,7 +43,7 @@ public interface SetView<T> extends Set<T> {
     void clear();
 
     @AllArgsConstructor
-    public static class Impl<T> extends AbstractSet<T> implements SetView<T> {
+    class Impl<T> extends AbstractSet<T> implements SetView<T> {
 
         private final PersistentSet<T> host;
 

@@ -75,7 +75,7 @@ public class GroupedWhileSpliterator<T, C extends PersistentCollection<? super T
             return false;
         }
 
-        boolean accepted[] = {true};
+        boolean[] accepted = {true};
         while (accepted[0]) {
             boolean canAdvance = source.tryAdvance(t -> {
                 collection = (C) collection.plus(t);

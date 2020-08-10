@@ -1,8 +1,8 @@
 package cyclops.function.enhanced;
 
 
-import cyclops.container.control.Eval;
 import cyclops.async.Future;
+import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
@@ -14,11 +14,11 @@ import java.util.function.Supplier;
 public interface Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> extends
                                                               Function1<T1, Function1<T2, Function1<T3, Function1<T4, Function1<T5, Function1<T6, Function1<T7, Function1<T8, R>>>>>>>> {
 
-    public static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> constant(R t) {
+    static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> constant(R t) {
         return (a, b, c, d, e, f, g, h) -> t;
     }
 
-    public static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> lazyConstant(Supplier<R> t) {
+    static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> lazyConstant(Supplier<R> t) {
         return (a, b, c, d, e, f, g, h) -> t.get();
     }
 
@@ -34,22 +34,22 @@ public interface Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> extends
      * @param func8
      * @return supplied function
      */
-    public static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> λ(final Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> func8) {
+    static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> λ(final Function8<T1, T2, T3, T4, T5, T6, T7, T8, R> func8) {
         return func8;
     }
 
-    public static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> v(final Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> func8) {
+    static <T1, T2, T3, T4, T5, T6, T7, T8, R> Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> v(final Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> func8) {
         return func8;
     }
 
-    public R apply(T1 a,
-                   T2 b,
-                   T3 c,
-                   T4 d,
-                   T5 e,
-                   T6 f,
-                   T7 g,
-                   T8 h);
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d,
+            T5 e,
+            T6 f,
+            T7 g,
+            T8 h);
 
     default Function1<T2, Function1<T3, Function1<T4, Function1<T5, Function1<T6, Function1<T7, Function1<T8, R>>>>>>> apply(final T1 s) {
         return Curry.curry8(this)

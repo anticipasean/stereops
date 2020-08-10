@@ -1,32 +1,32 @@
 package cyclops.async;
 
 
+import cyclops.async.companion.CompletableFutures;
+import cyclops.container.MonadicValue;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Ior;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Try;
-import cyclops.function.higherkinded.DataWitness.future;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.MonadicValue;
 import cyclops.container.foldable.OrElseValue;
-import cyclops.function.combiner.Zippable;
-import cyclops.container.transformable.To;
-import cyclops.container.transformable.ReactiveTransformable;
-import cyclops.reactive.Completable;
-import cyclops.reactive.subscriber.ValueSubscriber;
-import cyclops.container.recoverable.RecoverableFrom;
-import cyclops.container.mutable.Mutable;
-import cyclops.async.companion.CompletableFutures;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.recoverable.RecoverableFrom;
+import cyclops.container.transformable.ReactiveTransformable;
+import cyclops.container.transformable.To;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.combiner.Zippable;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.future;
+import cyclops.function.higherkinded.Higher;
+import cyclops.reactive.Completable;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.subscriber.ValueSubscriber;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -70,8 +70,8 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
     public static <T, R> Future<R> tailRec(T initial,
                                            Function<? super T, ? extends Future<? extends Either<T, R>>> fn) {
         Future<? extends Either<T, R>> ft = fn.apply(initial);
-        return ft.flatMap(e -> e.fold(t -> Future.of(() -> Future.<T, R>tailRec(t,
-                                                                                fn))
+        return ft.flatMap(e -> e.fold(t -> Future.of(() -> Future.tailRec(t,
+                                                                          fn))
                                                  .flatMap(a -> a),
                                       r -> Future.ofResult(r)));
     }
@@ -311,7 +311,7 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
     public static <T, X extends Throwable> Future<T> fromTry(final Try<T, X> value) {
 
         return value.fold(s -> Future.ofResult(s),
-                          e -> Future.<T>of(CompletableFutures.error(e)));
+                          e -> Future.of(CompletableFutures.error(e)));
     }
 
     /**
@@ -637,7 +637,7 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
         final CompletableFuture<T> cf = new CompletableFuture<>();
         cf.completeExceptionally(error);
 
-        return Future.<T>of(cf);
+        return Future.of(cf);
     }
 
     /**
@@ -685,8 +685,8 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
         Mutable<Future<T>> future = Mutable.of(this);
         sub.onSubscribe(new Subscription() {
 
-            AtomicBoolean running = new AtomicBoolean(true);
-            AtomicBoolean cancelled = new AtomicBoolean(false);
+            final AtomicBoolean running = new AtomicBoolean(true);
+            final AtomicBoolean cancelled = new AtomicBoolean(false);
 
             @Override
             public void request(final long n) {
@@ -987,6 +987,7 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
 
     /**
      * If not already completed, completes this Future with a {@link java.util.concurrent.CancellationException} Passes true to
+     *
      * @see java.util.concurrent.CompletableFuture#cancel as mayInterruptIfRunning parameter on that method has no effect for the
      * default CompletableFuture implementation
      */
@@ -1046,8 +1047,8 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
      */
     @Override
     public <R> Future<R> flatMap(final Function<? super T, ? extends MonadicValue<? extends R>> mapper) {
-        return Future.<R>of(future.<R>thenCompose(t -> (CompletionStage<R>) Future.fromMonadicValue(mapper.apply(t))
-                                                                                  .getFuture()));
+        return Future.of(future.thenCompose(t -> (CompletionStage<R>) Future.fromMonadicValue(mapper.apply(t))
+                                                                            .getFuture()));
     }
 
     /**
@@ -1057,14 +1058,14 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
      * @return FlatMapped Future
      */
     public <R> Future<R> flatMapCf(final Function<? super T, ? extends CompletionStage<? extends R>> mapper) {
-        return Future.<R>of(future.<R>thenCompose(t -> (CompletionStage<R>) mapper.apply(t)));
+        return Future.of(future.thenCompose(t -> (CompletionStage<R>) mapper.apply(t)));
     }
 
     public Either<Throwable, T> toEither() {
         try {
             return Either.right(future.join());
         } catch (final Throwable t) {
-            return Either.<Throwable, T>left(t.getCause());
+            return Either.left(t.getCause());
         }
     }
 
@@ -1077,7 +1078,7 @@ public class Future<T> implements To<Future<T>>, MonadicValue<T>, Completable<T>
         try {
             return Ior.right(future.join());
         } catch (final Throwable t) {
-            return Ior.<Throwable, T>left(t.getCause());
+            return Ior.left(t.getCause());
         }
     }
 

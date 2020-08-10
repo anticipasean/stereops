@@ -142,7 +142,7 @@ public class FutureStreamUtils {
                                                                                                                                         final Runnable onComplete) {
         final CompletableFuture<Boolean> streamCompleted = new CompletableFuture<>();
         final Subscription s = new Subscription() {
-            Iterator<T> it = stream.iterator();
+            final Iterator<T> it = stream.iterator();
             volatile boolean running = true;
 
             @Override

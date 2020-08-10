@@ -184,7 +184,7 @@ public class MutableShort implements To<MutableShort>, Supplier<Short>, Consumer
 
     }
 
-    public static interface ShortFunction {
+    public interface ShortFunction {
 
         short apply(short var);
     }

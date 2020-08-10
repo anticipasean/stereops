@@ -1,23 +1,23 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.function.higherkinded.DataWitness.differenceList;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.foldable.Foldable;
-import cyclops.container.transformable.Transformable;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentIndexed;
 import cyclops.container.control.Option;
 import cyclops.container.control.Trampoline;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentIndexed;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.differenceList;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;

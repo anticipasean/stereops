@@ -1,13 +1,13 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.stream.type.ToStream;
-import cyclops.stream.type.Streamable;
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.companion.Streams;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.type.ToStream;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -92,7 +92,7 @@ public class ConvertableSequence<T> implements ToStream<T> {
 
     public Option<LazySeq<T>> option() {
         Iterator<T> it = iterator();
-        return it.hasNext() ? Option.<LazySeq<T>>some(LazySeq.fromIterator(it)) : Option.<LazySeq<T>>none();
+        return it.hasNext() ? Option.some(LazySeq.fromIterator(it)) : Option.none();
     }
 
 

@@ -2,9 +2,9 @@ package cyclops.container.immutable.tuple;
 
 
 import cyclops.container.transformable.To;
+import cyclops.function.cacheable.Memoize;
 import cyclops.function.companion.Comparators;
 import cyclops.function.enhanced.Function6;
-import cyclops.function.cacheable.Memoize;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;

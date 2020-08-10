@@ -59,7 +59,7 @@ public interface ListView<T> extends List<T> {
     void clear();
 
     @AllArgsConstructor
-    public static class Impl<T> extends AbstractList<T> implements ListView<T> {
+    class Impl<T> extends AbstractList<T> implements ListView<T> {
 
         private final PersistentIndexed<T> host;
 

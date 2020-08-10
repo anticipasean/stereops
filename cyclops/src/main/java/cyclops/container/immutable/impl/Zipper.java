@@ -1,12 +1,12 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.function.higherkinded.DataWitness.zipper;
-import cyclops.function.higherkinded.Higher;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.function.higherkinded.DataWitness.zipper;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.Objects;
@@ -25,8 +25,8 @@ public class Zipper<T> implements Iterable<T>, Higher<zipper, T> {
     private final ImmutableList<T> right;
 
     private Zipper(ImmutableList<T> left,
-                  T point,
-                  ImmutableList<T> right) {
+                   T point,
+                   ImmutableList<T> right) {
         this.left = left;
         this.point = point;
         this.right = right;

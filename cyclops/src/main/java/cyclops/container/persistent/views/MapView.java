@@ -97,7 +97,7 @@ public interface MapView<K, V> extends Map<K, V> {
     }
 
     @AllArgsConstructor
-    public static class Impl<K, V> extends AbstractMap<K, V> implements MapView<K, V> {
+    class Impl<K, V> extends AbstractMap<K, V> implements MapView<K, V> {
 
         private final PersistentMap<K, V> host;
 

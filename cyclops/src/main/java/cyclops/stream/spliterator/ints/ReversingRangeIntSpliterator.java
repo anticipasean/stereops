@@ -13,8 +13,8 @@ public class ReversingRangeIntSpliterator implements Spliterator.OfInt, Reversab
     private final int min;
     private final int max;
     private int index;
-    private int start;
-    private int step;
+    private final int start;
+    private final int step;
 
 
     @Getter

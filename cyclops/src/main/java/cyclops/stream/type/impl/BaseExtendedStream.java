@@ -1,12 +1,12 @@
 package cyclops.stream.type.impl;
 
+import cyclops.container.immutable.impl.Seq;
 import cyclops.container.unwrappable.Unwrappable;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.stream.companion.Streams;
-import cyclops.container.immutable.impl.Seq;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.companion.Streams;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;

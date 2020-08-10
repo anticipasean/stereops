@@ -1,10 +1,8 @@
 package cyclops.function.companion;
 
 
-import cyclops.function.combiner.Zippable;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.control.Either;
 import cyclops.async.Future;
+import cyclops.container.control.Either;
 import cyclops.container.control.Ior;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Try;
@@ -19,7 +17,9 @@ import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.immutable.impl.TrieSet;
 import cyclops.container.immutable.impl.Vector;
+import cyclops.container.persistent.PersistentCollection;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Zippable;
 import cyclops.function.higherkinded.NaturalTransformation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
@@ -46,112 +46,112 @@ public interface Monoids {
     /**
      * Combine two Integers by summing them
      */
-    static Monoid<Integer> intSum = Monoid.of(0,
+    Monoid<Integer> intSum = Monoid.of(0,
                                               Semigroups.intSum);
     /**
      * Combine two Longs by summing them
      */
-    static Monoid<Long> longSum = Monoid.of(0l,
+    Monoid<Long> longSum = Monoid.of(0l,
                                             Semigroups.longSum);
     /**
      * Combine two Doubles by summing them
      */
-    static Monoid<Double> doubleSum = Monoid.of(0d,
+    Monoid<Double> doubleSum = Monoid.of(0d,
                                                 Semigroups.doubleSum);
     /**
      * Combine two BigIngegers by summing them
      */
-    static Monoid<BigInteger> bigIntSum = Monoid.of(BigInteger.ZERO,
+    Monoid<BigInteger> bigIntSum = Monoid.of(BigInteger.ZERO,
                                                     Semigroups.bigIntSum);
     /**
      * Combine two Integers by multiplying them
      */
-    static Monoid<Integer> intMult = Monoid.of(1,
+    Monoid<Integer> intMult = Monoid.of(1,
                                                Semigroups.intMult);
     /**
      * Combine two Longs by multiplying them
      */
-    static Monoid<Long> longMult = Monoid.of(0l,
+    Monoid<Long> longMult = Monoid.of(0l,
                                              Semigroups.longMult);
     /**
      * Combine two Doubles by multiplying them
      */
-    static Monoid<Double> doubleMult = Monoid.of(0d,
+    Monoid<Double> doubleMult = Monoid.of(0d,
                                                  Semigroups.doubleMult);
     /**
      * Combine two BigIntegers by multiplying them
      */
-    static Monoid<BigInteger> bigIntMult = Monoid.of(BigInteger.ZERO,
+    Monoid<BigInteger> bigIntMult = Monoid.of(BigInteger.ZERO,
                                                      Semigroups.bigIntMult);
     /**
      * Combine two Integers by selecting the max
      */
-    static Monoid<Integer> intMax = Monoid.of(Integer.MIN_VALUE,
+    Monoid<Integer> intMax = Monoid.of(Integer.MIN_VALUE,
                                               Semigroups.intMax);
     /**
      * Combine two Longs by selecting the max
      */
-    static Monoid<Long> longMax = Monoid.of(Long.MIN_VALUE,
+    Monoid<Long> longMax = Monoid.of(Long.MIN_VALUE,
                                             Semigroups.longMax);
     /**
      * Combine two Doubles by selecting the max
      */
-    static Monoid<Double> doubleMax = Monoid.of(Double.MIN_VALUE,
+    Monoid<Double> doubleMax = Monoid.of(Double.MIN_VALUE,
                                                 Semigroups.doubleMax);
     /**
      * Combine two BigIntegers by selecting the max
      */
-    static Monoid<BigInteger> bigIntMax = Monoid.of(BigInteger.valueOf(Long.MIN_VALUE),
+    Monoid<BigInteger> bigIntMax = Monoid.of(BigInteger.valueOf(Long.MIN_VALUE),
                                                     Semigroups.bigIntMax);
     /**
      * Combine two Integers by selecting the min
      */
-    static Monoid<Integer> intMin = Monoid.of(Integer.MAX_VALUE,
+    Monoid<Integer> intMin = Monoid.of(Integer.MAX_VALUE,
                                               Semigroups.intMin);
     /**
      * Combine two Longs by selecting the min
      */
-    static Monoid<Long> longMin = Monoid.of(Long.MAX_VALUE,
+    Monoid<Long> longMin = Monoid.of(Long.MAX_VALUE,
                                             Semigroups.longMin);
     /**
      * Combine two Doubles by selecting the min
      */
-    static Monoid<Double> doubleMin = Monoid.of(Double.MAX_VALUE,
+    Monoid<Double> doubleMin = Monoid.of(Double.MAX_VALUE,
                                                 Semigroups.doubleMin);
     /**
      * Combine two BigIntegers by selecting the min
      */
-    static Monoid<BigInteger> bigIntMin = Monoid.of(BigInteger.valueOf(Long.MAX_VALUE),
+    Monoid<BigInteger> bigIntMin = Monoid.of(BigInteger.valueOf(Long.MAX_VALUE),
                                                     Semigroups.bigIntMin);
     /**
      * String concatenation
      */
-    static Monoid<String> stringConcat = Monoid.of("",
+    Monoid<String> stringConcat = Monoid.of("",
                                                    Semigroups.stringConcat);
     /**
      * StringBuffer concatenation
      */
-    static Monoid<StringBuffer> stringBufferConcat = Monoid.of(new StringBuffer(""),
+    Monoid<StringBuffer> stringBufferConcat = Monoid.of(new StringBuffer(),
                                                                Semigroups.stringBufferConcat);
     /**
      * StringBuilder concatenation
      */
-    static Monoid<StringBuilder> stringBuilderConcat = Monoid.of(new StringBuilder(""),
+    Monoid<StringBuilder> stringBuilderConcat = Monoid.of(new StringBuilder(),
                                                                  Semigroups.stringBuilderConcat);
     /**
      * Combine two booleans by OR'ing them (disjunction)
      */
-    static Monoid<Boolean> booleanDisjunction = Monoid.of(false,
+    Monoid<Boolean> booleanDisjunction = Monoid.of(false,
                                                           Semigroups.booleanDisjunction);
     /**
      * Combine two booleans by XOR'ing them (exclusive disjunction)
      */
-    static Monoid<Boolean> booleanXDisjunction = Monoid.of(false,
+    Monoid<Boolean> booleanXDisjunction = Monoid.of(false,
                                                            Semigroups.booleanXDisjunction);
     /**
      * Combine two booleans by AND'ing them (conjunction)
      */
-    static Monoid<Boolean> booleanConjunction = Monoid.of(true,
+    Monoid<Boolean> booleanConjunction = Monoid.of(true,
                                                           Semigroups.booleanConjunction);
 
     static <T> Monoid<Chain<T>> chainConcat() {
@@ -495,7 +495,7 @@ public interface Monoids {
      * @return Combine two StringBuilders separated by the supplied joiner
      */
     static Monoid<StringBuilder> stringBuilderJoin(final String joiner) {
-        return Monoid.of(new StringBuilder(""),
+        return Monoid.of(new StringBuilder(),
                          Semigroups.stringBuilderJoin(joiner));
     }
 
@@ -504,7 +504,7 @@ public interface Monoids {
      * @return Combine two StringBuffers separated by the supplied joiner
      */
     static Monoid<StringBuffer> stringBufferJoin(final String joiner) {
-        return Monoid.of(new StringBuffer(""),
+        return Monoid.of(new StringBuffer(),
                          Semigroups.stringBufferJoin(joiner));
     }
 

@@ -1,11 +1,11 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.function.higherkinded.DataWitness.tree;
-import cyclops.function.higherkinded.Higher;
 import cyclops.container.foldable.Deconstructable.Deconstructable2;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.cacheable.Memoize;
+import cyclops.function.higherkinded.DataWitness.tree;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.Function;
 import java.util.function.Supplier;

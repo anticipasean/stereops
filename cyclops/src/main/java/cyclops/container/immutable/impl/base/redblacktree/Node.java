@@ -1,7 +1,7 @@
 package cyclops.container.immutable.impl.base.redblacktree;
 
-import cyclops.container.foldable.Deconstructable.Deconstructable5;
 import cyclops.container.control.Option;
+import cyclops.container.foldable.Deconstructable.Deconstructable5;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

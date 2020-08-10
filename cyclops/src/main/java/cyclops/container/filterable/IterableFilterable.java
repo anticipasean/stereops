@@ -1,7 +1,7 @@
 package cyclops.container.filterable;
 
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Eval;
+import cyclops.stream.companion.Streams;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -1,8 +1,8 @@
 package cyclops.stream.operator;
 
-import cyclops.stream.companion.Streams;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.stream.companion.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

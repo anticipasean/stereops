@@ -1,17 +1,17 @@
 package cyclops.container.immutable.tuple;
 
 
-import cyclops.function.higherkinded.DataWitness.tuple1;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.filterable.Filterable;
 import cyclops.container.comparative.EqualTo;
+import cyclops.container.control.Either;
+import cyclops.container.control.Option;
+import cyclops.container.filterable.Filterable;
 import cyclops.container.ordering.OrderedBy;
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.function.companion.Comparators;
-import cyclops.container.control.Either;
-import cyclops.container.control.Option;
 import cyclops.function.cacheable.Memoize;
+import cyclops.function.companion.Comparators;
+import cyclops.function.higherkinded.DataWitness.tuple1;
+import cyclops.function.higherkinded.Higher;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -54,7 +54,7 @@ public class Tuple1<T> implements To<Tuple1<T>>, Serializable, Transformable<T>,
 
     public static <T, R> Tuple1<R> tailRec(T initial,
                                            Function<? super T, ? extends Tuple1<? extends Either<T, R>>> fn) {
-        Tuple1<? extends Either<T, R>> next[] = new Tuple1[1];
+        Tuple1<? extends Either<T, R>>[] next = new Tuple1[1];
         next[0] = Tuple1.of(Either.left(initial));
         boolean cont = true;
         do {

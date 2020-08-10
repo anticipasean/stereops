@@ -1,7 +1,7 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.persistent.PersistentIndexed;
 import cyclops.container.control.Option;
+import cyclops.container.persistent.PersistentIndexed;
 import cyclops.function.enhanced.Function1;
 import cyclops.reactive.ReactiveSeq;
 import java.util.List;
@@ -130,7 +130,7 @@ public interface Enumeration<E> {
     }
 
     @AllArgsConstructor
-    static class EnumerationByEnum<E extends Enum<E>> implements Enumeration<E> {
+    class EnumerationByEnum<E extends Enum<E>> implements Enumeration<E> {
 
         private final E[] values;
         final Function1<E, Integer> memo = this::calcFromEnum;
@@ -175,7 +175,7 @@ public interface Enumeration<E> {
     }
 
     @AllArgsConstructor
-    static class EnumerationByIndexed<E> implements Enumeration<E> {
+    class EnumerationByIndexed<E> implements Enumeration<E> {
 
         private final PersistentIndexed<E> seq;
         final Function1<E, Integer> memo = this::calcFromEnum;

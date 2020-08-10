@@ -1,17 +1,15 @@
 package cyclops.function.companion;
 
-import cyclops.function.combiner.Zippable;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.control.Either;
 import cyclops.async.Future;
+import cyclops.container.control.Either;
 import cyclops.container.control.Ior;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Try;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.Bag;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.Chain;
 import cyclops.container.immutable.impl.HashSet;
-import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.IntMap;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.LazyString;
@@ -21,8 +19,10 @@ import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.immutable.impl.TrieSet;
 import cyclops.container.immutable.impl.Vector;
-import cyclops.function.higherkinded.NaturalTransformation;
+import cyclops.container.persistent.PersistentCollection;
 import cyclops.function.combiner.Semigroup;
+import cyclops.function.combiner.Zippable;
+import cyclops.function.higherkinded.NaturalTransformation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.math.BigInteger;
@@ -55,91 +55,91 @@ public interface Semigroups {
     /**
      * Combine two Integers by summing them
      */
-    static Semigroup<Integer> intSum = (a, b) -> a + b;
+    Semigroup<Integer> intSum = (a, b) -> a + b;
     /**
      * Combine two Longs by summing them
      */
-    static Semigroup<Long> longSum = (a, b) -> a + b;
+    Semigroup<Long> longSum = (a, b) -> a + b;
     /**
      * Combine two Doubles by summing them
      */
-    static Semigroup<Double> doubleSum = (a, b) -> a + b;
+    Semigroup<Double> doubleSum = (a, b) -> a + b;
     /**
      * Combine two BigIngegers by summing them
      */
-    static Semigroup<BigInteger> bigIntSum = (a, b) -> a.add(b);
+    Semigroup<BigInteger> bigIntSum = (a, b) -> a.add(b);
     /**
      * Combine two Integers by multiplying them
      */
-    static Semigroup<Integer> intMult = (a, b) -> a * b;
+    Semigroup<Integer> intMult = (a, b) -> a * b;
     /**
      * Combine two Longs by multiplying them
      */
-    static Semigroup<Long> longMult = (a, b) -> a * b;
+    Semigroup<Long> longMult = (a, b) -> a * b;
     /**
      * Combine two Doubles by multiplying them
      */
-    static Semigroup<Double> doubleMult = (a, b) -> a * b;
+    Semigroup<Double> doubleMult = (a, b) -> a * b;
     /**
      * Combine two BigIntegers by multiplying them
      */
-    static Semigroup<BigInteger> bigIntMult = (a, b) -> a.multiply(b);
+    Semigroup<BigInteger> bigIntMult = (a, b) -> a.multiply(b);
     /**
      * Combine two Integers by selecting the max
      */
-    static Semigroup<Integer> intMax = (a, b) -> b > a ? b : a;
+    Semigroup<Integer> intMax = (a, b) -> b > a ? b : a;
     /**
      * Combine two Longs by selecting the max
      */
-    static Semigroup<Long> longMax = (a, b) -> b > a ? b : a;
+    Semigroup<Long> longMax = (a, b) -> b > a ? b : a;
     /**
      * Combine two Doubles by selecting the max
      */
-    static Semigroup<Double> doubleMax = (a, b) -> b > a ? b : a;
+    Semigroup<Double> doubleMax = (a, b) -> b > a ? b : a;
     /**
      * Combine two BigIntegers by selecting the max
      */
-    static Semigroup<BigInteger> bigIntMax = (a, b) -> a.max(b);
+    Semigroup<BigInteger> bigIntMax = (a, b) -> a.max(b);
     /**
      * Combine two Integers by selecting the min
      */
-    static Semigroup<Integer> intMin = (a, b) -> a < b ? a : b;
+    Semigroup<Integer> intMin = (a, b) -> a < b ? a : b;
     /**
      * Combine two Longs by selecting the min
      */
-    static Semigroup<Long> longMin = (a, b) -> a < b ? a : b;
+    Semigroup<Long> longMin = (a, b) -> a < b ? a : b;
     /**
      * Combine two Doubles by selecting the min
      */
-    static Semigroup<Double> doubleMin = (a, b) -> a < b ? a : b;
+    Semigroup<Double> doubleMin = (a, b) -> a < b ? a : b;
     /**
      * Combine two BigIntegers by selecting the min
      */
-    static Semigroup<BigInteger> bigIntMin = (a, b) -> a.min(b);
+    Semigroup<BigInteger> bigIntMin = (a, b) -> a.min(b);
     /**
      * String concatenation
      */
-    static Semigroup<String> stringConcat = (a, b) -> a + b;
+    Semigroup<String> stringConcat = (a, b) -> a + b;
     /**
      * StringBuffer concatenation
      */
-    static Semigroup<StringBuffer> stringBufferConcat = (a, b) -> a.append(b);
+    Semigroup<StringBuffer> stringBufferConcat = (a, b) -> a.append(b);
     /**
      * StringBuilder concatenation
      */
-    static Semigroup<StringBuilder> stringBuilderConcat = (a, b) -> a.append(b);
+    Semigroup<StringBuilder> stringBuilderConcat = (a, b) -> a.append(b);
     /**
      * Combine two booleans by OR'ing them (disjunction)
      */
-    static Semigroup<Boolean> booleanDisjunction = (a, b) -> a || b;
+    Semigroup<Boolean> booleanDisjunction = (a, b) -> a || b;
     /**
      * Combine two booleans by XOR'ing them (exclusive disjunction)
      */
-    static Semigroup<Boolean> booleanXDisjunction = (a, b) -> a && !b || b && !a;
+    Semigroup<Boolean> booleanXDisjunction = (a, b) -> a && !b || b && !a;
     /**
      * Combine two booleans by AND'ing them (conjunction)
      */
-    static Semigroup<Boolean> booleanConjunction = (a, b) -> a && b;
+    Semigroup<Boolean> booleanConjunction = (a, b) -> a && b;
 
     static <T, C extends PersistentCollection<T>> Semigroup<C> persistentCollectionConcat() {
 
@@ -313,8 +313,8 @@ public interface Semigroups {
      * @return Combine two CompletableFuture's by taking the first present
      */
     static <T> Semigroup<CompletableFuture<T>> firstCompleteCompletableFuture() {
-        return (a, b) -> (CompletableFuture<T>) CompletableFuture.<T>anyOf(a,
-                                                                           b);
+        return (a, b) -> (CompletableFuture<T>) CompletableFuture.anyOf(a,
+                                                                        b);
     }
 
     /**

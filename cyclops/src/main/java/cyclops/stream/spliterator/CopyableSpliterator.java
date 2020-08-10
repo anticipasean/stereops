@@ -7,14 +7,14 @@ import java.util.Spliterator;
  */
 public interface CopyableSpliterator<T> extends Spliterator<T> {
 
-    public static <T> Spliterator<T> copy(Spliterator<T> split) {
+    static <T> Spliterator<T> copy(Spliterator<T> split) {
         if (split instanceof CopyableSpliterator) {
             return ((CopyableSpliterator<T>) split).copy();
         }
         return split;
     }
 
-    public static <T> Spliterator[] copy(Spliterator[] spliterators) {
+    static <T> Spliterator[] copy(Spliterator[] spliterators) {
         Spliterator[] copies = new Spliterator[spliterators.length];
         int i = 0;
         for (Spliterator next : spliterators) {

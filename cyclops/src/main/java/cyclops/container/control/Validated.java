@@ -1,16 +1,16 @@
 package cyclops.container.control;
 
-import cyclops.function.higherkinded.DataWitness.validated;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.foldable.Sealed2;
-import cyclops.container.foldable.OrElseValue;
 import cyclops.container.Value;
-import cyclops.container.transformable.Transformable;
-import cyclops.function.companion.Semigroups;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.impl.NonEmptyList;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Semigroup;
+import cyclops.function.companion.Semigroups;
+import cyclops.function.higherkinded.DataWitness.validated;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,19 +26,19 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
                                          OrElseValue<T, Validated<E, T>>, Higher<validated, T>, Value<T>, Serializable {
 
 
-    public static <E, T> Validated<E, T> valid(T t) {
+    static <E, T> Validated<E, T> valid(T t) {
         return new Valid<>(Either.right(t));
     }
 
-    public static <E, T> Validated<E, T> invalid(E e) {
+    static <E, T> Validated<E, T> invalid(E e) {
         return new Invalid<>(Either.left(NonEmptyList.of(e)));
     }
 
-    public static <E, T> Validated<E, T> invalid(NonEmptyList<E> nel) {
+    static <E, T> Validated<E, T> invalid(NonEmptyList<E> nel) {
         return new Invalid<>(Either.left(nel));
     }
 
-    public static <T> Validated<Throwable, T> fromPublisher(Publisher<T> pub) {
+    static <T> Validated<Throwable, T> fromPublisher(Publisher<T> pub) {
         return new Async<>(LazyEither.fromPublisher(pub)
                                      .mapLeft(NonEmptyList::of));
     }
@@ -66,20 +66,20 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
                                     Validated<E, T> b) {
         return fold(iv -> {
                         return b.fold(biv -> {
-                                          return Validated.<E, T>invalid(Semigroups.<E>nonEmptyListConcat().apply(iv,
-                                                                                                                  biv));
+                                          return Validated.invalid(Semigroups.<E>nonEmptyListConcat().apply(iv,
+                                                                                                            biv));
                                       },
                                       bv -> {
-                                          return Validated.<E, T>invalid(iv);
+                                          return Validated.invalid(iv);
                                       });
                     },
                     v -> {
                         return b.fold(biv -> {
-                                          return Validated.<E, T>invalid(biv);
+                                          return Validated.invalid(biv);
                                       },
                                       bv -> {
-                                          return Validated.<E, T>valid(st.apply(v,
-                                                                                bv));
+                                          return Validated.valid(st.apply(v,
+                                                                          bv));
                                       });
                     });
     }
@@ -88,7 +88,7 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
 
         return ReactiveSeq.fromIterable(seq)
                           .prepend(this)
-                          .foldLeft(Validated.<E, Seq<T>>valid(Seq.<T>empty()),
+                          .foldLeft(Validated.valid(Seq.empty()),
                                     (a, b) -> a.combine(Semigroups.<T>seqConcat(),
                                                         b.map(Seq::of)));
     }
@@ -97,7 +97,7 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
                                               Function<? super T, ? extends R> fn) {
         return ReactiveSeq.fromIterable(seq)
                           .prepend(this)
-                          .foldLeft(Validated.<E, Seq<R>>valid(Seq.<R>empty()),
+                          .foldLeft(Validated.valid(Seq.empty()),
                                     (a, b) -> a.combine(Semigroups.<R>seqConcat(),
                                                         b.map(v -> Seq.of(fn.apply(v)))));
     }
@@ -110,8 +110,8 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
     default Validated<E, T> orElseUseAccumulating(Supplier<Validated<E, T>> alt) {
         return fold(e -> {
                         return alt.get()
-                                  .fold(ee -> Validated.<E, T>invalid(Semigroups.<E>nonEmptyListConcat().apply(e,
-                                                                                                               ee)),
+                                  .fold(ee -> Validated.invalid(Semigroups.<E>nonEmptyListConcat().apply(e,
+                                                                                                         ee)),
                                         it -> valid(it));
                     },
                     it -> valid(it));
@@ -148,7 +148,7 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
 
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class Async<E, T> implements Validated<E, T> {
+    final class Async<E, T> implements Validated<E, T> {
 
         private final LazyEither<NonEmptyList<E>, T> either;
 
@@ -218,7 +218,7 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class Valid<E, T> implements Validated<E, T> {
+    final class Valid<E, T> implements Validated<E, T> {
 
         private final Either<NonEmptyList<E>, T> either;
 
@@ -285,7 +285,7 @@ public interface Validated<E, T> extends Sealed2<NonEmptyList<E>, T>, Transforma
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class Invalid<E, T> implements Validated<E, T> {
+    final class Invalid<E, T> implements Validated<E, T> {
 
         private final Either<NonEmptyList<E>, T> either;
 

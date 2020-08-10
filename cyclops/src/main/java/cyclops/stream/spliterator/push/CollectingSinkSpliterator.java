@@ -13,7 +13,7 @@ public class CollectingSinkSpliterator<T, A, R> extends AbstractSpliterator<R> i
     private final Collector<? super T, A, R> monoid;
     volatile A total;
     volatile Consumer<? super R> action;
-    private Object lock = new Object();
+    private final Object lock = new Object();
 
     public CollectingSinkSpliterator(long est,
                                      int additionalCharacteristics,

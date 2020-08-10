@@ -23,10 +23,10 @@ public class SpliteratorToOperator<T> implements Operator<T> {
     public StreamSubscription subscribe(Consumer<? super T> onNext,
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
-        boolean closed[] = {false};
-        boolean canAdvance[] = {true};
+        boolean[] closed = {false};
+        boolean[] canAdvance = {true};
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
 
                 while (isActive() && canAdvance[0]) {
                     try {

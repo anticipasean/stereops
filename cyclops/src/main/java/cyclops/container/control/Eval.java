@@ -1,14 +1,8 @@
 package cyclops.container.control;
 
 import cyclops.async.Future;
-import cyclops.function.higherkinded.DataWitness.eval;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.container.MonadicValue;
-import cyclops.container.transformable.To;
-import cyclops.reactive.Completable;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.mutable.Mutable;
+import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple1;
 import cyclops.container.immutable.tuple.Tuple2;
@@ -17,12 +11,18 @@ import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.container.immutable.tuple.Tuple5;
 import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
-import cyclops.function.enhanced.Function0;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.transformable.To;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.enhanced.Function0;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.eval;
+import cyclops.function.higherkinded.Higher;
+import cyclops.reactive.Completable;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Iterator;
@@ -75,21 +75,21 @@ import org.reactivestreams.Subscription;
 public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>, MonadicValue<T>, Higher<eval, T> {
 
 
-    public static <T> Eval<T> eval(Supplier<T> s) {
+    static <T> Eval<T> eval(Supplier<T> s) {
         if (s instanceof Eval) {
             return (Eval<T>) s;
         }
         return later(s);
     }
 
-    public static <T, R> Eval<R> tailRec(T initial,
-                                         Function<? super T, ? extends Eval<? extends Either<T, R>>> fn) {
+    static <T, R> Eval<R> tailRec(T initial,
+                                  Function<? super T, ? extends Eval<? extends Either<T, R>>> fn) {
         return narrowK(fn.apply(initial)).flatMap(eval -> eval.fold(s -> tailRec(s,
                                                                                  fn),
                                                                     p -> Eval.now(p)));
     }
 
-    public static <T> Higher<eval, T> widen(Eval<T> narrow) {
+    static <T> Higher<eval, T> widen(Eval<T> narrow) {
         return narrow;
     }
 
@@ -105,7 +105,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param future HKT encoded list into a OptionalType
      * @return Eval
      */
-    public static <T> Eval<T> narrowK(final Higher<eval, T> future) {
+    static <T> Eval<T> narrowK(final Higher<eval, T> future) {
         return (Eval<T>) future;
     }
 
@@ -122,7 +122,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param pub Publisher to create the Eval from
      * @return Eval created from Publisher
      */
-    public static <T> Eval<T> fromPublisher(final Publisher<T> pub) {
+    static <T> Eval<T> fromPublisher(final Publisher<T> pub) {
         if (pub instanceof Eval) {
             return (Eval<T>) pub;
         }
@@ -185,11 +185,11 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
 
     }
 
-    public static <T> Eval<T> coeval(final Future<Eval<T>> pub) {
+    static <T> Eval<T> coeval(final Future<Eval<T>> pub) {
         return new Module.FutureAlways<T>(pub);
     }
 
-    public static <T> Eval<T> fromFuture(final Future<T> pub) {
+    static <T> Eval<T> fromFuture(final Future<T> pub) {
         return coeval(pub.map(Eval::now));
     }
 
@@ -206,7 +206,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param iterable to create the Eval from
      * @return Eval created from Publisher
      */
-    public static <T> Eval<T> fromIterable(final Iterable<T> iterable) {
+    static <T> Eval<T> fromIterable(final Iterable<T> iterable) {
         if (iterable instanceof Eval) {
             return (Eval<T>) iterable;
         }
@@ -226,7 +226,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param value of Eval
      * @return Eval with specified value
      */
-    public static <T> Eval<T> now(final T value) {
+    static <T> Eval<T> now(final T value) {
         return always(() -> value);
 
     }
@@ -245,14 +245,14 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param value Supplier to (lazily) populate this Eval
      * @return Eval with specified value
      */
-    public static <T> Eval<T> later(final Supplier<T> value) {
+    static <T> Eval<T> later(final Supplier<T> value) {
         if (value instanceof Module.Later) {
             return (Eval<T>) value;
         }
         return new Module.Later<T>(() -> value == null ? null : value.get());
     }
 
-    public static <T> Eval<T> defer(final Supplier<Eval<T>> value) {
+    static <T> Eval<T> defer(final Supplier<Eval<T>> value) {
         return new Module.Later<T>(() -> value == null || value.get() == null ? null : value.get()
                                                                                             .get());
     }
@@ -271,7 +271,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param value Supplier to (lazily) populate this Eval
      * @return Eval with specified value
      */
-    public static <T> Eval<T> always(final Supplier<T> value) {
+    static <T> Eval<T> always(final Supplier<T> value) {
         return new Module.Always<T>(() -> value == null ? null : value.get());
     }
 
@@ -289,7 +289,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param evals Collection of evals to convert into a single eval with a List of values
      * @return Eval with a  list of values
      */
-    public static <T> Eval<ReactiveSeq<T>> sequence(final Iterable<? extends Eval<T>> evals) {
+    static <T> Eval<ReactiveSeq<T>> sequence(final Iterable<? extends Eval<T>> evals) {
         return sequence(ReactiveSeq.fromIterable(evals));
 
     }
@@ -308,11 +308,11 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param evals Collection of evals to convert into a single eval with a List of values
      * @return Eval with a  list of values
      */
-    public static <T> Eval<ReactiveSeq<T>> sequence(final Stream<? extends Eval<T>> evals) {
+    static <T> Eval<ReactiveSeq<T>> sequence(final Stream<? extends Eval<T>> evals) {
         return sequence(ReactiveSeq.fromStream(evals));
     }
 
-    public static <T> Eval<ReactiveSeq<T>> sequence(ReactiveSeq<? extends Eval<T>> stream) {
+    static <T> Eval<ReactiveSeq<T>> sequence(ReactiveSeq<? extends Eval<T>> stream) {
 
         Eval<ReactiveSeq<T>> identity = Eval.now(ReactiveSeq.empty());
 
@@ -327,8 +327,8 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
                              combineStreams);
     }
 
-    public static <T, R> Eval<ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
-                                                       ReactiveSeq<Eval<T>> stream) {
+    static <T, R> Eval<ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
+                                                ReactiveSeq<Eval<T>> stream) {
         ReactiveSeq<Eval<R>> s = stream.map(h -> h.map(fn));
         return sequence(s);
     }
@@ -348,8 +348,8 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param reducer Reducer to fold nest values into
      * @return Eval with a value
      */
-    public static <T, R> Eval<R> accumulate(final Iterable<Eval<T>> evals,
-                                            final Reducer<R, T> reducer) {
+    static <T, R> Eval<R> accumulate(final Iterable<Eval<T>> evals,
+                                     final Reducer<R, T> reducer) {
         return sequence(evals).map(s -> s.foldMap(reducer));
     }
 
@@ -368,15 +368,15 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
      * @param reducer Combiner function to applyHKT to converted values
      * @return Eval with a value
      */
-    public static <T, R> Eval<R> accumulate(final Iterable<Eval<T>> evals,
-                                            final Function<? super T, R> mapper,
-                                            final Monoid<R> reducer) {
+    static <T, R> Eval<R> accumulate(final Iterable<Eval<T>> evals,
+                                     final Function<? super T, R> mapper,
+                                     final Monoid<R> reducer) {
         return sequence(evals).map(s -> s.map(mapper)
                                          .reduce(reducer));
     }
 
-    public static <T> Eval<T> accumulate(final Monoid<T> reducer,
-                                         final Iterable<Eval<T>> evals) {
+    static <T> Eval<T> accumulate(final Monoid<T> reducer,
+                                  final Iterable<Eval<T>> evals) {
         return sequence(evals).map(s -> s.reduce(reducer));
     }
 
@@ -438,7 +438,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
 
 
     @Override
-    public <T> Eval<T> unit(T unit);
+    <T> Eval<T> unit(T unit);
 
 
     @Override
@@ -477,7 +477,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
 
 
     @Override
-    public T get();
+    T get();
 
 
     @Override
@@ -531,7 +531,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
 
     default <C extends Throwable> Eval<T> recoverWith(Class<C> type,
                                                       Function<? super C, ? extends Eval<T>> value) {
-        return Eval.<Eval<T>>always(() -> {
+        return Eval.always(() -> {
             try {
                 T res = this.get();
                 return Eval.now(res);
@@ -678,7 +678,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
     }
 
     @AllArgsConstructor
-    static class CompletableEval<ORG, T2> implements Eval<T2>, Completable<ORG> {
+    class CompletableEval<ORG, T2> implements Eval<T2>, Completable<ORG> {
 
         public final CompletableFuture<ORG> complete;
         public final Eval<T2> lazy;
@@ -751,7 +751,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
         }
     }
 
-    static class Module {
+    class Module {
 
         static <T> Eval<T> asEval(final MonadicValue<T> value) {
 
@@ -1053,8 +1053,8 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
                 Mutable<Future<Eval<T>>> future = Mutable.of(input);
                 sub.onSubscribe(new Subscription() {
 
-                    AtomicBoolean running = new AtomicBoolean(true);
-                    AtomicBoolean cancelled = new AtomicBoolean(false);
+                    final AtomicBoolean running = new AtomicBoolean(true);
+                    final AtomicBoolean cancelled = new AtomicBoolean(false);
 
                     @Override
                     public void request(final long n) {
@@ -1170,7 +1170,7 @@ public interface Eval<T> extends To<Eval<T>>, Function0<T>, Deconstructable1<T>,
     }
 
     @Deprecated
-    public static class Comprehensions {
+    class Comprehensions {
 
         public static <T, F, R1, R2, R3, R4, R5, R6, R7> Eval<R7> forEach(Eval<T> eval,
                                                                           Function<? super T, ? extends Eval<R1>> value2,

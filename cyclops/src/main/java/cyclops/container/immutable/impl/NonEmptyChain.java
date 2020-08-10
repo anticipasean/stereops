@@ -1,13 +1,13 @@
 package cyclops.container.immutable.impl;
 
 import cyclops.container.immutable.ImmutableList;
-import cyclops.stream.spliterator.IteratableSpliterator;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.container.persistent.PersistentIndexed;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
+import cyclops.stream.spliterator.IteratableSpliterator;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
@@ -221,7 +221,7 @@ public abstract class NonEmptyChain<T> extends Chain<T> implements ImmutableList
 
     @Override
     public NonEmptyChain<T> prependAll(T... values) {
-        return (NonEmptyChain<T>) super.prependAll(values);
+        return super.prependAll(values);
     }
 
     @Override

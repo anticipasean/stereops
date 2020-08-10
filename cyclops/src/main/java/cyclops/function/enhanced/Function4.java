@@ -1,8 +1,8 @@
 package cyclops.function.enhanced;
 
 
-import cyclops.container.control.Eval;
 import cyclops.async.Future;
+import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
@@ -17,11 +17,11 @@ import java.util.function.Supplier;
 
 public interface Function4<T1, T2, T3, T4, R> extends Function1<T1, Function1<T2, Function1<T3, Function1<T4, R>>>> {
 
-    public static <T1, T2, T3, T4, R> Function4<T1, T2, T3, T4, R> constant(R t) {
+    static <T1, T2, T3, T4, R> Function4<T1, T2, T3, T4, R> constant(R t) {
         return (a, b, c, d) -> t;
     }
 
-    public static <T1, T2, T3, T4, R> Function4<T1, T2, T3, T4, R> lazyConstant(Supplier<R> t) {
+    static <T1, T2, T3, T4, R> Function4<T1, T2, T3, T4, R> lazyConstant(Supplier<R> t) {
         return (a, b, c, d) -> t.get();
     }
 
@@ -95,18 +95,18 @@ public interface Function4<T1, T2, T3, T4, R> extends Function1<T1, Function1<T2
                                         d);
     }
 
-    public static <T1, T2, T3, T4, R> Function4<T1, T2, T3, T4, R> λ(final Function4<T1, T2, T3, T4, R> triFunc) {
+    static <T1, T2, T3, T4, R> Function4<T1, T2, T3, T4, R> λ(final Function4<T1, T2, T3, T4, R> triFunc) {
         return triFunc;
     }
 
-    public static <T1, T2, T3, T4, R> Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> λv(final Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> triFunc) {
+    static <T1, T2, T3, T4, R> Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> λv(final Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> triFunc) {
         return triFunc;
     }
 
-    public R apply(T1 a,
-                   T2 b,
-                   T3 c,
-                   T4 d);
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d);
 
     default Function4<T1, T2, T3, T4, Maybe<R>> lazyLift4() {
         return (s1, s2, s3, s4) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(s1,

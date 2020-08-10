@@ -45,6 +45,6 @@ public interface Cacheable<OUT> {
      * @param fn  Function to compute value, if it is not in the cache
      * @return Cached (or computed) result
      */
-    public OUT computeIfAbsent(Object key,
-                               Function<Object, OUT> fn) throws Throwable;
+    OUT computeIfAbsent(Object key,
+                        Function<Object, OUT> fn) throws Throwable;
 }

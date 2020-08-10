@@ -14,8 +14,8 @@ public class ReversingIntArraySpliterator<Integer> implements Spliterator.OfInt,
 
     private final int[] array;
     int index = 0;
-    private int max;
-    private int start;
+    private final int max;
+    private final int start;
     @Getter
     @Setter
     private boolean reverse;

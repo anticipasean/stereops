@@ -1,7 +1,7 @@
 package cyclops.function.enhanced;
 
-import cyclops.container.control.Eval;
 import cyclops.async.Future;
+import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
@@ -17,19 +17,19 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Function3<S1, S2, S3, R> extends Function1<S1, Function1<S2, Function1<S3, R>>> {
 
-    public static <T1, T2, T3, R> Function3<T1, T2, T3, R> λ(final Function3<T1, T2, T3, R> triFunc) {
+    static <T1, T2, T3, R> Function3<T1, T2, T3, R> λ(final Function3<T1, T2, T3, R> triFunc) {
         return triFunc;
     }
 
-    public static <T1, T2, T3, R> Function3<? super T1, ? super T2, ? super T3, ? extends R> λv(final Function3<? super T1, ? super T2, ? super T3, ? extends R> triFunc) {
+    static <T1, T2, T3, R> Function3<? super T1, ? super T2, ? super T3, ? extends R> λv(final Function3<? super T1, ? super T2, ? super T3, ? extends R> triFunc) {
         return triFunc;
     }
 
-    public static <T1, T2, T3, R> Function3<T1, T2, T3, R> constant(R t) {
+    static <T1, T2, T3, R> Function3<T1, T2, T3, R> constant(R t) {
         return (a, b, c) -> t;
     }
 
-    public static <T1, T2, T3, R> Function3<T1, T2, T3, R> lazyConstant(Supplier<R> t) {
+    static <T1, T2, T3, R> Function3<T1, T2, T3, R> lazyConstant(Supplier<R> t) {
         return (a, b, c) -> t.get();
     }
 
@@ -60,9 +60,9 @@ public interface Function3<S1, S2, S3, R> extends Function1<S1, Function1<S2, Fu
                                      c);
     }
 
-    public R apply(S1 a,
-                   S2 b,
-                   S3 c);
+    R apply(S1 a,
+            S2 b,
+            S3 c);
 
     default <R2> R2 toType3(Function<? super Function3<? super S1, ? super S2, ? super S3, ? extends R>, ? extends R2> reduce) {
         return reduce.apply(this);

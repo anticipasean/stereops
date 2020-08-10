@@ -2,7 +2,6 @@ package cyclops.stream.type.impl;
 
 import static cyclops.reactive.ReactiveSeq.fill;
 
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
@@ -10,6 +9,7 @@ import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.companion.Streams;
 import cyclops.stream.spliterator.CopyableSpliterator;
 import cyclops.stream.spliterator.IteratableSpliterator;
 import cyclops.stream.spliterator.ReversableSpliterator;
@@ -82,7 +82,7 @@ public class StreamX<T> extends SpliteratorBasedStream<T> {
 
         Spliterator<T> t = copy();
         return fill(1).flatMap(i -> createSeq(CopyableSpliterator.copy(t),
-                                                          reversible));
+                                              reversible));
     }
 
     @Override
@@ -222,7 +222,7 @@ public class StreamX<T> extends SpliteratorBasedStream<T> {
     @Override
     public ReactiveSeq<T> cycle(long times) {
         return fill(1).limit(times)
-                          .flatMap(i -> createSeq(copy(),
+                      .flatMap(i -> createSeq(copy(),
                                               reversible));
 
     }

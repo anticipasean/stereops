@@ -184,7 +184,7 @@ public class MutableFloat implements To<MutableFloat>, Supplier<Float>, Consumer
 
     }
 
-    public static interface FloatFunction {
+    public interface FloatFunction {
 
         float apply(float var);
     }

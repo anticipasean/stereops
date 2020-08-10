@@ -1,19 +1,19 @@
 package cyclops.container.immutable.impl;
 
+import cyclops.container.control.Option;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.ImmutableQueue;
-import cyclops.function.higherkinded.DataWitness.bankersQueue;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentQueue;
-import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentQueue;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
+import cyclops.function.higherkinded.DataWitness.bankersQueue;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -64,11 +64,11 @@ public interface BankersQueue<T> extends ImmutableQueue<T>, Higher<bankersQueue,
         return fromIterable(() -> it);
     }
 
-    public static <T> BankersQueue<T> empty() {
+    static <T> BankersQueue<T> empty() {
         return Nil.Instance;
     }
 
-    public static <T> BankersQueue<T> cons(T value) {
+    static <T> BankersQueue<T> cons(T value) {
         return new Cons<>(1,
                           LazySeq.cons(value,
                                        () -> LazySeq.empty()),
@@ -76,7 +76,7 @@ public interface BankersQueue<T> extends ImmutableQueue<T>, Higher<bankersQueue,
                           LazySeq.empty());
     }
 
-    public static <T> BankersQueue<T> ofAll(ImmutableList<T> list) {
+    static <T> BankersQueue<T> ofAll(ImmutableList<T> list) {
         return new Cons<>(list.size(),
                           list,
                           0,
@@ -733,7 +733,7 @@ public interface BankersQueue<T> extends ImmutableQueue<T>, Higher<bankersQueue,
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Cons<T> implements BankersQueue<T>, ImmutableQueue.Some<T> {
+    final class Cons<T> implements BankersQueue<T>, ImmutableQueue.Some<T> {
 
         private static final long serialVersionUID = 1L;
         private final int sizeFront;
@@ -985,7 +985,7 @@ public interface BankersQueue<T> extends ImmutableQueue<T>, Higher<bankersQueue,
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class Nil<T> implements BankersQueue<T>, ImmutableQueue.None<T> {
+    final class Nil<T> implements BankersQueue<T>, ImmutableQueue.None<T> {
 
         private static final long serialVersionUID = 1L;
         static Nil Instance = new Nil();

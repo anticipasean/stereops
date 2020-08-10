@@ -29,7 +29,7 @@ public class RangeLongOperator implements Operator<Long> {
         long[] index = {start};
         AtomicBoolean completed = new AtomicBoolean(false);
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
 
                 if (requested.get() == Long.MAX_VALUE) {
                     pushAll();
@@ -44,7 +44,7 @@ public class RangeLongOperator implements Operator<Long> {
                         }
                         try {
 
-                            ((Consumer) onNext).accept(index[0]++);
+                            onNext.accept(index[0]++);
                             delivered++;
                         } catch (Throwable t) {
                             onError.accept(t);
@@ -88,7 +88,7 @@ public class RangeLongOperator implements Operator<Long> {
 
                     try {
                         if (isOpen) {
-                            ((Consumer) onNext).accept(index[0]);
+                            onNext.accept(index[0]);
                         } else {
                             break;
                         }
@@ -126,7 +126,7 @@ public class RangeLongOperator implements Operator<Long> {
 
         for (long i = start; i < end; i++) {
             try {
-                ((Consumer) onNext).accept(i);
+                onNext.accept(i);
             } catch (Throwable t) {
                 onError.accept(t);
             }

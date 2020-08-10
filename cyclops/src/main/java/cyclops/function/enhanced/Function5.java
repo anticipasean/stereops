@@ -1,8 +1,8 @@
 package cyclops.function.enhanced;
 
 
-import cyclops.container.control.Eval;
 import cyclops.async.Future;
+import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
@@ -15,11 +15,11 @@ import java.util.function.Supplier;
 public interface Function5<T1, T2, T3, T4, T5, R> extends
                                                   Function1<T1, Function1<T2, Function1<T3, Function1<T4, Function1<T5, R>>>>> {
 
-    public static <T1, T2, T3, T4, T5, R> Function5<T1, T2, T3, T4, T5, R> constant(R t) {
+    static <T1, T2, T3, T4, T5, R> Function5<T1, T2, T3, T4, T5, R> constant(R t) {
         return (a, b, c, d, e) -> t;
     }
 
-    public static <T1, T2, T3, T4, T5, R> Function5<T1, T2, T3, T4, T5, R> lazyConstant(Supplier<R> t) {
+    static <T1, T2, T3, T4, T5, R> Function5<T1, T2, T3, T4, T5, R> lazyConstant(Supplier<R> t) {
         return (a, b, c, d, e) -> t.get();
     }
 
@@ -188,19 +188,19 @@ public interface Function5<T1, T2, T3, T4, T5, R> extends
                                            e);
     }
 
-    public static <T1, T2, T3, T4, T5, R> Function5<T1, T2, T3, T4, T5, R> λ(final Function5<T1, T2, T3, T4, T5, R> triFunc) {
+    static <T1, T2, T3, T4, T5, R> Function5<T1, T2, T3, T4, T5, R> λ(final Function5<T1, T2, T3, T4, T5, R> triFunc) {
         return triFunc;
     }
 
-    public static <T1, T2, T3, T4, T5, R> Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> λv(final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> triFunc) {
+    static <T1, T2, T3, T4, T5, R> Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> λv(final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> triFunc) {
         return triFunc;
     }
 
-    public R apply(T1 a,
-                   T2 b,
-                   T3 c,
-                   T4 d,
-                   T5 e);
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d,
+            T5 e);
 
     default Function5<T1, T2, T3, T4, T5, Maybe<R>> lazyLift5() {
         return (s1, s2, s3, s4, s5) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(s1,

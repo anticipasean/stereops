@@ -115,10 +115,10 @@ public class SeqUtils {
                                                                 final boolean concurrent) {
         return new AbstractCollection<A>() {
 
-            List<A> data = new ArrayList<>();
+            final List<A> data = new ArrayList<>();
             volatile boolean complete = false;
-            Object lock = new Object();
-            ReentrantLock rlock = new ReentrantLock();
+            final Object lock = new Object();
+            final ReentrantLock rlock = new ReentrantLock();
 
             @Override
             public boolean equals(final Object o) {
@@ -140,10 +140,7 @@ public class SeqUtils {
                         return false;
                     }
                 }
-                if (it2.hasNext()) {
-                    return false;
-                }
-                return true;
+                return !it2.hasNext();
             }
 
             @Override
@@ -179,11 +176,7 @@ public class SeqUtils {
 
                                 return result;
                             }
-                            if (current + 1 < data.size()) {
-
-                                return true;
-                            }
-                            return false;
+                            return current + 1 < data.size();
                         } finally {
                             if (concurrent) {
                                 rlock.unlock();

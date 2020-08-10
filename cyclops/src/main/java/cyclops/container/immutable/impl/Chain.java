@@ -1,19 +1,19 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.stream.type.impl.OneShotStreamX;
-import cyclops.stream.spliterator.IteratableSpliterator;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentList;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentList;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.spliterator.IteratableSpliterator;
+import cyclops.stream.type.impl.OneShotStreamX;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -128,7 +128,7 @@ public abstract class Chain<T> implements ImmutableList<T> {
         if (stream instanceof ReactiveSeq && !(stream instanceof OneShotStreamX)) {
             return (Chain<T>) ImmutableList.super.prependStream(stream);
         } else {
-            return (Chain<T>) prependAll(stream.collect(Collectors.toList()));
+            return prependAll(stream.collect(Collectors.toList()));
         }
     }
 

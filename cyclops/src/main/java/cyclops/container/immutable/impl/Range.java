@@ -3,11 +3,11 @@ package cyclops.container.immutable.impl;
 
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.function.higherkinded.DataWitness.range;
-import cyclops.function.higherkinded.Higher;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.ordering.Ordering;
+import cyclops.function.higherkinded.DataWitness.range;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -105,12 +105,9 @@ public final class Range<T> implements Iterable<T>, Higher<range, T>, Serializab
     }
 
     public boolean contains(T value) {
-        if (comp.isGreaterThanOrEqual(value,
-                                      start) && comp.isLessThan(value,
-                                                                end)) {
-            return true;
-        }
-        return false;
+        return comp.isGreaterThanOrEqual(value,
+                                         start) && comp.isLessThan(value,
+                                                                   end);
     }
 
     public boolean contains(Range<T> compareTo) {

@@ -2,21 +2,21 @@ package cyclops.container.immutable;
 
 
 import cyclops.container.comparative.Contains;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentSet;
+import cyclops.container.control.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentSet;
 import cyclops.container.recoverable.OnEmptyError;
 import cyclops.container.recoverable.OnEmptySwitch;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.traversable.Traversable;
-import cyclops.container.control.Try;
-import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.container.immutable.tuple.Tuple3;
-import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.Random;

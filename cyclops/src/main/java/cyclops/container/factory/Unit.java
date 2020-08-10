@@ -9,6 +9,6 @@ package cyclops.container.factory;
 @FunctionalInterface
 public interface Unit<T> {
 
-    public <T> Unit<T> unit(T unit);
+    <T> Unit<T> unit(T unit);
 
 }

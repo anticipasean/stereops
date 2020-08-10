@@ -21,9 +21,9 @@ public interface RedBlackTree extends Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> Tree<K, V> fromStream(Comparator<? super K> comp,
-                                               Stream<? extends Tuple2<? extends K, ? extends V>> stream) {
-        Tree<K, V> tree[] = new Tree[1];
+    static <K, V> Tree<K, V> fromStream(Comparator<? super K> comp,
+                                        Stream<? extends Tuple2<? extends K, ? extends V>> stream) {
+        Tree<K, V>[] tree = new Tree[1];
         tree[0] = new Leaf(comp);
         stream.forEach(t -> {
             tree[0] = tree[0].plus(t._1(),
@@ -32,7 +32,7 @@ public interface RedBlackTree extends Serializable {
         return tree[0];
     }
 
-    public static <K, V> Tree<K, V> empty(Comparator<? super K> comp) {
+    static <K, V> Tree<K, V> empty(Comparator<? super K> comp) {
         return new Leaf<K, V>(comp);
     }
 

@@ -43,7 +43,7 @@ public class OperatorToIterable<T, R> implements Iterable<T> {
             boolean active = false;
             volatile boolean requested = false;
             volatile boolean awaiting = false;
-            StreamSubscription sub = source.subscribe(e -> {
+            final StreamSubscription sub = source.subscribe(e -> {
                                                           value.set(e);
                                                           awaiting = false;
                                                       },
@@ -51,7 +51,7 @@ public class OperatorToIterable<T, R> implements Iterable<T> {
                                                           error.set(e);
                                                           awaiting = false;
                                                       },
-                                                      () -> {
+                                                            () -> {
 
                                                           done.set(true);
                                                           awaiting = false;
@@ -67,10 +67,7 @@ public class OperatorToIterable<T, R> implements Iterable<T> {
             }
 
             boolean complete() {
-                if (done.get() && !unRead()) {
-                    return true;
-                }
-                return false;
+                return done.get() && !unRead();
             }
 
             @Override

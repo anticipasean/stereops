@@ -187,7 +187,7 @@ public class MutableBoolean implements To<MutableBoolean>, BooleanSupplier, Cons
     }
 
 
-    public static interface BooleanFunction {
+    public interface BooleanFunction {
 
         boolean apply(boolean var);
     }

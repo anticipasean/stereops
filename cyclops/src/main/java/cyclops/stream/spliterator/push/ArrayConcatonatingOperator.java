@@ -34,7 +34,7 @@ public class ArrayConcatonatingOperator<IN> implements Operator<IN> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
         BankersQueue<StreamSubscription> subs = BankersQueue.empty();
-        int index[] = {0};
+        int[] index = {0};
         boolean[] finished = {false};
 
         Concat[] ref = {null};

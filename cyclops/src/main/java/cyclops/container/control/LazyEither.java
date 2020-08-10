@@ -1,17 +1,17 @@
 package cyclops.container.control;
 
 import cyclops.async.Future;
+import cyclops.container.MonadicValue;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.FluentFunctions;
+import cyclops.function.companion.Semigroups;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.higherkinded.DataWitness.either;
 import cyclops.function.higherkinded.Higher;
 import cyclops.function.higherkinded.Higher2;
-import cyclops.container.MonadicValue;
 import cyclops.reactive.Completable;
-import cyclops.function.companion.Semigroups;
-import cyclops.container.immutable.impl.LazySeq;
-import cyclops.function.companion.FluentFunctions;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.InvalidObjectException;
@@ -115,18 +115,18 @@ import org.reactivestreams.Subscription;
 public interface LazyEither<LT, RT> extends Either<LT, RT> {
 
 
-    public static <ST, T> LazyEither<ST, T> narrowK2(final Higher2<either, ST, T> xor) {
+    static <ST, T> LazyEither<ST, T> narrowK2(final Higher2<either, ST, T> xor) {
         return fromEither(Either.narrowK2(xor));
 
     }
 
-    public static <ST, T> LazyEither<ST, T> narrowK(final Higher<Higher<either, ST>, T> xor) {
+    static <ST, T> LazyEither<ST, T> narrowK(final Higher<Higher<either, ST>, T> xor) {
         return fromEither(Either.narrowK(xor));
     }
 
-    public static <L, T, R> LazyEither<L, R> tailRec(T initial,
-                                                     Function<? super T, ? extends LazyEither<L, ? extends Either<T, R>>> fn) {
-        LazyEither<L, ? extends Either<T, R>> next[] = new LazyEither[1];
+    static <L, T, R> LazyEither<L, R> tailRec(T initial,
+                                              Function<? super T, ? extends LazyEither<L, ? extends Either<T, R>>> fn) {
+        LazyEither<L, ? extends Either<T, R>>[] next = new LazyEither[1];
         next[0] = LazyEither.right(Either.left(initial));
         boolean cont = true;
         do {
@@ -217,7 +217,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     }
 
     static <T> LazyEither<Throwable, T> fromFuture(Future<T> future) {
-        return fromLazy(Eval.fromFuture(future.<LazyEither<Throwable, T>>map(LazyEither::right).recover(e -> LazyEither.<Throwable, T>left(e.getCause()))));
+        return fromLazy(Eval.fromFuture(future.<LazyEither<Throwable, T>>map(LazyEither::right).recover(e -> LazyEither.left(e.getCause()))));
 
     }
 
@@ -239,13 +239,13 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param xors Either to sequence
      * @return Either Sequenced
      */
-    public static <LT1, PT> LazyEither<LT1, ReactiveSeq<PT>> sequenceRight(final Iterable<LazyEither<LT1, PT>> xors) {
+    static <LT1, PT> LazyEither<LT1, ReactiveSeq<PT>> sequenceRight(final Iterable<LazyEither<LT1, PT>> xors) {
         Objects.requireNonNull(xors);
         return sequence(ReactiveSeq.fromIterable(xors)
                                    .filter(LazyEither::isRight));
     }
 
-    public static <LT1, PT> LazyEither<ReactiveSeq<LT1>, PT> sequenceLeft(final Iterable<LazyEither<LT1, PT>> xors) {
+    static <LT1, PT> LazyEither<ReactiveSeq<LT1>, PT> sequenceLeft(final Iterable<LazyEither<LT1, PT>> xors) {
         Objects.requireNonNull(xors);
         LazyEither<PT, ReactiveSeq<LT1>> res = sequence(ReactiveSeq.fromIterable(xors)
                                                                    .filter(LazyEither::isRight)
@@ -253,7 +253,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
         return res.swap();
     }
 
-    public static <L, T> LazyEither<L, ReactiveSeq<T>> sequence(ReactiveSeq<? extends LazyEither<L, T>> stream) {
+    static <L, T> LazyEither<L, ReactiveSeq<T>> sequence(ReactiveSeq<? extends LazyEither<L, T>> stream) {
 
         LazyEither<L, ReactiveSeq<T>> identity = right(ReactiveSeq.empty());
 
@@ -268,8 +268,8 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
                              combineStreams);
     }
 
-    public static <L, T, R> LazyEither<L, ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
-                                                                   ReactiveSeq<LazyEither<L, T>> stream) {
+    static <L, T, R> LazyEither<L, ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
+                                                            ReactiveSeq<LazyEither<L, T>> stream) {
         return sequence(stream.map(h -> h.map(fn)));
     }
 
@@ -281,13 +281,13 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param fn   Transformation function
      * @return An Either with a transformed list
      */
-    public static <LT1, PT, R> LazyEither<LT1, ReactiveSeq<R>> traverseRight(final Iterable<LazyEither<LT1, PT>> xors,
-                                                                             Function<? super PT, ? extends R> fn) {
+    static <LT1, PT, R> LazyEither<LT1, ReactiveSeq<R>> traverseRight(final Iterable<LazyEither<LT1, PT>> xors,
+                                                                      Function<? super PT, ? extends R> fn) {
         return sequenceRight(xors).map(l -> l.map(fn));
     }
 
-    public static <LT1, PT, R> LazyEither<ReactiveSeq<R>, PT> traverseLeft(final Iterable<LazyEither<LT1, PT>> xors,
-                                                                           Function<? super LT1, ? extends R> fn) {
+    static <LT1, PT, R> LazyEither<ReactiveSeq<R>, PT> traverseLeft(final Iterable<LazyEither<LT1, PT>> xors,
+                                                                    Function<? super LT1, ? extends R> fn) {
         return sequenceLeft(xors).mapLeft(l -> l.map(fn));
     }
 
@@ -311,16 +311,16 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param reducer Reducer to accumulate results
      * @return Either populated with the accumulate right operation
      */
-    public static <LT1, RT> LazyEither<LT1, RT> accumulate(final Monoid<RT> reducer,
-                                                           final Iterable<LazyEither<LT1, RT>> xors) {
+    static <LT1, RT> LazyEither<LT1, RT> accumulate(final Monoid<RT> reducer,
+                                                    final Iterable<LazyEither<LT1, RT>> xors) {
         return sequenceRight(xors).map(s -> s.reduce(reducer));
     }
 
-    public static <LT, B, RT> LazyEither<LT, RT> rightEval(final Eval<RT> right) {
+    static <LT, B, RT> LazyEither<LT, RT> rightEval(final Eval<RT> right) {
         return new Right(right);
     }
 
-    public static <LT, B, RT> LazyEither<LT, RT> leftEval(final Eval<LT> left) {
+    static <LT, B, RT> LazyEither<LT, RT> leftEval(final Eval<LT> left) {
         return new Left(left);
     }
 
@@ -388,7 +388,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param pub Publisher to construct an Either from
      * @return Either constructed from the supplied Publisher
      */
-    public static <T> LazyEither<Throwable, T> fromPublisher(final Publisher<T> pub) {
+    static <T> LazyEither<Throwable, T> fromPublisher(final Publisher<T> pub) {
         if (pub instanceof LazyEither) {
             return (LazyEither<Throwable, T>) pub;
         }
@@ -442,8 +442,8 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param iterable Iterable to construct an Either from
      * @return Either constructed from the supplied Iterable
      */
-    public static <ST, T> LazyEither<ST, T> fromIterable(final Iterable<T> iterable,
-                                                         T alt) {
+    static <ST, T> LazyEither<ST, T> fromIterable(final Iterable<T> iterable,
+                                                  T alt) {
         return later(() -> {
             final Iterator<T> it = iterable.iterator();
             return it.hasNext() ? LazyEither.right(it.next()) : LazyEither.right(alt);
@@ -467,7 +467,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param value to wrap
      * @return Left instance of Either
      */
-    public static <ST, PT> LazyEither<ST, PT> left(final ST value) {
+    static <ST, PT> LazyEither<ST, PT> left(final ST value) {
         return new Left(Eval.later(() -> value));
     }
 
@@ -487,7 +487,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
      * @param value To construct an Either from
      * @return Right type instanceof Either
      */
-    public static <ST, PT> LazyEither<ST, PT> right(final PT value) {
+    static <ST, PT> LazyEither<ST, PT> right(final PT value) {
 
         return new Right(Eval.later(() -> value));
     }
@@ -821,12 +821,12 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     /**
      * @return True if this is a right Either
      */
-    public boolean isRight();
+    boolean isRight();
 
     /**
      * @return True if this is a left Either
      */
-    public boolean isLeft();
+    boolean isLeft();
 
 
     /**
@@ -882,7 +882,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     }
 
     @AllArgsConstructor
-    static class CompletableEither<ORG, RT> implements LazyEither<Throwable, RT>, Completable<ORG> {
+    class CompletableEither<ORG, RT> implements LazyEither<Throwable, RT>, Completable<ORG> {
 
         public final CompletableFuture<ORG> complete;
         public final LazyEither<Throwable, RT> either;
@@ -1053,7 +1053,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     }
 
     // @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class Lazy<ST, PT> implements LazyEither<ST, PT> {
+    final class Lazy<ST, PT> implements LazyEither<ST, PT> {
 
         private final Eval<LazyEither<ST, PT>> lazy;
 
@@ -1367,7 +1367,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    static class Right<ST, PT> implements LazyEither<ST, PT> {
+    class Right<ST, PT> implements LazyEither<ST, PT> {
 
         private final Eval<PT> value;
 
@@ -1525,7 +1525,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
             }
 
             if (obj instanceof Lazy) {
-                return ((Lazy) obj).equals(this);
+                return obj.equals(this);
             }
             if (obj instanceof Either.Right) {
                 return Objects.equals(value.get(),
@@ -1550,7 +1550,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    static class Left<ST, PT> implements LazyEither<ST, PT> {
+    class Left<ST, PT> implements LazyEither<ST, PT> {
 
         private final Eval<ST> value;
 
@@ -1721,7 +1721,7 @@ public interface LazyEither<LT, RT> extends Either<LT, RT> {
                 return false;
             }
             if (obj instanceof Lazy) {
-                return ((Lazy) obj).equals(this);
+                return obj.equals(this);
             }
             if (obj instanceof Either.Left) {
                 return Objects.equals(value.get(),

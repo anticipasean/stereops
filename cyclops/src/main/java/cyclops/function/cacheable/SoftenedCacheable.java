@@ -30,6 +30,6 @@ public interface SoftenedCacheable<OUT> {
      * @param fn  Function to compute value, if it is not in the cache
      * @return Cached (or computed) result
      */
-    public OUT computeIfAbsent(Object key,
-                               Function<Object, OUT> fn);
+    OUT computeIfAbsent(Object key,
+                        Function<Object, OUT> fn);
 }

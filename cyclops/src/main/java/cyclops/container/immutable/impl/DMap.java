@@ -1,6 +1,5 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.transformable.To;
 import cyclops.container.control.Either;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.LazyEither3;
@@ -8,6 +7,7 @@ import cyclops.container.control.LazyEither4;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.transformable.To;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Objects;
 import java.util.function.Function;
@@ -18,33 +18,33 @@ import lombok.AllArgsConstructor;
 public interface DMap {
 
 
-    public static <K1, V1, K2, V2> Two<K1, V1, K2, V2> two(ImmutableMap<K1, V1> map1,
-                                                           ImmutableMap<K2, V2> map2) {
+    static <K1, V1, K2, V2> Two<K1, V1, K2, V2> two(ImmutableMap<K1, V1> map1,
+                                                    ImmutableMap<K2, V2> map2) {
         return new DMap2<>(map1,
                            map2);
     }
 
-    public static <K1, V1, K2, V2, K3, V3> Three<K1, V1, K2, V2, K3, V3> three(ImmutableMap<K1, V1> map1,
-                                                                               ImmutableMap<K2, V2> map2,
-                                                                               ImmutableMap<K3, V3> map3) {
+    static <K1, V1, K2, V2, K3, V3> Three<K1, V1, K2, V2, K3, V3> three(ImmutableMap<K1, V1> map1,
+                                                                        ImmutableMap<K2, V2> map2,
+                                                                        ImmutableMap<K3, V3> map3) {
         return new DMap3<>(map1,
                            map2,
                            map3);
     }
 
-    public static <K1, V1, K2, V2> Two<K1, V1, K2, V2> twoEmpty() {
+    static <K1, V1, K2, V2> Two<K1, V1, K2, V2> twoEmpty() {
         return new DMap2<>(HashMap.empty(),
                            HashMap.empty());
     }
 
-    public static <K1, V1, K2, V2, K3, V3> Three<K1, V1, K2, V2, K3, V3> threeEmpty() {
+    static <K1, V1, K2, V2, K3, V3> Three<K1, V1, K2, V2, K3, V3> threeEmpty() {
         return new DMap3<>(HashMap.empty(),
                            HashMap.empty(),
                            HashMap.empty());
     }
 
 
-    static interface Two<K1, V1, K2, V2> extends DMap {
+    interface Two<K1, V1, K2, V2> extends DMap {
 
         Two<K1, V1, K2, V2> put1(K1 key,
                                  V1 value);
@@ -95,7 +95,7 @@ public interface DMap {
 
     }
 
-    static interface Three<K1, V1, K2, V2, K3, V3> extends DMap, To<Three<K1, V1, K2, V2, K3, V3>> {
+    interface Three<K1, V1, K2, V2, K3, V3> extends DMap, To<Three<K1, V1, K2, V2, K3, V3>> {
 
         Three<K1, V1, K2, V2, K3, V3> put(LazyEither3<Tuple2<K1, V1>, Tuple2<K2, V2>, Tuple2<K3, V3>> keyAndValue);
 
@@ -163,7 +163,7 @@ public interface DMap {
     }
 
     @AllArgsConstructor
-    static class DMap2<K1, V1, K2, V2> implements Two<K1, V1, K2, V2> {
+    class DMap2<K1, V1, K2, V2> implements Two<K1, V1, K2, V2> {
 
         private final ImmutableMap<K1, V1> map1;
         private final ImmutableMap<K2, V2> map2;
@@ -345,7 +345,7 @@ public interface DMap {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Nothing {
+    class Nothing {
 
         public final static Nothing EMPTY = new Nothing();
 
@@ -356,7 +356,7 @@ public interface DMap {
     }
 
     @AllArgsConstructor
-    static class DMap3<K1, V1, K2, V2, K3, V3> implements Three<K1, V1, K2, V2, K3, V3> {
+    class DMap3<K1, V1, K2, V2, K3, V3> implements Three<K1, V1, K2, V2, K3, V3> {
 
         private final ImmutableMap<K1, V1> map1;
         private final ImmutableMap<K2, V2> map2;

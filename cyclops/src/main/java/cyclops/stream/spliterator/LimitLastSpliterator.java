@@ -21,7 +21,6 @@ public class LimitLastSpliterator<T> extends AbstractSpliterator<T> implements C
               source.characteristics() & Spliterator.ORDERED);
         buffer = limit < 1_000 ? new ArrayDeque<>(limit) : new LinkedList<>();
         this.source = source;
-        ;
         this.limit = limit;
     }
 

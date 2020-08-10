@@ -25,8 +25,8 @@ public class LimitWhileClosedOperator<T, R> extends BaseOperator<T, T> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
 
-        boolean closed[] = {false};
-        StreamSubscription sub[] = {null};
+        boolean[] closed = {false};
+        StreamSubscription[] sub = {null};
         sub[0] = source.subscribe(e -> {
                                       try {
 
@@ -62,7 +62,7 @@ public class LimitWhileClosedOperator<T, R> extends BaseOperator<T, T> {
                              Consumer<? super Throwable> onError,
                              Runnable onCompleteDs) {
         boolean[] complete = {false};
-        boolean closed[] = {false};
+        boolean[] closed = {false};
 
         source.subscribeAll(e -> {
                                 try {

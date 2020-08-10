@@ -1,10 +1,10 @@
 package cyclops.function.companion;
 
 import cyclops.container.Value;
-import cyclops.util.SimpleTimer;
 import cyclops.container.control.Maybe;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.util.SimpleTimer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -129,7 +129,7 @@ public class Predicates {
      */
 
     public static <T> Predicate<T> optionalPresent() {
-        return t -> t instanceof Optional ? ((Optional) t).isPresent() : false;
+        return t -> t instanceof Optional && ((Optional) t).isPresent();
     }
 
     /**
@@ -147,8 +147,8 @@ public class Predicates {
      * @return A Predicate that checks if it's input is a cyclops2-react Value (which also contains a present value)
      */
     public static <T> Predicate<T> valuePresent() {
-        return t -> t instanceof Value ? ((Value) t).toMaybe()
-                                                    .isPresent() : false;
+        return t -> t instanceof Value && ((Value) t).toMaybe()
+                                                     .isPresent();
     }
 
     /**
@@ -166,8 +166,8 @@ public class Predicates {
      * @return A Predicate that checks if it's input is an Iterable with at least one value
      */
     public static <T> Predicate<T> iterablePresent() {
-        return t -> t instanceof Iterable ? ((Iterable) t).iterator()
-                                                          .hasNext() : false;
+        return t -> t instanceof Iterable && ((Iterable) t).iterator()
+                                                           .hasNext();
     }
 
     /**
@@ -225,13 +225,9 @@ public class Predicates {
         return __;
     }
 
-    ;
-
     public static final <Y> Predicate<Y> none() {
         return t -> false;
     }
-
-    ;
 
     /**
      * MatchType against any object that is an instance of supplied type
@@ -257,8 +253,6 @@ public class Predicates {
         return a -> a.getClass()
                      .isAssignableFrom(c);
     }
-
-    ;
 
 
     /**
@@ -324,24 +318,24 @@ public class Predicates {
      */
     public static <V> Predicate<Value<? super V>> eqv(final Value<? super V> value) {
 
-        return test -> test == null ? value == null ? true : !value.toMaybe()
-                                                                   .isPresent() : test.toMaybe()
+        return test -> test == null ? value == null || !value.toMaybe()
+                                                             .isPresent() : test.toMaybe()
                                                                                       .equals(value.toMaybe());
 
     }
 
     public static <V> Predicate<Iterable<? super V>> eqvIterable(final Iterable<? super V> iterable) {
 
-        return test -> test == null ? iterable == null ? true : Seq.fromIterable(iterable)
-                                                                   .isEmpty() : Seq.fromIterable(test)
+        return test -> test == null ? iterable == null || Seq.fromIterable(iterable)
+                                                             .isEmpty() : Seq.fromIterable(test)
                                                                                    .equals(Seq.fromIterable(iterable));
 
     }
 
     public static <V> Predicate<V> eqv2(final Value<? super V> value) {
 
-        return test -> test == null ? value == null ? true : !value.toMaybe()
-                                                                   .isPresent() : Maybe.ofNullable(test)
+        return test -> test == null ? value == null || !value.toMaybe()
+                                                             .isPresent() : Maybe.ofNullable(test)
                                                                                        .equals(value.toMaybe());
 
     }
@@ -350,7 +344,7 @@ public class Predicates {
     public static <T1> Predicate<T1> and(Predicate<? super T1>... preds) {
         Predicate<T1> current = (Predicate<T1>) preds[0];
         for (int i = 1; i < preds.length; i++) {
-            current = current.and((Predicate<T1>) preds[i]);
+            current = current.and(preds[i]);
         }
         return current;
     }
@@ -358,7 +352,7 @@ public class Predicates {
     public static <T1> Predicate<T1> or(Predicate<? super T1>... preds) {
         Predicate<T1> current = (Predicate<T1>) preds[0];
         for (int i = 1; i < preds.length; i++) {
-            current = current.or((Predicate<T1>) preds[i]);
+            current = current.or(preds[i]);
         }
         return current;
     }
@@ -442,7 +436,7 @@ public class Predicates {
     public static <T1> Predicate<? super T1> allOf(final Predicate<? super T1>... preds) {
         Predicate<T1> current = (Predicate<T1>) preds[0];
         for (int i = 1; i < preds.length; i++) {
-            current = current.and((Predicate<T1>) preds[i]);
+            current = current.and(preds[i]);
         }
         return current;
     }
@@ -451,7 +445,7 @@ public class Predicates {
     public static <T1> Predicate<? super T1> anyOf(final Predicate<? super T1>... preds) {
         Predicate<T1> current = (Predicate<T1>) preds[0];
         for (int i = 1; i < preds.length; i++) {
-            current = current.or((Predicate<T1>) preds[i]);
+            current = current.or(preds[i]);
         }
         return current;
     }
@@ -526,7 +520,7 @@ public class Predicates {
 
         private final int rate;
 
-        private AtomicInteger count = new AtomicInteger(0);
+        private final AtomicInteger count = new AtomicInteger(0);
 
         public Sample(int rate) {
             this.rate = rate;

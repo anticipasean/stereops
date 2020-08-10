@@ -26,7 +26,7 @@ public class ArrayOfValuesOperator<T> implements Operator<T> {
         int[] index = {0};
         AtomicBoolean completeSent = new AtomicBoolean(false);
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
                 if (n == Long.MAX_VALUE) {
                     pushAll();
 

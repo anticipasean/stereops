@@ -82,7 +82,7 @@ public class ThreadPools {
         ThreadPools.useCommon = useCommon;
     }
 
-    public static enum ExecutionMode {
+    public enum ExecutionMode {
         CURRENT,
         COMMON_FREE,
         NEW_FREE

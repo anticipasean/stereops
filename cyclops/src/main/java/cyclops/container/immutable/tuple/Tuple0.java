@@ -6,11 +6,11 @@ package cyclops.container.immutable.tuple;
 
 public final class Tuple0 {
 
+    static Tuple0 INSTANCE = new Tuple0();
+
     private Tuple0() {
 
     }
-
-    static Tuple0 INSTANCE = new Tuple0();
 
     public static Tuple0 empty() {
         return INSTANCE;

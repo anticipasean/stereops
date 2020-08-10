@@ -697,7 +697,7 @@ public class ExceptionSoftener {
      * @return
      */
     public static RuntimeException throwSoftenedException(final Throwable e) {
-        throw ExceptionSoftener.<RuntimeException>uncheck(e);
+        throw ExceptionSoftener.uncheck(e);
     }
 
     /**
@@ -709,7 +709,7 @@ public class ExceptionSoftener {
     public static <X extends Throwable> void throwIf(final X e,
                                                      final Predicate<X> p) {
         if (p.test(e)) {
-            throw ExceptionSoftener.<RuntimeException>uncheck(e);
+            throw ExceptionSoftener.uncheck(e);
         }
     }
 
@@ -724,7 +724,7 @@ public class ExceptionSoftener {
                                                            final Predicate<X> p,
                                                            final Consumer<X> handler) {
         if (p.test(e)) {
-            throw ExceptionSoftener.<RuntimeException>uncheck(e);
+            throw ExceptionSoftener.uncheck(e);
         } else {
             handler.accept(e);
         }

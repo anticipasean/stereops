@@ -25,7 +25,7 @@ public class FlatMapPublisher<T, R> extends BaseOperator<T, R> {
     public StreamSubscription subscribe(Consumer<? super R> onNext,
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
-        StreamSubscription sub[] = new StreamSubscription[1];
+        StreamSubscription[] sub = new StreamSubscription[1];
         ConcurrentFlatMapper<T, R>[] ref = new ConcurrentFlatMapper[1];
         StreamSubscription res = new StreamSubscription() {
 

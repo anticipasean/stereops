@@ -1,14 +1,14 @@
 package cyclops.container;
 
-import cyclops.container.foldable.SealedOr;
 import cyclops.container.control.Either;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
+import cyclops.container.foldable.SealedOr;
 import cyclops.container.immutable.impl.NonEmptyList;
-import cyclops.function.enhanced.Function0;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.enhanced.Function0;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.PrintStream;
@@ -92,8 +92,8 @@ public interface Value<T> extends SealedOr<T>, Iterable<T>, Publisher<T> {
     default void subscribe(final Subscriber<? super T> sub) {
         sub.onSubscribe(new Subscription() {
 
-            AtomicBoolean running = new AtomicBoolean(true);
-            AtomicBoolean cancelled = new AtomicBoolean(false);
+            final AtomicBoolean running = new AtomicBoolean(true);
+            final AtomicBoolean cancelled = new AtomicBoolean(false);
 
             @Override
             public void request(final long n) {

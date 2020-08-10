@@ -27,7 +27,7 @@ public class LazySingleValueOperator<T, R> implements Operator<R> {
                                         Runnable onComplete) {
         boolean[] sent = {false};
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
 
                 if (n > 0 && !sent[0] && isActive()) {
                     onNext.accept(fn.apply(value));

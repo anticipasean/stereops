@@ -46,7 +46,7 @@ public class AsyncSubscriber<T> implements Subscriber<T>, PushSubscriber<T> {
 
     volatile boolean isOpen;
     volatile boolean streamCreated = false;
-    private AtomicReference<CapturingOperator<T>> action = new AtomicReference<>(null);
+    private final AtomicReference<CapturingOperator<T>> action = new AtomicReference<>(null);
 
 
     public AsyncSubscriber() {

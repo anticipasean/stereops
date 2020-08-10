@@ -39,7 +39,7 @@ public class Zipping3Spliterator<T1, T2, T3, R> implements CopyableSpliterator<R
 
     @Override
     public boolean tryAdvance(Consumer<? super R> action) {
-        boolean found[] = {false};
+        boolean[] found = {false};
         return left.tryAdvance(l -> middle.tryAdvance(m -> {
             right.tryAdvance(r -> {
                 action.accept(fn.apply(l,

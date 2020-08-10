@@ -11,5 +11,5 @@ public interface EmptyUnit<T> extends Unit<T> {
     /**
      * @return A new, zero instance of this EmptyUnit type
      */
-    public <T> Unit<T> emptyUnit();
+    <T> Unit<T> emptyUnit();
 }

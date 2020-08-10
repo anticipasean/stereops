@@ -7,5 +7,5 @@ import java.util.Spliterator;
  */
 public interface Composable<R> {
 
-    public Spliterator<R> compose();
+    Spliterator<R> compose();
 }

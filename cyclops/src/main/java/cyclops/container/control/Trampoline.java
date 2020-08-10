@@ -1,10 +1,10 @@
 package cyclops.container.control;
 
 import cyclops.container.Value;
-import cyclops.container.transformable.To;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.transformable.To;
 import cyclops.function.enhanced.Function0;
 import cyclops.function.enhanced.Function3;
 import cyclops.reactive.ReactiveSeq;
@@ -80,7 +80,7 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Trampoline<T> extends Value<T>, Function0<T>, To<Trampoline<T>> {
 
-    public static <T> Trampoline<T> narrow(Trampoline<? extends T> broad) {
+    static <T> Trampoline<T> narrow(Trampoline<? extends T> broad) {
         return (Trampoline<T>) broad;
     }
 
@@ -90,7 +90,7 @@ public interface Trampoline<T> extends Value<T>, Function0<T>, To<Trampoline<T>>
      * @param result Completed result
      * @return Completed Trampoline
      */
-    public static <T> Trampoline<T> done(final T result) {
+    static <T> Trampoline<T> done(final T result) {
         return () -> result;
     }
 
@@ -100,7 +100,7 @@ public interface Trampoline<T> extends Value<T>, Function0<T>, To<Trampoline<T>>
      * @param trampoline Next stage in Trampoline
      * @return Trampoline with more work
      */
-    public static <T> Trampoline<T> more(final Trampoline<Trampoline<T>> trampoline) {
+    static <T> Trampoline<T> more(final Trampoline<Trampoline<T>> trampoline) {
         return new Trampoline<T>() {
 
 

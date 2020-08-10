@@ -1,14 +1,14 @@
 package cyclops.async.companion;
 
-import cyclops.function.higherkinded.DataWitness.future;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.traversable.IterableX;
-import cyclops.container.control.Either;
 import cyclops.async.Future;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.control.Either;
+import cyclops.container.traversable.IterableX;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.future;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;

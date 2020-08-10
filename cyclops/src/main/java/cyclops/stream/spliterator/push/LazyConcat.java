@@ -268,7 +268,7 @@ public class LazyConcat<IN> {
                         break;
                     } else if (next != null) {
                         operatorsSub.request(1l);
-                        Operator<IN> pub = (Operator<IN>) nilsafeOut(next);
+                        Operator<IN> pub = nilsafeOut(next);
                         running = true;
                         nextSub(pub);
                     }

@@ -33,8 +33,8 @@ public class ZippingLatestOperator<T1, T2, R> implements Operator<R> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
 
-        StreamSubscription leftSub[] = {null};
-        StreamSubscription rightSub[] = {null};
+        StreamSubscription[] leftSub = {null};
+        StreamSubscription[] rightSub = {null};
         AtomicBoolean leftComplete = new AtomicBoolean(false); //left & right compelte can be merged into single integer
         AtomicBoolean rightComplete = new AtomicBoolean(false);
         AtomicReference<Tuple2<T1, T2>> nextValue = new AtomicReference<>(Tuple.tuple((T1) UNSET,
@@ -47,7 +47,7 @@ public class ZippingLatestOperator<T1, T2, R> implements Operator<R> {
 
         List<StreamSubscription> subs = new ArrayList<>(2);
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
                 while (requested.get() > 0) {
                     if (completed.get() == 2 && data.size() == 0) {
 

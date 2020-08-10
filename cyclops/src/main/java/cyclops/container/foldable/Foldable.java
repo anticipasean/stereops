@@ -277,7 +277,7 @@ public interface Foldable<T> extends Iterable<T> {
     }
 
     default double mean(ToDoubleFunction<T> fn) {
-        return stream().collect(Collectors.<T>averagingDouble(fn));
+        return stream().collect(Collectors.averagingDouble(fn));
     }
 
     default Option<T> median() {
@@ -320,7 +320,7 @@ public interface Foldable<T> extends Iterable<T> {
 
     default double variance(ToDoubleFunction<T> fn) {
         Seq<T> list = stream().seq();
-        double avg = list.collect(Collectors.<T>averagingDouble(fn));
+        double avg = list.collect(Collectors.averagingDouble(fn));
         return (list.map(t -> fn.applyAsDouble(t))
                     .map(t -> t - avg)
                     .map(t -> t * t)
@@ -330,7 +330,7 @@ public interface Foldable<T> extends Iterable<T> {
 
     default double populationVariance(ToDoubleFunction<T> fn) {
         Seq<T> list = stream().seq();
-        double avg = list.collect(Collectors.<T>averagingDouble(fn));
+        double avg = list.collect(Collectors.averagingDouble(fn));
         return (list.map(t -> fn.applyAsDouble(t))
                     .map(t -> t - avg)
                     .map(t -> t * t)
@@ -340,7 +340,7 @@ public interface Foldable<T> extends Iterable<T> {
 
     default double stdDeviation(ToDoubleFunction<T> fn) {
         Seq<T> list = stream().seq();
-        double avg = list.collect(Collectors.<T>averagingDouble(fn));
+        double avg = list.collect(Collectors.averagingDouble(fn));
         return Math.sqrt(list.stream()
                              .mapToDouble(fn)
                              .map(i -> i - avg)

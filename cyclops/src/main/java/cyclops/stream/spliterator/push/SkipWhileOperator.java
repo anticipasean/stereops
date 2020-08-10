@@ -25,7 +25,7 @@ public class SkipWhileOperator<T, R> extends BaseOperator<T, T> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
         boolean[] skipping = {true};
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {

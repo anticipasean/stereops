@@ -8,26 +8,26 @@ import java.util.stream.Stream;
 
 public interface Group<T> extends Monoid<T> {
 
-    public static <T> Group<T> fromCurried(UnaryOperator<T> inverse,
-                                           final T zero,
-                                           final Function<T, Function<T, T>> combiner) {
+    static <T> Group<T> fromCurried(UnaryOperator<T> inverse,
+                                    final T zero,
+                                    final Function<T, Function<T, T>> combiner) {
         return of(inverse,
                   Monoid.of(zero,
                             combiner));
 
     }
 
-    public static <T> Group<T> fromBiFunction(UnaryOperator<T> inverse,
-                                              final T zero,
-                                              final BiFunction<T, T, T> combiner) {
+    static <T> Group<T> fromBiFunction(UnaryOperator<T> inverse,
+                                       final T zero,
+                                       final BiFunction<T, T, T> combiner) {
         return of(inverse,
                   Monoid.fromBiFunction(zero,
                                         combiner));
 
     }
 
-    public static <T> Group<T> of(UnaryOperator<T> inverse,
-                                  Monoid<T> monoid) {
+    static <T> Group<T> of(UnaryOperator<T> inverse,
+                           Monoid<T> monoid) {
         return new Group<T>() {
 
 

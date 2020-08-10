@@ -78,7 +78,7 @@ public class ConcatonatingSpliterator<IN, T> extends BaseComposableSpliterator<I
     public boolean tryAdvance(Consumer<? super T> action) {
         Consumer<? super IN> toUse = apply(action);
         if (!isRight) {
-            return left.tryAdvance(toUse) ? true : rightAdvance(toUse);
+            return left.tryAdvance(toUse) || rightAdvance(toUse);
         } else {
             return right.tryAdvance(toUse);
         }

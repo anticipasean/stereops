@@ -25,7 +25,7 @@ public class LimitWhileOperator<T, R> extends BaseOperator<T, T> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
 
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         sub[0] = source.subscribe(e -> {
                                       try {
                                           if (predicate.test(e)) {

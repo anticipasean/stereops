@@ -1,8 +1,25 @@
 package cyclops.stream.type.impl;
 
 
-import cyclops.async.companion.QueueFactories;
 import cyclops.async.adapters.Signal;
+import cyclops.async.companion.QueueFactories;
+import cyclops.container.control.Eval;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Maybe;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.companion.Spouts;
+import cyclops.reactive.subscriber.ValueSubscriber;
+import cyclops.stream.async.Continuation;
+import cyclops.stream.companion.Streams;
 import cyclops.stream.publisher.PublisherIterable;
 import cyclops.stream.spliterator.CompleteSpliterator;
 import cyclops.stream.spliterator.ComposableFunction;
@@ -48,23 +65,6 @@ import cyclops.stream.spliterator.Zipping4Spliterator;
 import cyclops.stream.spliterator.ZippingSpliterator;
 import cyclops.stream.spliterator.push.CollectingSinkSpliterator;
 import cyclops.stream.spliterator.push.ValueEmittingSpliterator;
-import cyclops.stream.async.Continuation;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.reactive.subscriber.ValueSubscriber;
-import cyclops.stream.companion.Streams;
-import cyclops.container.control.Eval;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.Maybe;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.container.immutable.tuple.Tuple3;
-import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.companion.Spouts;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -279,11 +279,11 @@ public abstract class SpliteratorBasedStream<T> extends BaseExtendedStream<T> {
     public <C extends PersistentCollection<T>, R> ReactiveSeq<R> groupedWhile(final BiPredicate<C, ? super T> predicate,
                                                                               final Supplier<C> factory,
                                                                               Function<? super C, ? extends R> finalizer) {
-        return this.<R>createSeq(new GroupedStatefullySpliterator<T, C, R>(get(),
-                                                                           factory,
-                                                                           finalizer,
-                                                                           predicate),
-                                 this.reversible);
+        return this.createSeq(new GroupedStatefullySpliterator<T, C, R>(get(),
+                                                                        factory,
+                                                                        finalizer,
+                                                                        predicate),
+                              this.reversible);
     }
 
     @Override
@@ -299,11 +299,11 @@ public abstract class SpliteratorBasedStream<T> extends BaseExtendedStream<T> {
     public <C extends PersistentCollection<T>, R> ReactiveSeq<R> groupedUntil(final BiPredicate<C, ? super T> predicate,
                                                                               final Supplier<C> factory,
                                                                               Function<? super C, ? extends R> finalizer) {
-        return this.<R>createSeq(new GroupedStatefullySpliterator<T, C, R>(get(),
-                                                                           factory,
-                                                                           finalizer,
-                                                                           predicate.negate()),
-                                 this.reversible);
+        return this.createSeq(new GroupedStatefullySpliterator<T, C, R>(get(),
+                                                                        factory,
+                                                                        finalizer,
+                                                                        predicate.negate()),
+                              this.reversible);
     }
 
     @Override
@@ -609,7 +609,7 @@ public abstract class SpliteratorBasedStream<T> extends BaseExtendedStream<T> {
         final Object value = new Object();
         ReactiveSeq res = createSeq(onEmptyGet((Supplier) () -> value).flatMap(s -> {
             if (s == value) {
-                return (Stream) switchTo.get();
+                return switchTo.get();
             }
             return Stream.of(s);
         }));
@@ -705,7 +705,7 @@ public abstract class SpliteratorBasedStream<T> extends BaseExtendedStream<T> {
                                                        final long time,
                                                        final TimeUnit t) {
         return createSeq(new GroupedByTimeAndSizeSpliterator<>(this.get(),
-                                                               () -> Vector.<T>empty(),
+                                                               () -> Vector.empty(),
                                                                Function.identity(),
                                                                size,
                                                                time,
@@ -763,7 +763,7 @@ public abstract class SpliteratorBasedStream<T> extends BaseExtendedStream<T> {
     @Override
     public ReactiveSeq<Vector<T>> groupedWhile(final Predicate<? super T> predicate) {
         return createSeq(new GroupedWhileSpliterator<>(get(),
-                                                       () -> Vector.<T>empty(),
+                                                       () -> Vector.empty(),
                                                        Function.identity(),
                                                        predicate),
                          this.reversible);

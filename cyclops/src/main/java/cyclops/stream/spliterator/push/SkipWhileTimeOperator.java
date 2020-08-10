@@ -30,7 +30,7 @@ public class SkipWhileTimeOperator<T, R> extends BaseOperator<T, T> {
         final long toRun = t.toNanos(time);
         long start = System.nanoTime();
 
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {

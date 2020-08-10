@@ -32,7 +32,7 @@ public class CapturingOperator<T> implements Operator<T> {
             super.cancel();
         }
     };
-    private AtomicBoolean initialized = new AtomicBoolean(false);
+    private final AtomicBoolean initialized = new AtomicBoolean(false);
 
     public CapturingOperator(Subscription s) {
         this.s = s;

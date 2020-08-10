@@ -11,8 +11,8 @@ public class ReversingArraySpliterator<T> implements Spliterator<T>, ReversableS
 
     private final Object[] array;
     int index = 0;
-    private int max;
-    private int start;
+    private final int max;
+    private final int start;
     @Getter
     @Setter
     private boolean reverse;

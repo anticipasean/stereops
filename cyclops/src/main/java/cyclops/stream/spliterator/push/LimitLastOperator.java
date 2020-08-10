@@ -25,7 +25,7 @@ public class LimitLastOperator<T, R> extends BaseOperator<T, T> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
         final Deque<T> buffer = limit < 1_000 ? new ArrayDeque<T>(limit) : new LinkedList<>();
-        StreamSubscription upstream[] = {null};
+        StreamSubscription[] upstream = {null};
         Runnable[] thunk = {() -> {
         }};
         StreamSubscription result = new StreamSubscription() {

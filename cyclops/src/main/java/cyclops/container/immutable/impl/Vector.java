@@ -1,22 +1,22 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.function.higherkinded.DataWitness.vector;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentIndexed;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.base.BAMT;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentIndexed;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.vector;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
 import java.io.IOException;
@@ -187,7 +187,7 @@ public class Vector<T> implements ImmutableList<T>, Serializable, Higher<vector,
                                            Function<? super T, ? extends Vector<? extends Either<T, R>>> fn) {
         Vector<Either<T, R>> next = Vector.of(Either.left(initial));
 
-        boolean newValue[] = {true};
+        boolean[] newValue = {true};
         for (; ; ) {
 
             next = next.flatMap(e -> e.fold(s -> {
@@ -214,7 +214,7 @@ public class Vector<T> implements ImmutableList<T>, Serializable, Higher<vector,
 
     @Override
     public Vector<T> plusAll(Iterable<? extends T> list) {
-        return (Vector<T>) appendAll((Iterable<T>) list);
+        return appendAll(list);
     }
 
     @Override

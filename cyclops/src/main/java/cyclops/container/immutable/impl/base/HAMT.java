@@ -1,14 +1,14 @@
 package cyclops.container.immutable.impl.base;
 
 
-import cyclops.container.foldable.Deconstructable.Deconstructable2;
-import cyclops.function.companion.Comparators;
 import cyclops.container.control.Option;
+import cyclops.container.foldable.Deconstructable.Deconstructable2;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.function.companion.Comparators;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -69,28 +69,28 @@ public final class HAMT<K, V> implements Serializable {
                          key);
         }
 
-        public Node<K, V> plus(int bitShiftDepth,
-                               int hash,
-                               K key,
-                               V value);
+        Node<K, V> plus(int bitShiftDepth,
+                        int hash,
+                        K key,
+                        V value);
 
-        public Option<V> get(int bitShiftDepth,
-                             int hash,
-                             K key);
+        Option<V> get(int bitShiftDepth,
+                      int hash,
+                      K key);
 
-        public V getOrElse(int bitShiftDepth,
-                           int hash,
-                           K key,
-                           V alt);
+        V getOrElse(int bitShiftDepth,
+                    int hash,
+                    K key,
+                    V alt);
 
-        public V getOrElseGet(int bitShiftDepth,
-                              int hash,
-                              K key,
-                              Supplier<? extends V> alt);
+        V getOrElseGet(int bitShiftDepth,
+                       int hash,
+                       K key,
+                       Supplier<? extends V> alt);
 
-        public Node<K, V> minus(int bitShiftDepth,
-                                int hash,
-                                K key);
+        Node<K, V> minus(int bitShiftDepth,
+                         int hash,
+                         K key);
 
         int size();
 

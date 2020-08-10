@@ -25,7 +25,7 @@ public class SkipOperator<T, R> extends BaseOperator<T, T> {
                                         Runnable onComplete) {
         long[] count = {0};
         boolean[] skipping = {true};
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {

@@ -2,9 +2,6 @@ package cyclops.stream.type.impl;
 
 import static cyclops.reactive.ReactiveSeq.fromIterable;
 
-import cyclops.stream.spliterator.ReversableSpliterator;
-import cyclops.stream.type.Streamable;
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
@@ -12,6 +9,9 @@ import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.companion.Streams;
+import cyclops.stream.spliterator.ReversableSpliterator;
+import cyclops.stream.type.Streamable;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Optional;

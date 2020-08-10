@@ -1,20 +1,20 @@
 package cyclops.container.control;
 
 
-import cyclops.function.higherkinded.DataWitness.tryType;
-import cyclops.function.higherkinded.Higher;
-import cyclops.function.higherkinded.Higher2;
-import cyclops.container.foldable.Sealed2;
-import cyclops.container.filterable.Filterable;
-import cyclops.container.foldable.OrElseValue;
 import cyclops.container.Value;
 import cyclops.container.factory.Unit;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.foldable.Sealed2;
+import cyclops.container.recoverable.RecoverableFrom;
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.recoverable.RecoverableFrom;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.tryType;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.Objects;
@@ -40,7 +40,7 @@ import org.reactivestreams.Subscription;
  * <p>
  * 1. Lazy / Eager / Reactive operational modes 2. Illegal states are unrepresentable 3. Exception types are explicitly declared
  * 4. Exceptions during execution are not caught be default 5. To handle exceptions during operations provide the Exception
- * classes explicitly on initiatialization
+ * classes explicitly on initialization
  * <p>
  * Create a 'successful' value
  * <pre>
@@ -124,7 +124,8 @@ import org.reactivestreams.Subscription;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFrom<X, T>, Value<T>, Unit<T>, Transformable<T>,
-                                                    Filterable<T>, Sealed2<T, X>, OrElseValue<T, Try<T, X>>, Higher2<tryType, X, T> {
+                                                    Filterable<T>, Sealed2<T, X>, OrElseValue<T, Try<T, X>>,
+                                                    Higher2<tryType, X, T> {
 
 
     final Either<X, T> xor;
@@ -133,7 +134,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
 
     public static <X extends Throwable, T, R> Try<R, X> tailRec(T initial,
                                                                 Function<? super T, ? extends Try<? extends Either<T, R>, X>> fn) {
-        Try<? extends Either<T, R>, X> next[] = new Try[1];
+        Try<? extends Either<T, R>, X>[] next = new Try[1];
         next[0] = Try.success(Either.left(initial));
         boolean cont = true;
         do {
@@ -176,19 +177,20 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
     @SafeVarargs
     public static <T, X extends Throwable> Try<T, X> fromPublisher(final Publisher<T> pub,
                                                                    final Class<X>... classes) {
-        return new Try<T, X>(LazyEither.fromPublisher(pub).<X>mapLeft(t -> {
-            if (classes.length == 0) {
-                return (X) t;
-            }
-            val error = Stream.of(classes)
-                              .filter(c -> c.isAssignableFrom(t.getClass()))
-                              .findFirst();
-            if (error.isPresent()) {
-                return (X) t;
-            } else {
-                throw ExceptionSoftener.throwSoftenedException(t);
-            }
-        }),
+        return new Try<T, X>(LazyEither.fromPublisher(pub)
+                                       .mapLeft(t -> {
+                                           if (classes.length == 0) {
+                                               return (X) t;
+                                           }
+                                           val error = Stream.of(classes)
+                                                             .filter(c -> c.isAssignableFrom(t.getClass()))
+                                                             .findFirst();
+                                           if (error.isPresent()) {
+                                               return (X) t;
+                                           } else {
+                                               throw ExceptionSoftener.throwSoftenedException(t);
+                                           }
+                                       }),
                              classes);
     }
 
@@ -209,7 +211,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param pub Publisher to extract value from
      * @return Try populated with first value from Publisher
      */
-    public static <T> Try<T, Throwable> CofromPublisher(final Publisher<T> pub) {
+    public static <T> Try<T, Throwable> fromPublisher(final Publisher<T> pub) {
         return new Try<>(LazyEither.fromPublisher(pub),
                          new Class[0]);
     }
@@ -329,7 +331,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
                                             t2));
             } catch (Throwable t) {
                 return handleError(t,
-                                   (Class<? extends X>[]) classes);
+                                   classes);
             } finally {
                 ExceptionSoftener.softenRunnable(() -> t1.close())
                                  .run();
@@ -338,7 +340,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
             }
         } catch (Throwable e) {
             return handleError(e,
-                               (Class<? extends X>[]) classes);
+                               classes);
         }
     }
 
@@ -1042,11 +1044,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
 
         Try<?, ?> aTry = (Try<?, ?>) o;
 
-        if (!xor.equals(aTry.xor)) {
-            return false;
-        }
-
-        return true;
+        return xor.equals(aTry.xor);
     }
 
     @Override
@@ -1054,9 +1052,9 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         return xor.hashCode();
     }
 
-    public static interface CheckedFunction<T, R, X extends Throwable> {
+    public interface CheckedFunction<T, R, X extends Throwable> {
 
-        public R apply(T t) throws X;
+        R apply(T t) throws X;
 
         default Function<T, R> asFunction() {
             return i -> {
@@ -1069,26 +1067,26 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    public static interface CheckedBiFunction<T1, T2, R, X extends Throwable> {
+    public interface CheckedBiFunction<T1, T2, R, X extends Throwable> {
 
-        public R apply(T1 t,
-                       T2 t2) throws X;
+        R apply(T1 t,
+                T2 t2) throws X;
     }
 
-    public static interface CheckedSupplier<T, X extends Throwable> {
+    public interface CheckedSupplier<T, X extends Throwable> {
 
-        public T get() throws X;
+        T get() throws X;
     }
 
 
-    public static interface CheckedConsumer<T, X extends Throwable> {
+    public interface CheckedConsumer<T, X extends Throwable> {
 
-        public void accept(T t) throws X;
+        void accept(T t) throws X;
     }
 
-    public static interface CheckedRunnable<X extends Throwable> {
+    public interface CheckedRunnable<X extends Throwable> {
 
-        public void run() throws X;
+        void run() throws X;
     }
 
 

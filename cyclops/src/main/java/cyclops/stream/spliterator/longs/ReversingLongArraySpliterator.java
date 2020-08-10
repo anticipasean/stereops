@@ -13,8 +13,8 @@ public class ReversingLongArraySpliterator<Long> implements Spliterator.OfLong, 
 
     private final long[] array;
     int index = 0;
-    private int max;
-    private int start;
+    private final int max;
+    private final int start;
     @Getter
     @Setter
     private boolean reverse;

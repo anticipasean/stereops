@@ -8,12 +8,12 @@ import java.util.function.Consumer;
 public interface Operator<T> {
 
 
-    public StreamSubscription subscribe(Consumer<? super T> onNext,
-                                        Consumer<? super Throwable> onError,
-                                        Runnable onComplete);
+    StreamSubscription subscribe(Consumer<? super T> onNext,
+                                 Consumer<? super Throwable> onError,
+                                 Runnable onComplete);
 
-    public void subscribeAll(Consumer<? super T> onNext,
-                             Consumer<? super Throwable> onError,
-                             Runnable onComplete);
+    void subscribeAll(Consumer<? super T> onNext,
+                      Consumer<? super Throwable> onError,
+                      Runnable onComplete);
 
 }

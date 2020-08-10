@@ -1,14 +1,14 @@
 package cyclops.container.immutable.impl.base;
 
+import cyclops.container.control.Option;
 import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.container.foldable.Deconstructable.Deconstructable2;
 import cyclops.container.foldable.Sealed4;
-import cyclops.function.companion.Comparators;
-import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple1;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.function.companion.Comparators;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -19,10 +19,10 @@ import lombok.AllArgsConstructor;
 
 public interface HashedPatriciaTrie<K, V> {
 
-    static final int BITS = 5;
-    static final int BUCKET_SIZE = 1 << BITS;
-    static final int MASK = (1 << BITS) - 1;
-    static final Node[] EMPTY_ARRAY = createBaseEmptyArray();
+    int BITS = 5;
+    int BUCKET_SIZE = 1 << BITS;
+    int MASK = (1 << BITS) - 1;
+    Node[] EMPTY_ARRAY = createBaseEmptyArray();
 
     static <K, V> Node<K, V> empty() {
         return EmptyNode.Instance;
@@ -73,7 +73,7 @@ public interface HashedPatriciaTrie<K, V> {
 
     }
 
-    static final class EmptyNode<K, V> implements Node<K, V> {
+    final class EmptyNode<K, V> implements Node<K, V> {
 
         private static final long serialVersionUID = 1L;
         static EmptyNode Instance = new EmptyNode();
@@ -156,7 +156,7 @@ public interface HashedPatriciaTrie<K, V> {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class SingleNode<K, V> implements Node<K, V>, Deconstructable2<K, V> {
+    final class SingleNode<K, V> implements Node<K, V>, Deconstructable2<K, V> {
 
         private static final long serialVersionUID = 1L;
         private final K key;
@@ -279,7 +279,7 @@ public interface HashedPatriciaTrie<K, V> {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    static final class CollisionNode<K, V> implements Node<K, V>, Deconstructable1<LazySeq<Tuple2<K, V>>> {
+    final class CollisionNode<K, V> implements Node<K, V>, Deconstructable1<LazySeq<Tuple2<K, V>>> {
 
         private static final long serialVersionUID = 1L;
         private final LazySeq<Tuple2<K, V>> bucket;
@@ -400,7 +400,7 @@ public interface HashedPatriciaTrie<K, V> {
         }
     }
 
-    static final class ArrayNode<K, V> implements Node<K, V>, Deconstructable1<Node<K, V>[]> {
+    final class ArrayNode<K, V> implements Node<K, V>, Deconstructable1<Node<K, V>[]> {
 
         private static final long serialVersionUID = 1L;
         private final Node<K, V>[] nodes;

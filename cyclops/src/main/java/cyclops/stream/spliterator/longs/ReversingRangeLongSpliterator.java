@@ -13,8 +13,8 @@ public class ReversingRangeLongSpliterator implements Spliterator.OfLong, Revers
     private final long min;
     private final long max;
     private long index;
-    private long start;
-    private long step;
+    private final long start;
+    private final long step;
 
 
     @Getter

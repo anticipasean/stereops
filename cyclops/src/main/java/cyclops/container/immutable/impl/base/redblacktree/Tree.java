@@ -4,8 +4,8 @@ import static cyclops.container.immutable.impl.base.redblacktree.Node.LEFT_BLACK
 import static cyclops.container.immutable.impl.base.redblacktree.Node.RED;
 import static cyclops.container.immutable.impl.base.redblacktree.Node.RIGHT_BLACK;
 
-import cyclops.container.foldable.Sealed2;
 import cyclops.container.control.Option;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
@@ -54,10 +54,13 @@ public interface Tree<K, V> extends Sealed2<Node<K, V>, Leaf<K, V>> {
                 Node<K, V> leftNode = left.fold(n -> n,
                                                 leaf ->//unreachable
                                                     null);
-                if (!leftNode.left().isBlack() && !leftNode.left().isEmpty()) {
-                    Node<K, V> nestedLeftNode = leftNode.left().fold(n -> n,
-                                                                   leaf ->//unreachable
-                                                                       null);
+                if (!leftNode.left()
+                             .isBlack() && !leftNode.left()
+                                                    .isEmpty()) {
+                    Node<K, V> nestedLeftNode = leftNode.left()
+                                                        .fold(n -> n,
+                                                              leaf ->//unreachable
+                                                                  null);
 
                     return RED(LEFT_BLACK(nestedLeftNode.left(),
                                           nestedLeftNode.right(),
@@ -73,10 +76,13 @@ public interface Tree<K, V> extends Sealed2<Node<K, V>, Leaf<K, V>> {
                                leftNode.value(),
                                comparator());
                 }
-                if (!leftNode.right().isBlack() && !leftNode.right().isEmpty()) {
-                    Node<K, V> nestedRightNode = leftNode.right().fold(n -> n,
-                                                                     leaf ->//unreachable
-                                                                         null);
+                if (!leftNode.right()
+                             .isBlack() && !leftNode.right()
+                                                    .isEmpty()) {
+                    Node<K, V> nestedRightNode = leftNode.right()
+                                                         .fold(n -> n,
+                                                               leaf ->//unreachable
+                                                                   null);
 
                     return RED(LEFT_BLACK(leftNode.left(),
                                           nestedRightNode.left(),
@@ -98,10 +104,13 @@ public interface Tree<K, V> extends Sealed2<Node<K, V>, Leaf<K, V>> {
                 Node<K, V> rightNode = right.fold(n -> n,
                                                   leaf ->//unreachable
                                                       null);
-                if (rightNode.left().isRed() && !rightNode.left().isEmpty()) {
-                    Node<K, V> nestedLeftNode = rightNode.left().fold(n -> n,
-                                                                    leaf ->//unreachable
-                                                                        null);
+                if (rightNode.left()
+                             .isRed() && !rightNode.left()
+                                                   .isEmpty()) {
+                    Node<K, V> nestedLeftNode = rightNode.left()
+                                                         .fold(n -> n,
+                                                               leaf ->//unreachable
+                                                                   null);
                     return RED(LEFT_BLACK(left,
                                           nestedLeftNode.left(),
                                           key,
@@ -117,10 +126,13 @@ public interface Tree<K, V> extends Sealed2<Node<K, V>, Leaf<K, V>> {
                                comparator());
 
                 }
-                if (rightNode.right().isRed() && !rightNode.right().isEmpty()) {
-                    Node<K, V> nestedRightNode = rightNode.right().fold(n -> n,
-                                                                      leaf ->//unreachable
-                                                                          null);
+                if (rightNode.right()
+                             .isRed() && !rightNode.right()
+                                                   .isEmpty()) {
+                    Node<K, V> nestedRightNode = rightNode.right()
+                                                          .fold(n -> n,
+                                                                leaf ->//unreachable
+                                                                    null);
 
                     Node<K, V> res = RED(LEFT_BLACK(left,
                                                     rightNode.left(),

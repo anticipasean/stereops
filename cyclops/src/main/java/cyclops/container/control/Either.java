@@ -1,27 +1,27 @@
 package cyclops.container.control;
 
-import cyclops.function.higherkinded.DataWitness.either;
-import cyclops.function.higherkinded.Higher;
-import cyclops.function.higherkinded.Higher2;
-import cyclops.container.foldable.Sealed2;
-import cyclops.container.filterable.Filterable;
-import cyclops.container.foldable.OrElseValue;
 import cyclops.container.Value;
 import cyclops.container.factory.Unit;
-import cyclops.container.transformable.To;
-import cyclops.container.transformable.BiTransformable;
-import cyclops.container.transformable.Transformable;
-import cyclops.reactive.subscriber.ValueSubscriber;
-import cyclops.function.companion.Semigroups;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.OrElseValue;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.function.companion.FluentFunctions;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.transformable.BiTransformable;
+import cyclops.container.transformable.To;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.companion.FluentFunctions;
+import cyclops.function.companion.Semigroups;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.either;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher2;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.subscriber.ValueSubscriber;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
@@ -115,13 +115,13 @@ import org.reactivestreams.Publisher;
  * @author johnmcclean
  */
 public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, RT>, Sealed2<LT, RT>, Value<RT>,
-                                        OrElseValue<RT, Either<LT, RT>>, Unit<RT>, Transformable<RT>, Filterable<RT>, Serializable,
-                                        Higher2<either, LT, RT> {
+                                        OrElseValue<RT, Either<LT, RT>>, Unit<RT>, Transformable<RT>, Filterable<RT>,
+                                        Serializable, Higher2<either, LT, RT> {
 
 
-    public static <L, T, R> Either<L, R> tailRec(T initial,
-                                                 Function<? super T, ? extends Either<L, ? extends Either<T, R>>> fn) {
-        Either<L, ? extends Either<T, R>> next[] = new Either[1];
+    static <L, T, R> Either<L, R> tailRec(T initial,
+                                          Function<? super T, ? extends Either<L, ? extends Either<T, R>>> fn) {
+        Either<L, ? extends Either<T, R>>[] next = new Either[1];
         next[0] = Either.right(Either.left(initial));
         boolean cont = true;
         do {
@@ -137,7 +137,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
                                        r -> r));
     }
 
-    public static <L, T> Higher<Higher<either, L>, T> widen(Either<L, T> narrow) {
+    static <L, T> Higher<Higher<either, L>, T> widen(Either<L, T> narrow) {
         return narrow;
     }
 
@@ -189,11 +189,11 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
                         fn);
     }
 
-    public static <ST, T> Either<ST, T> narrowK2(final Higher2<either, ST, T> xor) {
+    static <ST, T> Either<ST, T> narrowK2(final Higher2<either, ST, T> xor) {
         return (Either<ST, T>) xor;
     }
 
-    public static <ST, T> Either<ST, T> narrowK(final Higher<Higher<either, ST>, T> xor) {
+    static <ST, T> Either<ST, T> narrowK(final Higher<Higher<either, ST>, T> xor) {
         return (Either<ST, T>) xor;
     }
 
@@ -213,7 +213,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param pub Publisher to construct an Either from
      * @return Either constructed from the supplied Publisher
      */
-    public static <T> Either<Throwable, T> fromPublisher(final Publisher<T> pub) {
+    static <T> Either<Throwable, T> fromPublisher(final Publisher<T> pub) {
         final ValueSubscriber<T> sub = ValueSubscriber.subscriber();
         pub.subscribe(sub);
         return sub.toLazyEither();
@@ -235,7 +235,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param iterable Iterable to construct an Either from
      * @return Either constructed from the supplied Iterable
      */
-    public static <ST, T> Either<ST, T> fromIterable(final Iterable<T> iterable) {
+    static <ST, T> Either<ST, T> fromIterable(final Iterable<T> iterable) {
 
         final Iterator<T> it = iterable.iterator();
         return it.hasNext() ? Either.right(it.next()) : Either.left(null);
@@ -258,7 +258,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param value to wrap
      * @return Left instance of Either
      */
-    public static <ST, PT> Either<ST, PT> left(final ST value) {
+    static <ST, PT> Either<ST, PT> left(final ST value) {
         return new Left<>(value);
     }
 
@@ -278,7 +278,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param value To construct an Either from
      * @return Right type instanceof Either
      */
-    public static <ST, PT> Either<ST, PT> right(final PT value) {
+    static <ST, PT> Either<ST, PT> right(final PT value) {
         return new Right<>(value);
     }
 
@@ -299,13 +299,13 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param xors Eithers to sequence
      * @return Either sequenced and swapped
      */
-    public static <ST, PT> Either<PT, ReactiveSeq<ST>> sequenceLeft(final Iterable<Either<ST, PT>> xors) {
+    static <ST, PT> Either<PT, ReactiveSeq<ST>> sequenceLeft(final Iterable<Either<ST, PT>> xors) {
         return sequence(ReactiveSeq.fromIterable(xors)
                                    .filter(Either::isLeft)
                                    .map(i -> i.swap())).map(s -> ReactiveSeq.fromStream(s));
     }
 
-    public static <L, T> Either<L, Stream<T>> sequence(Stream<? extends Either<L, T>> stream) {
+    static <L, T> Either<L, Stream<T>> sequence(Stream<? extends Either<L, T>> stream) {
 
         Either<L, Stream<T>> identity = Either.right(ReactiveSeq.empty());
 
@@ -322,12 +322,12 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
                              combineStreams);
     }
 
-    public static <L, T, R> Either<L, Stream<R>> traverse(Function<? super T, ? extends R> fn,
-                                                          Stream<Either<L, T>> stream) {
+    static <L, T, R> Either<L, Stream<R>> traverse(Function<? super T, ? extends R> fn,
+                                                   Stream<Either<L, T>> stream) {
         return sequence(stream.map(h -> h.map(fn)));
     }
 
-    public static <L, R> Tuple2<Vector<L>, Vector<R>> partitionEithers(Iterable<Either<L, R>> eithers) {
+    static <L, R> Tuple2<Vector<L>, Vector<R>> partitionEithers(Iterable<Either<L, R>> eithers) {
 
         return ReactiveSeq.fromIterable(eithers)
                           .partition(Either::isLeft)
@@ -339,7 +339,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
                                        .vector());
     }
 
-    public static <L, R> Vector<L> lefts(Iterable<Either<L, R>> eithers) {
+    static <L, R> Vector<L> lefts(Iterable<Either<L, R>> eithers) {
         return ReactiveSeq.fromIterable(eithers)
                           .filter(Either::isLeft)
                           .map(e -> e.fold(left -> left,
@@ -347,7 +347,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
                           .vector();
     }
 
-    public static <L, R> Vector<R> rights(Iterable<Either<L, R>> eithers) {
+    static <L, R> Vector<R> rights(Iterable<Either<L, R>> eithers) {
         return ReactiveSeq.fromIterable(eithers)
                           .filter(Either::isRight)
                           .map(e -> e.fold(left -> null,
@@ -373,8 +373,8 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param reducer Reducer to accumulate results
      * @return Either populated with the accumulate left operation
      */
-    public static <LT, RT, R> Either<RT, R> accumulateLeft(final Iterable<Either<LT, RT>> xors,
-                                                           final Reducer<R, LT> reducer) {
+    static <LT, RT, R> Either<RT, R> accumulateLeft(final Iterable<Either<LT, RT>> xors,
+                                                    final Reducer<R, LT> reducer) {
         return sequenceLeft(xors).map(s -> s.foldMap(reducer));
     }
 
@@ -400,9 +400,9 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param reducer Semigroup to combine values from each Ior
      * @return Either populated with the accumulate Left operation
      */
-    public static <ST, PT, R> Either<PT, R> accumulateLeft(final Iterable<Either<ST, PT>> xors,
-                                                           final Function<? super ST, R> mapper,
-                                                           final Monoid<R> reducer) {
+    static <ST, PT, R> Either<PT, R> accumulateLeft(final Iterable<Either<ST, PT>> xors,
+                                                    final Function<? super ST, R> mapper,
+                                                    final Monoid<R> reducer) {
         return sequenceLeft(xors).map(s -> s.map(mapper)
                                             .reduce(reducer));
     }
@@ -425,7 +425,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param eithers Eithers to sequence
      * @return Either Sequenced
      */
-    public static <ST, PT> Either<ST, ReactiveSeq<PT>> sequenceRight(final Iterable<Either<ST, PT>> eithers) {
+    static <ST, PT> Either<ST, ReactiveSeq<PT>> sequenceRight(final Iterable<Either<ST, PT>> eithers) {
         return sequence(ReactiveSeq.fromIterable(eithers)
                                    .filter(Either::isRight)).map(s -> ReactiveSeq.fromStream(s));
     }
@@ -448,8 +448,8 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param reducer Reducer to accumulate results
      * @return Either populated with the accumulate right operation
      */
-    public static <LT, RT, R> Either<LT, R> accumulateRight(final Iterable<Either<LT, RT>> xors,
-                                                            final Reducer<R, RT> reducer) {
+    static <LT, RT, R> Either<LT, R> accumulateRight(final Iterable<Either<LT, RT>> xors,
+                                                     final Reducer<R, RT> reducer) {
         return sequenceRight(xors).map(s -> s.foldMap(reducer));
     }
 
@@ -473,9 +473,9 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param reducer Reducer to accumulate results
      * @return Either populated with the accumulate right operation
      */
-    public static <ST, PT, R> Either<ST, R> accumulateRight(final Iterable<Either<ST, PT>> xors,
-                                                            final Function<? super PT, R> mapper,
-                                                            final Monoid<R> reducer) {
+    static <ST, PT, R> Either<ST, R> accumulateRight(final Iterable<Either<ST, PT>> xors,
+                                                     final Function<? super PT, R> mapper,
+                                                     final Monoid<R> reducer) {
         return sequenceRight(xors).map(s -> s.map(mapper)
                                              .reduce(reducer));
     }
@@ -500,8 +500,8 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param reducer Reducer to accumulate results
      * @return Either populated with the accumulate right operation
      */
-    public static <ST, PT> Either<ST, PT> accumulateRight(final Monoid<PT> reducer,
-                                                          final Iterable<Either<ST, PT>> xors) {
+    static <ST, PT> Either<ST, PT> accumulateRight(final Monoid<PT> reducer,
+                                                   final Iterable<Either<ST, PT>> xors) {
         return sequenceRight(xors).map(s -> s.reduce(reducer));
     }
 
@@ -537,8 +537,8 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
      * @param reducer Semigroup to combine values from each Either
      * @return Either populated with the accumulate Left operation
      */
-    public static <ST, PT> Either<PT, ST> accumulateLeft(final Monoid<ST> reducer,
-                                                         final Iterable<Either<ST, PT>> xors) {
+    static <ST, PT> Either<PT, ST> accumulateLeft(final Monoid<ST> reducer,
+                                                  final Iterable<Either<ST, PT>> xors) {
         return sequenceLeft(xors).map(s -> s.reduce(reducer));
     }
 
@@ -800,12 +800,12 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     /**
      * @return True if this is a right Either
      */
-    public boolean isRight();
+    boolean isRight();
 
     /**
      * @return True if this is a left Either
      */
-    public boolean isLeft();
+    boolean isLeft();
 
 
     default <T2, R> Either<LT, R> zip(final Ior<LT, ? extends T2> app,
@@ -914,7 +914,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Right<L, RT> implements Either<L, RT> {
+    class Right<L, RT> implements Either<L, RT> {
 
         private static final long serialVersionUID = 1L;
         private final RT value;
@@ -1083,7 +1083,7 @@ public interface Either<LT, RT> extends To<Either<LT, RT>>, BiTransformable<LT, 
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Left<L, R> implements Either<L, R> {
+    class Left<L, R> implements Either<L, R> {
 
         private static final long serialVersionUID = 1L;
         private final L value;

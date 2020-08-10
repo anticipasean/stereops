@@ -1,7 +1,7 @@
 package cyclops.function.combiner;
 
-import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.ImmutableList;
+import cyclops.function.companion.Semigroups;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;
@@ -31,8 +31,8 @@ public interface Monoid<T> extends Semigroup<T> {
      * @return Monoid consisting of the supplied identity element and combiner
      * @see Semigroups
      */
-    public static <T> Monoid<T> of(final T zero,
-                                   final Semigroup<T> group) {
+    static <T> Monoid<T> of(final T zero,
+                            final Semigroup<T> group) {
         return new Monoid<T>() {
             @Override
             public T zero() {
@@ -55,8 +55,8 @@ public interface Monoid<T> extends Semigroup<T> {
      * @param combiner Combining function
      * @return Monoid consisting of the supplied identity element and combiner
      */
-    public static <T> Monoid<T> of(final T zero,
-                                   final Function<T, Function<T, T>> combiner) {
+    static <T> Monoid<T> of(final T zero,
+                            final Function<T, Function<T, T>> combiner) {
         return new Monoid<T>() {
             @Override
             public T zero() {
@@ -80,8 +80,8 @@ public interface Monoid<T> extends Semigroup<T> {
      * @param combiner Combining function
      * @return Monoid consisting of the supplied identity element and combiner
      */
-    public static <T> Monoid<T> fromBiFunction(final T zero,
-                                               final BiFunction<T, T, T> combiner) {
+    static <T> Monoid<T> fromBiFunction(final T zero,
+                                        final BiFunction<T, T, T> combiner) {
         return new Monoid<T>() {
             @Override
             public T zero() {

@@ -1,12 +1,12 @@
 package cyclops.reactive;
 
-import cyclops.container.immutable.impl.ConvertableSequence;
-import cyclops.stream.type.ToStream;
 import cyclops.container.control.Ior;
 import cyclops.container.control.Maybe;
-import cyclops.function.predicate.BooleanFunction0;
+import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.function.enhanced.Function0;
 import cyclops.function.enhanced.Function1;
+import cyclops.function.predicate.BooleanFunction0;
+import cyclops.stream.type.ToStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.BooleanSupplier;
@@ -213,7 +213,7 @@ public class Generator<T> implements Iterable<T>, ToStream<T> {
                     nextCont = nextCont.proceed()
                                        .orElse(null);
 
-                    ready = nextCont == null ? false : nextCont.value.isPresent();
+                    ready = nextCont != null && nextCont.value.isPresent();
                 }
                 return true;
 
@@ -227,11 +227,11 @@ public class Generator<T> implements Iterable<T>, ToStream<T> {
         };
     }
 
-    public static interface GeneratorSupplier<T> extends Function0<Generator<T>> {
+    public interface GeneratorSupplier<T> extends Function0<Generator<T>> {
 
     }
 
-    public static interface GeneratorFunction<T> extends Function1<Suspended<T>, Generator<T>> {
+    public interface GeneratorFunction<T> extends Function1<Suspended<T>, Generator<T>> {
 
     }
 
@@ -270,7 +270,7 @@ public class Generator<T> implements Iterable<T>, ToStream<T> {
         public Generator<T> yield(T value) {
             Generator<T> res = new Generator<T>(this,
                                                 value,
-                                                (GeneratorSupplier<T>) local);
+                                                local);
             local = nullValue();
             return res;
         }
@@ -332,7 +332,7 @@ public class Generator<T> implements Iterable<T>, ToStream<T> {
                                   Predicate<? super T> predicate) {
             return new Generator<T>(this,
                                     value,
-                                    (GeneratorSupplier<T>) local);
+                                    local);
         }
 
         public Generator<T> yield(T value,

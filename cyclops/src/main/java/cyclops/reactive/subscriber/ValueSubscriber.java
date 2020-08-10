@@ -1,11 +1,11 @@
 package cyclops.reactive.subscriber;
 
-import cyclops.container.Value;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Either;
 import cyclops.async.Future;
+import cyclops.container.Value;
+import cyclops.container.control.Either;
 import cyclops.container.control.Ior;
 import cyclops.container.control.Try;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Memoize;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -164,10 +164,10 @@ public class ValueSubscriber<T> implements Subscriber<T>, Value<T> {
         Ior<Throwable, T> primary = null;
 
         if (firstError.get() != UNSET) {
-            secondary = Ior.<Throwable, T>left((Throwable) firstError.get());
+            secondary = Ior.left((Throwable) firstError.get());
         }
         if (firstValue.get() != UNSET) {
-            primary = Ior.<Throwable, T>right((T) firstValue.get());
+            primary = Ior.right((T) firstValue.get());
         }
         if (secondary != null && primary != null) {
             return Ior.both((Throwable) firstError.get(),

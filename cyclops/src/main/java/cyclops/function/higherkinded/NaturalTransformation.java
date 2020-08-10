@@ -1,9 +1,9 @@
 package cyclops.function.higherkinded;
 
-import cyclops.function.higherkinded.DataWitness.future;
-import cyclops.function.higherkinded.DataWitness.option;
 import cyclops.async.Future;
 import cyclops.container.control.Option;
+import cyclops.function.higherkinded.DataWitness.future;
+import cyclops.function.higherkinded.DataWitness.option;
 import java.util.function.Function;
 
 
@@ -43,7 +43,7 @@ public interface NaturalTransformation<W1, W2> {
         };
     }
 
-    public static class NatEx implements NaturalTransformation<future, option> {
+    class NatEx implements NaturalTransformation<future, option> {
 
         @Override
         public <T> Option<T> apply(Higher<future, T> a) {

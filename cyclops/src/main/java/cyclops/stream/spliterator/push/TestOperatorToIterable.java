@@ -45,7 +45,7 @@ public class TestOperatorToIterable<T, R> implements Iterable<T> {
             boolean active = false;
             volatile boolean requested = false;
             volatile boolean awaiting = false;
-            StreamSubscription sub = source.subscribe(e -> {
+            final StreamSubscription sub = source.subscribe(e -> {
 
                                                           if (numRecieved.incrementAndGet() > numRequested.get()) {
                                                               System.err.println("Too many onNext " + numRecieved.get() + " " + numRequested.get());
@@ -58,7 +58,7 @@ public class TestOperatorToIterable<T, R> implements Iterable<T> {
                                                           error.set(e);
                                                           awaiting = false;
                                                       },
-                                                      () -> {
+                                                            () -> {
                                                           System.out.println("On complete " + numRequested.get() + " recieved "
                                                                                  + numRecieved.get());
                                                           done.set(true);
@@ -82,10 +82,7 @@ public class TestOperatorToIterable<T, R> implements Iterable<T> {
             }
 
             boolean complete() {
-                if (done.get() && !unRead()) {
-                    return true;
-                }
-                return false;
+                return done.get() && !unRead();
             }
 
             @Override

@@ -1,13 +1,7 @@
 package cyclops.reactive;
 
-import cyclops.function.higherkinded.DataWitness.io;
-import cyclops.function.higherkinded.Higher;
-import cyclops.reactive.companion.Spouts;
-import cyclops.container.transformable.To;
-import cyclops.container.transformable.ReactiveTransformable;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Either;
 import cyclops.async.Future;
+import cyclops.container.control.Either;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
@@ -17,11 +11,17 @@ import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.container.immutable.tuple.Tuple5;
 import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
-import cyclops.function.enhanced.Function3;
+import cyclops.container.transformable.ReactiveTransformable;
+import cyclops.container.transformable.To;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.checked.CheckedConsumer;
 import cyclops.function.checked.CheckedFunction;
 import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.higherkinded.DataWitness.io;
+import cyclops.function.higherkinded.Higher;
+import cyclops.reactive.companion.Spouts;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,58 +38,58 @@ import org.reactivestreams.Subscription;
 
 public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T>, Publisher<T> {
 
-    public static <T> IO<T> sync(T s) {
+    static <T> IO<T> sync(T s) {
         return SyncIO.of(s);
     }
 
-    public static <T> IO<T> sync(Supplier<? extends T> s) {
+    static <T> IO<T> sync(Supplier<? extends T> s) {
         return SyncIO.of(s);
     }
 
-    public static <T> IO<T> sync(Iterable<? extends T> s) {
+    static <T> IO<T> sync(Iterable<? extends T> s) {
         return new SyncIO<T>(ReactiveSeq.narrow(ReactiveSeq.fromIterable(s)));
     }
 
-    public static <T> IO<T> of(T s) {
+    static <T> IO<T> of(T s) {
         return ReactiveSeqIO.of(s);
     }
 
 
-    public static <T> IO<T> of(Supplier<? extends T> s) {
+    static <T> IO<T> of(Supplier<? extends T> s) {
         return ReactiveSeqIO.of(s);
     }
 
-    public static <T> IO<T> of(Supplier<? extends T> s,
-                               Executor ex) {
+    static <T> IO<T> of(Supplier<? extends T> s,
+                        Executor ex) {
         return ReactiveSeqIO.of(s,
                                 ex);
     }
 
-    public static <T> IO<T> fromPublisher(Publisher<T> p) {
+    static <T> IO<T> fromPublisher(Publisher<T> p) {
         return ReactiveSeqIO.fromPublisher(p);
     }
 
 
-    public static <T> IO<T> narrowK(final Higher<io, T> io) {
+    static <T> IO<T> narrowK(final Higher<io, T> io) {
         return (IO<T>) io;
     }
 
-    public static <T> Higher<io, T> widen(IO<T> narrow) {
+    static <T> Higher<io, T> widen(IO<T> narrow) {
         return narrow;
     }
 
-    public static <T, X extends Throwable> IO<T> withCatch(CheckedSupplier<? extends T> cf) {
+    static <T, X extends Throwable> IO<T> withCatch(CheckedSupplier<? extends T> cf) {
         return fromPublisher(Try.withCatch(() -> cf.get(),
                                            Throwable.class));
     }
 
-    public static <T, X extends Throwable> IO<T> recover(IO<Try<T, X>> io,
-                                                         Supplier<? extends T> s) {
+    static <T, X extends Throwable> IO<T> recover(IO<Try<T, X>> io,
+                                                  Supplier<? extends T> s) {
         return io.map(t -> t.fold(i -> i,
                                   s));
     }
 
-    public static <T> IO<T> flatten(IO<IO<T>> io) {
+    static <T> IO<T> flatten(IO<IO<T>> io) {
         return io.flatMap(i -> i);
     }
 
@@ -328,7 +328,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
     }
 
     @Deprecated
-    public static class Comprehensions {
+    class Comprehensions {
 
         public static <T, F, R1, R2, R3, R4, R5, R6, R7> IO<R7> forEach(IO<T> io,
                                                                         Function<? super T, IO<R1>> value2,
@@ -604,7 +604,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class ReactiveSeqIO<T> implements IO<T> {
+    final class ReactiveSeqIO<T> implements IO<T> {
 
         private final ReactiveSeq<T> fn;
 
@@ -770,7 +770,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class SyncIO<T> implements IO<T> {
+    final class SyncIO<T> implements IO<T> {
 
         private final ReactiveSeq<T> fn;
 

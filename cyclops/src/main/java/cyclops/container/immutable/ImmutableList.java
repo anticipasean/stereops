@@ -3,30 +3,30 @@ package cyclops.container.immutable;
 import static cyclops.matching.Api.Case;
 import static cyclops.matching.Api.MatchType;
 
+import cyclops.container.comparative.Contains;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.container.foldable.Deconstructable.Deconstructable2;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.NonEmptyList;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.impl.Zipper;
-import cyclops.container.foldable.Deconstructable.Deconstructable2;
-import cyclops.container.foldable.Sealed2;
-import cyclops.container.comparative.Contains;
-import cyclops.container.transformable.To;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentList;
-import cyclops.container.recoverable.OnEmptyError;
-import cyclops.container.recoverable.OnEmptySwitch;
-import cyclops.container.traversable.IterableX;
-import cyclops.container.traversable.Traversable;
-import cyclops.container.control.Option;
-import cyclops.container.control.Try;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.recoverable.OnEmptyError;
+import cyclops.container.recoverable.OnEmptySwitch;
+import cyclops.container.transformable.To;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.Traversable;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -909,7 +909,7 @@ public interface ImmutableList<T> extends Sealed2<ImmutableList.Some<T>, Immutab
                                                      value));
     }
 
-    public static interface Some<T> extends Deconstructable2<T, ImmutableList<T>>, ImmutableList<T> {
+    interface Some<T> extends Deconstructable2<T, ImmutableList<T>>, ImmutableList<T> {
 
         ImmutableList<T> tail();
 
@@ -924,7 +924,7 @@ public interface ImmutableList<T> extends Sealed2<ImmutableList.Some<T>, Immutab
         }
     }
 
-    public interface None<T> extends ImmutableList<T> {
+    interface None<T> extends ImmutableList<T> {
 
         @Override
         default <R> R fold(Function<? super Some<T>, ? extends R> fn1,

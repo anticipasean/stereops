@@ -23,6 +23,7 @@ public class GroupingSpliterator<T, C extends PersistentCollection<? super T>, R
     boolean sent = false;
     boolean data = false;
     boolean closed = false;
+
     public GroupingSpliterator(final Spliterator<T> source,
                                Supplier<? extends C> factory,
                                Function<? super C, ? extends R> finalizer,

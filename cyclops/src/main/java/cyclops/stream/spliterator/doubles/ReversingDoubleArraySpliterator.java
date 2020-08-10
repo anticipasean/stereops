@@ -14,8 +14,8 @@ public class ReversingDoubleArraySpliterator<Double> implements Spliterator.OfDo
 
     private final double[] array;
     int index = 0;
-    private int max;
-    private int start;
+    private final int max;
+    private final int start;
     @Getter
     @Setter
     private boolean reverse;

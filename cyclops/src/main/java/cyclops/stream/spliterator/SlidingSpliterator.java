@@ -1,7 +1,7 @@
 package cyclops.stream.spliterator;
 
-import cyclops.container.mutable.Mutable;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.container.mutable.Mutable;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -21,6 +21,7 @@ public class SlidingSpliterator<T, R> extends Spliterators.AbstractSpliterator<R
     boolean sent = false;
     boolean data = false;
     boolean canAdvance = true;
+
     public SlidingSpliterator(final Spliterator<T> source,
                               Function<? super Seq<T>, ? extends R> finalizer,
                               int windowSize,

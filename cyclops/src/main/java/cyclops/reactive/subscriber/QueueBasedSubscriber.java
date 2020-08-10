@@ -3,10 +3,10 @@ package cyclops.reactive.subscriber;
 import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.Queue.ClosedQueueException;
 import cyclops.async.adapters.QueueFactory;
+import cyclops.container.control.Eval;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
-import cyclops.container.control.Eval;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,8 +38,8 @@ public class QueueBasedSubscriber<T> implements Subscriber<T> {
     protected volatile Queue<T> queue;
     @Getter
     volatile Subscription subscription;
-    private volatile Supplier<Stream<T>> jdkStream = Eval.later(this::genJdkStream);
-    private volatile Supplier<ReactiveSeq<T>> reactiveSeq = Eval.later(() -> ReactiveSeq.fromStream(jdkStream.get()));
+    private final Supplier<Stream<T>> jdkStream = Eval.later(this::genJdkStream);
+    private final Supplier<ReactiveSeq<T>> reactiveSeq = Eval.later(() -> ReactiveSeq.fromStream(jdkStream.get()));
     @Setter
     private volatile Consumer<Throwable> errorHandler;
 
@@ -59,6 +59,7 @@ public class QueueBasedSubscriber<T> implements Subscriber<T> {
             }
         };
     }
+
     private QueueBasedSubscriber(final Queue<T> q,
                                  final Counter counter,
                                  final int maxConcurrency) {
@@ -67,6 +68,7 @@ public class QueueBasedSubscriber<T> implements Subscriber<T> {
         this.counter = counter;
         queue = q;
     }
+
     private QueueBasedSubscriber(final QueueFactory<T> factory,
                                  final Counter counter,
                                  final int maxConcurrency) {

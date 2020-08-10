@@ -1,23 +1,23 @@
 package cyclops.container.immutable.impl;
 
 
+import cyclops.container.control.Option;
 import cyclops.container.immutable.ImmutableSet;
 import cyclops.container.immutable.ImmutableSortedSet;
-import cyclops.function.higherkinded.DataWitness.treeSet;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentSet;
-import cyclops.function.companion.Comparators;
-import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.base.RedBlackTree;
 import cyclops.container.immutable.impl.base.redblacktree.Tree;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentSet;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Comparators;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
+import cyclops.function.higherkinded.DataWitness.treeSet;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
@@ -180,7 +180,7 @@ public final class TreeSet<T> implements ImmutableSortedSet<T>, Higher<treeSet, 
                                    final long end) {
         return TreeSet.fromStream(ReactiveSeq.rangeLong(start,
                                                         end),
-                                  Comparator.<Long>naturalOrder());
+                                  Comparator.naturalOrder());
 
     }
 

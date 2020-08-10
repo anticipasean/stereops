@@ -24,9 +24,9 @@ public class LimitOperator<T, R> extends BaseOperator<T, T> {
                                         Consumer<? super Throwable> onError,
                                         Runnable onComplete) {
         long[] count = {0};
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
 
-        boolean completed[] = {false};
+        boolean[] completed = {false};
         sub[0] = source.subscribe(e -> {
 
                                       try {
@@ -60,9 +60,9 @@ public class LimitOperator<T, R> extends BaseOperator<T, T> {
                              Runnable onCompleteDs) {
 
         long[] count = {0};
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
 
-        boolean completed[] = {false};
+        boolean[] completed = {false};
         source.subscribeAll(e -> {
 
                                 try {

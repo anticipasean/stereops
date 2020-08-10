@@ -1,9 +1,8 @@
 package cyclops.function.enhanced;
 
-import cyclops.stream.type.Streamable;
+import cyclops.async.Future;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
-import cyclops.async.Future;
 import cyclops.container.control.Ior;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
@@ -20,6 +19,7 @@ import cyclops.function.cacheable.Memoize;
 import cyclops.function.companion.FluentFunctions;
 import cyclops.function.currying.Curry;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.type.Streamable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.BiConsumer;
@@ -30,15 +30,15 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Function1<T, R> extends Function<T, R> {
 
-    public static <T1, R> Function1<T1, R> of(final Function<T1, R> triFunc) {
+    static <T1, R> Function1<T1, R> of(final Function<T1, R> triFunc) {
         return a -> triFunc.apply(a);
     }
 
-    public static <T1, R> Function1<T1, R> λ(final Function1<T1, R> triFunc) {
+    static <T1, R> Function1<T1, R> λ(final Function1<T1, R> triFunc) {
         return triFunc;
     }
 
-    public static <T1, R> Function1<? super T1, ? extends R> λv(final Function1<? super T1, ? extends R> triFunc) {
+    static <T1, R> Function1<? super T1, ? extends R> λv(final Function1<? super T1, ? extends R> triFunc) {
         return triFunc;
     }
 
@@ -77,7 +77,7 @@ public interface Function1<T, R> extends Function<T, R> {
         return Eval.now(apply(t));
     }
 
-    public R apply(T a);
+    R apply(T a);
 
     /**
      * Apply before advice to this function, capture the input with the provided Consumer

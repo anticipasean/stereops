@@ -1,16 +1,16 @@
 package cyclops.container.immutable.tuple;
 
 
-import cyclops.function.higherkinded.DataWitness.tuple3;
-import cyclops.function.higherkinded.Higher;
-import cyclops.function.higherkinded.Higher3;
 import cyclops.container.comparative.EqualTo;
 import cyclops.container.ordering.OrderedBy;
 import cyclops.container.transformable.To;
-import cyclops.function.companion.Comparators;
-import cyclops.function.enhanced.Function3;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Comparators;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.higherkinded.DataWitness.tuple3;
+import cyclops.function.higherkinded.Higher;
+import cyclops.function.higherkinded.Higher3;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
@@ -31,8 +31,8 @@ public class Tuple3<T1, T2, T3> implements To<Tuple3<T1, T2, T3>>, Serializable,
     private final T3 _3;
 
     public Tuple3(T1 _1,
-                     T2 _2,
-                     T3 _3) {
+                  T2 _2,
+                  T3 _3) {
         this._1 = _1;
         this._2 = _2;
         this._3 = _3;

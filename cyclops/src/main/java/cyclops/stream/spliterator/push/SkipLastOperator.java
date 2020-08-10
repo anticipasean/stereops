@@ -26,7 +26,7 @@ public class SkipLastOperator<T, R> extends BaseOperator<T, T> {
                                         Runnable onComplete) {
 
         final Deque<T> buffer = skip < 1_000 ? new ArrayDeque<T>((int) skip) : new LinkedList<>();
-        StreamSubscription sub[] = {null};
+        StreamSubscription[] sub = {null};
         StreamSubscription res = new StreamSubscription() {
             @Override
             public void request(long n) {

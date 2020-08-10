@@ -1,25 +1,25 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.function.higherkinded.DataWitness.seq;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.filterable.Filterable;
-import cyclops.container.foldable.Foldable;
-import cyclops.container.transformable.Transformable;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentIndexed;
-import cyclops.container.persistent.PersistentList;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentIndexed;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.seq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
@@ -65,7 +65,7 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
                                  Function<? super T, ? extends Seq<? extends Either<T, R>>> fn) {
         Seq<Either<T, R>> next = Seq.of(Either.left(initial));
 
-        boolean newValue[] = {true};
+        boolean[] newValue = {true};
         for (; ; ) {
 
             next = next.flatMap(e -> e.fold(s -> {
@@ -193,11 +193,11 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
         return Nil.Instance;
     }
 
-    public static <T> Seq<T> narrowK(final Higher<seq, T> list) {
+    static <T> Seq<T> narrowK(final Higher<seq, T> list) {
         return (Seq<T>) list;
     }
 
-    public static <C2, T> Higher<C2, Higher<seq, T>> widen2(Higher<C2, Seq<T>> list) {
+    static <C2, T> Higher<C2, Higher<seq, T>> widen2(Higher<C2, Seq<T>> list) {
         return (Higher) list;
     }
 
@@ -211,7 +211,7 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
                          tail);
     }
 
-    public static <T> Higher<seq, T> widen(Seq<T> narrow) {
+    static <T> Higher<seq, T> widen(Seq<T> narrow) {
         return narrow;
     }
 
@@ -244,7 +244,7 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
     }
 
     default Seq<T> plusAll(Iterable<? extends T> t) {
-        return prependAll((Iterable<T>) t);
+        return prependAll(t);
     }
 
     Seq<T> updateAt(int i,
@@ -412,7 +412,7 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
         return new Iterator<T>() {
 
             Seq<T> active = host;
-            Seq<T> empty = empty();
+            final Seq<T> empty = empty();
 
             @Override
             public boolean hasNext() {
@@ -831,8 +831,8 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
 
     default <R> R foldRight(R zero,
                             BiFunction<? super T, ? super R, ? extends R> f) {
-        return (R) ImmutableList.super.foldRight(zero,
-                                                 f);
+        return ImmutableList.super.foldRight(zero,
+                                             f);
     }
 
     default <R> R foldLeft(R zero,
@@ -958,7 +958,7 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Cons<T> implements ImmutableList.Some<T>, Seq<T>, Serializable {
+    final class Cons<T> implements ImmutableList.Some<T>, Seq<T>, Serializable {
 
         private static final long serialVersionUID = 1L;
         public final T head;
@@ -1270,7 +1270,7 @@ public interface Seq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Tr
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public final class Nil<T> implements Seq<T>, ImmutableList.None<T> {
+    final class Nil<T> implements Seq<T>, ImmutableList.None<T> {
 
         static final Nil Instance = new Nil();
 

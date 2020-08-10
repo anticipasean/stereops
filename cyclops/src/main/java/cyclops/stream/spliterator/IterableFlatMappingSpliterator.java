@@ -29,7 +29,7 @@ public class IterableFlatMappingSpliterator<T, R> extends Spliterators.AbstractS
                                                                            Function<? super T, ? extends Iterable<? extends R>> mapper) {
         Function<? super T2, ? extends T> fn = fnS.function();
         return new IterableFlatMappingSpliterator<T2, R>(CopyableSpliterator.copy(fnS.source()),
-                                                         mapper.<T2>compose(fn));
+                                                         mapper.compose(fn));
 
     }
 
@@ -67,8 +67,8 @@ public class IterableFlatMappingSpliterator<T, R> extends Spliterators.AbstractS
             //next iterator
             boolean advance = source.tryAdvance(t -> {
                 if (active == null || !active.hasNext()) {
-                    active = (Iterator<R>) mapper.apply(t)
-                                                 .iterator();
+                    active = mapper.apply(t)
+                                   .iterator();
                 }
 
 

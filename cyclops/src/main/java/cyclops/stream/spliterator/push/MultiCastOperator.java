@@ -14,6 +14,7 @@ public class MultiCastOperator<T> extends BaseOperator<T, T> {
     Seq<Consumer<? super Throwable>> registeredOnError = Seq.empty();
     Seq<Runnable> registeredOnComplete = Seq.empty();
     Seq<StreamSubscription> subs = Seq.empty();
+
     public MultiCastOperator(Operator<T> source,
                              int expect) {
         super(source);

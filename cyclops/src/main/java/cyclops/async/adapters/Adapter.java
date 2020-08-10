@@ -1,10 +1,10 @@
 package cyclops.async.adapters;
 
+import cyclops.container.control.Either;
 import cyclops.container.foldable.Sealed2;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
-import cyclops.container.control.Either;
-import cyclops.reactive.ReactiveSeq;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  */
 public interface Adapter<T> extends Sealed2<Queue<T>, Topic<T>> {
 
-    public void addContinuation(Continuation cont);
+    void addContinuation(Continuation cont);
 
     /**
      * @return A structural Pattern Matcher for this Adapter that allows matching on  Queue / Topic types
@@ -43,33 +43,33 @@ public interface Adapter<T> extends Sealed2<Queue<T>, Topic<T>> {
      * @param data data to add
      * @return self
      */
-    public boolean offer(T data);
+    boolean offer(T data);
 
     /**
      * @param stream Input data from provided Stream
      */
-    public boolean fromStream(Stream<T> stream);
+    boolean fromStream(Stream<T> stream);
 
 
     /**
      * @return Stream of data
      */
-    public ReactiveSeq<T> stream();
+    ReactiveSeq<T> stream();
 
     /**
      * @return Stream of data
      */
-    public ReactiveSeq<T> stream(Continueable s);
+    ReactiveSeq<T> stream(Continueable s);
 
     /**
      * @return Stream of CompletableFutures that can be used as input into a SimpleReact concurrent dataflow
      */
-    public ReactiveSeq<CompletableFuture<T>> streamCompletableFutures();
+    ReactiveSeq<CompletableFuture<T>> streamCompletableFutures();
 
     /**
      * Close this adapter
      *
      * @return true if closed
      */
-    public boolean close();
+    boolean close();
 }

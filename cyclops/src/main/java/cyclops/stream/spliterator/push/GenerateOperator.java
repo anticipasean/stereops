@@ -24,7 +24,7 @@ public class GenerateOperator<T> implements Operator<T> {
                                         Runnable onComplete) {
         boolean[] sent = {false};
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
                 try {
                     long reqs = n;
                     long delivered = 0;

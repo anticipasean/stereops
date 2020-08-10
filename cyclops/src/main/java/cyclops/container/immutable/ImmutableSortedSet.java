@@ -1,20 +1,20 @@
 package cyclops.container.immutable;
 
 
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentSortedSet;
+import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
-import cyclops.container.traversable.IterableX;
-import cyclops.container.traversable.Traversable;
-import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentSortedSet;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.Traversable;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.Random;

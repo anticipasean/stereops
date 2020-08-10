@@ -1,12 +1,12 @@
 package cyclops.async.adapters;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.reactive.subscription.Continueable;
-import cyclops.stream.async.Continuation;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.subscription.Continueable;
+import cyclops.stream.async.Continuation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;

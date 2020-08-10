@@ -1,15 +1,10 @@
 package cyclops.container.control;
 
 import cyclops.async.Future;
-import cyclops.function.higherkinded.DataWitness.option;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.foldable.Sealed2;
 import cyclops.container.MonadicValue;
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.foldable.Present;
-import cyclops.function.combiner.Zippable;
-import cyclops.container.transformable.To;
-import cyclops.container.recoverable.Recoverable;
+import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
@@ -17,11 +12,16 @@ import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.container.immutable.tuple.Tuple5;
 import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.recoverable.Recoverable;
+import cyclops.container.transformable.To;
+import cyclops.function.checked.CheckedSupplier;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
-import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.combiner.Zippable;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.option;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.Serializable;
@@ -57,9 +57,9 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
 
     @SuppressWarnings("rawtypes")
-    final static Option EMPTY = new Option.None<>();
+    Option EMPTY = new Option.None<>();
 
-    public static <T> Option<T> attempt(CheckedSupplier<T> s) {
+    static <T> Option<T> attempt(CheckedSupplier<T> s) {
         try {
             return some(s.get());
         } catch (Throwable throwable) {
@@ -67,9 +67,9 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
         }
     }
 
-    public static <T, R> Option<R> tailRec(T initial,
-                                           Function<? super T, ? extends Option<? extends Either<T, R>>> fn) {
-        Option<? extends Either<T, R>> next[] = new Option[1];
+    static <T, R> Option<R> tailRec(T initial,
+                                    Function<? super T, ? extends Option<? extends Either<T, R>>> fn) {
+        Option<? extends Either<T, R>>[] next = new Option[1];
         next[0] = Option.some(Either.left(initial));
         boolean cont = true;
         do {
@@ -85,15 +85,15 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
                                        r -> r));
     }
 
-    public static <T> Option<T> narrowK(final Higher<option, T> opt) {
+    static <T> Option<T> narrowK(final Higher<option, T> opt) {
         return (Option<T>) opt;
     }
 
-    public static <T> Higher<option, T> widen(Option<T> narrow) {
+    static <T> Higher<option, T> widen(Option<T> narrow) {
         return narrow;
     }
 
-    public static <C2, T> Higher<C2, Higher<option, T>> widen2(Higher<C2, Option<T>> nestedMaybe) {
+    static <C2, T> Higher<C2, Higher<option, T>> widen2(Higher<C2, Option<T>> nestedMaybe) {
 
         return (Higher) nestedMaybe;
     }
@@ -131,7 +131,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param pub Publisher to extract value from
      * @return Maybe populated with first value from Publisher (Option.zero if Publisher zero)
      */
-    public static <T> Option<T> fromPublisher(final Publisher<T> pub) {
+    static <T> Option<T> fromPublisher(final Publisher<T> pub) {
         return Spouts.from(pub)
                      .take(1)
                      .takeOne()
@@ -260,7 +260,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param maybes Option to Sequence
      * @return Option with a List of values
      */
-    public static <T> Option<ReactiveSeq<T>> sequenceJust(final Iterable<? extends Option<T>> maybes) {
+    static <T> Option<ReactiveSeq<T>> sequenceJust(final Iterable<? extends Option<T>> maybes) {
         return sequence(ReactiveSeq.fromIterable(maybes)
                                    .filter(Option::isPresent));
     }
@@ -284,7 +284,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param maybes Option to Sequence
      * @return Option with a List of values
      */
-    public static <T> Option<ReactiveSeq<T>> sequence(final Iterable<? extends Option<T>> maybes) {
+    static <T> Option<ReactiveSeq<T>> sequence(final Iterable<? extends Option<T>> maybes) {
         return sequence(ReactiveSeq.fromIterable(maybes));
 
     }
@@ -309,13 +309,13 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param maybes Option to Sequence
      * @return Option with a Stream of values
      */
-    public static <T> Option<ReactiveSeq<T>> sequence(final Stream<? extends Option<T>> maybes) {
+    static <T> Option<ReactiveSeq<T>> sequence(final Stream<? extends Option<T>> maybes) {
         return sequence(ReactiveSeq.fromStream(maybes));
 
 
     }
 
-    public static <T> Option<ReactiveSeq<T>> sequence(ReactiveSeq<? extends Option<T>> stream) {
+    static <T> Option<ReactiveSeq<T>> sequence(ReactiveSeq<? extends Option<T>> stream) {
 
         Option<ReactiveSeq<T>> identity = Option.some(ReactiveSeq.empty());
 
@@ -330,8 +330,8 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
                              combineStreams);
     }
 
-    public static <T, R> Option<ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
-                                                         ReactiveSeq<Option<T>> stream) {
+    static <T, R> Option<ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
+                                                  ReactiveSeq<Option<T>> stream) {
         ReactiveSeq<Option<R>> s = stream.map(h -> h.map(fn));
         return sequence(s);
     }
@@ -354,8 +354,8 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param reducer Reducer to accumulate values with
      * @return Maybe with reduced value
      */
-    public static <T, R> Option<R> accumulateJust(final Iterable<Option<T>> maybes,
-                                                  final Reducer<R, T> reducer) {
+    static <T, R> Option<R> accumulateJust(final Iterable<Option<T>> maybes,
+                                           final Reducer<R, T> reducer) {
         return sequenceJust(maybes).map(s -> s.foldMap(reducer));
     }
 
@@ -381,9 +381,9 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param reducer Monoid to combine values from each Maybe
      * @return Maybe with reduced value
      */
-    public static <T, R> Option<R> accumulateJust(final Iterable<Option<T>> maybes,
-                                                  final Function<? super T, R> mapper,
-                                                  final Monoid<R> reducer) {
+    static <T, R> Option<R> accumulateJust(final Iterable<Option<T>> maybes,
+                                           final Function<? super T, R> mapper,
+                                           final Monoid<R> reducer) {
         return sequenceJust(maybes).map(s -> s.map(mapper)
                                               .reduce(reducer));
     }
@@ -407,12 +407,12 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @param reducer Monoid to combine values from each Maybe
      * @return Maybe with reduced value
      */
-    public static <T> Option<T> accumulateJust(final Monoid<T> reducer,
-                                               final Iterable<Option<T>> maybes) {
+    static <T> Option<T> accumulateJust(final Monoid<T> reducer,
+                                        final Iterable<Option<T>> maybes) {
         return sequenceJust(maybes).map(s -> s.reduce(reducer));
     }
 
-    public static <T> Option<T> fromNullable(T t) {
+    static <T> Option<T> fromNullable(T t) {
         if (t == null) {
             return none();
         }
@@ -686,7 +686,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static final class Some<T> implements Option<T>, Present<T> {
+    final class Some<T> implements Option<T>, Present<T> {
 
         private static final long serialVersionUID = 1L;
         private final T value;
@@ -783,7 +783,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
         }
     }
 
-    public static class None<T> implements Option<T> {
+    class None<T> implements Option<T> {
 
         private static final long serialVersionUID = 1L;
         public static None NOTHING_EAGER = new None();
@@ -893,7 +893,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     }
 
     @Deprecated
-    public static class Comprehensions {
+    class Comprehensions {
 
         public static <T, F, R1, R2, R3, R4, R5, R6, R7> Option<R7> forEach(Option<T> option,
                                                                             Function<? super T, ? extends Option<R1>> value2,

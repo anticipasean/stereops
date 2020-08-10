@@ -1,11 +1,11 @@
 package cyclops.async.adapters;
 
 
+import cyclops.container.control.Option;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.Continueable;
 import cyclops.stream.async.Continuation;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Option;
-import cyclops.reactive.ReactiveSeq;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 
 public interface AdaptersModule {
 
-    static class StreamOfContinuations implements ContinuationStrategy {
+    class StreamOfContinuations implements ContinuationStrategy {
 
         private final Queue<?> queue;
         private List<Continuation> continuation = new ArrayList<>();
@@ -74,7 +74,7 @@ public interface AdaptersModule {
     }
 
 
-    static class SingleContinuation implements ContinuationStrategy {
+    class SingleContinuation implements ContinuationStrategy {
 
         private final Queue<?> queue;
         private volatile Continuation continuation = null;
@@ -98,7 +98,7 @@ public interface AdaptersModule {
     }
 
     @AllArgsConstructor
-    static class QueueToBlockingQueueWrapper implements BlockingQueue {
+    class QueueToBlockingQueueWrapper implements BlockingQueue {
 
         java.util.Queue queue;
 
@@ -279,7 +279,7 @@ public interface AdaptersModule {
 
     }
 
-    static class ClosingSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements Spliterator<T> {
+    class ClosingSpliterator<T> extends Spliterators.AbstractSpliterator<T> implements Spliterator<T> {
 
         final Supplier<T> s;
         final AtomicBoolean closed;

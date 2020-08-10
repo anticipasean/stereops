@@ -1,9 +1,9 @@
 package cyclops.stream.type.impl;
 
-import cyclops.exception.ExceptionSoftener;
-import cyclops.stream.scheduling.cron.CronExpression;
 import cyclops.container.control.companion.Eithers;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.companion.FluentFunctions;
+import cyclops.stream.scheduling.cron.CronExpression;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Queue;
@@ -18,7 +18,7 @@ public class IteratorHotStream<T> {
 
     protected final AtomicReferenceArray<Queue<T>> connections = new AtomicReferenceArray<>(10);
     protected final AtomicBoolean open = new AtomicBoolean(true);
-    protected final AtomicReference<CompletableFuture<Void>> pause = new AtomicReference<>(CompletableFuture.<Void>completedFuture(null));
+    protected final AtomicReference<CompletableFuture<Void>> pause = new AtomicReference<>(CompletableFuture.completedFuture(null));
     protected volatile int connected = 0;
 
     public boolean isPaused() {

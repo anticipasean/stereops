@@ -15,7 +15,6 @@ public class FlatMapOperator<T, R> extends BaseOperator<T, R> {
 
 
     final Function<? super T, ? extends Stream<? extends R>> mapper;
-    ;
 
     public FlatMapOperator(Operator<T> source,
                            Function<? super T, ? extends Stream<? extends R>> mapper) {
@@ -40,7 +39,7 @@ public class FlatMapOperator<T, R> extends BaseOperator<T, R> {
         }};
 
         StreamSubscription res = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
 
                 thunk[0].getAsBoolean();
 

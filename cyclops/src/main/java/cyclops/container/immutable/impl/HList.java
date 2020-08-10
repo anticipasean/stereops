@@ -15,18 +15,18 @@ import lombok.EqualsAndHashCode.Include;
 //inspired / influenced by Functional Java's HList
 public interface HList<T1 extends HList<T1>> extends SealedOr<HList<T1>> {
 
-    public static <T, HL extends HList<HL>> HCons<T, HL> cons(final T value,
-                                                              final HL l) {
+    static <T, HL extends HList<HL>> HCons<T, HL> cons(final T value,
+                                                       final HL l) {
         return new HCons<>(value,
                            l);
     }
 
-    public static <T> HCons<T, HNil> of(final T value) {
+    static <T> HCons<T, HNil> of(final T value) {
         return new HCons<>(value,
                            empty());
     }
 
-    public static HList<HNil> empty() {
+    static HList<HNil> empty() {
         return HNil.Instance;
     }
 
@@ -34,9 +34,8 @@ public interface HList<T1 extends HList<T1>> extends SealedOr<HList<T1>> {
     <TB> HCons<TB, T1> prepend(TB value);
 
 
-
     @EqualsAndHashCode
-    public static class HCons<T1, T2 extends HList<T2>> implements Deconstructable2<T1, HList<T2>>, HList<HCons<T1, T2>> {
+    class HCons<T1, T2 extends HList<T2>> implements Deconstructable2<T1, HList<T2>>, HList<HCons<T1, T2>> {
 
         @Include
         public final T1 head;
@@ -68,7 +67,7 @@ public interface HList<T1 extends HList<T1>> extends SealedOr<HList<T1>> {
         }
     }
 
-    public static class HNil implements HList<HNil> {
+    class HNil implements HList<HNil> {
 
         final static HNil Instance = new HNil();
 

@@ -11,21 +11,21 @@ import lombok.AllArgsConstructor;
 
 public interface Ord<W, T> {
 
-    public static <W, T> Ord<W, T> ord(Comparator<Higher<W, T>> comp) {
+    static <W, T> Ord<W, T> ord(Comparator<Higher<W, T>> comp) {
         return new OrdByComparotor(comp);
     }
 
     Ordering compare(Higher<W, T> first,
                      Higher<W, T> second);
 
-    public enum Ordering {
+    enum Ordering {
         LESS,
         EQUAL,
         MORE
     }
 
     @AllArgsConstructor
-    public static class OrdByComparotor<W, T> implements Ord<W, T> {
+    class OrdByComparotor<W, T> implements Ord<W, T> {
 
         private final Comparator<Higher<W, T>> comp;
 

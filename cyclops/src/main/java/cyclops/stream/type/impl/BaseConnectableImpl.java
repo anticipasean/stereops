@@ -1,9 +1,9 @@
 package cyclops.stream.type.impl;
 
+import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.companion.Streams;
 import cyclops.stream.spliterator.ClosingSpliterator;
 import cyclops.stream.type.Connectable;
-import cyclops.stream.companion.Streams;
-import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Queue;

@@ -1,12 +1,12 @@
 package cyclops.function.partial;
 
+import cyclops.function.companion.Lambda;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.function.enhanced.Function5;
 import cyclops.function.enhanced.Function6;
 import cyclops.function.enhanced.Function7;
 import cyclops.function.enhanced.Function8;
-import cyclops.function.companion.Lambda;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;

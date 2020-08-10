@@ -1,12 +1,6 @@
 package cyclops.function.companion;
 
 
-import cyclops.container.persistent.PersistentBag;
-import cyclops.container.persistent.PersistentList;
-import cyclops.container.persistent.PersistentMap;
-import cyclops.container.persistent.PersistentQueue;
-import cyclops.container.persistent.PersistentSet;
-import cyclops.container.persistent.PersistentSortedSet;
 import cyclops.container.immutable.impl.Bag;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.HashMap;
@@ -18,6 +12,12 @@ import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.immutable.impl.TrieSet;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.persistent.PersistentBag;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.persistent.PersistentMap;
+import cyclops.container.persistent.PersistentQueue;
+import cyclops.container.persistent.PersistentSet;
+import cyclops.container.persistent.PersistentSortedSet;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import java.util.Comparator;
@@ -28,38 +28,38 @@ import lombok.experimental.UtilityClass;
 public class Reducers {
 
     public static <T> Reducer<BankersQueue<T>, T> toBankersQueue() {
-        return Reducer.fromMonoid(Monoids.<T>bankersQueueConcat(),
+        return Reducer.fromMonoid(Monoids.bankersQueueConcat(),
                                   a -> BankersQueue.of(a));
     }
 
     public static <T> Reducer<Seq<T>, T> toSeq() {
-        return Reducer.fromMonoid(Monoids.<T>seqConcat(),
+        return Reducer.fromMonoid(Monoids.seqConcat(),
                                   a -> Seq.of(a));
     }
 
     public static <T> Reducer<LazySeq<T>, T> toLazySeq() {
-        return Reducer.fromMonoid(Monoids.<T>lazySeqConcat(),
+        return Reducer.fromMonoid(Monoids.lazySeqConcat(),
                                   a -> LazySeq.of(a));
     }
 
     public static <T> Reducer<IntMap<T>, T> toIntMap() {
-        return Reducer.fromMonoid(Monoids.<T>intMapConcat(),
+        return Reducer.fromMonoid(Monoids.intMapConcat(),
                                   a -> IntMap.of(a));
     }
 
     public static <T> Reducer<Vector<T>, T> toVector() {
-        return Reducer.fromMonoid(Monoids.<T>vectorConcat(),
+        return Reducer.fromMonoid(Monoids.vectorConcat(),
                                   a -> Vector.of(a));
     }
 
     public static <T> Reducer<TreeSet<T>, T> toTreeSet(Comparator<T> c) {
-        return Reducer.fromMonoid(Monoids.<T>treeSetConcat(c),
+        return Reducer.fromMonoid(Monoids.treeSetConcat(c),
                                   a -> TreeSet.of(c,
                                                   a));
     }
 
     public static <T> Reducer<Bag<T>, T> toBag() {
-        return Reducer.fromMonoid(Monoids.<T>bagConcat(),
+        return Reducer.fromMonoid(Monoids.bagConcat(),
                                   a -> Bag.of(a));
     }
 
@@ -69,12 +69,12 @@ public class Reducers {
     }
 
     public static <T> Reducer<HashSet<T>, T> toHashSet() {
-        return Reducer.fromMonoid(Monoids.<T>hashSetConcat(),
+        return Reducer.fromMonoid(Monoids.hashSetConcat(),
                                   a -> HashSet.of(a));
     }
 
     public static <T> Reducer<TrieSet<T>, T> toTrieSet() {
-        return Reducer.fromMonoid(Monoids.<T>trieSetConcat(),
+        return Reducer.fromMonoid(Monoids.trieSetConcat(),
                                   a -> TrieSet.of(a));
     }
 
@@ -90,7 +90,7 @@ public class Reducers {
      * @return Reducer to PQueue types
      */
     public static <T> Reducer<PersistentQueue<T>, T> toPersistentQueue() {
-        return Reducer.fromMonoid(Monoids.<T, PersistentQueue<T>>concatPersistentCollection(BankersQueue.empty()),
+        return Reducer.fromMonoid(Monoids.concatPersistentCollection(BankersQueue.empty()),
                                   a -> BankersQueue.of(a));
     }
 
@@ -179,9 +179,9 @@ public class Reducers {
      * @return Reducer for PersistentList
      */
     public static <T> Reducer<PersistentList<T>, T> toPersistentList() {
-        return Reducer.<PersistentList<T>, T>of(Seq.empty(),
-                                                (final PersistentList<T> a) -> b -> b.plusAll(a),
-                                                (final T x) -> Seq.of(x));
+        return Reducer.of(Seq.empty(),
+                          (final PersistentList<T> a) -> b -> b.plusAll(a),
+                          (final T x) -> Seq.of(x));
 
     }
 
@@ -217,8 +217,8 @@ public class Reducers {
                           (final PersistentMap<K, V> a) -> b -> a.putAll(b),
                           (in) -> {
                               Tuple2<K, V> w = in;
-                              return HashMap.of((K) w._1(),
-                                                (V) w._2());
+                              return HashMap.of(w._1(),
+                                                w._2());
 
                           });
 

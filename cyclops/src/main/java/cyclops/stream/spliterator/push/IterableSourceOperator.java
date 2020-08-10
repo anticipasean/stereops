@@ -26,9 +26,8 @@ public class IterableSourceOperator<T> implements Operator<T> {
         final Iterator<T> it = values.iterator();
 
         AtomicBoolean completed = new AtomicBoolean(false);
-        ;
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
                 if (n == Long.MAX_VALUE) {
                     pushAll();
 
@@ -43,7 +42,7 @@ public class IterableSourceOperator<T> implements Operator<T> {
                             return;
                         }
 
-                        ((Consumer) onNext).accept(it.next());
+                        onNext.accept(it.next());
                         delivered++;
                     }
 
@@ -84,7 +83,7 @@ public class IterableSourceOperator<T> implements Operator<T> {
                     if (!isOpen) {
                         break;
                     }
-                    ((Consumer) onNext).accept(it.next());
+                    onNext.accept(it.next());
                 }
                 requested.set(0);
                 completed.set(true);
@@ -106,7 +105,7 @@ public class IterableSourceOperator<T> implements Operator<T> {
                              Runnable onCompleteDs) {
         final Iterator<T> it = values.iterator();
         while (it.hasNext()) {
-            ((Consumer) onNext).accept(it.next());
+            onNext.accept(it.next());
         }
         onCompleteDs.run();
     }

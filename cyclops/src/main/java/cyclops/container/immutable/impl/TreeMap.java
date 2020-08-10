@@ -1,17 +1,17 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.immutable.ImmutableMap;
-import cyclops.function.higherkinded.DataWitness.treeMap;
-import cyclops.function.higherkinded.Higher2;
-import cyclops.container.persistent.PersistentMap;
-import cyclops.function.companion.Comparators;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.impl.base.RedBlackTree;
 import cyclops.container.immutable.impl.base.redblacktree.Tree;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.persistent.PersistentMap;
+import cyclops.function.companion.Comparators;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.treeMap;
+import cyclops.function.higherkinded.Higher2;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Comparator;

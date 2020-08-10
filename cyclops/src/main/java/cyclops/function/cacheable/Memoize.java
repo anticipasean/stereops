@@ -2,16 +2,16 @@ package cyclops.function.cacheable;
 
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
+import cyclops.container.immutable.LazyImmutable;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.function.enhanced.Function0;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.enhanced.Function2;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.immutable.LazyImmutable;
-import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.container.immutable.tuple.Tuple3;
-import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -488,7 +488,7 @@ public class Memoize {
      * @return Memoised Predicate
      */
     public static <T> Predicate<T> memoizePredicate(final Predicate<T> p) {
-        final Function<T, Boolean> memoised = memoizeFunction((Function<T, Boolean>) t -> p.test(t));
+        final Function<T, Boolean> memoised = memoizeFunction(t -> p.test(t));
         LazyImmutable<Boolean> nullR = LazyImmutable.def();
         return (t) -> t == null ? nullR.computeIfAbsent(() -> p.test(null)) : memoised.apply(t);
     }
@@ -502,7 +502,7 @@ public class Memoize {
      */
     public static <T> Predicate<T> memoizePredicate(final Predicate<T> p,
                                                     final Cacheable<Boolean> cache) {
-        final Function<T, Boolean> memoised = memoizeFunction((Function<T, Boolean>) t -> p.test(t),
+        final Function<T, Boolean> memoised = memoizeFunction(t -> p.test(t),
                                                               cache);
         LazyImmutable<Boolean> nullR = LazyImmutable.def();
         return (t) -> t == null ? nullR.computeIfAbsent(() -> p.test(null)) : memoised.apply(t);

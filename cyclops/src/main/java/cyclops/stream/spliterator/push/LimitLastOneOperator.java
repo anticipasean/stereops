@@ -19,7 +19,7 @@ public class LimitLastOneOperator<T, R> extends BaseOperator<T, T> {
                                         Runnable onComplete) {
         Object UNSET = new Object();
         Object[] last = {UNSET};
-        StreamSubscription upstream[] = {null};
+        StreamSubscription[] upstream = {null};
 
         StreamSubscription result = new StreamSubscription() {
             @Override

@@ -1,8 +1,8 @@
 package cyclops.container.immutable.impl.base;
 
+import cyclops.container.control.Option;
 import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.container.foldable.Sealed3;
-import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple1;
 import cyclops.reactive.ReactiveSeq;
@@ -15,10 +15,10 @@ import lombok.AllArgsConstructor;
 
 public interface IntPatriciaTrie<V> {
 
-    static final int BITS = 5;
-    static final int BUCKET_SIZE = 1 << BITS;
-    static final int MASK = (1 << BITS) - 1;
-    static final Node[] EMPTY_ARRAY = createBaseEmptyArray();
+    int BITS = 5;
+    int BUCKET_SIZE = 1 << BITS;
+    int MASK = (1 << BITS) - 1;
+    Node[] EMPTY_ARRAY = createBaseEmptyArray();
 
     static <V> Node<V> empty() {
         return EmptyNode.Instance;
@@ -63,7 +63,7 @@ public interface IntPatriciaTrie<V> {
 
         default Iterator<V> iterator() {
             return new Iterator<V>() {
-                int size = size();
+                final int size = size();
                 int pos = 0;
 
                 @Override
@@ -88,7 +88,7 @@ public interface IntPatriciaTrie<V> {
 
     }
 
-    static class EmptyNode<V> implements Node<V> {
+    class EmptyNode<V> implements Node<V> {
 
         static EmptyNode Instance = new EmptyNode();
 
@@ -167,7 +167,7 @@ public interface IntPatriciaTrie<V> {
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    static class SingleNode<V> implements Node<V> {
+    class SingleNode<V> implements Node<V> {
 
 
         private final V value;
@@ -269,7 +269,7 @@ public interface IntPatriciaTrie<V> {
     }
 
 
-    static class ArrayNode<V> implements Node<V>, Deconstructable1<Node<V>[]> {
+    class ArrayNode<V> implements Node<V>, Deconstructable1<Node<V>[]> {
 
         private final Node<V>[] nodes;
 

@@ -1,8 +1,8 @@
 package cyclops.function.enhanced;
 
 
-import cyclops.container.control.Eval;
 import cyclops.async.Future;
+import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.control.Try;
@@ -15,28 +15,28 @@ import java.util.function.Supplier;
 public interface Function6<T1, T2, T3, T4, T5, T6, R> extends
                                                       Function1<T1, Function1<T2, Function1<T3, Function1<T4, Function1<T5, Function1<T6, R>>>>>> {
 
-    public static <T1, T2, T3, T4, T5, T6, R> Function6<T1, T2, T3, T4, T5, T6, R> constant(R t) {
+    static <T1, T2, T3, T4, T5, T6, R> Function6<T1, T2, T3, T4, T5, T6, R> constant(R t) {
         return (a, b, c, d, e, f) -> t;
     }
 
-    public static <T1, T2, T3, T4, T5, T6, R> Function6<T1, T2, T3, T4, T5, T6, R> lazyConstant(Supplier<R> t) {
+    static <T1, T2, T3, T4, T5, T6, R> Function6<T1, T2, T3, T4, T5, T6, R> lazyConstant(Supplier<R> t) {
         return (a, b, c, d, e, f) -> t.get();
     }
 
-    public static <T1, T2, T3, T4, T5, T6, R> Function6<T1, T2, T3, T4, T5, T6, R> λ(final Function6<T1, T2, T3, T4, T5, T6, R> func) {
+    static <T1, T2, T3, T4, T5, T6, R> Function6<T1, T2, T3, T4, T5, T6, R> λ(final Function6<T1, T2, T3, T4, T5, T6, R> func) {
         return func;
     }
 
-    public static <T1, T2, T3, T4, T5, T6, R> Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> λv(final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> triFunc) {
+    static <T1, T2, T3, T4, T5, T6, R> Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> λv(final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> triFunc) {
         return triFunc;
     }
 
-    public R apply(T1 a,
-                   T2 b,
-                   T3 c,
-                   T4 d,
-                   T5 e,
-                   T6 f);
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d,
+            T5 e,
+            T6 f);
 
     default Function1<T2, Function1<T3, Function1<T4, Function1<T5, Function1<T6, R>>>>> apply(final T1 s) {
         return Curry.curry6(this)

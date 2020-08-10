@@ -1,9 +1,9 @@
 package cyclops.reactive.subscriber;
 
-import cyclops.stream.spliterator.push.CapturingOperator;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
+import cyclops.stream.spliterator.push.CapturingOperator;
 import java.util.ArrayList;
 import java.util.Objects;
 import lombok.Getter;

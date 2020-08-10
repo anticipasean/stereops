@@ -32,7 +32,7 @@ public class IteratePredicateOperator<T> implements Operator<T> {
         Object[] current = {null};
         Consumer next = onNext;
         StreamSubscription sub = new StreamSubscription() {
-            LongConsumer work = n -> {
+            final LongConsumer work = n -> {
                 if (n == Long.MAX_VALUE) {
                     pushAll();
                     return;
@@ -124,7 +124,7 @@ public class IteratePredicateOperator<T> implements Operator<T> {
         for (; ; ) {
             try {
                 current = (current != null ? fn.apply(current) : in);
-                if (pred.test((T) current)) {
+                if (pred.test(current)) {
                     onNext.accept(current);
                 } else {
                     onCompleteDs.run();

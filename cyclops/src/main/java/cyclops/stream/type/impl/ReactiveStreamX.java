@@ -6,12 +6,31 @@ import static cyclops.reactive.ReactiveSeq.fromIterable;
 import static cyclops.stream.type.impl.ReactiveStreamX.Type.BACKPRESSURE;
 import static cyclops.stream.type.impl.ReactiveStreamX.Type.SYNC;
 
-import cyclops.async.companion.QueueFactories;
+import cyclops.async.Future;
 import cyclops.async.adapters.Queue;
 import cyclops.async.adapters.QueueFactory;
 import cyclops.async.adapters.Signal;
 import cyclops.async.adapters.Topic;
+import cyclops.async.companion.QueueFactories;
+import cyclops.container.control.LazyEither;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.exception.ExceptionSoftener;
 import cyclops.exception.stream.FullQueueException;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.companion.Spouts;
+import cyclops.stream.async.Continuation;
+import cyclops.stream.companion.Streams;
 import cyclops.stream.spliterator.push.ArrayConcatonatingOperator;
 import cyclops.stream.spliterator.push.CollectAllOperator;
 import cyclops.stream.spliterator.push.CombineOperator;
@@ -55,26 +74,7 @@ import cyclops.stream.spliterator.push.SpliteratorToOperator;
 import cyclops.stream.spliterator.push.StreamSubscription;
 import cyclops.stream.spliterator.push.ZippingLatestOperator;
 import cyclops.stream.spliterator.push.ZippingOperator;
-import cyclops.stream.async.Continuation;
-import cyclops.container.persistent.PersistentCollection;
 import cyclops.stream.type.Connectable;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.stream.companion.Streams;
-import cyclops.async.Future;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.container.immutable.tuple.Tuple3;
-import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
-import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.companion.Spouts;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
@@ -174,7 +174,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
         }
 
-        Subscription sub[] = {null};
+        Subscription[] sub = {null};
         //may be quicker to use forEachAsync and throw an Exception with fillInStackTrace overriden
         sub[0] = stream.source.subscribe(e -> {
 
@@ -355,7 +355,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
         }
 
-        Subscription sub[] = {null};
+        Subscription[] sub = {null};
         //may be quicker toNested use forEachAsync and throw an Exception with fillInStackTrace overriden
         sub[0] = source.subscribe(e -> {
 
@@ -417,10 +417,10 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
     public <C extends PersistentCollection<T>, R> ReactiveSeq<R> groupedWhile(final BiPredicate<C, ? super T> predicate,
                                                                               final Supplier<C> factory,
                                                                               Function<? super C, ? extends R> finalizer) {
-        return this.<R>createSeq(new GroupedStatefullyOperator<>(source,
-                                                                 factory,
-                                                                 finalizer,
-                                                                 predicate.negate()));
+        return this.createSeq(new GroupedStatefullyOperator<>(source,
+                                                              factory,
+                                                              finalizer,
+                                                              predicate.negate()));
     }
 
     @Override
@@ -435,10 +435,10 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
     public <C extends PersistentCollection<T>, R> ReactiveSeq<R> groupedUntil(final BiPredicate<C, ? super T> predicate,
                                                                               final Supplier<C> factory,
                                                                               Function<? super C, ? extends R> finalizer) {
-        return this.<R>createSeq(new GroupedStatefullyOperator<>(source,
-                                                                 factory,
-                                                                 finalizer,
-                                                                 predicate));
+        return this.createSeq(new GroupedStatefullyOperator<>(source,
+                                                              factory,
+                                                              finalizer,
+                                                              predicate));
     }
 
     @Override
@@ -777,7 +777,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                 boolean requested = false;
                 volatile boolean active = false;
                 volatile boolean completed = false;
-                OneToOneConcurrentArrayQueue<T> data = new OneToOneConcurrentArrayQueue<T>(1024 * 10);
+                final OneToOneConcurrentArrayQueue<T> data = new OneToOneConcurrentArrayQueue<T>(1024 * 10);
 
                 @Override
                 public void request(long n) {
@@ -867,7 +867,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
         final Object value = new Object();
         ReactiveSeq res = createSeq(onEmptyGet((Supplier) () -> value).flatMap(s -> {
             if (s == value) {
-                return (Stream) switchTo.get();
+                return switchTo.get();
             }
             return Stream.of(s);
         }));
@@ -889,12 +889,12 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
     @Override
     public ReactiveSeq<T> appendStream(final Stream<? extends T> other) {
         return Spouts.concat(this,
-                             (Stream<T>) other);
+                             other);
     }
 
     public ReactiveSeq<T> appendAll(final Iterable<? extends T> other) {
         return Spouts.concat(this,
-                             (Stream<T>) Spouts.fromIterable(other));
+                             Spouts.fromIterable(other));
     }
 
     //TODO use spliterators and createSeq
@@ -1292,10 +1292,10 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                                                                             .withTimeout(1);
 
             Topic<T> topic = new Topic<>(queue,
-                                         QueueFactories.<T>boundedNonBlockingQueue(1000));
+                                         QueueFactories.boundedNonBlockingQueue(1000));
             AtomicBoolean wip = new AtomicBoolean(false);
 
-            Continuation contRef[] = {null};
+            Continuation[] contRef = {null};
             Continuation cont = new Continuation(() -> {
 
                 if (wip.compareAndSet(false,
@@ -1321,12 +1321,12 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                                                                         .withTimeout(1);
 
         Topic<T> topic = new Topic<>(queue,
-                                     QueueFactories.<T>boundedNonBlockingQueue(1000));
+                                     QueueFactories.boundedNonBlockingQueue(1000));
         AtomicBoolean wip = new AtomicBoolean(false);
         Subscription s = source.subscribe(topic::offer,
                                           e -> topic.close(),
                                           () -> topic.close());
-        Continuation contRef[] = {null};
+        Continuation[] contRef = {null};
         Continuation cont = new Continuation(() -> {
 
             if (wip.compareAndSet(false,
@@ -1517,7 +1517,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
             ConcurrentLinkedQueue<Subscriber> subs = new ConcurrentLinkedQueue<>();
             Seq<ReactiveSeq<T>> result = Seq.empty();
             for (int i = 0; i < num; i++) {
-                ReactiveSeq<T> seq = Spouts.<T>async(s1 -> {
+                ReactiveSeq<T> seq = Spouts.async(s1 -> {
                     subs.add(s1.asSubscriber());
                     if (subs.size() == num) {
                         this.forEach(e -> subs.forEach(s -> s.onNext(e)),
@@ -1712,8 +1712,8 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                         final BiFunction<U, ? super T, U> accumulator) {
         Future<U> future = Future.future();
         Object[] current = {identity};
-        forEach(e -> current[0] = (U) accumulator.apply((U) current[0],
-                                                        e),
+        forEach(e -> current[0] = accumulator.apply((U) current[0],
+                                                    e),
                 this.defaultErrorHandler,
                 () -> future.complete((U) current[0]));
         return future.getFuture()
@@ -1845,7 +1845,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
                          .join();
         }
 
-        Subscription sub[] = {null};
+        Subscription[] sub = {null};
         //may be quicker to use forEachAsync and throw an Exception with fillInStackTrace overriden
         sub[0] = filtered.source.subscribe(e -> {
                                                result.complete(true);
@@ -1897,7 +1897,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
     @Override
     public Maybe<T> single() {
-        Maybe.CompletableMaybe<T, T> maybe = Maybe.<T>maybe();
+        Maybe.CompletableMaybe<T, T> maybe = Maybe.maybe();
         subscribe(new Subscriber<T>() {
             Object value = UNSET;
             Subscription sub;
@@ -1957,7 +1957,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
         }
         return Spouts.deferFromStream(() -> {
             long check = new Long(pos);
-            boolean added[] = {false};
+            boolean[] added = {false};
             return Spouts.of(zipWithIndex().flatMap(t -> {
                                  if (t._2() < check && !added[0]) {
                                      return ReactiveSeq.of(t._1());
@@ -1993,7 +1993,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
         return Spouts.deferFromStream(() -> {
             long check = new Long(pos);
-            boolean added[] = {false};
+            boolean[] added = {false};
 
             return Spouts.of(zipWithIndex().flatMap(t -> {
                                  if (t._2() < check && !added[0]) {
@@ -2014,7 +2014,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
     }
 
-    public static enum Type {
+    public enum Type {
         SYNC,
         BACKPRESSURE,
         @Deprecated NO_BACKPRESSURE

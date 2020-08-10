@@ -3,133 +3,133 @@ package cyclops.function.higherkinded;
 
 public interface DataWitness {
 
-    public static enum lazySeq {}
+    enum lazySeq {}
 
-    public static enum nonEmptyList {}
+    enum nonEmptyList {}
 
-    public static enum seq {}
+    enum seq {}
 
-    public static enum vector {}
+    enum vector {}
 
-    public static enum lazyString {}
+    enum lazyString {}
 
-    public static enum intMap {}
+    enum intMap {}
 
-    public static enum zipper {}
+    enum zipper {}
 
-    public static enum hlist {}
+    enum hlist {}
 
-    public static enum differenceList {}
+    enum differenceList {}
 
-    public static enum tree {}
+    enum tree {}
 
-    public static enum bankersQueue {}
+    enum bankersQueue {}
 
 
-    public static enum hashSet {}
+    enum hashSet {}
 
-    public static enum trieSet {}
+    enum trieSet {}
 
-    public static enum treeSet {}
+    enum treeSet {}
 
-    public static enum bag {}
+    enum bag {}
 
-    public static enum treeMap {}
+    enum treeMap {}
 
-    public static enum trieMap {}
+    enum trieMap {}
 
-    public static enum hashMap {}
+    enum hashMap {}
 
-    public static enum linkedHashMap {}
+    enum linkedHashMap {}
 
-    public static enum multiMapHK {}
+    enum multiMapHK {}
 
-    public static enum diet {}
+    enum diet {}
 
-    public static enum range {}
+    enum range {}
 
 
-    public static enum stream {}
+    enum stream {}
 
-    public static enum futureStream {}
+    enum futureStream {}
 
-    public static enum reactiveSeq {}
+    enum reactiveSeq {}
 
 
-    public static enum streamable {}
+    enum streamable {}
 
-    public static enum tryType {}
+    enum tryType {}
 
-    public static enum ior {}
+    enum ior {}
 
-    public static enum lazyEither {}
+    enum lazyEither {}
 
-    public static enum lazyEither3 {}
+    enum lazyEither3 {}
 
-    public static enum lazyEither4 {}
+    enum lazyEither4 {}
 
-    public static enum lazyEither5 {}
+    enum lazyEither5 {}
 
-    public static enum either {}
+    enum either {}
 
-    public static enum eval {}
+    enum eval {}
 
-    public static enum option {}
+    enum option {}
 
-    public static enum validated {}
+    enum validated {}
 
-    public static enum future {}
+    enum future {}
 
-    public static enum completableFuture {}
+    enum completableFuture {}
 
-    public static enum optional {}
+    enum optional {}
 
-    public static enum reader {}
+    enum reader {}
 
-    public static enum io {}
+    enum io {}
 
-    public static enum managed {}
+    enum managed {}
 
-    public static enum supplier {}
+    enum supplier {}
 
-    public static enum yoneda {}
+    enum yoneda {}
 
-    public static enum coyoneda {}
+    enum coyoneda {}
 
-    public static enum coreader {}
+    enum coreader {}
 
-    public static enum kleisli {}
+    enum kleisli {}
 
-    public static enum rws {}
+    enum rws {}
 
-    public static enum state {}
+    enum state {}
 
-    public static enum writer {}
+    enum writer {}
 
-    public static enum constant {}
+    enum constant {}
 
-    public static enum cofree {}
+    enum cofree {}
 
-    public static enum identity {}
+    enum identity {}
 
-    public static enum product {}
+    enum product {}
 
-    public static enum coproduct {}
+    enum coproduct {}
 
-    public static enum nested {}
+    enum nested {}
 
-    public static enum free {}
+    enum free {}
 
-    public static enum freeAp {}
+    enum freeAp {}
 
-    public static enum predicate {}
+    enum predicate {}
 
-    public static enum tuple1 {}
+    enum tuple1 {}
 
-    public static enum tuple2 {}
+    enum tuple2 {}
 
-    public static enum tuple3 {}
+    enum tuple3 {}
 
-    public static enum tuple4 {}
+    enum tuple4 {}
 
 }

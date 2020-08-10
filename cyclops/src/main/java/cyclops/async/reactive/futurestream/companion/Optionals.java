@@ -1,13 +1,13 @@
 package cyclops.async.reactive.futurestream.companion;
 
-import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Either;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.traversable.IterableX;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;
 import java.util.Optional;
@@ -42,7 +42,7 @@ public class Optionals {
 
     public static <T, R> Optional<R> tailRec(T initial,
                                              Function<? super T, ? extends Optional<? extends Either<T, R>>> fn) {
-        Optional<? extends Either<T, R>> next[] = new Optional[1];
+        Optional<? extends Either<T, R>>[] next = new Optional[1];
         next[0] = Optional.of(Either.left(initial));
         boolean cont = true;
         do {

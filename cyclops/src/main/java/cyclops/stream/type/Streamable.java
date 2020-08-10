@@ -1,16 +1,10 @@
 package cyclops.stream.type;
 
 
-import cyclops.stream.companion.Streams;
-import cyclops.stream.type.impl.StreamableImpl;
-import cyclops.container.factory.Unit;
 import cyclops.container.comparative.Contains;
-import cyclops.container.transformable.To;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.traversable.IterableX;
-import cyclops.container.traversable.RecoverableTraversable;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
+import cyclops.container.factory.Unit;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
@@ -18,12 +12,18 @@ import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.transformable.To;
+import cyclops.container.traversable.IterableX;
+import cyclops.container.traversable.RecoverableTraversable;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
+import cyclops.stream.companion.Streams;
+import cyclops.stream.type.impl.StreamableImpl;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -74,7 +74,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param stream to construct Streamable from
      * @return Streamable
      */
-    public static <T> Streamable<T> fromStream(final Stream<T> stream) {
+    static <T> Streamable<T> fromStream(final Stream<T> stream) {
         return new StreamableImpl(new PrintableIterable<>(Streams.toLazyCollection(stream)));
     }
 
@@ -84,7 +84,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param iterable to construct Streamable from
      * @return Streamable
      */
-    public static <T> Streamable<T> fromIterable(final Iterable<T> iterable) {
+    static <T> Streamable<T> fromIterable(final Iterable<T> iterable) {
         if (iterable instanceof Streamable) {
             return (Streamable<T>) iterable;
         }
@@ -97,13 +97,13 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param publisher to construct ReactiveSeq from
      * @return FutureStream
      */
-    public static <T> Streamable<T> fromPublisher(final Publisher<T> publisher) {
+    static <T> Streamable<T> fromPublisher(final Publisher<T> publisher) {
         Objects.requireNonNull(publisher);
 
         return fromStream(Spouts.from(publisher));
     }
 
-    public static <T> Streamable<T> fromIterator(final Iterator<T> it) {
+    static <T> Streamable<T> fromIterator(final Iterator<T> it) {
         return Streamable.fromIterable(() -> it);
     }
 
@@ -113,7 +113,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param values to construct Streamable from
      * @return Streamable
      */
-    public static <T> Streamable<T> of(final T... values) {
+    static <T> Streamable<T> of(final T... values) {
         final Iterable<T> it = Arrays.asList(values);
         return new Streamable<T>() {
 
@@ -130,7 +130,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
         };
     }
 
-    public static <T> Streamable<T> empty() {
+    static <T> Streamable<T> empty() {
         return of();
     }
 
@@ -149,11 +149,11 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      *
      * @return Flattened / joined one level
      */
-    public static <T1> Streamable<T1> flatten(Streamable<? extends Streamable<T1>> nested) {
+    static <T1> Streamable<T1> flatten(Streamable<? extends Streamable<T1>> nested) {
         return nested.flatMap(Function.identity());
     }
 
-    public static <T> Streamable<T> narrow(Streamable<? extends T> broad) {
+    static <T> Streamable<T> narrow(Streamable<? extends T> broad) {
         return (Streamable<T>) broad;
     }
 
@@ -163,7 +163,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param elements To Construct sequence from
      * @return
      */
-    public static <T> Streamable<T> reversedOf(final T... elements) {
+    static <T> Streamable<T> reversedOf(final T... elements) {
         return fromStream(ReactiveSeq.reversedOf(elements));
 
     }
@@ -174,7 +174,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param elements To Construct sequence from
      * @return
      */
-    public static <T> Streamable<T> reversedListOf(final List<T> elements) {
+    static <T> Streamable<T> reversedListOf(final List<T> elements) {
         Objects.requireNonNull(elements);
         return fromStream(ReactiveSeq.reversedListOf(elements));
 
@@ -187,8 +187,8 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param end   Number for range to take at
      * @return Range Streamable
      */
-    public static Streamable<Integer> range(final int start,
-                                            final int end) {
+    static Streamable<Integer> range(final int start,
+                                     final int end) {
         return fromStream(ReactiveSeq.range(start,
                                             end));
 
@@ -201,8 +201,8 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param end   Number for range to take at
      * @return Range Streamable
      */
-    public static Streamable<Long> rangeLong(final long start,
-                                             final long end) {
+    static Streamable<Long> rangeLong(final long start,
+                                      final long end) {
         return fromStream(ReactiveSeq.rangeLong(start,
                                                 end));
 
@@ -214,7 +214,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param stream Stream to construct Sequence from
      * @return
      */
-    public static Streamable<Integer> fromIntStream(final IntStream stream) {
+    static Streamable<Integer> fromIntStream(final IntStream stream) {
         Objects.requireNonNull(stream);
         return fromStream(ReactiveSeq.fromIntStream(stream));
     }
@@ -225,7 +225,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param stream Stream to construct Sequence from
      * @return
      */
-    public static Streamable<Long> fromLongStream(final LongStream stream) {
+    static Streamable<Long> fromLongStream(final LongStream stream) {
         Objects.requireNonNull(stream);
         return fromStream(ReactiveSeq.fromLongStream(stream));
     }
@@ -236,12 +236,12 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * @param stream Stream to construct Sequence from
      * @return
      */
-    public static Streamable<Double> fromDoubleStream(final DoubleStream stream) {
+    static Streamable<Double> fromDoubleStream(final DoubleStream stream) {
         Objects.requireNonNull(stream);
         return fromStream(ReactiveSeq.fromDoubleStream(stream));
     }
 
-    public static <T> Streamable<T> fromList(final List<T> list) {
+    static <T> Streamable<T> fromList(final List<T> list) {
         Objects.requireNonNull(list);
         return Streamable.fromIterable(list);
     }
@@ -276,7 +276,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      *
      * </pre>
      */
-    public static <T, U> Tuple2<Streamable<T>, Streamable<U>> unzip(final Streamable<Tuple2<T, U>> sequence) {
+    static <T, U> Tuple2<Streamable<T>, Streamable<U>> unzip(final Streamable<Tuple2<T, U>> sequence) {
         return ReactiveSeq.unzip(sequence.stream())
                           .map1(s -> fromStream(s))
                           .map2(s -> fromStream(s));
@@ -291,7 +291,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * // Streamable[1,2,3], Streamable[a,b,c], Streamable[2l,3l,4l]
      * </pre>
      */
-    public static <T1, T2, T3> Tuple3<Streamable<T1>, Streamable<T2>, Streamable<T3>> unzip3(final Streamable<Tuple3<T1, T2, T3>> sequence) {
+    static <T1, T2, T3> Tuple3<Streamable<T1>, Streamable<T2>, Streamable<T3>> unzip3(final Streamable<Tuple3<T1, T2, T3>> sequence) {
         return ReactiveSeq.unzip3(sequence.stream())
                           .map1(s -> fromStream(s))
                           .map2(s -> fromStream(s))
@@ -309,7 +309,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      * // Streamable[1,2,3], Streamable[a,b,c], Streamable[2l,3l,4l], Streamable[µ,y,x]
      * </pre>
      */
-    public static <T1, T2, T3, T4> Tuple4<Streamable<T1>, Streamable<T2>, Streamable<T3>, Streamable<T4>> unzip4(final Streamable<Tuple4<T1, T2, T3, T4>> sequence) {
+    static <T1, T2, T3, T4> Tuple4<Streamable<T1>, Streamable<T2>, Streamable<T3>, Streamable<T4>> unzip4(final Streamable<Tuple4<T1, T2, T3, T4>> sequence) {
         return ReactiveSeq.unzip4(sequence.stream())
                           .map1(s -> fromStream(s))
                           .map2(s -> fromStream(s))
@@ -536,9 +536,8 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
     }
 
     /**
-     default <R> Streamable<R> flatMap(final Function<? super T, Streamable<? extends R>> fn) {
-     return Streamable.fromStream(stream().flatMap(i -> fn.apply(i).stream()));
-     }
+     * default <R> Streamable<R> flatMap(final Function<? super T, Streamable<? extends R>> fn) { return
+     * Streamable.fromStream(stream().flatMap(i -> fn.apply(i).stream())); }
      **/
 
     @Override
@@ -850,13 +849,10 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
      *
      * }</pre>
      *
-     *
      * @return Split Streamable
-
-    default Tuple2<Optional<T>, Streamable<T>> splitAtHead() {
-    return reactiveSeq().splitAtHead()
-    .zip(s -> fromStream(s));
-    }*/
+     * <p>
+     * default Tuple2<Optional<T>, Streamable<T>> splitAtHead() { return reactiveSeq().splitAtHead() .zip(s -> fromStream(s)); }
+     */
 
     /* (non-Javadoc)
      * @see cyclops.types.stream.CyclopsCollectable#collect(java.util.stream.Collector)
@@ -2760,7 +2756,7 @@ public interface Streamable<T> extends To<Streamable<T>>, ToStream<T>, Stream<T>
     }
 
     @AllArgsConstructor
-    static class PrintableIterable<T> implements Iterable<T> {
+    class PrintableIterable<T> implements Iterable<T> {
 
         private final Collection c;
 

@@ -7,12 +7,12 @@ import java.util.function.Supplier;
 
 public interface PartialFunction<T, R> {
 
-    public static <T, R> PartialFunction<T, R> of(Function<? super T, ? extends Option<R>> fn) {
+    static <T, R> PartialFunction<T, R> of(Function<? super T, ? extends Option<R>> fn) {
         return in -> Memoize.memoizeFunction(fn)
                             .apply(in);
     }
 
-    public static <T, R> PartialFunction<T, R> unmemoized(Function<? super T, ? extends Option<R>> fn) {
+    static <T, R> PartialFunction<T, R> unmemoized(Function<? super T, ? extends Option<R>> fn) {
         return in -> fn.apply(in);
     }
 
@@ -30,7 +30,7 @@ public interface PartialFunction<T, R> {
 
     default <V> PartialFunction<T, V> andThen(Function<? super R, ? extends V> f2) {
         return of((T t) -> apply(t).fold(r -> Option.some(f2.apply(r)),
-                                         none -> Option.<V>none()));
+                                         none -> Option.none()));
     }
 
 
@@ -55,7 +55,7 @@ public interface PartialFunction<T, R> {
     default <R1> PartialFunction<T, R1> flatMapFn(final Function<? super R, ? extends Function<? super T, ? extends R1>> f) {
         return of(a -> apply(a).fold(r -> Option.some(f.apply(r)
                                                        .apply(a)),
-                                     none -> Option.<R1>none()));
+                                     none -> Option.none()));
     }
 
     default Function<? super T, ? extends Option<R>> asFunction() {

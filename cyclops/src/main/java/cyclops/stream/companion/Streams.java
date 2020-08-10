@@ -1,10 +1,26 @@
 package cyclops.stream.companion;
 
-import cyclops.stream.type.Streamable;
-import cyclops.stream.type.impl.OneShotStreamX;
-import cyclops.stream.type.impl.PausableConnectableImpl;
+import cyclops.container.control.Either;
+import cyclops.container.control.Eval;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.immutable.tuple.Tuple3;
+import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.traversable.Traversable;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.combiner.Reducer;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.iterator.ReversedIterator;
-import cyclops.stream.type.impl.StreamX;
 import cyclops.stream.operator.DebounceOperator;
 import cyclops.stream.operator.MultiReduceOperator;
 import cyclops.stream.operator.OnePerOperator;
@@ -23,29 +39,13 @@ import cyclops.stream.spliterator.SkipLastSpliterator;
 import cyclops.stream.spliterator.SkipWhileSpliterator;
 import cyclops.stream.spliterator.SkipWhileTimeSpliterator;
 import cyclops.stream.spliterator.SlidingSpliterator;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentList;
 import cyclops.stream.type.Connectable;
-import cyclops.stream.type.impl.NonPausableConnectable;
 import cyclops.stream.type.PausableConnectable;
-import cyclops.container.traversable.Traversable;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.mutable.Mutable;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.container.immutable.tuple.Tuple3;
-import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
-import cyclops.function.combiner.Reducer;
-import cyclops.reactive.ReactiveSeq;
+import cyclops.stream.type.Streamable;
+import cyclops.stream.type.impl.NonPausableConnectable;
+import cyclops.stream.type.impl.OneShotStreamX;
+import cyclops.stream.type.impl.PausableConnectableImpl;
+import cyclops.stream.type.impl.StreamX;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -3187,10 +3187,7 @@ public class Streams {
 
         @Override
         public boolean hasNext() {
-            if (bufferFrom.size() > 0 || it.hasNext()) {
-                return true;
-            }
-            return false;
+            return bufferFrom.size() > 0 || it.hasNext();
         }
 
         @Override

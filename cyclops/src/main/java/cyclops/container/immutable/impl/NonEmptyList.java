@@ -1,16 +1,16 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.function.higherkinded.DataWitness.nonEmptyList;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.foldable.Deconstructable.Deconstructable2;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentList;
 import cyclops.container.control.Option;
+import cyclops.container.foldable.Deconstructable.Deconstructable2;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentList;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.higherkinded.DataWitness.nonEmptyList;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Comparator;
 import java.util.Iterator;

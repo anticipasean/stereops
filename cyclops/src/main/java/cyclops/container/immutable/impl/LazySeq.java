@@ -1,26 +1,26 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.immutable.ImmutableList;
-import cyclops.function.higherkinded.DataWitness.lazySeq;
-import cyclops.function.higherkinded.Higher;
-import cyclops.container.filterable.Filterable;
-import cyclops.container.foldable.Foldable;
-import cyclops.container.transformable.Transformable;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.container.persistent.PersistentIndexed;
-import cyclops.container.persistent.PersistentList;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Option;
+import cyclops.container.filterable.Filterable;
+import cyclops.container.foldable.Foldable;
+import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.container.persistent.PersistentIndexed;
+import cyclops.container.persistent.PersistentList;
+import cyclops.container.transformable.Transformable;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
+import cyclops.function.higherkinded.DataWitness.lazySeq;
+import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.Generator;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
@@ -45,7 +45,8 @@ import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 
 //safe LazyList / Stream collection type that does not support exceptional states
-public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Transformable<T>, Serializable, Higher<lazySeq, T> {
+public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>, Transformable<T>, Serializable,
+                                    Higher<lazySeq, T> {
 
 
     static <T> Collector<T, List<T>, LazySeq<T>> collector() {
@@ -66,7 +67,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
                                      Function<? super T, ? extends LazySeq<? extends Either<T, R>>> fn) {
         LazySeq<Either<T, R>> next = LazySeq.of(Either.left(initial));
 
-        boolean newValue[] = {true};
+        boolean[] newValue = {true};
         for (; ; ) {
 
             next = next.flatMap(e -> e.fold(s -> {
@@ -339,11 +340,11 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
                                    .lazySeq());
     }
 
-    public static <T> LazySeq<T> narrowK(final Higher<lazySeq, T> list) {
+    static <T> LazySeq<T> narrowK(final Higher<lazySeq, T> list) {
         return (LazySeq<T>) list;
     }
 
-    public static <C2, T> Higher<C2, Higher<lazySeq, T>> widen2(Higher<C2, LazySeq<T>> list) {
+    static <C2, T> Higher<C2, Higher<lazySeq, T>> widen2(Higher<C2, LazySeq<T>> list) {
         return (Higher) list;
     }
 
@@ -365,7 +366,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
                          tail.apply(head));
     }
 
-    public static <T> Higher<lazySeq, T> widen(LazySeq<T> narrow) {
+    static <T> Higher<lazySeq, T> widen(LazySeq<T> narrow) {
         return narrow;
     }
 
@@ -423,7 +424,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
     }
 
     default LazySeq<T> plusAll(Iterable<? extends T> t) {
-        return prependAll((Iterable<T>) t);
+        return prependAll(t);
     }
 
     @Override
@@ -1081,20 +1082,20 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
     @Override
     default <R> R foldRight(R zero,
                             BiFunction<? super T, ? super R, ? extends R> f) {
-        return (R) ImmutableList.super.foldRight(zero,
-                                                 f);
+        return ImmutableList.super.foldRight(zero,
+                                             f);
     }
 
     @Override
     default T foldRight(final T identity,
                         final BinaryOperator<T> accumulator) {
-        return (T) ImmutableList.super.foldRight(identity,
-                                                 accumulator);
+        return ImmutableList.super.foldRight(identity,
+                                             accumulator);
     }
 
     @Override
     default T foldRight(final Monoid<T> reducer) {
-        return (T) ImmutableList.super.foldRight(reducer);
+        return ImmutableList.super.foldRight(reducer);
     }
 
     LazySeq<T> filter(Predicate<? super T> pred);
@@ -1175,7 +1176,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
                         BiFunction<? super T, Supplier<R>, ? extends R> f);
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Cons<T> implements LazySeq<T>, ImmutableList.Some<T> {
+    class Cons<T> implements LazySeq<T>, ImmutableList.Some<T> {
 
         private static final long serialVersionUID = 1L;
         public final Eval<T> head;
@@ -1290,7 +1291,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
         @Override
         public <R> LazySeq<R> concatMap(Function<? super T, ? extends Iterable<? extends R>> fn) {
             return LazySeq.fromIterator(new Iterator<R>() {
-                Iterator<? extends T> it = iterator();
+                final Iterator<? extends T> it = iterator();
                 Iterator<? extends R> active = new Iterator<R>() {
                     @Override
                     public boolean hasNext() {
@@ -1523,7 +1524,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
     }
 
     @AllArgsConstructor
-    public static class Lazy<T> implements LazySeq<T> {
+    class Lazy<T> implements LazySeq<T> {
 
         private final Eval<LazySeq<T>> ref;
 
@@ -1672,7 +1673,7 @@ public interface LazySeq<T> extends ImmutableList<T>, Foldable<T>, Filterable<T>
         }
     }
 
-    public static class Nil<T> implements LazySeq<T>, ImmutableList.None<T> {
+    class Nil<T> implements LazySeq<T>, ImmutableList.None<T> {
 
         static final Nil Instance = new Nil();
         private static final long serialVersionUID = 1L;
