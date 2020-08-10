@@ -1,0 +1,39 @@
+package cyclops.container.immutable.impl;
+
+
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.TreeMap;
+import java.util.Comparator;
+import org.junit.Test;
+
+/**
+ * Created by johnmcclean on 02/09/2017.
+ */
+public class TreeMapTest {
+
+    @Test
+    public void put() {
+
+        TreeMap<Integer, String> map = TreeMap.fromMap(Comparator.naturalOrder(),
+                                                       HashMap.of(1,
+                                                                  "hello",
+                                                                  2,
+                                                                  "world"));
+
+        map.stream()
+           .printOut();
+
+        map.put(10,
+                "boo!")
+           .put(20,
+                "world")
+           .remove(10)
+           .stream()
+           .printOut();
+
+        System.out.println(map.put(10,
+                                   "boo!")
+                              .elementAt(10)
+                              .orElse(null));
+    }
+}

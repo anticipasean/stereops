@@ -16,7 +16,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.traversable.IterableX;
-import cyclops.Sets;
+import cyclops.testing.util.Sets;
 import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;

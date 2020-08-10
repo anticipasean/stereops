@@ -3,7 +3,7 @@ package cyclops.futurestream.react;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import com.oath.cyclops.streams.BaseSequentialTest;
+import cyclops.stream.operator.BaseSequentialTest;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.futurestream.LazyReact;
 import cyclops.reactive.ReactiveSeq;

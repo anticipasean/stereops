@@ -53,6 +53,6 @@ public class TwoTest {
                 array[i][j] = count++;
             }
         }
-        return new Two<>(array);
+        return Two.two(array);
     }
 }

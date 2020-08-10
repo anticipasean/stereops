@@ -1,6 +1,6 @@
 package cyclops.container.control.maybe;
 
-import cyclops.types.AbstractValueTest;
+import cyclops.container.AbstractValueTest;
 import cyclops.container.Value;
 import cyclops.container.control.Maybe;
 

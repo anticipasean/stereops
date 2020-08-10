@@ -17,7 +17,7 @@ import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.AbstractOptionTest;
+import cyclops.container.control.option.AbstractOptionTest;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.async.Future;

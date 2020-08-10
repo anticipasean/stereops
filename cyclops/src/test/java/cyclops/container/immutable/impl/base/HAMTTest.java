@@ -339,11 +339,11 @@ public class HAMTTest {
     public void bitSetShouldCallSupplierOnlyIfKeyIsNotPresent() {
         Node<Integer, String>[] nodes = new Node[2];
         nodes[0] = new HAMT.ValueNode<>(0,
-                                        0,
-                                        "-100");
+                                        "-100",
+                                        0);
         nodes[1] = new HAMT.ValueNode<>(31,
-                                        31,
-                                        "3100");
+                                        "3100",
+                                        31);
         BitsetNode<Integer, String> node = new BitsetNode<>(1,
                                                             2,
                                                             nodes);
