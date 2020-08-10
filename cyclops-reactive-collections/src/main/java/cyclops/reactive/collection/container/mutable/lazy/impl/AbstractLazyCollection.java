@@ -1,9 +1,9 @@
 package cyclops.reactive.collection.container.mutable.lazy.impl;
 
-import cyclops.reactive.collection.container.lazy.LazyCollectionX;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.lazy.LazyCollectionX;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;

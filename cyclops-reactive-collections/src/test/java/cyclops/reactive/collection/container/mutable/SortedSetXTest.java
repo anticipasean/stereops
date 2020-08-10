@@ -540,11 +540,11 @@ public class SortedSetXTest extends AbstractSetTest {
     @Test
     public void testOfTypeNoOrd() {
 
-        SortedSetX<Number> set = SortedSetX.<Number>of(1,
-                                                       10l,
-                                                       2,
-                                                       20l,
-                                                       3);
+        SortedSetX<Number> set = SortedSetX.of(1,
+                                               10l,
+                                               2,
+                                               20l,
+                                               3);
         SortedSetX<Integer> setA = set.ofType(Integer.class);
         assertThat(setA.toListX(),
                    containsInAnyOrder(1,

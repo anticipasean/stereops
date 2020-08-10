@@ -6,14 +6,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
-import cyclops.function.evaluation.Evaluation;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.reactive.companion.Spouts;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.collection.container.AbstractCollectionXTest;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
+import cyclops.reactive.companion.Spouts;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;

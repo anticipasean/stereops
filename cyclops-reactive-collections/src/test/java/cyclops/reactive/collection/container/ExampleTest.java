@@ -1,11 +1,11 @@
 package cyclops.reactive.collection.container;
 
+import cyclops.reactive.collection.companion.CyclopsCollectors;
 import cyclops.reactive.collection.container.mutable.DequeX;
 import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.QueueX;
 import cyclops.reactive.collection.container.mutable.SetX;
 import cyclops.reactive.collection.container.mutable.SortedSetX;
-import cyclops.reactive.collection.companion.CyclopsCollectors;
 import java.util.Arrays;
 import org.junit.Test;
 

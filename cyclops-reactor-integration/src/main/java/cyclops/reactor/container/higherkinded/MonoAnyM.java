@@ -4,22 +4,23 @@ import com.oath.cyclops.anym.AnyMValue;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.monads.XorM;
-import cyclops.reactor.container.higherkinded.ReactorWitness.mono;
 import cyclops.reactor.container.MonoT;
+import cyclops.reactor.container.higherkinded.ReactorWitness.mono;
 import reactor.core.publisher.Mono;
 
 public interface MonoAnyM {
-    public static  <W1 extends WitnessType<W1>,T> XorM<W1, mono,T> xorM(Mono<T> type){
+
+    static <W1 extends WitnessType<W1>, T> XorM<W1, mono, T> xorM(Mono<T> type) {
         return XorM.right(anyM(type));
     }
 
-    public static <T> Mono<T> raw(AnyM<mono,T> anyM){
+    static <T> Mono<T> raw(AnyM<mono, T> anyM) {
         return ReactorWitness.mono(anyM);
     }
 
     /**
-     * Construct an AnyM type from a Mono. This allows the Mono to be manipulated according to a standard interface
-     * along with a vast array of other Java Monad implementations
+     * Construct an AnyM type from a Mono. This allows the Mono to be manipulated according to a standard interface along with a
+     * vast array of other Java Monad implementations
      *
      * <pre>
      * {@code
@@ -34,14 +35,18 @@ public interface MonoAnyM {
      * @param mono To wrap inside an AnyM
      * @return AnyMSeq wrapping a Mono
      */
-    public static <T> AnyMValue<ReactorWitness.mono,T> anyM(Mono<T> mono) {
-        return AnyM.ofValue(mono, ReactorWitness.mono.INSTANCE);
+    static <T> AnyMValue<ReactorWitness.mono, T> anyM(Mono<T> mono) {
+        return AnyM.ofValue(mono,
+                            ReactorWitness.mono.INSTANCE);
     }
 
-    public static <W extends WitnessType<W>,T> MonoT<W,T> liftM(AnyM<W,Mono<T>> nested){
+    static <W extends WitnessType<W>, T> MonoT<W, T> liftM(AnyM<W, Mono<T>> nested) {
         return MonoT.of(nested);
     }
-    public static <T,W extends WitnessType<W>> MonoT<W, T> liftM(Mono<T> opt, W witness) {
-        return MonoT.of(witness.adapter().unit(opt));
+
+    static <T, W extends WitnessType<W>> MonoT<W, T> liftM(Mono<T> opt,
+                                                           W witness) {
+        return MonoT.of(witness.adapter()
+                               .unit(opt));
     }
 }

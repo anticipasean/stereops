@@ -4,9 +4,7 @@ package cyclops.reactive.collection.container;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.stream.type.Streamable;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collection.container.immutable.BagX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.immutable.OrderedSetX;
@@ -17,6 +15,8 @@ import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.QueueX;
 import cyclops.reactive.collection.container.mutable.SetX;
 import cyclops.reactive.collection.container.mutable.SortedSetX;
+import cyclops.reactive.companion.Spouts;
+import cyclops.stream.type.Streamable;
 import java.util.Arrays;
 import org.junit.Test;
 import reactor.core.publisher.Flux;

@@ -1,19 +1,19 @@
 package cyclops.reactive.collection.container.lazy;
 
-import cyclops.reactive.collection.container.CollectionX;
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.stream.companion.Streams;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.function.combiner.Monoid;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Monoid;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.CollectionX;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.stream.companion.Streams;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;

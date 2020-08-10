@@ -1,7 +1,7 @@
 package cyclops.reactive.collection.container.fluent;
 
-import cyclops.container.persistent.PersistentMap;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.persistent.PersistentMap;
 import java.util.Collection;
 import java.util.Map;
 

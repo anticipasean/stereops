@@ -1,9 +1,9 @@
 package cyclops.reactive.collection.container.mutable.eager.impl;
 
-import cyclops.reactive.collection.container.CollectionX;
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.CollectionX;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.reactive.collection.container.lazy.LazyCollectionX;
 import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.Collection;

@@ -6,18 +6,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
-import cyclops.function.combiner.Zippable;
-import cyclops.function.evaluation.Evaluation;
-import cyclops.container.traversable.IterableX;
-import cyclops.function.companion.Semigroups;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.reactive.companion.Spouts;
+import cyclops.container.traversable.IterableX;
+import cyclops.function.combiner.Zippable;
+import cyclops.function.companion.Semigroups;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.collection.container.CollectionXTestsWithNulls;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
+import cyclops.reactive.companion.Spouts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -612,7 +612,7 @@ public class ListXTest extends CollectionXTestsWithNulls {
 
     @Test//(expected = IndexOutOfBoundsException.class)
     public void minusAtOutOfRange() {
-        IterableX<Integer> vec = this.<Integer>empty();
+        IterableX<Integer> vec = this.empty();
         vec = vec.insertAt(0,
                            1)
                  .insertAt(0,
@@ -629,7 +629,7 @@ public class ListXTest extends CollectionXTestsWithNulls {
 
     @Test//(expected = IndexOutOfBoundsException.class)
     public void minusAtOutOfRange2() {
-        IterableX<Integer> vec = this.<Integer>empty();
+        IterableX<Integer> vec = this.empty();
         vec = vec.insertAt(0,
                            1)
                  .insertAt(0,

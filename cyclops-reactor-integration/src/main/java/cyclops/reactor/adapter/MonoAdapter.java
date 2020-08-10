@@ -1,25 +1,23 @@
 package cyclops.reactor.adapter;
 
+import static cyclops.reactor.container.higherkinded.ReactorWitness.mono;
+
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
 import cyclops.async.Future;
 import cyclops.container.control.Option;
-import cyclops.reactor.container.higherkinded.MonoAnyM;
-import cyclops.reactor.container.higherkinded.ReactorWitness.mono;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
-import lombok.AllArgsConstructor;
-import reactor.core.publisher.Mono;
-
+import cyclops.reactor.container.higherkinded.MonoAnyM;
+import cyclops.reactor.container.higherkinded.ReactorWitness.mono;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import static cyclops.reactor.container.higherkinded.ReactorWitness.mono;
+import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
 
 
 @AllArgsConstructor
 public class MonoAdapter implements ValueAdapter<mono> {
-
 
 
     @Override
@@ -28,23 +26,28 @@ public class MonoAdapter implements ValueAdapter<mono> {
     }
 
     @Override
-    public <T, R> AnyM<mono, R> ap(AnyM<mono,? extends Function<? super T,? extends R>> fn, AnyM<mono, T> apply) {
+    public <T, R> AnyM<mono, R> ap(AnyM<mono, ? extends Function<? super T, ? extends R>> fn,
+                                   AnyM<mono, T> apply) {
         Mono<T> f = future(apply);
         Mono<? extends Function<? super T, ? extends R>> fnF = future(fn);
-        Mono<R> res = Mono.fromFuture(fnF.toFuture().thenCombine(f.toFuture(), (a, b) -> a.apply(b)));
+        Mono<R> res = Mono.fromFuture(fnF.toFuture()
+                                         .thenCombine(f.toFuture(),
+                                                      (a, b) -> a.apply(b)));
         return MonoAnyM.anyM(res);
 
     }
 
     @Override
-    public <T> AnyM<mono, T> filter(AnyM<mono, T> t, Predicate<? super T> fn) {
+    public <T> AnyM<mono, T> filter(AnyM<mono, T> t,
+                                    Predicate<? super T> fn) {
         return MonoAnyM.anyM(future(t).filter(fn));
     }
 
-    <T> Mono<T> future(AnyM<mono,T> anyM){
+    <T> Mono<T> future(AnyM<mono, T> anyM) {
         return anyM.unwrap();
     }
-    <T> Future<T> futureW(AnyM<mono,T> anyM){
+
+    <T> Future<T> futureW(AnyM<mono, T> anyM) {
         return Future.fromPublisher(anyM.unwrap());
     }
 
@@ -54,16 +57,15 @@ public class MonoAdapter implements ValueAdapter<mono> {
     }
 
 
-
     @Override
     public <T, R> AnyM<mono, R> flatMap(AnyM<mono, T> t,
-                                     Function<? super T, ? extends AnyM<mono, ? extends R>> fn) {
-        return MonoAnyM.anyM(Mono.from(futureW(t).flatMap(fn.andThen(a-> futureW(a)))));
+                                        Function<? super T, ? extends AnyM<mono, ? extends R>> fn) {
+        return MonoAnyM.anyM(Mono.from(futureW(t).flatMap(fn.andThen(a -> futureW(a)))));
 
     }
 
     @Override
-    public <T> AnyM<mono, T> unitIterable(Iterable<T> it)  {
+    public <T> AnyM<mono, T> unitIterable(Iterable<T> it) {
         return MonoAnyM.anyM(Mono.from(Future.fromIterable(it)));
     }
 
@@ -78,17 +80,18 @@ public class MonoAdapter implements ValueAdapter<mono> {
     }
 
     @Override
-    public <T, R> AnyM<mono, R> map(AnyM<mono, T> t, Function<? super T, ? extends R> fn) {
+    public <T, R> AnyM<mono, R> map(AnyM<mono, T> t,
+                                    Function<? super T, ? extends R> fn) {
         return MonoAnyM.anyM(future(t).map(fn));
     }
 
     @Override
     public <T> Option<T> get(AnyMValue<mono, T> t) {
-      try {
-        return Option.some(future(t).block());
-      }catch (Exception e){
-        return Option.none();
-      }
+        try {
+            return Option.some(future(t).block());
+        } catch (Exception e) {
+            return Option.none();
+        }
 
     }
 }

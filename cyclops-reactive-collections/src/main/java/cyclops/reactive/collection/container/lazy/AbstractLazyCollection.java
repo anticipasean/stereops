@@ -1,7 +1,7 @@
 package cyclops.reactive.collection.container.lazy;
 
-import cyclops.function.evaluation.Evaluation;
 import cyclops.exception.ExceptionSoftener;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;
 import java.util.Iterator;

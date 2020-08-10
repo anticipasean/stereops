@@ -12,11 +12,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.function.companion.Semigroups;
 import cyclops.container.control.Trampoline;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
+import cyclops.function.companion.Semigroups;
 import cyclops.reactive.collection.container.mutable.ListX;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -449,9 +449,10 @@ public abstract class AbstractOrderDependentCollectionXTest extends AbstractColl
     @Test
     public void testIntersperse() {
 
-        assertThat(((CollectionX<Integer>) of(1,
-                                              2,
-                                              3).intersperse(0)).toListX(),
+        assertThat(of(1,
+                      2,
+                      3).intersperse(0)
+                        .toListX(),
                    equalTo(Arrays.asList(1,
                                          0,
                                          2,

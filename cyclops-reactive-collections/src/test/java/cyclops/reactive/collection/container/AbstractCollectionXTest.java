@@ -16,15 +16,15 @@ import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
+import cyclops.container.basetests.AbstractIterableXTest;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.TreeSet;
-import cyclops.container.basetests.AbstractIterableXTest;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.reactive.companion.Spouts;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.mutable.DequeX;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.companion.Spouts;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -241,7 +241,7 @@ public abstract class AbstractCollectionXTest extends AbstractIterableXTest {
                            3).retry(serviceMock)
                              .firstValue(null);
 
-        assertThat((Long) System.currentTimeMillis() - start,
+        assertThat(System.currentTimeMillis() - start,
                    greaterThan(2000l));
         assertThat(result,
                    is("42"));

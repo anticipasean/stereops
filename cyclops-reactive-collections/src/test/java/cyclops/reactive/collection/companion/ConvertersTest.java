@@ -3,12 +3,12 @@ package cyclops.reactive.collection.companion;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.container.persistent.PersistentBag;
 import cyclops.container.persistent.PersistentList;
 import cyclops.container.persistent.PersistentQueue;
 import cyclops.container.persistent.PersistentSet;
 import cyclops.container.persistent.PersistentSortedSet;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.collection.container.immutable.BagX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.immutable.OrderedSetX;

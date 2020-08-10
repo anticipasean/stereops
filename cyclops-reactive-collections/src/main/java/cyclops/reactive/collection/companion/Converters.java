@@ -1,13 +1,13 @@
 package cyclops.reactive.collection.companion;
 
-import cyclops.reactive.collection.container.CollectionX;
-import cyclops.container.transformable.To;
 import cyclops.container.persistent.PersistentBag;
 import cyclops.container.persistent.PersistentList;
 import cyclops.container.persistent.PersistentQueue;
 import cyclops.container.persistent.PersistentSet;
 import cyclops.container.persistent.PersistentSortedSet;
+import cyclops.container.transformable.To;
 import cyclops.function.companion.Reducers;
+import cyclops.reactive.collection.container.CollectionX;
 import cyclops.reactive.collection.container.mutable.MapX;
 import java.util.ArrayDeque;
 import java.util.ArrayList;

@@ -16,9 +16,15 @@ public class LazyListXTest {
         LazyListX<Animal> lazyListX = (LazyListX<Animal>) ListX.of(new Animal("A"),
                                                                    new Animal("B"),
                                                                    new Animal("C"));
-        List<List<Cat>> listOfLists = Arrays.asList(new List[]{Arrays.asList(new Cat[]{new Cat("1"), new Cat("2"), new Cat("3")}),
-            Arrays.asList(new Cat[]{new Cat("4"), new Cat("5"), new Cat("6")}),
-            Arrays.asList(new Cat[]{new Cat("7"), new Cat("8"), new Cat("9")})});
+        List<List<Cat>> listOfLists = Arrays.asList(Arrays.asList(new Cat("1"),
+                                                                  new Cat("2"),
+                                                                  new Cat("3")),
+                                                    Arrays.asList(new Cat("4"),
+                                                                  new Cat("5"),
+                                                                  new Cat("6")),
+                                                    Arrays.asList(new Cat("7"),
+                                                                  new Cat("8"),
+                                                                  new Cat("9")));
         ListX<Animal> intercalated = lazyListX.intercalate(listOfLists);
         assertThat(intercalated.size(),
                    equalTo(15));
@@ -74,13 +80,15 @@ public class LazyListXTest {
         ListX needle = ListX.of(-1,
                                 -1,
                                 -1);
-        ListX listOfLists = ListX.of(new ListX[]{ListX.of(1l,
-                                                          2l,
-                                                          3l), ListX.of(4l,
-                                                                        5l,
-                                                                        6l), ListX.of(7l,
-                                                                                      8l,
-                                                                                      9l)});
+        ListX listOfLists = ListX.of(ListX.of(1l,
+                                              2l,
+                                              3l),
+                                     ListX.of(4l,
+                         5l,
+                         6l),
+                                     ListX.of(7l,
+           8l,
+           9l));
         ListX intercalated = needle.intercalate(listOfLists);
         assertThat(intercalated.size(),
                    equalTo(15));

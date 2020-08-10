@@ -1,14 +1,11 @@
 package cyclops.reactive.collection.container;
 
-import cyclops.reactive.collection.container.mutable.eager.impl.CollectionXImpl;
 import cyclops.container.Value;
-import cyclops.container.immutable.impl.ConvertableSequence;
-import cyclops.function.evaluation.Evaluation;
-import cyclops.stream.type.Streamable;
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.ConvertableSequence;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collection.container.immutable.BagX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
@@ -22,6 +19,9 @@ import cyclops.reactive.collection.container.mutable.MapX;
 import cyclops.reactive.collection.container.mutable.QueueX;
 import cyclops.reactive.collection.container.mutable.SetX;
 import cyclops.reactive.collection.container.mutable.SortedSetX;
+import cyclops.reactive.collection.container.mutable.eager.impl.CollectionXImpl;
+import cyclops.stream.companion.Streams;
+import cyclops.stream.type.Streamable;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;

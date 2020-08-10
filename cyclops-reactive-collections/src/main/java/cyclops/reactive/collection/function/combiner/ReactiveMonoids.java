@@ -1,8 +1,8 @@
 package cyclops.reactive.collection.function.combiner;
 
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
-import cyclops.function.companion.Comparators;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Comparators;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.reactive.collection.container.immutable.BagX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.immutable.OrderedSetX;

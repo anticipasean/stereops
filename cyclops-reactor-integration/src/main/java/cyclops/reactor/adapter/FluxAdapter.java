@@ -2,10 +2,10 @@ package cyclops.reactor.adapter;
 
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import cyclops.monads.AnyM;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.reactor.container.higherkinded.FluxAnyM;
 import cyclops.reactor.container.higherkinded.ReactorWitness;
 import cyclops.reactor.container.higherkinded.ReactorWitness.flux;
-import cyclops.reactive.ReactiveSeq;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import reactor.core.publisher.Flux;

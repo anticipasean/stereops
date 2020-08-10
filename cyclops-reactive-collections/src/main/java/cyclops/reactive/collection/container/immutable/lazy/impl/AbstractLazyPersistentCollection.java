@@ -1,14 +1,14 @@
 package cyclops.reactive.collection.container.immutable.lazy.impl;
 
+import cyclops.container.control.Option;
+import cyclops.container.persistent.PersistentCollection;
+import cyclops.exception.ExceptionSoftener;
+import cyclops.function.combiner.Reducer;
+import cyclops.function.evaluation.Evaluation;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.reactive.collection.container.fluent.LazyFluentCollection;
 import cyclops.reactive.collection.container.lazy.LazyCollectionX;
-import cyclops.function.evaluation.Evaluation;
-import cyclops.container.persistent.PersistentCollection;
-import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Option;
-import cyclops.function.combiner.Reducer;
-import cyclops.reactive.ReactiveSeq;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;

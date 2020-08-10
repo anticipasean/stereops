@@ -1,18 +1,16 @@
 package cyclops.reactor.companion;
 
-import cyclops.reactor.companion.Fluxs;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import cyclops.async.Future;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 
 public class FluxsTest {
@@ -23,7 +21,7 @@ public class FluxsTest {
     Flux<Integer> just2;
 
     @Before
-    public void setup(){
+    public void setup() {
         just = Flux.just(10);
         none = Flux.error(new Exception("boo"));
         active = Flux.from(Future.future());
@@ -32,35 +30,53 @@ public class FluxsTest {
 
     @Test
     public void testSequenceError() throws InterruptedException {
-        Flux<Mono<Integer>> maybes = Fluxs.sequence(Flux.just(just,none));
+        Flux<Mono<Integer>> maybes = Fluxs.sequence(Flux.just(just,
+                                                              none));
         AtomicBoolean error = new AtomicBoolean(false);
-        maybes.subscribe(m->{
-            System.out.println(m);
-        },t->{
-            error.set(true);
-        },()->{
-            System.out.println("Done");
-        });
+        maybes.subscribe(m -> {
+                             System.out.println(m);
+                         },
+                         t -> {
+                             error.set(true);
+                         },
+                         () -> {
+                             System.out.println("Done");
+                         });
 
-        assertThat(error.get(),equalTo(true));
+        assertThat(error.get(),
+                   equalTo(true));
     }
+
     @Test
     public void testSequenceErrorAsync() {
         AtomicBoolean done = new AtomicBoolean(false);
-        Flux<Mono<Integer>> maybes =Fluxs.sequence(Flux.just(just.doOnNext(e->done.set(true)),active));
+        Flux<Mono<Integer>> maybes = Fluxs.sequence(Flux.just(just.doOnNext(e -> done.set(true)),
+                                                              active));
 
-       assertThat(done.get(),equalTo(false));
+        assertThat(done.get(),
+                   equalTo(false));
     }
+
     @Test
     public void testSequenceTwo() {
-        Flux<Mono<Integer>> maybes =Fluxs.sequence(Flux.just(just,just2));
-        assertThat(maybes.map(Mono::block).toStream().collect(Collectors.toList()),equalTo(Arrays.asList(10,20)));
+        Flux<Mono<Integer>> maybes = Fluxs.sequence(Flux.just(just,
+                                                              just2));
+        assertThat(maybes.map(Mono::block)
+                         .toStream()
+                         .collect(Collectors.toList()),
+                   equalTo(Arrays.asList(10,
+                                         20)));
     }
 
     @Test
     public void testSequenceOneFlux() {
-        Flux<Mono<Integer>> maybes =Fluxs.sequence(Mono.just(Flux.just(10,20)));
-        assertThat(maybes.map(Mono::block).collect(Collectors.toList()).block(),equalTo(Arrays.asList(10,20)));
+        Flux<Mono<Integer>> maybes = Fluxs.sequence(Mono.just(Flux.just(10,
+                                                                        20)));
+        assertThat(maybes.map(Mono::block)
+                         .collect(Collectors.toList())
+                         .block(),
+                   equalTo(Arrays.asList(10,
+                                         20)));
     }
 
 }

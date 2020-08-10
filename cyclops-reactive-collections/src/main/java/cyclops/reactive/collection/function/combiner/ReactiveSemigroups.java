@@ -1,7 +1,7 @@
 package cyclops.reactive.collection.function.combiner;
 
-import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.function.combiner.Semigroup;
+import cyclops.reactive.collection.container.fluent.FluentCollectionX;
 import cyclops.reactive.collection.container.immutable.BagX;
 import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.immutable.OrderedSetX;

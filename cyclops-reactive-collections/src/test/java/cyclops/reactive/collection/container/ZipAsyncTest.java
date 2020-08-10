@@ -3,12 +3,12 @@ package cyclops.reactive.collection.container;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import cyclops.reactive.subscriber.AsyncSubscriber;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.companion.Spouts;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.companion.Spouts;
+import cyclops.reactive.subscriber.AsyncSubscriber;
 import java.util.concurrent.ForkJoinPool;
 import org.junit.Test;
 import reactor.core.publisher.Flux;

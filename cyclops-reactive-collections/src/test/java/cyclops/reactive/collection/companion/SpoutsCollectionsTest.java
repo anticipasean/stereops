@@ -25,8 +25,6 @@ import java.util.stream.Stream;
 import org.junit.Before;
 import org.junit.Test;
 
-;
-
 public class SpoutsCollectionsTest {
 
     Executor ex = Executors.newFixedThreadPool(1);

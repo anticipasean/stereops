@@ -1,7 +1,7 @@
 package cyclops.reactive.collection.container.immutable;
 
-import cyclops.container.persistent.PersistentList;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.container.persistent.PersistentList;
 import cyclops.reactive.collection.container.mutable.ListX;
 import java.util.ArrayList;
 import java.util.List;

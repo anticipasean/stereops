@@ -1,11 +1,11 @@
 package cyclops.reactive.collection.container.immutable.lazy.impl;
 
 
-import cyclops.function.evaluation.Evaluation;
-import cyclops.container.persistent.PersistentBag;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Bag;
+import cyclops.container.persistent.PersistentBag;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collection.container.immutable.BagX;
 import java.util.function.Function;

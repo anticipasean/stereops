@@ -3,13 +3,13 @@ package cyclops.reactive.collection.function;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.reactive.collection.companion.MapXs;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.MapX;
 import cyclops.reactive.collection.container.mutable.SetX;
-import cyclops.reactive.collection.companion.MapXs;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;

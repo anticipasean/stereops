@@ -1,7 +1,7 @@
 package cyclops.reactive.collection.container.fluent;
 
-import cyclops.reactive.collection.container.CollectionX;
 import cyclops.container.control.Option;
+import cyclops.reactive.collection.container.CollectionX;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 

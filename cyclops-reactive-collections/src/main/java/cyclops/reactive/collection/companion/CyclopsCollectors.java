@@ -1,11 +1,11 @@
 package cyclops.reactive.collection.companion;
 
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.collection.container.lazy.LazyDequeX;
 import cyclops.reactive.collection.container.lazy.LazyListX;
 import cyclops.reactive.collection.container.lazy.LazyQueueX;
 import cyclops.reactive.collection.container.lazy.LazySetX;
 import cyclops.reactive.collection.container.lazy.LazySortedSetX;
-import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.collection.container.mutable.DequeX;
 import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.QueueX;

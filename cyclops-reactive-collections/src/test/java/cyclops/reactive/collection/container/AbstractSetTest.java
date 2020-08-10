@@ -9,14 +9,14 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.traversable.IterableX;
-import cyclops.function.companion.Monoids;
-import cyclops.function.companion.Reducers;
-import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.traversable.IterableX;
+import cyclops.function.companion.Monoids;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collection.container.mutable.ListX;
 import cyclops.reactive.collection.container.mutable.SetX;
@@ -81,10 +81,11 @@ public abstract class AbstractSetTest extends AbstractCollectionXTest {
     @Test
     public void testIntersperseNoOrd() {
 
-        assertThat(((CollectionX<Integer>) of(1,
-                                              2,
-                                              3).intersperse(0)).to()
-                                                                .listX(),
+        assertThat(of(1,
+                      2,
+                      3).intersperse(0)
+                        .to()
+                        .listX(),
                    hasItem(0));
 
 

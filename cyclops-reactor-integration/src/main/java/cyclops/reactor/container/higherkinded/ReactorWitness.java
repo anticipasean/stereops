@@ -11,18 +11,15 @@ import reactor.core.publisher.Mono;
 
 public interface ReactorWitness {
 
-    public static <T> Flux<T> flux(AnyM<flux,? extends T> anyM){
+    static <T> Flux<T> flux(AnyM<flux, ? extends T> anyM) {
         return anyM.unwrap();
     }
 
-    public static <T> Mono<T> mono(AnyM<mono,? extends T> anyM){
+    static <T> Mono<T> mono(AnyM<mono, ? extends T> anyM) {
         return anyM.unwrap();
     }
 
-    static interface FluxWitness<W extends ReactorWitness.FluxWitness<W>> extends WitnessType<W> {
-
-    }
-    public static enum flux implements FluxWitness<ReactorWitness.flux> {
+    enum flux implements FluxWitness<ReactorWitness.flux> {
         INSTANCE;
 
         @Override
@@ -31,16 +28,22 @@ public interface ReactorWitness {
         }
 
     }
-    static interface MonoWitness<W extends ReactorWitness.MonoWitness<W>>  extends WitnessType<W> {
 
-    }
-    public static enum mono implements MonoWitness<mono> {
+    enum mono implements MonoWitness<mono> {
         INSTANCE;
 
         @Override
         public MonadAdapter<mono> adapter() {
             return new MonoAdapter();
         }
+
+    }
+
+    interface FluxWitness<W extends ReactorWitness.FluxWitness<W>> extends WitnessType<W> {
+
+    }
+
+    interface MonoWitness<W extends ReactorWitness.MonoWitness<W>> extends WitnessType<W> {
 
     }
 }

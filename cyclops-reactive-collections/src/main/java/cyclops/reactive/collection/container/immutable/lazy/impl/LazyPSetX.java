@@ -1,10 +1,10 @@
 package cyclops.reactive.collection.container.immutable.lazy.impl;
 
 
-import cyclops.function.evaluation.Evaluation;
-import cyclops.container.persistent.PersistentSet;
 import cyclops.container.control.Option;
+import cyclops.container.persistent.PersistentSet;
 import cyclops.function.combiner.Reducer;
+import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.collection.container.immutable.PersistentSetX;
 import java.util.function.Function;

@@ -13,13 +13,17 @@ public class StreamTSeqConvertableSequenceTest extends AbstractConvertableSequen
     @Override
     public <T> ConvertableSequence<T> of(T... elements) {
 
-        return AnyMs.liftM(FluxReactiveSeq.of(elements), list.INSTANCE).to();
+        return AnyMs.liftM(FluxReactiveSeq.of(elements),
+                           list.INSTANCE)
+                    .to();
     }
 
     @Override
     public <T> ConvertableSequence<T> empty() {
 
-        return AnyMs.liftM(FluxReactiveSeq.<T>empty(),list.INSTANCE).to();
+        return AnyMs.liftM(FluxReactiveSeq.<T>empty(),
+                           list.INSTANCE)
+                    .to();
     }
 
 }

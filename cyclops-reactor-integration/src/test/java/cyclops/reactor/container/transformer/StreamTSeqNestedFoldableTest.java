@@ -10,13 +10,15 @@ import cyclops.reactor.stream.FluxReactiveSeq;
 public class StreamTSeqNestedFoldableTest extends AbstractNestedFoldableTest<list> {
 
     @Override
-    public <T> FoldableTransformerSeq<list,T> of(T... elements) {
-        return AnyMs.liftM(FluxReactiveSeq.of(elements), list.INSTANCE);
+    public <T> FoldableTransformerSeq<list, T> of(T... elements) {
+        return AnyMs.liftM(FluxReactiveSeq.of(elements),
+                           list.INSTANCE);
     }
 
     @Override
-    public <T> FoldableTransformerSeq<list,T> empty() {
-        return AnyMs.liftM(FluxReactiveSeq.empty(), list.INSTANCE);
+    public <T> FoldableTransformerSeq<list, T> empty() {
+        return AnyMs.liftM(FluxReactiveSeq.empty(),
+                           list.INSTANCE);
     }
 
 }

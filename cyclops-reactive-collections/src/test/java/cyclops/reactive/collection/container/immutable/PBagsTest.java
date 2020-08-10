@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertThat;
 
-import cyclops.function.companion.Reducers;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.stream.Collectors;
