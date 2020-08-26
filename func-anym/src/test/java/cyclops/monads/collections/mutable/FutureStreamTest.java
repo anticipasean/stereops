@@ -1,0 +1,71 @@
+package cyclops.monads.collections.mutable;
+
+import com.oath.cyclops.anym.AnyMSeq;
+import com.oath.cyclops.ReactiveConvertableSequence;
+import cyclops.function.companion.Monoids;
+import cyclops.monads.Witness.*;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+import cyclops.reactive.companion.ThreadPools;
+import cyclops.async.reactive.futurestream.LazyReact;
+
+
+import cyclops.monads.collections.AbstractAnyMSeqOrderedDependentTest;
+import cyclops.async.reactive.futurestream.FutureStream;
+import org.junit.Test;
+
+import java.util.stream.Stream;
+
+import cyclops.monads.AnyM;
+import cyclops.pure.reactive.collections.mutable.ListX;
+
+
+public class FutureStreamTest extends AbstractAnyMSeqOrderedDependentTest<futureStream> {
+
+    int count = 0;
+
+
+
+
+    public <T> FutureStream<T> ft(T... values) {
+        return new LazyReact(ThreadPools.getCommonFreeThread()).async().of(values);
+    }
+
+
+
+    @Override
+    public void combineNoOrderMonoid() {
+        assertThat(of(1,2,3)
+            .combine(Monoids.intSum,(a, b)->a.equals(b))
+            .to(ReactiveConvertableSequence::converter).listX(),hasItem(2));
+    }
+
+    @Test
+	public void materialize(){
+		ListX<Integer> d= of(1, 2, 3).cycleUntil(next->count++==6).to(ReactiveConvertableSequence::converter).listX();
+		System.out.println("D " + d);
+		count =0;
+		assertEquals(asList(1, 2,3, 1, 2,3),of(1, 2, 3).cycleUntil(next->count++==6).to(ReactiveConvertableSequence::converter).listX());
+	}
+	@Override
+	public <T> AnyMSeq<futureStream,T> of(T... values) {
+		return AnyM.fromFutureStream(new LazyReact(ThreadPools.getCommonFreeThread()).async().of(values));
+	}
+
+	@Override
+	public <T> AnyMSeq<futureStream,T> empty() {
+		return AnyM.fromFutureStream(new LazyReact().of());
+	}
+
+    @Test
+    public void testParallelFlatMap() {
+        assertThat(new LazyReact(ThreadPools.getCommonFreeThread()).fromStream(Stream.generate(() -> 1).limit(1000)).parallel()
+                .map(a -> Thread.currentThread().getName()).toSet().size(), greaterThan(1));
+    }
+
+}
+

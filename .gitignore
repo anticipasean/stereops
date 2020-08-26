@@ -143,3 +143,6 @@ gradle-app.setting
 hs_err_pid*
 
 !/gradle/wrapper/gradle-wrapper.jar
+
+# Ignore Gradle build output directory
+build
