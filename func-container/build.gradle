@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = javaSourceCompatibility
+targetCompatibility = javaTargetCompatibility
+
+configurations {
+    immutables {
+        dependencies {
+            testAnnotationProcessor group: "org.immutables", name: "value", version: "2.8.1"
+            testCompileClasspath 'com.google.code.findbugs:annotations:2.0.1'
+            testCompileClasspath 'com.google.code.findbugs:jsr305:1.3.9'
+            testCompileClasspath group: "org.immutables", name: 'value-annotations', version: '2.8.1'
+        }
+    }
+    test_ng {
+        dependencies {
+            testImplementation 'org.testng:testng:7.1.0'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':func-core')
+    compileClasspath "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
+    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    testImplementation project(':func-core')
+    testImplementation "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
+    testImplementation "io.kindedj:kindedj:${kindedJVersion}"
+    testCompileClasspath "org.slf4j:slf4j-api:${slf4jVersion}"
+    testImplementation "org.slf4j:slf4j-log4j12:${slf4jVersion}"
+}
+
+test {
+    useTestNG()
+}

@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+sourceCompatibility = javaSourceCompatibility
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
+    }
+}
+
+dependencies {
+    implementation project(':func-core')
+    compileClasspath project(':func-pure')
+    compileClasspath project(':func-anym')
+    compileClasspath project(':func-futurestream')
+    implementation project(':func-reactive-collection')
+    compileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
+    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
+    testCompileClasspath project(':func-anym')
+    testCompileClasspath project(':func-core').tasks.matching({ Task t -> t.name.contains('compileTestJava') }).first().outputs.files
+    testImplementation project(':func-reactive-collection')
+    testImplementation project(':func-anym')
+    testCompileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"
+    testCompileClasspath 'commons-io:commons-io:2.4'
+    testCompileClasspath group: 'junit', name: 'junit', version: '4.12'
+    testCompileClasspath group: 'junit', name: 'junit', version: '4.12'
+    testCompileClasspath group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testCompileClasspath group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+    testCompileClasspath 'org.reactivestreams:reactive-streams-tck:1.0.0'
+    testCompileClasspath 'org.assertj:assertj-core:3.2.0'
+    testCompileClasspath 'com.github.stefanbirkner:system-rules:1.10.0'
+    testCompileClasspath(group: 'org.hibernate', name: 'hibernate-core', version: '5.1.0.Final')
+    testCompileClasspath(group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.1.0.Final')
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+
+task packageTests(type: Jar) {
+    from sourceSets.test.output
+    classifier = 'tests'
+}
+test {
+    forkEvery = 100
+    testLogging {
+        events "started", "passed", "skipped", "failed"//, "standardOut", "standardError"
+    }
+}
