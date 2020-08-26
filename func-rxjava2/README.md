@@ -35,7 +35,7 @@ The ListX only blocks on first access to the data.
 
 ```java
 import static cyclops.collections.mutable.ListX.listX;
-import static cyclops.pure.reactive.ObservableReactiveSeq.reactiveSeq;
+import static cyclops.rxjava2.adapter.ObservableReactiveSeq.reactiveSeq;
 AtomicBoolean complete = new AtomicBoolean(false);
 
 
@@ -63,7 +63,7 @@ Completed? true
 
 
 ```java
-import static cyclops.async.reactive.futurestream.companion.rx2.Observables.*;
+import static cyclops.rxjava2.companion.Observables.*;
  Observable<Integer> result = Observables.forEach(Observable.just(10, 20),
                                                    a -> Observable.<Integer> just(a + 10),
                                                    (a, b) -> a + b);
@@ -167,7 +167,7 @@ String type = rs.visit(sync->"synchronous",rs->"reactive-streams",async->"pure a
 Use RxJava2 to extend cyclops-react's array of operations across ReactiveSeq, Future, Maybe (and other cyclops-react types), as well as RxJava 2's Observables, Flowables, Singles, Maybes
 
 ```java
-import static cyclops.streams.Rx2Operators.observable;
+import static cyclops.rxjava2.stream.operator.Rx2Operators.observable;
 
 ReactiveSeq<List<Integer>> seq = Observables.of(1,2,3)
                                             .map(i->i+1)
@@ -177,7 +177,7 @@ ReactiveSeq<List<Integer>> seq = Observables.of(1,2,3)
 Use custom Rx Operators
 
 ```java
-import static cyclops.streams.Rx2Operators.observable;
+import static cyclops.rxjava2.stream.operator.Rx2Operators.observable;
 
 ReactiveSeq<List<Integer>> seq = Observables.of(1,2,3)
                                             .to(lift(new Observable.Operator<Integer,Integer>(){
@@ -192,7 +192,7 @@ ReactiveSeq<List<Integer>> seq = Observables.of(1,2,3)
 For and from Mono
 
 ```java
-import static cyclops.streams.Rx2OperatorsR.single;
+import static cyclops.stream.Rx2OperatorsR.single;
 
 Future<Integer> future;
 Future<Integer> useSingleCacheOp = future.to(single(m->m.cache()));
@@ -218,7 +218,7 @@ There are three types. AnyM abstracts over all monadic types. AnyMValue represen
 We can create an AnyM instance for an Observable via Observables (and for Flowable via Flowables)
 
 ```java
-import static cyclops.monads.Rx2Witness.observable;
+import static cyclops.rxjava2.container.higherkinded.Rx2Witness.observable;
 
 Observable<Integer> myObservable;
 AnyMSeq<obsvervable,Integer> monad = Observables.anyM(myObsevable);
@@ -237,7 +237,7 @@ Observable<Integer> obs = Observables.raw(monad);
 For Flowable the code is very similar
 
 ```java
-import static cyclops.monads.Rx2Witness.flowable;
+import static cyclops.rxjava2.container.higherkinded.Rx2Witness.flowable;
 
 Flowable<Integer> myFlowable;
 AnyMSeq<flowable,Integer> monad = Flowables.anyM(myFlowable);
