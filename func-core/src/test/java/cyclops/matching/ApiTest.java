@@ -2,9 +2,9 @@ package cyclops.matching;
 
 import static cyclops.function.companion.Predicates.any;
 import static cyclops.function.companion.Predicates.eq;
-import static cyclops.matching.Api.Any;
-import static cyclops.matching.Api.Case;
-import static cyclops.matching.Api.Match;
+import static cyclops.pattern.Api.Any;
+import static cyclops.pattern.Api.Case;
+import static cyclops.pattern.Api.Match;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

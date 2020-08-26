@@ -1,7 +1,7 @@
 package cyclops.container.immutable;
 
-import static cyclops.matching.Api.Case;
-import static cyclops.matching.Api.MatchType;
+import static cyclops.pattern.Api.Case;
+import static cyclops.pattern.Api.MatchType;
 
 import cyclops.container.relational.Contains;
 import cyclops.container.control.Option;

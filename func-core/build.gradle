@@ -1,22 +1,35 @@
 plugins {
     id 'java'
-    id 'maven-publish'
+    id 'idea'
+    id "com.github.johnrengelman.shadow" version "6.0.0"
 }
 
 sourceCompatibility = javaSourceCompatibility
 targetCompatibility = javaTargetCompatibility
+java.withSourcesJar()
 
 jar {
-    manifest {
-        attributes 'Implementation-Title': project.name, 'Implementation-Version': version
-    }
+    enabled = false
 }
+
+shadowJar {
+    configurations = [project.configurations.compile]
+    /* nullifying the classifier
+     * and disabling the jar task
+     * makes the shadowJar act as the default jar for
+     * downstream consumers with this project dependency
+     */
+    classifier = null
+
+}
+
+jar.dependsOn shadowJar
 
 dependencies {
 
-    compileClasspath 'org.agrona:Agrona:0.9.1'
-    compileClasspath "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
-    compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    compile 'org.agrona:Agrona:0.9.1'
+    compile "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
+    compile "io.kindedj:kindedj:${kindedJVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"

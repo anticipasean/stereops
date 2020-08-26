@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import cyclops.container.immutable.tuple.Tuple1;
+import cyclops.pattern.Case;
 import org.junit.Test;
 
 public class Case1Test {

@@ -34,9 +34,7 @@ import lombok.EqualsAndHashCode;
  * @param <T> the type of elements held in this toX
  * @author johnmcclean
  */
-@EqualsAndHashCode(of = {"deque"})
 public class LazyDequeX<T> extends AbstractLazyCollection<T, Deque<T>> implements DequeX<T> {
-
 
     public LazyDequeX(Deque<T> list,
                       ReactiveSeq<T> seq,

@@ -17,6 +17,7 @@ dependencies {
     compileClasspath "org.reactivestreams:reactive-streams:${reactiveStreamsVersion}"
     compileClasspath "org.reactivestreams:reactive-streams-tck:${reactiveStreamsVersion}"
     compileClasspath "io.kindedj:kindedj:${kindedJVersion}"
+    compileClasspath 'org.agrona:Agrona:0.9.1'
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     compileClasspath "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"

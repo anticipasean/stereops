@@ -26,6 +26,12 @@ public class MapXImpl<K, V> implements MapX<K, V> {
         this.collector = defaultCollector();
     }
 
+    public MapXImpl(final Map<K, V> map,
+                    Collector<Tuple2<? extends K, ? extends V>, ?, Map<K, V>> collector) {
+        this.map = map;
+        this.collector = collector;
+    }
+
     @SuppressWarnings("unchecked")
     public MapXImpl() {
         this.collector = defaultCollector();

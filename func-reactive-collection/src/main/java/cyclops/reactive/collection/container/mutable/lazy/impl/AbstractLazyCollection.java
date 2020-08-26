@@ -15,11 +15,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.EqualsAndHashCode.Include;
 import lombok.Getter;
 
 /**
  * Created by johnmcclean on 22/12/2016.
  */
+@EqualsAndHashCode
 public abstract class AbstractLazyCollection<T, C extends Collection<T>> implements LazyCollectionX<T> {
 
     final AtomicBoolean updating = new AtomicBoolean(false);
@@ -32,6 +35,7 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
     private final Evaluation strict;
     private final Function<ReactiveSeq<C>, C> fn;
     @Getter(AccessLevel.PROTECTED)
+    @Include
     private volatile C list;
 
     public AbstractLazyCollection(C list,
@@ -211,18 +215,6 @@ public abstract class AbstractLazyCollection<T, C extends Collection<T>> impleme
     @Override
     public void clear() {
         get().clear();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        C c = get();
-        boolean res = c.equals(o);
-        return res;
-    }
-
-    @Override
-    public int hashCode() {
-        return get().hashCode();
     }
 
     @Override

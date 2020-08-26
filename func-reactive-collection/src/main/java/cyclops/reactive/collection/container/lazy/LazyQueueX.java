@@ -33,7 +33,6 @@ import lombok.EqualsAndHashCode;
  * @param <T> the type of elements held in this toX
  * @author johnmcclean
  */
-@EqualsAndHashCode(of = {"queue"})
 public class LazyQueueX<T> extends AbstractLazyCollection<T, Queue<T>> implements QueueX<T> {
 
 

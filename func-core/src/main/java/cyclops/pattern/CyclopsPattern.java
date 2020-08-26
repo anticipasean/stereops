@@ -1,4 +1,4 @@
-package cyclops.matching;
+package cyclops.pattern;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -30,18 +30,19 @@ import java.util.function.Predicate;
  *
  * @param <T>
  */
-public interface Pattern<T> extends Predicate<T> {
 
-    static <E extends Exception> Pattern<E> Message(String message) {
+public interface CyclopsPattern<T> extends Predicate<T> {
+
+    static <E extends Exception> CyclopsPattern<E> Message(String message) {
         return e -> Objects.equals(message,
                                    e.getMessage());
     }
 
-    static <E extends Exception> Pattern<E> Class(Class<? extends Exception> type) {
+    static <E extends Exception> CyclopsPattern<E> Class(Class<? extends Exception> type) {
         return type::isInstance;
     }
 
-    static <E extends Exception> Pattern<E> Cause(Class<? extends Exception> cause) {
+    static <E extends Exception> CyclopsPattern<E> Cause(Class<? extends Exception> cause) {
         return e -> cause.isInstance(e.getCause());
     }
 

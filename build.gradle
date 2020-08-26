@@ -6,12 +6,6 @@ group = "com.github.anticipasean.girakkagraph"
 sourceCompatibility = javaSourceCompatibility
 targetCompatibility = javaTargetCompatibility
 
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'girakkafunc', 'Implementation-Version': version
-    }
-}
-
 
 subprojects {
     sourceCompatibility = javaSourceCompatibility

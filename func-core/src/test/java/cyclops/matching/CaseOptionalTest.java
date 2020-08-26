@@ -3,6 +3,7 @@ package cyclops.matching;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
+import cyclops.pattern.Case;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -2,12 +2,13 @@ package cyclops.matching;
 
 import static org.junit.Assert.assertEquals;
 
-import cyclops.matching.Case.Case0;
+import cyclops.pattern.Case.Case0;
+import cyclops.pattern.Matching;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PatternMatchingTest {
+public class CyclopsPatternMatchingTest {
 
     private static final Random random = new Random();
 

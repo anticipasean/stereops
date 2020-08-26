@@ -1,4 +1,4 @@
-package cyclops.matching;
+package cyclops.pattern;
 
 import cyclops.container.foldable.Deconstructable;
 import cyclops.container.foldable.Deconstructable.Deconstructable1;
@@ -16,14 +16,14 @@ import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.container.immutable.tuple.Tuple5;
-import cyclops.matching.Case.Any;
-import cyclops.matching.Case.Case2;
-import cyclops.matching.Matching.OptionalMatching;
-import cyclops.matching.Matching.PatternMatching;
-import cyclops.matching.Matching.PatternMatching3;
-import cyclops.matching.Matching.PatternMatching4;
-import cyclops.matching.Matching.PatternMatching5;
-import cyclops.matching.Matching.PatternMatchingOrNone;
+import cyclops.pattern.Case.Any;
+import cyclops.pattern.Case.Case2;
+import cyclops.pattern.Matching.OptionalMatching;
+import cyclops.pattern.Matching.PatternMatching;
+import cyclops.pattern.Matching.PatternMatching3;
+import cyclops.pattern.Matching.PatternMatching4;
+import cyclops.pattern.Matching.PatternMatching5;
+import cyclops.pattern.Matching.PatternMatchingOrNone;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -93,54 +93,54 @@ public final class Api {
                                        supplier1);
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern,
                                          Function<T, R> supplier) {
         return new Case.Case0<>(pattern,
                                 supplier);
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern,
                                          Supplier<R> supplier) {
         return new Case.Case0<>(pattern,
                                 value -> supplier.get());
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
                                          Function<T, R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2),
                                 supplier);
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
                                          Supplier<R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2),
                                 value -> supplier.get());
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
-                                         Pattern<T> pattern3,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
+                                         CyclopsPattern<T> pattern3,
                                          Function<T, R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2)
                                         .and(pattern3),
                                 supplier);
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
-                                         Pattern<T> pattern3,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
+                                         CyclopsPattern<T> pattern3,
                                          Supplier<R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2)
                                         .and(pattern3),
                                 value -> supplier.get());
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
-                                         Pattern<T> pattern3,
-                                         Pattern<T> pattern4,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
+                                         CyclopsPattern<T> pattern3,
+                                         CyclopsPattern<T> pattern4,
                                          Function<T, R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2)
                                         .and(pattern3)
@@ -148,10 +148,10 @@ public final class Api {
                                 supplier);
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
-                                         Pattern<T> pattern3,
-                                         Pattern<T> pattern4,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
+                                         CyclopsPattern<T> pattern3,
+                                         CyclopsPattern<T> pattern4,
                                          Supplier<R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2)
                                         .and(pattern3)
@@ -159,11 +159,11 @@ public final class Api {
                                 value -> supplier.get());
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
-                                         Pattern<T> pattern3,
-                                         Pattern<T> pattern4,
-                                         Pattern<T> pattern5,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
+                                         CyclopsPattern<T> pattern3,
+                                         CyclopsPattern<T> pattern4,
+                                         CyclopsPattern<T> pattern5,
                                          Function<T, R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2)
                                         .and(pattern3)
@@ -172,11 +172,11 @@ public final class Api {
                                 supplier);
     }
 
-    public static <T, R> Case<T, R> Case(Pattern<T> pattern1,
-                                         Pattern<T> pattern2,
-                                         Pattern<T> pattern3,
-                                         Pattern<T> pattern4,
-                                         Pattern<T> pattern5,
+    public static <T, R> Case<T, R> Case(CyclopsPattern<T> pattern1,
+                                         CyclopsPattern<T> pattern2,
+                                         CyclopsPattern<T> pattern3,
+                                         CyclopsPattern<T> pattern4,
+                                         CyclopsPattern<T> pattern5,
                                          Supplier<R> supplier) {
         return new Case.Case0<>(pattern1.and(pattern2)
                                         .and(pattern3)

@@ -1,4 +1,4 @@
-package cyclops.matching;
+package cyclops.pattern;
 
 import static cyclops.container.control.Option.none;
 
@@ -22,6 +22,7 @@ import lombok.NonNull;
  * @param <R> the return that the use case will return, it may or note return null.
  */
 @FunctionalInterface
+
 public interface Case<T, R> {
 
     /**
@@ -49,8 +50,8 @@ public interface Case<T, R> {
      * Marker interface to build a Default Case when no pattern matches.
      *
      * @param <R> return type.
-     * @see cyclops.matching.Api#Any(Function)
-     * @see cyclops.matching.Api#Any(Supplier)
+     * @see Api#Any(Function)
+     * @see Api#Any(Supplier)
      **/
     interface Any<T, R> extends Function<T, R> {
 

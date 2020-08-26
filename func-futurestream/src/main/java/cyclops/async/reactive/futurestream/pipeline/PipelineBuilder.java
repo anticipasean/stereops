@@ -98,12 +98,12 @@ public class PipelineBuilder {
 
     }
 
-    public <X extends Throwable, T> PipelineBuilder exceptionally(final Function<? extends X, ? extends T> fn) {
+    public <X extends Throwable, T> PipelineBuilder exceptionally(final Function<X, ? extends T> fn) {
 
         return withBuilder(builder.exceptionally(fn));
     }
 
-    public <T, X extends Throwable> PipelineBuilder whenComplete(final BiConsumer<? extends T, ? extends X> fn) {
+    public <T, X extends Throwable> PipelineBuilder whenComplete(final BiConsumer<T, X> fn) {
         return withBuilder(builder.whenComplete(fn));
     }
 

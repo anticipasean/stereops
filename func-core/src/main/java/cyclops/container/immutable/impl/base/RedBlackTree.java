@@ -1,12 +1,12 @@
 package cyclops.container.immutable.impl.base;
 
 
-import static cyclops.matching.Api.Case;
+import static cyclops.pattern.Api.Case;
 
 import cyclops.container.immutable.impl.base.redblacktree.Leaf;
 import cyclops.container.immutable.impl.base.redblacktree.Tree;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.matching.Api;
+import cyclops.pattern.Api;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.stream.Stream;

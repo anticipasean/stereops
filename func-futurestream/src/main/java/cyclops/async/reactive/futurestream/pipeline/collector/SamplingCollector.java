@@ -21,6 +21,7 @@ public class SamplingCollector<T> implements LazyResultConsumer<T> {
 
     private final int sampleRate;
     private final LazyResultConsumer<T> consumer;
+    @Builder.Default
     private long count = 0;
 
     /**
