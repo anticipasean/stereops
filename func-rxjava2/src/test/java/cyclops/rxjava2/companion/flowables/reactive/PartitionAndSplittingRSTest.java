@@ -9,8 +9,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Option;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import java.util.function.Supplier;
 import org.junit.Test;
 

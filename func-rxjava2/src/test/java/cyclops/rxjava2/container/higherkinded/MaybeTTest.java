@@ -9,21 +9,22 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 
-import cyclops.container.printable.Printable;
-import cyclops.container.mutable.Mutable;
-import cyclops.ReactiveReducers;
-import cyclops.function.companion.Reducers;
-import cyclops.function.companion.Semigroups;
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.rxjava2.container.transformable.MaybeT;
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.printable.Printable;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.optional;
-import cyclops.pure.reactive.collections.immutable.LinkedListX;
+
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.function.reducer.ReactiveReducers;
+import cyclops.rxjava2.container.transformable.MaybeT;
+import cyclops.stream.companion.Streams;
 import io.reactivex.Maybe;
 import java.util.Arrays;
 import java.util.Optional;

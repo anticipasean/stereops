@@ -9,8 +9,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 
 import cyclops.exception.ExceptionSoftener;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;

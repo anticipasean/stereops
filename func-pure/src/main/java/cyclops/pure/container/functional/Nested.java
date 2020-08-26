@@ -1,5 +1,23 @@
 package cyclops.pure.container.functional;
 
+import cyclops.async.Future;
+import cyclops.container.control.Either;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Option;
+import cyclops.container.control.Try;
+import cyclops.container.immutable.ImmutableList;
+import cyclops.container.immutable.impl.LazySeq;
+import cyclops.container.immutable.impl.Seq;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.container.transformable.To;
+import cyclops.container.transformable.Transformable;
+import cyclops.function.combiner.Group;
+import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Monoids;
+import cyclops.function.enhanced.Function3;
+import cyclops.function.enhanced.Function4;
 import cyclops.function.higherkinded.DataWitness;
 import cyclops.function.higherkinded.DataWitness.completableFuture;
 import cyclops.function.higherkinded.DataWitness.either;
@@ -10,30 +28,12 @@ import cyclops.function.higherkinded.DataWitness.seq;
 import cyclops.function.higherkinded.DataWitness.stream;
 import cyclops.function.higherkinded.DataWitness.tryType;
 import cyclops.function.higherkinded.DataWitness.vector;
-import cyclops.container.transformable.To;
-import cyclops.container.transformable.Transformable;
 import cyclops.function.higherkinded.Higher;
 import cyclops.function.higherkinded.Higher3;
 import cyclops.pure.arrow.Cokleisli;
 import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidK;
 import cyclops.pure.arrow.SemigroupK;
-import cyclops.function.companion.Monoids;
-import cyclops.container.control.Either;
-import cyclops.async.Future;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
-import cyclops.container.control.Try;
-import cyclops.container.immutable.ImmutableList;
-import cyclops.container.immutable.impl.LazySeq;
-import cyclops.container.immutable.impl.Seq;
-import cyclops.container.immutable.impl.Vector;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.function.enhanced.Function3;
-import cyclops.function.enhanced.Function4;
-import cyclops.function.combiner.Group;
-import cyclops.function.combiner.Monoid;
 import cyclops.pure.instances.control.EitherInstances;
 import cyclops.pure.instances.control.FutureInstances;
 import cyclops.pure.instances.control.TryInstances;
@@ -45,7 +45,6 @@ import cyclops.pure.instances.jdk.StreamInstances;
 import cyclops.pure.kinds.CompletableFutureKind;
 import cyclops.pure.kinds.OptionalKind;
 import cyclops.pure.kinds.StreamKind;
-import cyclops.reactive.ReactiveSeq;
 import cyclops.pure.transformers.Transformer;
 import cyclops.pure.transformers.TransformerFactory;
 import cyclops.pure.typeclasses.Comprehensions;
@@ -63,6 +62,7 @@ import cyclops.pure.typeclasses.monad.MonadPlus;
 import cyclops.pure.typeclasses.monad.MonadRec;
 import cyclops.pure.typeclasses.monad.MonadZero;
 import cyclops.pure.typeclasses.monad.Traverse;
+import cyclops.reactive.ReactiveSeq;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -134,9 +134,9 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
         Compose<W1, W2> composed = Compose.compose(def1.functor(),
                                                    def2.functor());
         return new Nested<W1, W2, T>(narrow(nested),
-                                     composed,
                                      def1,
-                                     def2);
+                                     def2,
+                                     composed);
     }
 
     public static <W1, W2, T> Nested<W1, W2, T> of(Active<W1, ? extends Higher<W2, ? extends T>> nested,
@@ -145,9 +145,9 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                                                          .functor(),
                                                    def2.functor());
         return new Nested<W1, W2, T>(narrow(nested.getActive()),
-                                     composed,
                                      nested.getDef1(),
-                                     def2);
+                                     def2,
+                                     composed);
     }
 
     public static <W1, W2, T> Higher<W1, Higher<W2, T>> narrow(Higher<W1, ? extends Higher<W2, ? extends T>> nested) {
@@ -169,6 +169,7 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                   StreamInstances.definitions());
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public static <T> Nested<optional, stream, T> optionalStream(Optional<? extends Stream<T>> optionalList) {
         OptionalKind<StreamKind<T>> opt = OptionalKind.widen(optionalList)
                                                       .map(StreamKind::widen);
@@ -178,6 +179,7 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                   StreamInstances.definitions());
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public static <T> Nested<optional, seq, T> optionalSeq(Optional<? extends Seq<T>> optionalList) {
         OptionalKind<Seq<T>> opt = OptionalKind.widen(optionalList)
                                                .map(Seq::fromIterable);
@@ -262,9 +264,9 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
         Higher<W1, Higher<W2, R>> res = composedFunctor.map(fn,
                                                             nested);
         return new Nested<W1, W2, R>(res,
-                                     composedFunctor,
                                      def1,
-                                     def2);
+                                     def2,
+                                     composedFunctor);
     }
 
     public Active<W1, Seq<T>> toSeq() {
@@ -325,9 +327,9 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
         Higher<W1, Higher<W2, T>> res = composedFunctor.peek(fn,
                                                              nested);
         return new Nested<W1, W2, T>(res,
-                                     composedFunctor,
                                      def1,
-                                     def2);
+                                     def2,
+                                     composedFunctor);
     }
 
     public <R> Function<Nested<W1, W2, T>, Nested<W1, W2, R>> lift(final Function<? super T, ? extends R> fn) {
@@ -350,10 +352,10 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                                                                       .flatMap(fn,
                                                                                a),
                                                              nested);
-        return new Nested<>(res,
-                            composedFunctor,
-                            def1,
-                            def2);
+        return new Nested<W1, W2, R>(res,
+                                     def1,
+                                     def2,
+                                     composedFunctor);
     }
 
     public <R, X> Nested<W1, W2, R> flatMap(Function<? super X, ? extends Higher<W2, R>> widenFn,
@@ -363,9 +365,9 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                                                                                a),
                                                              nested);
         return new Nested<W1, W2, R>(res,
-                                     composedFunctor,
                                      def1,
-                                     def2);
+                                     def2,
+                                     composedFunctor);
     }
 
     public <T2, R> Nested<W1, W2, R> zip(Higher<W2, T2> fb,
@@ -422,9 +424,9 @@ public class Nested<W1, W2, T> implements Transformable<T>, Higher3<nested, W1, 
                                                                                a),
                                                              nested);
         return new Nested<W1, W2, R>(res,
-                                     composedFunctor,
                                      def1,
-                                     def2);
+                                     def2,
+                                     composedFunctor);
     }
 
     public <R> Nested<W1, W2, R> tailRecN(T initial,

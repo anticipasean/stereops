@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  * @param <T> Data type
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@EqualsAndHashCode(of="either")
+@EqualsAndHashCode
 public class XorM<W1 extends WitnessType<W1>,W2 extends WitnessType<W2>,T> implements Filterable<T>,
                                                                                       Transformable<T>, Foldable<T>,
                                                                                       Publisher<T>,

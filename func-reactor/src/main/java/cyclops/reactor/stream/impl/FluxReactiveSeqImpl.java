@@ -235,10 +235,10 @@ public class FluxReactiveSeqImpl<T> implements ReactiveSeq<T> {
                                                            a._2(),
                                                            b))
                                 .zip(fourth,
-                                     (a, b) -> (Tuple4<T, T2, T3, T4>) Tuple.tuple(a._1(),
-                                                                                   a._2(),
-                                                                                   a._3(),
-                                                                                   b));
+                                     (a, b) -> Tuple.tuple(a._1(),
+                                                           a._2(),
+                                                           a._3(),
+                                                           b));
     }
 
     @Override
@@ -662,12 +662,13 @@ public class FluxReactiveSeqImpl<T> implements ReactiveSeq<T> {
                                  maxConcurrency));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <R> ReactiveSeq<R> flatMapStream(Function<? super T, BaseStream<? extends R, ?>> fn) {
 
         return this.<R>flux((Flux) flux.flatMap(fn.andThen(s -> {
                                                                ReactiveSeq<R> res =
-                                                                   s instanceof ReactiveSeq ? (ReactiveSeq) s : ReactiveSeq.fromSpliterator(s.spliterator());
+                                                                   s instanceof ReactiveSeq ? (ReactiveSeq<R>) s : ReactiveSeq.<R>fromSpliterator((Spliterator<R>) s.spliterator());
                                                                return res;
                                                            }
 

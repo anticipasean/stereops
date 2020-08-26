@@ -9,26 +9,24 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Single;
-import cyclops.container.printable.Printable;
-import cyclops.container.mutable.Mutable;
-import cyclops.ReactiveReducers;
-import cyclops.function.companion.Reducers;
-import cyclops.function.companion.Semigroups;
-import cyclops.monads.Witness.optional;
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.rxjava2.container.transformable.SingleT;
-import cyclops.stream.companion.Streams;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.Seq;
+import cyclops.container.mutable.Mutable;
+import cyclops.container.printable.Printable;
 import cyclops.function.combiner.Monoid;
+import cyclops.function.companion.Reducers;
+import cyclops.function.companion.Semigroups;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness;
-import cyclops.pure.reactive.collections.immutable.LinkedListX;
+import cyclops.monads.Witness.optional;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.collection.function.reducer.ReactiveReducers;
+import cyclops.rxjava2.container.transformable.SingleT;
+import cyclops.stream.companion.Streams;
+import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,7 +44,7 @@ public class SingleTTest implements Printable {
     @Before
     public void setUp() throws Exception {
 
-        just = SingleT.of(AnyM.ofNullable(XsiNilLoader.Single.just(10)));
+        just = SingleT.of(AnyM.ofNullable(Single.just(10)));
         none = SingleT.of(AnyM.ofNullable(null));
         one = SingleT.of(AnyM.ofNullable(Single.just(1)));
     }

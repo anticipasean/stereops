@@ -5,24 +5,25 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.pure.reactive.collections.immutable.BagX;
-import cyclops.pure.reactive.collections.immutable.LinkedListX;
-import cyclops.pure.reactive.collections.immutable.OrderedSetX;
-import cyclops.pure.reactive.collections.immutable.PersistentQueueX;
-import cyclops.pure.reactive.collections.immutable.PersistentSetX;
-import cyclops.pure.reactive.collections.immutable.VectorX;
-import cyclops.pure.reactive.collections.mutable.DequeX;
+
+import cyclops.reactive.collection.container.immutable.BagX;
+import cyclops.reactive.collection.container.immutable.LinkedListX;
+import cyclops.reactive.collection.container.immutable.OrderedSetX;
+import cyclops.reactive.collection.container.immutable.PersistentQueueX;
+import cyclops.reactive.collection.container.immutable.PersistentSetX;
+import cyclops.reactive.collection.container.immutable.VectorX;
+import cyclops.reactive.collection.container.mutable.DequeX;
 import cyclops.reactive.collection.container.mutable.ListX;
-import cyclops.pure.reactive.collections.mutable.QueueX;
-import cyclops.pure.reactive.collections.mutable.SetX;
-import cyclops.pure.reactive.collections.mutable.SortedSetX;
+import cyclops.reactive.collection.container.mutable.QueueX;
+import cyclops.reactive.collection.container.mutable.SetX;
+import cyclops.reactive.collection.container.mutable.SortedSetX;
 import cyclops.rxjava2.adapter.ObservableCollections;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.Before;
 import org.junit.Test;
-import reactor.core.scheduler.Schedulers;
 
 public class ObservableCollectionsTest {
 
@@ -33,15 +34,15 @@ public class ObservableCollectionsTest {
     @Before
     public void setup() {
         complete = new AtomicBoolean(false);
-        async = java.util.Observable.interval(1,
-                                              TimeUnit.SECONDS,
-                                              Schedulers.io())
-                                    .take(2)
-                                    .map(i -> {
+        async = Observable.interval(1,
+                                    TimeUnit.SECONDS,
+                                    Schedulers.io())
+                          .take(2)
+                          .map(i -> {
                               Thread.sleep(500);
                               return i.intValue();
                           })
-                                    .doOnComplete(() -> complete.set(true));
+                          .doOnComplete(() -> complete.set(true));
     }
 
     @Test
