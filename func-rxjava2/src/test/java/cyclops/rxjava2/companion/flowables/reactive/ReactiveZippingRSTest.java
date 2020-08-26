@@ -11,13 +11,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.stream.type.Streamable;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
+import cyclops.stream.type.Streamable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;

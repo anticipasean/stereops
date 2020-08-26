@@ -12,14 +12,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-
 import cyclops.function.companion.Semigroups;
-import cyclops.stream.type.Streamable;
-import cyclops.stream.companion.Streams;
 import cyclops.monads.AnyM;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
+import cyclops.stream.companion.Streams;
+import cyclops.stream.type.Streamable;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;

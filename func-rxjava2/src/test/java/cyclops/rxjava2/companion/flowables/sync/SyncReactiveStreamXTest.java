@@ -10,29 +10,30 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static cyclops.container.immutable.impl.HashMap.of;
 
-
-import cyclops.reactive.collection.container.ReactiveConvertableSequence;
-import cyclops.stream.companion.Streams;
+import cyclops.async.reactive.futurestream.LazyReact;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;
 import cyclops.function.combiner.Monoid;
-import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.reactive.companion.Spouts;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.reactive.companion.Spouts;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
+import cyclops.stream.companion.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

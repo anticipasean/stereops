@@ -4,19 +4,20 @@ import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-
 import cyclops.async.queue.Topic;
-
-import cyclops.stream.type.Streamable;
 import cyclops.container.control.Maybe;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
+import cyclops.stream.operator.BaseSequentialTest;
+import cyclops.stream.type.Streamable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

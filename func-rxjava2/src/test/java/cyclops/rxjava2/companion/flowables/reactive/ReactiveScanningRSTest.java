@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import cyclops.function.companion.Reducers;
-import cyclops.stream.type.Streamable;
 import cyclops.reactive.collection.container.mutable.ListX;
+import cyclops.stream.type.Streamable;
 import org.junit.Test;
 
 public class ReactiveScanningRSTest {

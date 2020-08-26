@@ -22,6 +22,7 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
     testCompileClasspath project(':func-anym')
     testCompileClasspath project(':func-core')
+    testCompileClasspath project(':func-core').sourceSets.test.output
     testCompileClasspath project(':func-reactive-collection')
     testCompileClasspath project(':func-futurestream')
     testCompileClasspath "io.projectreactor:reactor-core:${reactorVersion}"

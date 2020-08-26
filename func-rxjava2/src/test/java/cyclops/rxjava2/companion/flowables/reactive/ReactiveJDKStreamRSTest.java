@@ -5,10 +5,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
 
-import cyclops.stream.type.Streamable;
-import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
+import cyclops.rxjava2.adapter.FlowableReactiveSeq;
+import cyclops.stream.type.Streamable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

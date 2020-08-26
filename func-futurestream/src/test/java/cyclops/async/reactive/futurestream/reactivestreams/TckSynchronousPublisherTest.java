@@ -1,8 +1,9 @@
 package cyclops.async.reactive.futurestream.reactivestreams;
 
 
-import com.oath.cyclops.react.ThreadPools;
+
 import cyclops.async.reactive.futurestream.LazyReact;
+import cyclops.reactive.companion.ThreadPools;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.tck.PublisherVerification;
 import org.reactivestreams.tck.TestEnvironment;

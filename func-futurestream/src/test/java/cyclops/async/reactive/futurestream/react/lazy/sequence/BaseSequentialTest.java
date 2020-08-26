@@ -11,14 +11,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.container.control.Option;
-import cyclops.container.Vector;
-import cyclops.container.immutable.tuple.Tuple;
-import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.pure.reactive.ReactiveSeq;
+import cyclops.container.control.Option;
+import cyclops.container.immutable.impl.HashMap;
+import cyclops.container.immutable.impl.Vector;
+import cyclops.container.immutable.tuple.Tuple;
+import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.reactive.ReactiveSeq;
+import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -799,10 +800,10 @@ public class BaseSequentialTest {
 
     @Test
     public void testGroupByEager() {
-        cyclops.container.HashMap<Integer, Vector<Integer>> map1 = of(1,
-                                                                      2,
-                                                                      3,
-                                                                      4).groupBy(i -> i % 2);
+        HashMap<Integer, Vector<Integer>> map1 = of(1,
+                                                    2,
+                                                    3,
+                                                    4).groupBy(i -> i % 2);
         assertEquals(Option.some(Vector.of(2,
                                            4)),
                      map1.get(0));
