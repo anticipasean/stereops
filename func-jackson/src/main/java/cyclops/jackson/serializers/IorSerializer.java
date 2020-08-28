@@ -49,7 +49,7 @@ public class IorSerializer extends JsonSerializer<Ior<?, ?>> {
 
         @Getter
         @Setter
-        private final Object left;
+        private Object left;
     }
 
     @AllArgsConstructor
@@ -57,7 +57,7 @@ public class IorSerializer extends JsonSerializer<Ior<?, ?>> {
 
         @Getter
         @Setter
-        private final Object right;
+        private Object right;
 
     }
 
@@ -66,9 +66,9 @@ public class IorSerializer extends JsonSerializer<Ior<?, ?>> {
 
         @Getter
         @Setter
-        private final Object left;
+        private Object left;
         @Getter
         @Setter
-        private final Object right;
+        private Object right;
     }
 }
