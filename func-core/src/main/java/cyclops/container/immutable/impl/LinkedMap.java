@@ -61,6 +61,18 @@ public final class LinkedMap<K, V> implements ImmutableMap<K, V>, Higher2<linked
         return res;
     }
 
+    public static <K, V> LinkedMap<K, V> fromMap(PersistentMap<K, V> map) {
+        if (map instanceof LinkedMap) {
+            return (LinkedMap) map;
+        }
+        LinkedMap<K, V> res = empty();
+        for (Tuple2<K, V> next : map) {
+            res = res.put(next._1(),
+                          next._2());
+        }
+        return res;
+    }
+
     public static <K, V> LinkedMap<K, V> fromStream(Stream<Tuple2<K, V>> stream) {
         return ReactiveSeq.fromStream(stream)
                           .foldLeft(empty(),
