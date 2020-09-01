@@ -1,14 +1,14 @@
 package cyclops.immutables.encoding;
 
-import cyclops.container.immutable.impl.Chain;
-import java.util.Arrays;
+import cyclops.container.immutable.ImmutableQueue;
+import cyclops.container.immutable.impl.BankersQueue;
 import org.immutables.encode.Encoding;
 
 @Encoding
 class CyclopsQueueEncoding<T> {
 
     @Encoding.Impl
-    private final Chain<T> field = Chain.empty();
+    private final ImmutableQueue<T> field = BankersQueue.empty();
 
     CyclopsQueueEncoding() {
 
@@ -17,7 +17,7 @@ class CyclopsQueueEncoding<T> {
     @Encoding.Builder
     static final class Builder<T> {
 
-        private Chain<T> queue = Chain.empty();
+        private ImmutableQueue<T> queue = BankersQueue.empty();
 
         Builder() {
 
@@ -34,7 +34,7 @@ class CyclopsQueueEncoding<T> {
         @Encoding.Naming(value = "enqueue*", depluralize = true)
         @Encoding.Init
         final void enqueueVarArgs(final T... elements) {
-            this.queue = this.queue.appendAll(Arrays.asList(elements));
+            this.queue = this.queue.appendAll(elements);
         }
 
         @Encoding.Naming(value = "enqueueAll*", depluralize = true)
@@ -45,18 +45,18 @@ class CyclopsQueueEncoding<T> {
 
         @Encoding.Init
         @Encoding.Copy
-        void set(final Chain<T> elements) {
+        void set(final ImmutableQueue<T> elements) {
             this.queue = elements;
         }
 
         @Encoding.Naming(value = "setIterable*")
         @Encoding.Init
         void setIterable(final Iterable<T> elements) {
-            this.queue = Chain.wrap(elements);
+            this.queue = BankersQueue.fromIterable(elements);
         }
 
         @Encoding.Build
-        Chain<T> build() {
+        ImmutableQueue<T> build() {
             return this.queue;
         }
     }
