@@ -1,5 +1,6 @@
 package cyclops.container.filterable;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -43,7 +44,11 @@ public interface Filterable<T> {
      */
     @SuppressWarnings("unchecked")
     default <U> Filterable<U> ofType(final Class<? extends U> type) {
-        return (Filterable<U>) filter(type::isInstance);
+        Objects.requireNonNull(type,
+                               "class object parameter of type U may not be null");
+        return (Filterable<U>) filter(tObj -> tObj != null && ((!tObj.getClass()
+                                                                     .isPrimitive() && type.isAssignableFrom(tObj.getClass()))
+            || (type.isPrimitive() && type.isInstance(tObj))));
     }
 
     /**
