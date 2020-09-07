@@ -1,4 +1,4 @@
-rootProject.name = 'girakkafunc'
+rootProject.name = 'girakkacyclops'
 include ':func-core'
 include ':func-anym'
 include ':func-futurestream'
@@ -8,4 +8,5 @@ include ':func-reactor'
 include ':func-rxjava2'
 include ':func-jackson'
 include ':func-container'
+include ':func-immutables'
 

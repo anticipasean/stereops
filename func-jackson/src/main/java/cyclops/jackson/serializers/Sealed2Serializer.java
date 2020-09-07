@@ -41,7 +41,7 @@ public class Sealed2Serializer extends JsonSerializer<Sealed2<?, ?>> {
 
         @Getter
         @Setter
-        private final Object left;
+        private Object left;
     }
 
     @AllArgsConstructor
@@ -49,7 +49,7 @@ public class Sealed2Serializer extends JsonSerializer<Sealed2<?, ?>> {
 
         @Getter
         @Setter
-        private final Object right;
+        private Object right;
 
     }
 }

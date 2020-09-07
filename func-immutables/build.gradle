@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+configurations {
+    immutables {
+        dependencies {
+            annotationProcessor group: "org.immutables", name: "value", version: immutablesVersion
+            annotationProcessor group: "org.immutables", name: "encode", version: immutablesVersion
+            compileClasspath group: "org.immutables", name: "encode", version: immutablesVersion
+            compileClasspath 'com.google.code.findbugs:annotations:2.0.1'
+            compileClasspath 'com.google.code.findbugs:jsr305:1.3.9'
+            implementation group: "org.immutables", name: 'value-annotations', version: immutablesVersion
+            testAnnotationProcessor group: "org.immutables", name: "value", version: immutablesVersion
+            testImplementation group: "org.immutables", name: 'value-annotations', version: immutablesVersion
+        }
+    }
+}
+
+dependencies {
+    compileClasspath project(":func-core")
+}

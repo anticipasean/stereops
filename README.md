@@ -1,4 +1,4 @@
-# Girakkafunc
+# Girakkacyclops
 
 ## A fork of the awesome *[Cyclops](https://github.com/aol/cyclops)* project
 
@@ -11,7 +11,8 @@
   - Reformatting the original code
 - Provide new constructs using Cyclops components
 - Create fluent interfaces building on the Cyclops project to keep it current
-- Upgrade the Cyclops project Gradle build configuration 
+- Upgrade the Cyclops project Gradle build configuration
+- Keep Java _func-y_
 
 ## Sweet Tutorials and Articles by Cyclops Project Owner John McClean: 
 
