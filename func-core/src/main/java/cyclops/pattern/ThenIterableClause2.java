@@ -3,7 +3,7 @@ package cyclops.pattern;
 
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.stream.type.Streamable;
+import cyclops.reactive.ReactiveSeq;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -22,24 +22,24 @@ public interface ThenIterableClause2<K, V, KI, VI> extends Clause<Tuple2<Tuple2<
         };
     }
 
-    default <KO, VO> OrMatchClause2<K, V, KI, VI, KO, VO> then(Function<Tuple2<KI, Streamable<VI>>, Tuple2<KO, VO>> mapper) {
-        return OrMatchClause2.of(() -> MatchResult2.of(subject().map2(kiviTupleOpt -> kiviTupleOpt.map(kiIterableTuple2 -> kiIterableTuple2.map2(Streamable::fromIterable))
+    default <KO, VO> OrMatchClause2<K, V, KI, VI, KO, VO> then(Function<Tuple2<KI, ReactiveSeq<VI>>, Tuple2<KO, VO>> mapper) {
+        return OrMatchClause2.of(() -> MatchResult2.of(subject().map2(kiviTupleOpt -> kiviTupleOpt.map(kiIterableTuple2 -> kiIterableTuple2.map2(ReactiveSeq::fromIterable))
                                                                                                   .map(mapper))
                                                                 .fold((kvTuple2, kovoTuple2) -> kovoTuple2.toEither(Tuple2.of(kvTuple2,
                                                                                                                               Option.none())))));
     }
 
-    default <KO, VO> OrMatchClause2<K, V, KI, VI, KO, VO> then(BiFunction<KI, Streamable<VI>, Tuple2<KO, VO>> mapper) {
+    default <KO, VO> OrMatchClause2<K, V, KI, VI, KO, VO> then(BiFunction<KI, ReactiveSeq<VI>, Tuple2<KO, VO>> mapper) {
         return OrMatchClause2.of(() -> MatchResult2.of(subject().map2(kiviTupleOpt -> kiviTupleOpt.map(kiviTuple2 -> mapper.apply(kiviTuple2._1(),
-                                                                                                                                  Streamable.fromIterable(kiviTuple2._2()))))
+                                                                                                                                  ReactiveSeq.fromIterable(kiviTuple2._2()))))
                                                                 .fold((kvTuple2, kovoTuple2) -> kovoTuple2.toEither(Tuple2.of(kvTuple2,
                                                                                                                               Option.none())))));
     }
 
     default <KO, VO> OrMatchClause2<K, V, KI, VI, KO, VO> then(Function<KI, KO> keyMapper,
-                                                               Function<Streamable<VI>, VO> valueMapper) {
+                                                               Function<ReactiveSeq<VI>, VO> valueMapper) {
         return OrMatchClause2.of(() -> MatchResult2.of(subject().map2(kiviTupleOpt -> kiviTupleOpt.map(kiviTuple2 -> kiviTuple2.map1(keyMapper)
-                                                                                                                               .map2(valueMapper.compose(Streamable::fromIterable))))
+                                                                                                                               .map2(valueMapper.compose(ReactiveSeq::fromIterable))))
                                                                 .fold((kvTuple2, kovoTuple2) -> kovoTuple2.toEither(Tuple2.of(kvTuple2,
                                                                                                                               Option.none())))));
     }

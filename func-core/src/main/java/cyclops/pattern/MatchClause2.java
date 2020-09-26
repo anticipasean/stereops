@@ -3,6 +3,7 @@ package cyclops.pattern;
 
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
 import java.util.Iterator;
 import java.util.function.BiPredicate;
@@ -26,14 +27,14 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
 
     default <I> ThenClause2<K, V, K, V> keyEqualTo(I otherObject) {
         return ThenClause2.of(() -> Tuple2.of(subject(),
-                                              Option.of(subject()._1())
+                                              Option.ofNullable(subject()._1())
                                                     .filter(k -> k.equals(otherObject))
                                                     .map(k -> subject())));
     }
 
     default <I> ThenClause2<K, V, K, V> valueEqualTo(I otherObject) {
         return ThenClause2.of(() -> Tuple2.of(subject(),
-                                              Option.of(subject()._2())
+                                              Option.ofNullable(subject()._2())
                                                     .filter(v -> v.equals(otherObject))
                                                     .map(v -> subject())));
 
@@ -41,7 +42,7 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
 
     default <KI, VI> ThenClause2<K, V, K, V> bothEqualTo(Tuple2<KI, VI> otherTuple) {
         return ThenClause2.of(() -> Tuple2.of(subject(),
-                                              Option.of(subject())
+                                              Option.ofNullable(subject())
                                                     .filter(tuple2 -> tuple2.equals(otherTuple))));
 
     }
@@ -83,7 +84,7 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
 
     default <VI> ThenClause2<K, V, K, VI> keyFitsAndValueOfType(Predicate<? super K> condition,
                                                                 Class<VI> possibleValueType) {
-        return ThenClause2.of(() -> subject().bimap(k -> Option.some(k)
+        return ThenClause2.of(() -> subject().bimap(k -> Option.ofNullable(k)
                                                                .filter(condition),
                                                     VariantMapper.inputTypeMapper(possibleValueType))
                                              .fold((kOption, viOption) -> Tuple2.of(subject(),
@@ -127,14 +128,14 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
 
     default ThenClause2<K, V, K, V> keyFits(Predicate<? super K> condition) {
         return ThenClause2.of(() -> Tuple2.of(subject(),
-                                              Option.of(subject()._1())
+                                              Option.ofNullable(subject()._1())
                                                     .filter(condition)
                                                     .map(k -> subject())));
     }
 
     default ThenClause2<K, V, K, V> valueFits(Predicate<? super V> condition) {
         return ThenClause2.of(() -> Tuple2.of(subject(),
-                                              Option.of(subject()._2())
+                                              Option.ofNullable(subject()._2())
                                                     .filter(condition)
                                                     .map(v -> subject())));
 
@@ -142,7 +143,7 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
 
     default ThenClause2<K, V, K, V> bothFit(BiPredicate<? super K, ? super V> condition) {
         return ThenClause2.of(() -> Tuple2.of(subject(),
-                                              Option.of(subject())
+                                              Option.ofNullable(subject())
                                                     .filter(kvTuple -> condition.test(kvTuple._1(),
                                                                                       kvTuple._2()))));
 
@@ -160,13 +161,13 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
     }
 
     default <T, E> ThenIterableClause2<K, V, K, E> valueIterableOverAnd(Class<E> possibleElementType,
-                                                                        Predicate<Streamable<E>> condition) {
+                                                                        Predicate<ReactiveSeq<E>> condition) {
         return ThenIterableClause2.of(() -> subject().map2(VariantMapper.inputTypeMapper(Iterable.class))
                                                      .map2(iterableOpt -> iterableOpt.map(iterable -> TypeMatchingIterable.of(iterable.iterator(),
                                                                                                                               possibleElementType))
-                                                                                     .filter(iter -> Option.some(iter.iterator())
+                                                                                     .filter(iter -> Option.ofNullable(iter.iterator())
                                                                                                            .filter(Iterator::hasNext)
-                                                                                                           .map(Streamable::fromIterator)
+                                                                                                           .map(ReactiveSeq::fromIterator)
                                                                                                            .filter(condition)
                                                                                                            .isPresent()))
                                                      .fold((k, iterableOpt) -> Tuple2.of(subject(),
@@ -184,7 +185,7 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
                                                    .map2(o -> Option.ofNullable(o)
                                                                     .flatMap(VariantMapper.inputTypeMapper(inputType)))
                                                    .fold((k, opt) -> Tuple2.of(subject(),
-                                                                               Option.of(opt)
+                                                                               Option.ofNullable(opt)
                                                                                      .filter(Option::isPresent)
                                                                                      .map(viOption -> Tuple2.of(k,
                                                                                                                 viOption)))));
@@ -258,7 +259,7 @@ public interface MatchClause2<K, V> extends Clause<Tuple2<K, V>> {
                                                                           .filter(kiviTuple2 -> condition.test(kiviTuple2._1(),
                                                                                                                kiviTuple2._2()))
                                                                           .fold(tuple -> Tuple2.of(subject(),
-                                                                                                   Option.some(tuple)),
+                                                                                                   Option.ofNullable(tuple)),
                                                                                 () -> Tuple2.of(subject(),
                                                                                                 Option.none()))));
 

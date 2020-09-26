@@ -5,7 +5,7 @@ import cyclops.container.control.Either;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.enhanced.Function1;
-import cyclops.stream.type.Streamable;
+import cyclops.reactive.ReactiveSeq;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -173,7 +173,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
 
     default OrThenClause2<K, V, K, V, KO, VO> bothFit(BiPredicate<? super K, ? super V> condition) {
         return OrThenClause2.of(() -> MatchResult2.of(subject().either()
-                                                               .mapLeft(kvkiviTuple -> Option.some(kvkiviTuple._1())
+                                                               .mapLeft(kvkiviTuple -> Option.ofNullable(kvkiviTuple._1())
                                                                                              .filter(kvTuple -> condition.test(kvTuple._1(),
                                                                                                                                kvTuple._2())))
                                                                .mapLeft(kvTupleOpt -> Tuple2.of(subject().unapply()
@@ -187,7 +187,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
                                                                           Class<VI> possibleValueType) {
         return OrThenClause2.of(() -> MatchResult2.of(subject().either()
                                                                .mapLeft(Tuple2::_1)
-                                                               .mapLeft(kvTuple -> kvTuple.bimap(k -> Option.some(k)
+                                                               .mapLeft(kvTuple -> kvTuple.bimap(k -> Option.ofNullable(k)
                                                                                                             .filter(condition),
                                                                                                  VariantMapper.inputTypeMapper(possibleValueType)))
                                                                .mapLeft(kOptViOptTuple -> Tuple2.of(subject().unapply()
@@ -230,7 +230,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
     }
 
     default <T, E> OrThenIterableClause2<K, V, K, E, KO, VO> valueIterableOverAnd(Class<E> possibleElementType,
-                                                                                  Predicate<Streamable<E>> condition) {
+                                                                                  Predicate<ReactiveSeq<E>> condition) {
         return OrThenIterableClause2.of(() -> MatchResult2.of(subject().either()
                                                                        .mapLeft(Tuple2::_1)
                                                                        .mapLeft(Tuple2::_2)
@@ -239,7 +239,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
                                                                                                                                        possibleElementType))
                                                                                               .filter(iterable -> iterable.iterator()
                                                                                                                           .hasNext())
-                                                                                              .filter(iterable -> condition.test(Streamable.fromIterable(iterable))))
+                                                                                              .filter(iterable -> condition.test(ReactiveSeq.fromIterable(iterable))))
                                                                        .mapLeft(viIterOpt -> Tuple2.of(subject().either()
                                                                                                                 .leftOrElse(null)
                                                                                                                 ._1(),
@@ -259,7 +259,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
         return OrThenOptionClause2.of(() -> MatchResult2.of(subject().either()
                                                                      .mapLeft(Tuple2::_1)
                                                                      .mapLeft(Tuple2::_2)
-                                                                     .mapLeft(v -> Option.of(v)
+                                                                     .mapLeft(v -> Option.ofNullable(v)
                                                                                          .flatMap(VariantMapper.inputTypeMapper(Option.class)))
                                                                      .mapLeft(optOpt -> optOpt.orElse(Option.none()))
                                                                      .mapLeft(option -> option.orElse(null))
@@ -282,7 +282,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
         return OrThenOptionClause2.of(() -> MatchResult2.of(subject().either()
                                                                      .mapLeft(Tuple2::_1)
                                                                      .mapLeft(Tuple2::_2)
-                                                                     .mapLeft(v -> Option.of(v)
+                                                                     .mapLeft(v -> Option.ofNullable(v)
                                                                                          .flatMap(VariantMapper.inputTypeMapper(Option.class)))
                                                                      .mapLeft(optOpt -> optOpt.orElse(Option.none()))
                                                                      .mapLeft(option -> option.orElse(null))
@@ -391,7 +391,8 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
 
     default Option<Tuple2<KO, VO>> elseOption() {
         return subject().either()
-                        .toOption();
+                        .toOption()
+                        .notNull();
     }
 
     default Either<Tuple2<K, V>, Tuple2<KO, VO>> elseOriginalOrResult() {
@@ -402,36 +403,41 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
 
     default Tuple2<KO, VO> elseNullable() {
         return subject().either()
-                        .orElse(Tuple2.of(null,
-                                          null));
+                        .notNull()
+                        .orElse(null);
     }
 
     default Option<KO> elseKeyOption() {
         return subject().either()
                         .toOption()
+                        .notNull()
                         .map(Tuple2::_1);
     }
 
     default Option<VO> elseValueOption() {
         return subject().either()
                         .toOption()
+                        .notNull()
                         .map(Tuple2::_2);
     }
 
     default Tuple2<KO, VO> elseDefault(Tuple2<KO, VO> defaultOutput) {
         return subject().either()
+                        .notNull()
                         .orElse(defaultOutput);
     }
 
     default Tuple2<KO, VO> elseDefault(KO defaultKey,
                                        VO defaultValue) {
         return subject().either()
+                        .notNull()
                         .orElse(Tuple2.of(defaultKey,
                                           defaultValue));
     }
 
     default KO elseDefaultKey(KO defaultKey) {
         return subject().either()
+                        .notNull()
                         .orElse(Tuple2.of(defaultKey,
                                           null))
                         ._1();
@@ -446,6 +452,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
 
     default Tuple2<KO, VO> elseGet(Supplier<Tuple2<KO, VO>> tupleSupplier) {
         return subject().either()
+                        .notNull()
                         .orElseGet(tupleSupplier);
     }
 
@@ -453,6 +460,7 @@ public interface OrMatchClause2<K, V, KI, VI, KO, VO> extends Clause<MatchResult
         if (subject().either()
                      .isRight()) {
             return subject().either()
+                            .notNull()
                             .orElse(null);
         }
         throw throwableMapper.apply(subject().either()

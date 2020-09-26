@@ -46,8 +46,7 @@ public interface Filterable<T> {
     default <U> Filterable<U> ofType(final Class<? extends U> type) {
         Objects.requireNonNull(type,
                                "class object parameter of type U may not be null");
-        return (Filterable<U>) filter(tObj -> tObj != null && ((!tObj.getClass()
-                                                                     .isPrimitive() && type.isAssignableFrom(tObj.getClass()))
+        return (Filterable<U>) filter(tObj -> tObj != null && ((!type.isPrimitive() && type.isAssignableFrom(tObj.getClass()))
             || (type.isPrimitive() && type.isInstance(tObj))));
     }
 

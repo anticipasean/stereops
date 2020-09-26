@@ -37,6 +37,7 @@ class TypeMatchingIterator<E> implements Iterator<E> {
     @Override
     public E next() {
         if (!hasNext()) {
+            // as per the contract on the Iterator interface
             throw new NoSuchElementException();
         }
         final E result = next.orElse(null);
