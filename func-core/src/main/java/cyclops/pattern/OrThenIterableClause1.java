@@ -4,7 +4,7 @@ package cyclops.pattern;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.stream.type.Streamable;
+import cyclops.reactive.ReactiveSeq;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -22,10 +22,10 @@ public interface OrThenIterableClause1<V, I, O> extends Clause<MatchResult1<V, I
         };
     }
 
-    default OrMatchClause1<V, I, O> then(Function<Streamable<I>, O> mapper) {
+    default OrMatchClause1<V, I, O> then(Function<ReactiveSeq<I>, O> mapper) {
         return OrMatchClause1.of(() -> MatchResult1.of(subject().either()
                                                                 .mapLeft(Tuple2::_2)
-                                                                .mapLeft(iIterOpt -> iIterOpt.map(Streamable::fromIterable)
+                                                                .mapLeft(iIterOpt -> iIterOpt.map(ReactiveSeq::fromIterable)
                                                                                              .map(mapper)).<Either<Tuple2<V, Option<I>>, O>>fold(outputOpt -> outputOpt.map(Either::<Tuple2<V, Option<I>>, O>right)
                                                                                                                                                                        .orElse(Either.<Tuple2<V, Option<I>>, O>left(Tuple2.of(subject().unapply()
                                                                                                                                                                                                                                        ._1(),

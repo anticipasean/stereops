@@ -3,6 +3,7 @@ package cyclops.pattern;
 
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
+import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -74,14 +75,14 @@ public interface MatchClause1<V> extends Clause<V> {
     }
 
     default <T, E> ThenIterableClause1<V, E> isIterableOverAnd(Class<E> elementType,
-                                                               Predicate<Streamable<E>> condition) {
+                                                               Predicate<ReactiveSeq<E>> condition) {
         return ThenIterableClause1.of(() -> Option.of(subject())
                                                   .flatMap(VariantMapper.inputTypeMapper(Iterable.class))
                                                   .map(iterable -> TypeMatchingIterable.of(iterable.iterator(),
                                                                                            elementType))
                                                   .filter(iterable -> iterable.iterator()
                                                                               .hasNext())
-                                                  .filter(iterable -> condition.test(Streamable.fromIterable(iterable)))
+                                                  .filter(iterable -> condition.test(ReactiveSeq.fromIterable(iterable)))
                                                   .fold(iterable -> Tuple2.of(subject(),
                                                                               Option.some(iterable)),
                                                         () -> Tuple2.of(subject(),
