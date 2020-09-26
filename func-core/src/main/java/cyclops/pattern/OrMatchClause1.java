@@ -4,7 +4,7 @@ package cyclops.pattern;
 import cyclops.container.control.Either;
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.stream.type.Streamable;
+import cyclops.reactive.ReactiveSeq;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -28,7 +28,7 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
                                                                .mapLeft(tuple -> Option.of(tuple._1())
                                                                                        .filter(v -> v.equals(otherObject))
                                                                                        .fold(v -> Tuple2.of(v,
-                                                                                                            Option.some(v)),
+                                                                                                            Option.ofNullable(v)),
                                                                                              () -> Tuple2.of(tuple._1(),
                                                                                                              Option.none())))));
     }
@@ -38,7 +38,7 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
                                                                .mapLeft(tuple -> Option.of(tuple._1())
                                                                                        .flatMap(VariantMapper.inputTypeMapper(possibleType))
                                                                                        .fold(i -> Tuple2.of(tuple._1(),
-                                                                                                            Option.some(i)),
+                                                                                                            Option.ofNullable(i)),
                                                                                              () -> Tuple2.of(tuple._1(),
                                                                                                              Option.none())))));
     }
@@ -50,7 +50,7 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
                                                                                        .flatMap(VariantMapper.inputTypeMapper(possibleType))
                                                                                        .filter(condition)
                                                                                        .fold(i -> Tuple2.of(tuple._1(),
-                                                                                                            Option.some(i)),
+                                                                                                            Option.ofNullable(i)),
                                                                                              () -> Tuple2.of(tuple._1(),
                                                                                                              Option.none())))));
     }
@@ -60,7 +60,7 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
                                                                .mapLeft(tuple -> tuple.first()
                                                                                       .filter(condition)
                                                                                       .fold(v -> Tuple2.of(v,
-                                                                                                           Option.some(v)),
+                                                                                                           Option.ofNullable(v)),
                                                                                             () -> Tuple2.of(subject().either()
                                                                                                                      .leftOrElse(null)
                                                                                                                      ._1(),
@@ -76,13 +76,13 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
                                                                                                .filter(iterable -> iterable.iterator()
                                                                                                                            .hasNext())
                                                                                                .fold(i -> Tuple2.of(tuple._1(),
-                                                                                                                    Option.some(i)),
+                                                                                                                    Option.ofNullable(i)),
                                                                                                      () -> Tuple2.of(tuple._1(),
                                                                                                                      Option.none())))));
     }
 
     default <T, E> OrThenIterableClause1<V, E, O> isIterableOverAnd(Class<E> elementType,
-                                                                    Predicate<Streamable<E>> condition) {
+                                                                    Predicate<ReactiveSeq<E>> condition) {
         return OrThenIterableClause1.of(() -> MatchResult1.of(subject().either()
                                                                        .mapLeft(tuple -> Option.of(tuple._1())
                                                                                                .flatMap(VariantMapper.inputTypeMapper(Iterable.class))
@@ -90,7 +90,7 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
                                                                                                                                         elementType))
                                                                                                .filter(iterable -> iterable.iterator()
                                                                                                                            .hasNext())
-                                                                                               .filter(iterable -> condition.test(Streamable.fromIterable(iterable)))
+                                                                                               .filter(iterable -> condition.test(ReactiveSeq.fromIterable(iterable)))
                                                                                                .fold(i -> Tuple2.of(tuple._1(),
                                                                                                                     Option.ofNullable(i)),
                                                                                                      () -> Tuple2.of(tuple._1(),
@@ -161,7 +161,7 @@ public interface OrMatchClause1<V, I, O> extends Clause<MatchResult1<V, I, O>> {
 
     default Option<O> elseOption() {
         return subject().either()
-                        .fold(Option::some,
+                        .fold(Option::ofNullable,
                               Option::none);
     }
 

@@ -51,6 +51,10 @@ public interface Value<T> extends SealedOr<T>, Iterable<T>, Publisher<T> {
                     () -> false);
     }
 
+    default boolean isEmpty(){
+        return !isPresent();
+    }
+
     default T orElse(T alt) {
         return fold(p -> p,
                     () -> alt);

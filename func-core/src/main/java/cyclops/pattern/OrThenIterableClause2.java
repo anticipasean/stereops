@@ -3,7 +3,7 @@ package cyclops.pattern;
 
 import cyclops.container.control.Option;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.stream.type.Streamable;
+import cyclops.reactive.ReactiveSeq;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -22,21 +22,21 @@ public interface OrThenIterableClause2<K, V, KI, E, KO, VO> extends Clause<Match
         };
     }
 
-    default OrMatchClause2<K, V, KI, E, KO, VO> then(Function<Tuple2<KI, Streamable<E>>, Tuple2<KO, VO>> mapper) {
+    default OrMatchClause2<K, V, KI, E, KO, VO> then(Function<Tuple2<KI, ReactiveSeq<E>>, Tuple2<KO, VO>> mapper) {
         return OrMatchClause2.of(() -> MatchResult2.of(subject().either()
                                                                 .mapLeft(Tuple2::_2)
-                                                                .mapLeft(kiviOptTuple -> kiviOptTuple.map(kiviTuple -> mapper.apply(kiviTuple.map2(Streamable::fromIterable))))
+                                                                .mapLeft(kiviOptTuple -> kiviOptTuple.map(kiviTuple -> mapper.apply(kiviTuple.map2(ReactiveSeq::fromIterable))))
                                                                 .flatMapLeft(kovoOptTuple -> kovoOptTuple.toEither(Tuple2.of(subject().either()
                                                                                                                                       .leftOrElse(null)
                                                                                                                                       ._1(),
                                                                                                                              Option.none())))));
     }
 
-    default OrMatchClause2<K, V, KI, E, KO, VO> then(BiFunction<KI, Streamable<E>, Tuple2<KO, VO>> biMapper) {
+    default OrMatchClause2<K, V, KI, E, KO, VO> then(BiFunction<KI, ReactiveSeq<E>, Tuple2<KO, VO>> biMapper) {
         return OrMatchClause2.of(() -> MatchResult2.of(subject().either()
                                                                 .mapLeft(Tuple2::_2)
                                                                 .mapLeft(kiviOptTuple -> kiviOptTuple.map(kiviTuple -> biMapper.apply(kiviTuple._1(),
-                                                                                                                                      Streamable.fromIterable(kiviTuple._2()))))
+                                                                                                                                      ReactiveSeq.fromIterable(kiviTuple._2()))))
                                                                 .toEither(Tuple2.of(subject().either()
                                                                                              .leftOrElse(null)
                                                                                              ._1(),
@@ -44,11 +44,11 @@ public interface OrThenIterableClause2<K, V, KI, E, KO, VO> extends Clause<Match
     }
 
     default OrMatchClause2<K, V, KI, E, KO, VO> then(Function<KI, KO> keyMapper,
-                                                     Function<Streamable<E>, VO> valueMapper) {
+                                                     Function<ReactiveSeq<E>, VO> valueMapper) {
         return OrMatchClause2.of(() -> MatchResult2.of(subject().either()
                                                                 .mapLeft(Tuple2::_2)
                                                                 .mapLeft(kiviOptTuple -> kiviOptTuple.map(kiviTuple -> kiviTuple.bimap(keyMapper,
-                                                                                                                                       valueMapper.compose(Streamable::fromIterable))))
+                                                                                                                                       valueMapper.compose(ReactiveSeq::fromIterable))))
                                                                 .toEither(Tuple2.of(subject().either()
                                                                                              .leftOrElse(null)
                                                                                              ._1(),

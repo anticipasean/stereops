@@ -11,10 +11,11 @@ import java.util.function.Predicate;
 public interface VariantMapper {
 
     static <I, R> boolean isOfType(I inputObject,
-                                   Class<R> returnType) {
-        return inputObject != null && returnType != null && (returnType.isAssignableFrom(inputObject.getClass()) || (
-            inputObject.getClass()
-                       .isPrimitive() && returnType.isInstance(inputObject)));
+                                   Class<? extends R> returnType) {
+        return inputObject != null && returnType != null && ((!inputObject.getClass()
+                                                                          .isPrimitive()
+            && returnType.isAssignableFrom(inputObject.getClass())) || (returnType.isPrimitive()
+            && returnType.isInstance(inputObject)));
     }
 
     static <I, R> Option<R> tryDynamicCastOfInputToReturnType(I inputObject,
