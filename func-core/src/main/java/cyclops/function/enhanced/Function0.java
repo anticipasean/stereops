@@ -1,6 +1,5 @@
 package cyclops.function.enhanced;
 
-
 import cyclops.async.Future;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
@@ -47,10 +46,6 @@ public interface Function0<R> extends Supplier<R> {
         return Eval.later(this);
     }
 
-    default R apply() {
-        return get();
-    }
-
     default Function0<Maybe<R>> lazyLift() {
         return () -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply())));
     }
@@ -68,7 +63,6 @@ public interface Function0<R> extends Supplier<R> {
     default Function0<Option<R>> lift() {
         return () -> Option.ofNullable(apply());
     }
-
 
     default Function0<R> memoize() {
         return Memoize.memoizeSupplier(this);
@@ -97,7 +91,6 @@ public interface Function0<R> extends Supplier<R> {
         return ReactiveSeq.of(get());
     }
 
-
     /**
      * Use the value stored in this Value to seed a Stream generated from the provided function
      *
@@ -115,7 +108,6 @@ public interface Function0<R> extends Supplier<R> {
     default ReactiveSeq<R> generate() {
         return ReactiveSeq.generate(this);
     }
-
 
     default <V> Function0<V> andThen(Function<? super R, ? extends V> after) {
         return () -> after.apply(get());
@@ -143,12 +135,15 @@ public interface Function0<R> extends Supplier<R> {
                       .get();
     }
 
+    default R apply() {
+        return get();
+    }
+
     default <R1> Function0<R1> coflatMapFn(final Function<? super Supplier<? super R>, ? extends R1> f) {
         return () -> f.apply(this);
     }
 
     interface FunctionalOperations<R> extends Function0<R> {
-
 
         default Function0<ReactiveSeq<R>> liftStream() {
             return () -> ReactiveSeq.of(apply());
@@ -158,11 +153,9 @@ public interface Function0<R> extends Supplier<R> {
             return () -> Future.ofResult(apply());
         }
 
-
         default Function0<Seq<R>> liftSeq() {
             return () -> Seq.of(apply());
         }
-
 
         default Function0<LazySeq<R>> liftLazySeq() {
             return () -> LazySeq.of(apply());
@@ -171,7 +164,7 @@ public interface Function0<R> extends Supplier<R> {
         default Function0<Vector<R>> liftVector() {
             return () -> Vector.of(apply());
         }
-    }
 
+    }
 
 }

@@ -1,6 +1,5 @@
 package cyclops.function.enhanced;
 
-
 import cyclops.async.Future;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
@@ -29,18 +28,6 @@ public interface Function6<T1, T2, T3, T4, T5, T6, R> extends
 
     static <T1, T2, T3, T4, T5, T6, R> Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> λv(final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> triFunc) {
         return triFunc;
-    }
-
-    R apply(T1 a,
-            T2 b,
-            T3 c,
-            T4 d,
-            T5 e,
-            T6 f);
-
-    default Function1<T2, Function1<T3, Function1<T4, Function1<T5, Function1<T6, R>>>>> apply(final T1 s) {
-        return Curry.curry6(this)
-                    .apply(s);
     }
 
     default Function1<T3, Function1<T4, Function1<T5, Function1<T6, R>>>> apply(final T1 s,
@@ -73,6 +60,11 @@ public interface Function6<T1, T2, T3, T4, T5, T6, R> extends
                        .apply(s3)
                        .apply(s4)
                        .apply(s5);
+    }
+
+    default Function1<T2, Function1<T3, Function1<T4, Function1<T5, Function1<T6, R>>>>> apply(final T1 s) {
+        return Curry.curry6(this)
+                    .apply(s);
     }
 
     default Function6<T1, T2, T3, T4, T5, T6, Maybe<R>> lazyLift6() {
@@ -127,4 +119,12 @@ public interface Function6<T1, T2, T3, T4, T5, T6, R> extends
                                                              t5,
                                                              t6));
     }
+
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d,
+            T5 e,
+            T6 f);
+
 }

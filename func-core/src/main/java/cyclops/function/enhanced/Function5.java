@@ -1,6 +1,5 @@
 package cyclops.function.enhanced;
 
-
 import cyclops.async.Future;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
@@ -196,12 +195,6 @@ public interface Function5<T1, T2, T3, T4, T5, R> extends
         return triFunc;
     }
 
-    R apply(T1 a,
-            T2 b,
-            T3 c,
-            T4 d,
-            T5 e);
-
     default Function5<T1, T2, T3, T4, T5, Maybe<R>> lazyLift5() {
         return (s1, s2, s3, s4, s5) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(s1,
                                                                                               s2,
@@ -278,7 +271,14 @@ public interface Function5<T1, T2, T3, T4, T5, R> extends
                                                          t5));
     }
 
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d,
+            T5 e);
+
     default Function1<? super T1, Function1<? super T2, Function1<? super T3, Function1<? super T4, Function1<? super T5, ? extends R>>>>> curry() {
         return CurryVariance.curry5(this);
     }
+
 }

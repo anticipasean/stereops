@@ -1,6 +1,5 @@
 package cyclops.function.enhanced;
 
-
 import cyclops.async.Future;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
@@ -24,11 +23,6 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function2<T1, T2, R>> {
 
-    static <T1, T2, R> Function2<T1, T2, R> of(final BiFunction<T1, T2, R> triFunc) {
-        return (a, b) -> triFunc.apply(a,
-                                       b);
-    }
-
     static <T1, T2, R> Function2<T1, T2, R> λ(final Function2<T1, T2, R> triFunc) {
         return triFunc;
     }
@@ -45,12 +39,9 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
         return Function2.of((BiFunction<T1, T2, R>) fn);
     }
 
-    static <T1, T2, R> Function2<T1, T2, R> _1(Function<T1, R> fn) {
-        return (a, b) -> fn.apply(a);
-    }
-
-    static <T1, T2, R> Function2<T1, T2, R> _2(Function<T2, R> fn) {
-        return (a, b) -> fn.apply(b);
+    static <T1, T2, R> Function2<T1, T2, R> of(final BiFunction<T1, T2, R> biFunc) {
+        return (a, b) -> biFunc.apply(a,
+                                      b);
     }
 
     static <T1, T2, R> Function2<T1, T2, R> constant(R d) {
@@ -61,13 +52,18 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
         return (a, b) -> d.get();
     }
 
-    R apply(T1 a,
-            T2 b);
+    static <T1, T2, R> Function2<T1, T2, R> _1(Function<T1, R> fn) {
+        return (a, b) -> fn.apply(a);
+    }
+
+    static <T1, T2, R> Function2<T1, T2, R> _2(Function<T2, R> fn) {
+        return (a, b) -> fn.apply(b);
+    }
 
     default Function2<T1, T2, Maybe<R>> lazyLift() {
         Function2<T1, T2, R> host = this;
-        return (T1, T2) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(T1,
-                                                                                  T2))));
+        return (T1, T2) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(host.apply(T1,
+                                                                                       T2))));
     }
 
     default Function2<T1, T2, Future<R>> lift(Executor ex) {
@@ -79,17 +75,16 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
 
     default Function2<T1, T2, Try<R, Throwable>> liftTry() {
         Function2<T1, T2, R> host = this;
-        return (T1, T2) -> Try.withCatch(() -> host.apply(T1,
-                                                          T2),
+        return (t1, t2) -> Try.withCatch(() -> host.apply(t1,
+                                                          t2),
                                          Throwable.class);
     }
 
     default Function2<T1, T2, Option<R>> lift() {
         Function2<T1, T2, R> host = this;
-        return (T1, T2) -> Option.ofNullable(host.apply(T1,
-                                                        T2));
+        return (t1, t2) -> Option.ofNullable(host.apply(t1,
+                                                        t2));
     }
-
 
     default Function2<T1, T2, R> memoize() {
         return Memoize.memoizeBiFunction(this);
@@ -118,7 +113,6 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
         return CurryVariance.curry2(this);
     }
 
-
     default Function1<T2, R> apply(final T1 s) {
         return Curry.curry2(this)
                     .apply(s);
@@ -129,15 +123,14 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
                                  t2);
     }
 
+    default <R1> Function2<T1, T2, R1> mapFn(final Function<? super R, ? extends R1> f2) {
+        return andThen(f2);
+    }
+
     @Override
     default <V> Function2<T1, T2, V> andThen(Function<? super R, ? extends V> after) {
         return (t1, t2) -> after.apply(apply(t1,
                                              t2));
-    }
-
-
-    default <R1> Function2<T1, T2, R1> mapFn(final Function<? super R, ? extends R1> f2) {
-        return andThen(f2);
     }
 
     default <R1> Function2<T1, T2, R1> flatMapFn(final Function<? super R, ? extends Function<? super T1, ? extends R1>> f) {
@@ -151,8 +144,10 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
                                b);
     }
 
-    interface FunctionalOperations<T1, T2, R> extends Function2<T1, T2, R> {
+    R apply(T1 a,
+            T2 b);
 
+    interface FunctionalOperations<T1, T2, R> extends Function2<T1, T2, R> {
 
         default <V> Function2<T1, T2, V> apply(final BiFunction<? super T1, ? super T2, ? extends Function<? super R, ? extends V>> applicative) {
             return (a, b) -> applicative.apply(a,
@@ -181,7 +176,6 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
                                         this);
         }
 
-
         default Function2<Seq<T1>, Seq<T2>, Seq<R>> seqZip() {
             return (a, b) -> a.zip(b,
                                    this);
@@ -206,7 +200,6 @@ public interface Function2<T1, T2, R> extends BiFunction<T1, T2, R>, To<Function
             return (a, b) -> a.zip(b,
                                    this);
         }
-
 
     }
 

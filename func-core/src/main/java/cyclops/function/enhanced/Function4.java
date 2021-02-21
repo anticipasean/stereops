@@ -1,6 +1,5 @@
 package cyclops.function.enhanced;
 
-
 import cyclops.async.Future;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
@@ -103,11 +102,6 @@ public interface Function4<T1, T2, T3, T4, R> extends Function1<T1, Function1<T2
         return triFunc;
     }
 
-    R apply(T1 a,
-            T2 b,
-            T3 c,
-            T4 d);
-
     default Function4<T1, T2, T3, T4, Maybe<R>> lazyLift4() {
         return (s1, s2, s3, s4) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(s1,
                                                                                           s2,
@@ -194,4 +188,10 @@ public interface Function4<T1, T2, T3, T4, R> extends Function1<T1, Function1<T2
                                                      t3,
                                                      t4));
     }
+
+    R apply(T1 a,
+            T2 b,
+            T3 c,
+            T4 d);
+
 }

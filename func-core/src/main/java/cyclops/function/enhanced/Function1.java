@@ -1,5 +1,7 @@
 package cyclops.function.enhanced;
 
+import static java.util.Objects.requireNonNull;
+
 import cyclops.async.Future;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
@@ -30,16 +32,18 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Function1<T, R> extends Function<T, R> {
 
-    static <T1, R> Function1<T1, R> of(final Function<T1, R> triFunc) {
-        return a -> triFunc.apply(a);
+    static <T1, R> Function1<T1, R> of(final Function<T1, R> func) {
+        requireNonNull(func,
+                       () -> "func");
+        return a -> func.apply(a);
     }
 
-    static <T1, R> Function1<T1, R> λ(final Function1<T1, R> triFunc) {
-        return triFunc;
+    static <T1, R> Function1<T1, R> λ(final Function1<T1, R> func) {
+        return func;
     }
 
-    static <T1, R> Function1<? super T1, ? extends R> λv(final Function1<? super T1, ? extends R> triFunc) {
-        return triFunc;
+    static <T1, R> Function1<? super T1, ? extends R> λv(final Function1<? super T1, ? extends R> func) {
+        return func;
     }
 
     static <T1, T2> Function1<T1, T2> constant(T2 t) {
@@ -47,14 +51,19 @@ public interface Function1<T, R> extends Function<T, R> {
     }
 
     static <T1, T2> Function1<T1, T2> lazy(Supplier<T2> t) {
+        requireNonNull(t,
+                       () -> "t");
         return __ -> t.get();
     }
 
-    static <T, R> Function1<T, R> narrow(Function<? super T, ? extends R> fn) {
-        if (fn instanceof Function1) {
-            return (Function1<T, R>) fn;
+    @SuppressWarnings("unchecked")
+    static <T, R> Function1<T, R> narrow(Function<? super T, ? extends R> func) {
+        requireNonNull(func,
+                       () -> "func");
+        if (func instanceof Function1) {
+            return (Function1<T, R>) func;
         }
-        return t -> fn.apply(t);
+        return t -> func.apply(t);
     }
 
     default <R2> R2 toType(Function<? super Function1<? super T, ? extends R>, ? extends R2> reduce) {
@@ -76,8 +85,6 @@ public interface Function1<T, R> extends Function<T, R> {
     default Eval<R> now(T t) {
         return Eval.now(apply(t));
     }
-
-    R apply(T a);
 
     /**
      * Apply before advice to this function, capture the input with the provided Consumer
@@ -102,21 +109,21 @@ public interface Function1<T, R> extends Function<T, R> {
     }
 
     default Function1<T, Maybe<R>> lazyLift() {
-        return (T1) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(T1))));
+        return (t) -> Maybe.fromLazy(Eval.later(() -> Maybe.ofNullable(apply(t))));
     }
 
     default Function1<T, Future<R>> lift(Executor ex) {
-        return (T1) -> Future.of(() -> apply(T1),
-                                 ex);
+        return (t) -> Future.of(() -> apply(t),
+                                ex);
     }
 
     default Function1<T, Try<R, Throwable>> liftTry() {
-        return (T1) -> Try.withCatch(() -> apply(T1),
-                                     Throwable.class);
+        return (t) -> Try.withCatch(() -> apply(t),
+                                    Throwable.class);
     }
 
     default Function1<T, Option<R>> lift() {
-        return (T1) -> Option.ofNullable(apply(T1));
+        return (t) -> Option.ofNullable(apply(t));
     }
 
     default Function1<T, R> memoize() {
@@ -209,11 +216,6 @@ public interface Function1<T, R> extends Function<T, R> {
         return v -> apply(before.apply(v));
     }
 
-    @Override
-    default <V> Function1<T, V> andThen(Function<? super R, ? extends V> after) {
-        return t -> after.apply(apply(t));
-    }
-
     default <V> Function1<Function<? super R, ? extends V>, Function1<T, V>> andThen() {
         return this::andThen;
     }
@@ -231,10 +233,17 @@ public interface Function1<T, R> extends Function<T, R> {
         return andThen(f2);
     }
 
+    @Override
+    default <V> Function1<T, V> andThen(Function<? super R, ? extends V> after) {
+        return t -> after.apply(apply(t));
+    }
+
     default <R1> Function1<T, R1> flatMapFn(final Function<? super R, ? extends Function<? super T, ? extends R1>> f) {
         return a -> f.apply(apply(a))
                      .apply(a);
     }
+
+    R apply(T a);
 
     default <R1> Function1<T, R1> coflatMapFn(final Function<? super Function1<? super T, ? extends R>, ? extends R1> f) {
         return in -> f.apply(this);
@@ -294,11 +303,9 @@ public interface Function1<T, R> extends Function<T, R> {
             return in -> Future.ofResult(apply(in));
         }
 
-
         default Function1<T1, Seq<R>> liftList() {
             return in -> Seq.of(apply(in));
         }
-
 
         default Function1<T1, LazySeq<R>> liftLazySeq() {
             return in -> LazySeq.of(apply(in));
@@ -307,7 +314,7 @@ public interface Function1<T, R> extends Function<T, R> {
         default Function1<T1, Vector<R>> liftVector() {
             return in -> Vector.of(apply(in));
         }
-    }
 
+    }
 
 }

@@ -26,13 +26,14 @@ public interface Function3<S1, S2, S3, R> extends Function1<S1, Function1<S2, Fu
     }
 
     @SuppressWarnings("unchecked")
-    static <T1, T2, T3, R> Function3<T1, T2, T3, R> narrow(final Function3<? extends T1, ? extends T2, ? extends T3, ? extends R> func){
+    static <T1, T2, T3, R> Function3<T1, T2, T3, R> narrow(final Function3<? super T1, ? super T2, ? super T3, ? extends R> func) {
         return (Function3<T1, T2, T3, R>) func;
     }
 
-//    @SuppressWarnings("unchecked")
-    static <T1, T2, T3, R> Function3<T1, T2, T3, R> λn(final Function3<? super T1, ? super T2, ? super T3, ? extends R> func){
-        return (a, b, c) -> func.apply(a, b, c);
+    static <T1, T2, T3, R> Function3<T1, T2, T3, R> λn(final Function3<? super T1, ? super T2, ? super T3, ? extends R> func) {
+        return (a, b, c) -> func.apply(a,
+                                       b,
+                                       c);
     }
 
     static <T1, T2, T3, R> Function3<T1, T2, T3, R> constant(R t) {
@@ -70,14 +71,9 @@ public interface Function3<S1, S2, S3, R> extends Function1<S1, Function1<S2, Fu
                                      c);
     }
 
-    R apply(S1 a,
-            S2 b,
-            S3 c);
-
     default <R2> R2 toType3(Function<? super Function3<? super S1, ? super S2, ? super S3, ? extends R>, ? extends R2> reduce) {
         return reduce.apply(this);
     }
-
 
     default Function3<S1, S2, S3, Maybe<R>> lazyLift3() {
         Function3<S1, S2, S3, R> host = this;
@@ -165,11 +161,9 @@ public interface Function3<S1, S2, S3, R> extends Function1<S1, Function1<S2, Fu
                                                timeToLiveMillis);
     }
 
-
     default Function1<? super S1, Function1<? super S2, Function1<? super S3, ? extends R>>> curry() {
         return CurryVariance.curry3(this);
     }
-
 
     default Function1<S2, Function1<S3, R>> apply(final S1 s) {
         return Curry.curry3(this)
@@ -183,10 +177,14 @@ public interface Function3<S1, S2, S3, R> extends Function1<S1, Function1<S2, Fu
                     .apply(s2);
     }
 
-
     default <V> Function3<S1, S2, S3, V> andThen3(Function<? super R, ? extends V> after) {
         return (s1, s2, s3) -> after.apply(apply(s1,
                                                  s2,
                                                  s3));
     }
+
+    R apply(S1 a,
+            S2 b,
+            S3 c);
+
 }
