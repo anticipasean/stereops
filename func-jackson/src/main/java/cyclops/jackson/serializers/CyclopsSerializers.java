@@ -19,7 +19,7 @@ import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Ior;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Trampoline;
 import cyclops.container.immutable.tuple.Tuple1;
 import cyclops.container.immutable.tuple.Tuple2;

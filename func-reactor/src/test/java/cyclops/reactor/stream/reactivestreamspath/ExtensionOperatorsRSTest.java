@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.function.companion.Semigroups;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;

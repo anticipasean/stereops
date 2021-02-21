@@ -1,7 +1,7 @@
 package cyclops.rxjava2.companion.flowables.async;
 
 
-import static cyclops.container.control.Option.some;
+import static cyclops.container.control.option.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;

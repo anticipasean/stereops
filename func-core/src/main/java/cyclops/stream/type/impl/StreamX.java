@@ -2,7 +2,7 @@ package cyclops.stream.type.impl;
 
 import static cyclops.reactive.ReactiveSeq.fill;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

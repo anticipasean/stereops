@@ -1,7 +1,7 @@
 package cyclops.container.foldable;
 
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.HashSet;

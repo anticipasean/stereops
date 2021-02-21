@@ -1,6 +1,6 @@
 package cyclops.container.talk;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 
 public class OptionExample {
 

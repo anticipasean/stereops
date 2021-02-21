@@ -4,7 +4,7 @@ import cyclops.container.control.Either;
 import cyclops.container.control.Ior;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Try;
 import cyclops.container.foldable.SealedOr;
 import cyclops.container.immutable.impl.NonEmptyList;

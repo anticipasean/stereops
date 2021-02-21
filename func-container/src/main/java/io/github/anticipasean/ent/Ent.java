@@ -3,7 +3,7 @@ package io.github.anticipasean.ent;
 import static java.util.Objects.requireNonNull;
 
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.impl.BankersQueue;
@@ -25,7 +25,6 @@ import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.type.Streamable;
-import io.github.anticipasean.ent.pattern.Matcher.Matcher2;
 import io.github.anticipasean.ent.pattern.VariantMapper;
 import io.github.anticipasean.ent.pattern.pair.EntPattern2;
 import io.github.anticipasean.ent.pattern.pair.Pattern2;

@@ -5,7 +5,7 @@ import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidK;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.pure.control.State;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;

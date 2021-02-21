@@ -1,6 +1,6 @@
 package cyclops.pattern;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.function.BiFunction;
 import java.util.function.Function;

@@ -3,7 +3,7 @@ package cyclops.pure.typeclasses.foldable;
 import cyclops.function.higherkinded.Higher;
 import cyclops.pure.arrow.MonoidK;
 import cyclops.function.companion.Monoids;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.function.combiner.Monoid;

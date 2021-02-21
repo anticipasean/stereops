@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;

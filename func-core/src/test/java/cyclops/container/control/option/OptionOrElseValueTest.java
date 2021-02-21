@@ -2,7 +2,6 @@ package cyclops.container.control.option;
 
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.control.AbstractOrElseValueTest;
-import cyclops.container.control.Option;
 
 public class OptionOrElseValueTest extends AbstractOrElseValueTest {
 

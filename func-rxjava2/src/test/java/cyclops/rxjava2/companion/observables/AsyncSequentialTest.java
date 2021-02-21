@@ -14,7 +14,7 @@ import cyclops.stream.type.Streamable;
 import cyclops.rxjava2.companion.Observables;
 import cyclops.container.control.Either;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import cyclops.container.immutable.tuple.Tuple4;

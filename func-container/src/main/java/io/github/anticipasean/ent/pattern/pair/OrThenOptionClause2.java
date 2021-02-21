@@ -1,7 +1,7 @@
 package io.github.anticipasean.ent.pattern.pair;
 
 import cyclops.container.control.Either;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import io.github.anticipasean.ent.pattern.Clause;
 import java.util.function.BiFunction;

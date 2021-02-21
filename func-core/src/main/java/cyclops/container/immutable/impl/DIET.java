@@ -3,7 +3,7 @@ package cyclops.container.immutable.impl;
 import static cyclops.container.control.Trampoline.done;
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Trampoline;
 import cyclops.container.foldable.Deconstructable.Deconstructable3;
 import cyclops.container.foldable.Foldable;

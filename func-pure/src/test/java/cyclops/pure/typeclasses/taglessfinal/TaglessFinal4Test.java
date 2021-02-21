@@ -1,7 +1,7 @@
 package cyclops.pure.typeclasses.taglessfinal;
 
 import cyclops.function.higherkinded.DataWitness.io;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.pure.instances.reactive.IOInstances;
 import cyclops.reactive.IO;

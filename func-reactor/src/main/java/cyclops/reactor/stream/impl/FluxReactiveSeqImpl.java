@@ -3,7 +3,7 @@ package cyclops.reactor.stream.impl;
 
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;

@@ -1,6 +1,6 @@
 package cyclops.container.immutable.impl.base;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.container.foldable.Deconstructable.Deconstructable2;
 import cyclops.container.foldable.Sealed4;

@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.async.Future;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Trampoline;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.mutable.Mutable;

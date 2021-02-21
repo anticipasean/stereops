@@ -3,7 +3,7 @@ package cyclops.reactive.collection.container;
 import cyclops.container.Value;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.function.evaluation.Evaluation;
 import cyclops.reactive.ReactiveSeq;

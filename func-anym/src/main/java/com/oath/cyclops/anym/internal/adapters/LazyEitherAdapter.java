@@ -5,7 +5,7 @@ import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.AbstractMonadAdapter;
 import com.oath.cyclops.anym.extensability.MonadAdapter;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Either;
 import cyclops.container.control.LazyEither;
 import cyclops.monads.AnyM;

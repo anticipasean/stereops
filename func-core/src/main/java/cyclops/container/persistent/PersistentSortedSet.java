@@ -1,7 +1,7 @@
 package cyclops.container.persistent;
 
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.persistent.views.SortedSetView;
 import java.util.Comparator;
 

@@ -28,7 +28,7 @@ import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Trampoline;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.impl.HashMap;

@@ -2,7 +2,7 @@ package cyclops.pattern;
 
 
 import cyclops.container.control.Either;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;
 import java.util.function.Function;

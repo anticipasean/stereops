@@ -16,7 +16,7 @@ import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.stream.companion.Streams;
 import cyclops.rxjava2.companion.Observables;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.tuple.Tuple2;

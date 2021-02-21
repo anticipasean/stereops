@@ -1,7 +1,7 @@
 package io.github.anticipasean.ent.pattern.single;
 
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.stream.type.Streamable;
 import io.github.anticipasean.ent.iterator.TypeMatchingIterable;

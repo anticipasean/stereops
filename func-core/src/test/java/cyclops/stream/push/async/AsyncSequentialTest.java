@@ -13,7 +13,7 @@ import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;

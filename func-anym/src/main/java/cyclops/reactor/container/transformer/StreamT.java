@@ -8,7 +8,7 @@ import cyclops.container.transformable.To;
 import cyclops.container.traversable.RecoverableTraversable;
 import cyclops.container.traversable.Traversable;
 import com.oath.cyclops.anym.transformers.FoldableTransformerSeq;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.control.Maybe;

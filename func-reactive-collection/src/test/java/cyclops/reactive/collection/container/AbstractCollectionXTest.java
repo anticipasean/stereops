@@ -17,7 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
 
 import cyclops.container.basetests.AbstractIterableXTest;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.TreeSet;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.collection.container.fluent.FluentCollectionX;

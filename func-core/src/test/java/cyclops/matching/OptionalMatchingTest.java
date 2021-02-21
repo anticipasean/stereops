@@ -5,7 +5,7 @@ import static cyclops.pattern.Api.MatchType;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.pattern.Case;
 import cyclops.pattern.Matching;

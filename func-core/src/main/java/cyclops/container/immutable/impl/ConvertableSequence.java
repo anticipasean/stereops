@@ -2,7 +2,7 @@ package cyclops.container.immutable.impl;
 
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.stream.companion.Streams;

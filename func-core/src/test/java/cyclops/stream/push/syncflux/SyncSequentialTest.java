@@ -10,7 +10,7 @@ import cyclops.async.queue.Topic;
 import cyclops.stream.operator.BaseSequentialTest;
 import cyclops.stream.type.Streamable;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

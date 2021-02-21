@@ -3,7 +3,7 @@ package cyclops.container.immutable.impl;
 
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.ordering.Ordering;
 import cyclops.function.higherkinded.DataWitness.range;

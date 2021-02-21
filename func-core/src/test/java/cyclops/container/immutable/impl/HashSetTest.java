@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.basetests.BaseImmutableSetTest;
 import cyclops.container.immutable.ImmutableSet;
 import cyclops.container.immutable.tuple.Tuple2;

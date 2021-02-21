@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Either;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.basetests.BaseImmutableListTest;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.Arrays;

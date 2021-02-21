@@ -11,7 +11,7 @@ import cyclops.container.immutable.ImmutableSet;
 import cyclops.container.traversable.IterableX;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.basetests.BaseImmutableSetTest;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;

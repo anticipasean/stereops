@@ -2,6 +2,7 @@ package cyclops.container.control;
 
 import cyclops.async.Future;
 import cyclops.container.MonadicValue;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.companion.FluentFunctions;

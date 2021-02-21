@@ -1,17 +1,13 @@
 package io.github.anticipasean.ent.pattern;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple2;
-import cyclops.reactive.ReactiveSeq;
 import io.github.anticipasean.ent.Ent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Function;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class KeyValueMatchingTest {

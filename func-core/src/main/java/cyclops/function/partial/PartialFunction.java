@@ -1,6 +1,6 @@
 package cyclops.function.partial;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.function.cacheable.Memoize;
 import java.util.function.Function;
 import java.util.function.Supplier;

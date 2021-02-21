@@ -1,7 +1,7 @@
 package cyclops.pure.typeclasses;
 
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import org.junit.Test;
 
 import static org.hamcrest.core.IsEqual.equalTo;

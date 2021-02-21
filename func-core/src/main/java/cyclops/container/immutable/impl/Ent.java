@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.tuple.Tuple2;

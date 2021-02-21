@@ -1,6 +1,6 @@
 package cyclops.monads.control;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 
 
 import static cyclops.monads.AnyM.success;

@@ -6,7 +6,7 @@ import cyclops.async.Future;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.function.companion.Functions;
 import cyclops.function.enhanced.Function1;
 import cyclops.monads.Witness.reactiveSeq;

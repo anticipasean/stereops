@@ -1,6 +1,6 @@
 package cyclops.immutables.encoding;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import java.util.Objects;
 import org.immutables.encode.Encoding;
 

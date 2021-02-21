@@ -1,7 +1,7 @@
 package com.oath.cyclops.anym;
 
 import cyclops.container.filterable.Filterable;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;

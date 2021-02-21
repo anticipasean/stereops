@@ -10,7 +10,7 @@ import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.stream.type.Connectable;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.function.combiner.Monoid;

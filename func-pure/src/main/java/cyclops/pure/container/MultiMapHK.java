@@ -5,7 +5,7 @@ import cyclops.container.immutable.impl.HashMap;
 import cyclops.function.higherkinded.DataWitness.multiMapHK;
 import cyclops.function.higherkinded.Higher;
 import cyclops.function.higherkinded.Higher2;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.pure.typeclasses.Pure;
 import java.util.function.Function;

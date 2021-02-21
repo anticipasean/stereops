@@ -9,7 +9,7 @@ import cyclops.pure.arrow.MonoidK;
 import cyclops.pure.arrow.MonoidKs;
 import cyclops.container.control.Either;
 import cyclops.async.Future;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.function.combiner.Monoid;
 import cyclops.pure.instances.control.FutureInstances;
 import cyclops.pure.kinds.CompletableFutureKind;

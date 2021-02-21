@@ -15,7 +15,7 @@ import cyclops.pure.arrow.SemigroupK;
 import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.tuple.Tuple;

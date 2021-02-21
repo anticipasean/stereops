@@ -2,6 +2,7 @@ package cyclops.reactor.container.transformer;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
+import cyclops.container.control.option.Option;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.AnyMs;
@@ -12,7 +13,6 @@ import cyclops.pure.reactive.collections.immutable.LinkedListX;
 import cyclops.function.companion.Reducers;
 import cyclops.stream.companion.Streams;
 import cyclops.pure.reactive.collections.mutable.ListX;
-import cyclops.container.control.*;
 import cyclops.container.control.Maybe;
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;

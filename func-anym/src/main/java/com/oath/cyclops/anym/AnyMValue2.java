@@ -6,7 +6,7 @@ import cyclops.function.companion.Predicates;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
 import cyclops.container.Value;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Either;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple2;

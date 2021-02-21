@@ -1,7 +1,7 @@
 package cyclops.reactor.stream.syncflux;
 
 
-import static cyclops.container.control.Option.some;
+import static cyclops.container.control.option.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;

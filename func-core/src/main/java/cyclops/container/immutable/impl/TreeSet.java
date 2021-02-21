@@ -1,7 +1,7 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.ImmutableSet;
 import cyclops.container.immutable.ImmutableSortedSet;
 import cyclops.container.immutable.impl.base.RedBlackTree;

@@ -2,7 +2,7 @@ package cyclops.pure.typeclasses;
 
 import cyclops.function.higherkinded.DataWitness.option;
 import cyclops.function.companion.Monoids;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
@@ -19,7 +19,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cyclops.container.control.Option.some;
+import static cyclops.container.control.option.Option.some;
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.IsEqual.equalTo;

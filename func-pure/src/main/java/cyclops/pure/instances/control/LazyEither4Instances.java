@@ -9,7 +9,7 @@ import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidK;
 import cyclops.container.control.Either;
 import cyclops.container.control.LazyEither4;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.function.combiner.Monoid;
 import cyclops.pure.container.functional.Active;
 import cyclops.pure.container.functional.Nested;

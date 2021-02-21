@@ -10,7 +10,7 @@ import cyclops.pure.arrow.MonoidK;
 import cyclops.pure.arrow.MonoidKs;
 import cyclops.container.control.Either;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.combiner.Monoid;

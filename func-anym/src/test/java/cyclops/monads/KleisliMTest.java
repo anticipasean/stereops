@@ -1,7 +1,7 @@
 package cyclops.monads;
 
 import cyclops.pure.reactive.collections.mutable.ListX;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Either;
 import cyclops.monads.Witness.stream;
 import cyclops.monads.Witness.reactiveSeq;

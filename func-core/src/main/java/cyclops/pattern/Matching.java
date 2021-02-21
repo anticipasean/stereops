@@ -1,6 +1,6 @@
 package cyclops.pattern;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.foldable.Sealed3;
 import cyclops.container.foldable.Sealed4;

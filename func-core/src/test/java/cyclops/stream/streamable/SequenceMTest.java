@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.reactive.ReactiveSeq;
 import java.io.Serializable;
 import java.util.Arrays;

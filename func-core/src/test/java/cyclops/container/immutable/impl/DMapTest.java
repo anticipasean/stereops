@@ -2,7 +2,7 @@ package cyclops.container.immutable.impl;
 
 import static cyclops.container.control.Either.right;
 import static cyclops.container.control.LazyEither.left;
-import static cyclops.container.control.Option.some;
+import static cyclops.container.control.option.Option.some;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Either;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.base.BAMT;
 import cyclops.container.basetests.BaseImmutableListTest;
 import cyclops.container.immutable.ImmutableList;

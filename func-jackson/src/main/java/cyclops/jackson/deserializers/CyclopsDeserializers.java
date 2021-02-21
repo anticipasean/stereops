@@ -20,7 +20,7 @@ import cyclops.container.control.LazyEither;
 import cyclops.container.control.LazyEither3;
 import cyclops.container.control.LazyEither4;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Trampoline;
 import cyclops.container.control.Unrestricted;
 import cyclops.container.immutable.tuple.Tuple0;

@@ -1,5 +1,6 @@
 package cyclops.monads;
 
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;

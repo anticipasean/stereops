@@ -4,6 +4,8 @@ package cyclops.container.control;
 import cyclops.async.Future;
 import cyclops.async.exception.ClosedQueueException;
 import cyclops.container.MonadicValue;
+import cyclops.container.control.option.None;
+import cyclops.container.control.option.Option;
 import cyclops.container.foldable.Present;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
@@ -1385,7 +1387,7 @@ public interface Maybe<T> extends Option<T> {
         @Override
         public <R> R fold(Function<? super T, ? extends R> fn1,
                           Function<? super None<T>, ? extends R> fn2) {
-            Option.None<T> none = None.NOTHING_EAGER;
+            None<T> none = None.NOTHING_EAGER;
             return fn2.apply(none);
         }
     }

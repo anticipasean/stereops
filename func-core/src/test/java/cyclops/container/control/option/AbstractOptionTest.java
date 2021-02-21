@@ -4,7 +4,6 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import cyclops.container.control.AbstractValueTest;
-import cyclops.container.control.Option;
 import org.junit.Test;
 import org.reactivestreams.Publisher;
 

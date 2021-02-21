@@ -2,7 +2,7 @@ package cyclops.companion;
 
 import cyclops.container.control.Either;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.traversable.IterableX;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;

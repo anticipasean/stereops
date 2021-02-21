@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.traversable.IterableX;
 import cyclops.function.companion.Semigroups;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.basetests.BaseImmutableListTest;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

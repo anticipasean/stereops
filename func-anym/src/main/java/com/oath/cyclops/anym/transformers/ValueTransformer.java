@@ -7,7 +7,7 @@ import cyclops.container.foldable.Foldable;
 import cyclops.container.MonadicValue;
 import cyclops.container.unwrappable.Unwrappable;
 import cyclops.function.combiner.Zippable;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;

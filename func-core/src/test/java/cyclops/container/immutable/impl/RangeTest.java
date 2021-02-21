@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.function.companion.Comparators;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.EnumerationTest.Days;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.ordering.Ord;

@@ -9,7 +9,7 @@ import cyclops.container.control.Either;
 import cyclops.container.control.Eval;
 import cyclops.async.Future;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Try;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.ImmutableMap;

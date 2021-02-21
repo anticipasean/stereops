@@ -1,9 +1,12 @@
-package cyclops.container.control;
+package cyclops.container.control.option;
 
 import cyclops.async.Future;
 import cyclops.container.MonadicValue;
+import cyclops.container.control.Either;
+import cyclops.container.control.Ior;
+import cyclops.container.control.Maybe;
+import cyclops.container.control.Trampoline;
 import cyclops.container.foldable.OrElseValue;
-import cyclops.container.foldable.Present;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
@@ -26,7 +29,6 @@ import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -35,8 +37,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 
 /**
@@ -50,14 +50,10 @@ import org.reactivestreams.Publisher;
  * <p>
  * Unlike Optional, Option does not expose an unsafe `get` method. `fold` or `orElse` can be used instead.
  *
- * @see Maybe is a lazy / reactive sub-class of Option
+ * @see cyclops.container.control.Maybe is a lazy / reactive sub-class of Option
  **/
 public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, MonadicValue<T>, Zippable<T>, Recoverable<T>,
-                                   Sealed2<T, Option.None<T>>, Iterable<T>, Higher<option, T>, Serializable {
-
-
-    @SuppressWarnings("rawtypes")
-    Option EMPTY = new Option.None<>();
+                                   Sealed2<T, None<T>>, Iterable<T>, Higher<option, T>, Serializable {
 
     static <T> Option<T> attempt(CheckedSupplier<T> s) {
         try {
@@ -93,22 +89,17 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
         return narrow;
     }
 
+    @SuppressWarnings("unchecked")
     static <C2, T> Higher<C2, Higher<option, T>> widen2(Higher<C2, Option<T>> nestedMaybe) {
-
         return (Higher) nestedMaybe;
     }
 
-    /**
-     * @return Get the zero Maybe (single instance)
-     */
-    @SuppressWarnings("unchecked")
     static <T> Option<T> none() {
-
-        return EMPTY;
+        return None.none();
     }
 
     static <T> Option<T> some(T value) {
-        return new Option.Some<>(value);
+        return new Some<>(value);
     }
 
     static <T> Option<T> fromFuture(Future<T> future) {
@@ -207,7 +198,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
      * @return Option containing the supplied value
      */
     static <T> Option<T> of(final T value) {
-        return new Option.Some(value);
+        return new Some(value);
 
     }
 
@@ -291,7 +282,8 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
     /**
      * Sequence operation, take a Stream of Option and turn it into a Option with a Stream By constrast with {@link
-     * Maybe#sequenceJust(Iterable)} Option#zero/ None types are result in the returned Maybe being Option.zero / None
+     * cyclops.container.control.Maybe#sequenceJust(Iterable)} Option#zero/ None types are result in the returned Maybe being
+     * Option.zero / None
      *
      *
      * <pre>
@@ -695,213 +687,6 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     @Override
     default <T1> Option<T1> emptyUnit() {
         return Option.none();
-    }
-
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    final class Some<T> implements Option<T>, Present<T> {
-
-        private static final long serialVersionUID = 1L;
-        private final T value;
-
-
-        public T get() {
-            return value;
-        }
-
-        @Override
-        public boolean isPresent() {
-            return true;
-        }
-
-        @Override
-        public Option<T> recover(Supplier<? extends T> value) {
-            return this;
-        }
-
-        @Override
-        public Option<T> recover(T value) {
-            return this;
-        }
-
-        @Override
-        public Option<T> recoverWith(Supplier<? extends Option<T>> fn) {
-            return this;
-        }
-
-        @Override
-        public <R> Option<R> map(Function<? super T, ? extends R> mapper) {
-            return new Some(mapper.apply(value));
-        }
-
-        @Override
-        public <R> Option<R> flatMap(Function<? super T, ? extends MonadicValue<? extends R>> mapper) {
-            Option<? extends R> x = mapper.apply(value)
-                                          .toOption();
-            return Option.narrow(x);
-        }
-
-        @Override
-        public <R> R fold(Function<? super T, ? extends R> some,
-                          Supplier<? extends R> none) {
-            return some.apply(value);
-        }
-
-        @Override
-        public Option<T> filter(Predicate<? super T> fn) {
-            return fn.test(value) ? this : None.NOTHING_EAGER;
-        }
-
-        @Override
-        public String toString() {
-            return mkString();
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(value);
-        }
-
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (obj instanceof Some) {
-                Some s = (Some) obj;
-                return Objects.equals(value,
-                                      s.value);
-            }
-            if (obj instanceof Present) {
-                return Objects.equals(value,
-                                      ((Maybe) obj).orElse(null));
-            } else if (obj instanceof Option) {
-                Option<T> opt = (Option<T>) obj;
-                if (opt.isPresent()) {
-                    return Objects.equals(value,
-                                          opt.orElse(null));
-                }
-
-            }
-            return false;
-        }
-
-        @Override
-        public <R> R fold(Function<? super T, ? extends R> fn1,
-                          Function<? super None<T>, ? extends R> fn2) {
-            return fn1.apply(value);
-        }
-
-        @Override
-        public T orElse(T alt) {
-            return value;
-        }
-    }
-
-    class None<T> implements Option<T> {
-
-        private static final long serialVersionUID = 1L;
-        public static None NOTHING_EAGER = new None();
-
-        private Object readResolve() {
-            return NOTHING_EAGER;
-        }
-
-        @Override
-        public <R> Option<R> map(final Function<? super T, ? extends R> mapper) {
-            return NOTHING_EAGER;
-        }
-
-        @Override
-        public <R> Option<R> flatMap(final Function<? super T, ? extends MonadicValue<? extends R>> mapper) {
-            return NOTHING_EAGER;
-
-        }
-
-        @Override
-        public Option<T> filter(final Predicate<? super T> test) {
-            return NOTHING_EAGER;
-        }
-
-
-        @Override
-        public Option<T> recover(final T value) {
-            return Option.of(value);
-        }
-
-        @Override
-        public Option<T> recover(final Supplier<? extends T> value) {
-            return Option.of(value.get());
-        }
-
-        @Override
-        public Option<T> recoverWith(Supplier<? extends Option<T>> fn) {
-
-            return fn.get();
-
-        }
-
-
-        @Override
-        public <R> R fold(final Function<? super T, ? extends R> some,
-                          final Supplier<? extends R> none) {
-            return none.get();
-        }
-
-        @Override
-        public Optional<T> toOptional() {
-            return Optional.ofNullable(null);
-        }
-
-        @Override
-        public String toString() {
-            return mkString();
-        }
-
-        @Override
-        public boolean isPresent() {
-            return false;
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-
-            if (obj instanceof None) {
-                return true;
-            } else if (obj instanceof Option) {
-                Option<T> opt = (Option<T>) obj;
-                return !opt.isPresent();
-            }
-            return false;
-        }
-
-        @Override
-        public T orElse(final T value) {
-            return value;
-        }
-
-        @Override
-        public T orElseGet(final Supplier<? extends T> value) {
-            return value.get();
-        }
-
-        @Override
-        public <R> None<R> concatMap(final Function<? super T, ? extends Iterable<? extends R>> mapper) {
-            return NOTHING_EAGER;
-        }
-
-        @Override
-        public <R> None<R> mergeMap(final Function<? super T, ? extends Publisher<? extends R>> mapper) {
-            return NOTHING_EAGER;
-        }
-
-        @Override
-        public void forEach(Consumer<? super T> action) {
-
-        }
-
-        @Override
-        public <R> R fold(Function<? super T, ? extends R> fn1,
-                          Function<? super None<T>, ? extends R> fn2) {
-            return fn2.apply(this);
-        }
     }
 
     @Deprecated

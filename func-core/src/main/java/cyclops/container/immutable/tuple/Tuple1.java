@@ -2,7 +2,7 @@ package cyclops.container.immutable.tuple;
 
 
 import cyclops.container.control.Either;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.ordering.OrderedBy;
 import cyclops.container.relational.EqualTo;

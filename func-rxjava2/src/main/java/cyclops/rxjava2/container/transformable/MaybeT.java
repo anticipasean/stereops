@@ -8,7 +8,7 @@ import cyclops.container.transformable.To;
 import cyclops.container.transformable.ReactiveTransformable;
 import cyclops.rxjava2.companion.Functions;
 import cyclops.rxjava2.companion.Maybes;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;

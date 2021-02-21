@@ -1,7 +1,7 @@
 package cyclops.container.immutable;
 
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.control.Try;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.foldable.Foldable;

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.base.HAMT.BitsetNode;
 import cyclops.container.immutable.impl.base.HAMT.Node;
 import java.util.function.Supplier;

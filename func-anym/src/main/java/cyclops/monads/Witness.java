@@ -1,5 +1,6 @@
 package cyclops.monads;
 
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.LazySeq;
@@ -470,7 +471,8 @@ public interface Witness {
         @Override
         public MonadAdapter<option> adapter() {
           return new MonadicValueAdapter<Witness.option>(()->Option.none(),
-            Option::some,Option::fromIterable,true,this);
+                                                         Option::some,
+                                                         Option::fromIterable, true, this);
         }
 
       }

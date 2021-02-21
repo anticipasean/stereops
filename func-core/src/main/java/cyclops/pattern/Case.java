@@ -1,8 +1,8 @@
 package cyclops.pattern;
 
-import static cyclops.container.control.Option.none;
+import static cyclops.container.control.option.Option.none;
 
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple1;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

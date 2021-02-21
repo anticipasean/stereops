@@ -2,7 +2,7 @@ package cyclops.pure.typeclasses;
 
 import cyclops.pure.arrow.MonoidK;
 import cyclops.container.control.Maybe;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.relational.Eq;
 import cyclops.pure.typeclasses.comonad.Comonad;
 import cyclops.pure.typeclasses.foldable.Foldable;

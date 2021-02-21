@@ -3,7 +3,7 @@ package cyclops.pure.typeclasses.cyclops;
 import cyclops.function.higherkinded.DataWitness.option;
 import cyclops.function.higherkinded.Higher;
 import cyclops.pure.arrow.MonoidKs;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.pure.instances.control.OptionInstances;

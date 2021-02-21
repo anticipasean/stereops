@@ -9,7 +9,7 @@ import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidK;
 import cyclops.container.control.Either;
 import cyclops.pure.control.Identity;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple1;
 import cyclops.function.combiner.Monoid;
 import cyclops.pure.typeclasses.InstanceDefinitions;

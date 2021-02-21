@@ -5,7 +5,7 @@ import cyclops.container.filterable.Filterable;
 import cyclops.container.MonadicValue;
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

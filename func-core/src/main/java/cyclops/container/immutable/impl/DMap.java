@@ -4,7 +4,7 @@ import cyclops.container.control.Either;
 import cyclops.container.control.LazyEither;
 import cyclops.container.control.LazyEither3;
 import cyclops.container.control.LazyEither4;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.transformable.To;

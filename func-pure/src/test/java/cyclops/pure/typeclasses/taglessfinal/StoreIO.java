@@ -2,7 +2,7 @@ package cyclops.pure.typeclasses.taglessfinal;
 
 import cyclops.function.higherkinded.DataWitness.io;
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.reactive.IO;
 

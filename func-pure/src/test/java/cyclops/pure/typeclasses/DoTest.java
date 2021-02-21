@@ -5,7 +5,7 @@ import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidKs;
 import cyclops.function.companion.Monoids;
 import cyclops.container.control.Either;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.pure.instances.control.EitherInstances;
@@ -14,7 +14,7 @@ import cyclops.pure.instances.data.SeqInstances;
 import org.junit.Test;
 
 import static cyclops.container.control.Either.right;
-import static cyclops.container.control.Option.some;
+import static cyclops.container.control.option.Option.some;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 

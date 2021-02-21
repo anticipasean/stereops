@@ -5,7 +5,7 @@ import cyclops.async.exception.ClosedQueueException;
 import cyclops.async.exception.Error;
 import cyclops.async.exception.QueueTimeoutException;
 import cyclops.async.strategy.continuation.ContinuationStrategy;
-import cyclops.container.control.Option;
+import cyclops.container.control.option.Option;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.subscription.Continueable;
