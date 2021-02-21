@@ -1,4 +1,4 @@
-rootProject.name = 'girakkacyclops'
+rootProject.name = 'stereops'
 include ':func-core'
 include ':func-anym'
 include ':func-futurestream'
