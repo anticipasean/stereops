@@ -1,5 +1,7 @@
 package cyclops.container.control.option;
 
+import static java.util.Objects.requireNonNull;
+
 import cyclops.container.MonadicValue;
 import cyclops.container.control.Maybe;
 import cyclops.container.foldable.Present;
@@ -46,25 +48,38 @@ final class Some<T> implements Option<T>, Present<T> {
 
     @Override
     public <R> Option<R> map(Function<? super T, ? extends R> mapper) {
-        return new Some(mapper.apply(value));
+        if (value == null) {
+            return Option.none();
+        }
+        return new Some<>(requireNonNull(mapper,
+                                         () -> "mapper").apply(value));
     }
 
     @Override
     public <R> Option<R> flatMap(Function<? super T, ? extends MonadicValue<? extends R>> mapper) {
-        Option<? extends R> x = mapper.apply(value)
-                                      .toOption();
-        return Option.narrow(x);
+        return Option.narrow(requireNonNull(mapper,
+                                            () -> "mapper").apply(value)
+                                                           .toOption());
     }
 
     @Override
     public <R> R fold(Function<? super T, ? extends R> some,
                       Supplier<? extends R> none) {
-        return some.apply(value);
+        if (value == null) {
+            return requireNonNull(none,
+                                  () -> "none").get();
+        }
+        return requireNonNull(some,
+                              () -> "some").apply(value);
     }
 
     @Override
-    public Option<T> filter(Predicate<? super T> fn) {
-        return fn.test(value) ? this : Option.none();
+    public Option<T> filter(Predicate<? super T> predicate) {
+        if (value == null) {
+            return Option.none();
+        }
+        return requireNonNull(predicate,
+                              () -> "predicate").test(value) ? this : Option.none();
     }
 
     @Override
@@ -76,7 +91,6 @@ final class Some<T> implements Option<T>, Present<T> {
     public int hashCode() {
         return Objects.hashCode(value);
     }
-
 
     @Override
     public boolean equals(final Object obj) {
@@ -102,11 +116,16 @@ final class Some<T> implements Option<T>, Present<T> {
     @Override
     public <R> R fold(Function<? super T, ? extends R> fn1,
                       Function<? super None<T>, ? extends R> fn2) {
-        return fn1.apply(value);
+        if (value == null) {
+            return requireNonNull(fn2.apply(None.none()));
+        }
+        return requireNonNull(fn1,
+                              () -> "fn1").apply(value);
     }
 
     @Override
     public T orElse(T alt) {
         return value;
     }
+
 }

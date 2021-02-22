@@ -50,8 +50,11 @@ import org.reactivestreams.Publisher;
  * <p>
  * Unlike Optional, Option does not expose an unsafe `get` method. `fold` or `orElse` can be used instead.
  *
+ *
  * @see cyclops.container.control.Maybe is a lazy / reactive sub-class of Option
  **/
+
+//TODO: Make null values not prompt NullPointerExceptions on method chains
 public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, MonadicValue<T>, Zippable<T>, Recoverable<T>,
                                    Sealed2<T, None<T>>, Iterable<T>, Higher<option, T>, Serializable {
 
@@ -94,68 +97,8 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
         return (Higher) nestedMaybe;
     }
 
-    static <T> Option<T> none() {
-        return None.none();
-    }
-
-    static <T> Option<T> some(T value) {
-        return new Some<>(value);
-    }
-
     static <T> Option<T> fromFuture(Future<T> future) {
         return future.toOption();
-    }
-
-    /**
-     * Construct a Maybe  that contains a single value extracted from the supplied reactive-streams Publisher
-     * <pre>
-     * {@code
-     *   ReactiveSeq<Integer> stream =  ReactiveSeq.of(1,2,3);
-     *
-     * Option<Integer> maybe = Option.fromPublisher(stream);
-     *
-     * //Option[1]
-     *
-     * }
-     * </pre>
-     *
-     * @param pub Publisher to extract value from
-     * @return Maybe populated with first value from Publisher (Option.zero if Publisher zero)
-     */
-    static <T> Option<T> fromPublisher(final Publisher<T> pub) {
-        return Spouts.from(pub)
-                     .take(1)
-                     .takeOne()
-                     .toOption();
-
-    }
-
-    /**
-     * Construct an Option  that contains a single value extracted from the supplied Iterable
-     * <pre>
-     * {@code
-     *   ReactiveSeq<Integer> stream =  ReactiveSeq.of(1,2,3);
-     *
-     * Option<Integer> maybe = Option.fromIterable(stream);
-     *
-     * //Option[1]
-     *
-     * }
-     * </pre>
-     *
-     * @param iterable Iterable  to extract value from
-     * @return Option populated with first value from Iterable (Option.zero if Publisher zero)
-     */
-    static <T> Option<T> fromIterable(final Iterable<T> iterable) {
-        if (iterable instanceof Option) {
-            return (Option<T>) iterable;
-        }
-        Iterator<T> it = iterable.iterator();
-        if (it.hasNext()) {
-            return Option.some(it.next());
-        }
-        return Option.none();
-
     }
 
     static <R> Option<R> fromStream(Stream<R> apply) {
@@ -185,75 +128,14 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     }
 
     /**
-     * Construct an Option which contains the provided (non-null) value Equivalent to @see {@link Option#some(Object)}
-     * <pre>
-     * {@code
-     *
-     *    Option<Integer> some = Option.of(10);
-     *    some.map(i->i*2);
-     * }
-     * </pre>
-     *
-     * @param value Value to wrap inside a Maybe
-     * @return Option containing the supplied value
-     */
-    static <T> Option<T> of(final T value) {
-        return new Some(value);
-
-    }
-
-    /**
-     * <pre>
-     * {@code
-     *    Option<Integer> maybe  = Option.ofNullable(null);
-     *    //None
-     *
-     *    Option<Integer> maybe = Option.ofNullable(10);
-     *    //Option[10], Some[10]
-     *
-     * }
-     * </pre>
-     *
-     * @param value
-     * @return
-     */
-    static <T> Option<T> ofNullable(final T value) {
-        if (value != null) {
-            return of(value);
-        }
-        return none();
-    }
-
-    /**
      * Narrow covariant type parameter
      *
      * @param broad Maybe with covariant type parameter
      * @return Narrowed Maybe
      */
+    @SuppressWarnings("unchecked")
     static <T> Option<T> narrow(final Option<? extends T> broad) {
         return (Option<T>) broad;
-    }
-
-    /**
-     * Sequence operation, take a Collection of Options and turn it into a Option with a Collection Only successes are retained.
-     * By constrast with {@link Option#sequence(Iterable)} Option#none/ None types are tolerated and ignored.
-     *
-     * <pre>
-     * {@code
-     *  Option<Integer> just = Option.of(10);
-     * Option<Integer> none = Option.none();
-     *
-     * Option<Seq<Integer>> maybes = Option.sequenceJust(Seq.of(just, none, Option.of(1)));
-     * //Option.of(Seq.of(10, 1));
-     * }
-     * </pre>
-     *
-     * @param maybes Option to Sequence
-     * @return Option with a List of values
-     */
-    static <T> Option<ReactiveSeq<T>> sequenceJust(final Iterable<? extends Option<T>> maybes) {
-        return sequence(ReactiveSeq.fromIterable(maybes)
-                                   .filter(Option::isPresent));
     }
 
     /**
@@ -304,22 +186,6 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     static <T> Option<ReactiveSeq<T>> sequence(final Stream<? extends Option<T>> maybes) {
         return sequence(ReactiveSeq.fromStream(maybes));
 
-
-    }
-
-    static <T> Option<ReactiveSeq<T>> sequence(ReactiveSeq<? extends Option<T>> stream) {
-
-        Option<ReactiveSeq<T>> identity = Option.some(ReactiveSeq.empty());
-
-        BiFunction<Option<ReactiveSeq<T>>, Option<T>, Option<ReactiveSeq<T>>> combineToStream = (acc, next) -> acc.zip(next,
-                                                                                                                       (a, b) -> a.append(b));
-
-        BinaryOperator<Option<ReactiveSeq<T>>> combineStreams = (a, b) -> a.zip(b,
-                                                                                (z1, z2) -> z1.appendStream(z2));
-
-        return stream.reduce(identity,
-                             combineToStream,
-                             combineStreams);
     }
 
     static <T, R> Option<ReactiveSeq<R>> traverse(Function<? super T, ? extends R> fn,
@@ -404,6 +270,43 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
         return sequenceJust(maybes).map(s -> s.reduce(reducer));
     }
 
+    /**
+     * Sequence operation, take a Collection of Options and turn it into a Option with a Collection Only successes are retained.
+     * By constrast with {@link Option#sequence(Iterable)} Option#none/ None types are tolerated and ignored.
+     *
+     * <pre>
+     * {@code
+     *  Option<Integer> just = Option.of(10);
+     * Option<Integer> none = Option.none();
+     *
+     * Option<Seq<Integer>> maybes = Option.sequenceJust(Seq.of(just, none, Option.of(1)));
+     * //Option.of(Seq.of(10, 1));
+     * }
+     * </pre>
+     *
+     * @param maybes Option to Sequence
+     * @return Option with a List of values
+     */
+    static <T> Option<ReactiveSeq<T>> sequenceJust(final Iterable<? extends Option<T>> maybes) {
+        return sequence(ReactiveSeq.fromIterable(maybes)
+                                   .filter(Option::isPresent));
+    }
+
+    static <T> Option<ReactiveSeq<T>> sequence(ReactiveSeq<? extends Option<T>> stream) {
+
+        Option<ReactiveSeq<T>> identity = Option.some(ReactiveSeq.empty());
+
+        BiFunction<Option<ReactiveSeq<T>>, Option<T>, Option<ReactiveSeq<T>>> combineToStream = (acc, next) -> acc.zip(next,
+                                                                                                                       (a, b) -> a.append(b));
+
+        BinaryOperator<Option<ReactiveSeq<T>>> combineStreams = (a, b) -> a.zip(b,
+                                                                                (z1, z2) -> z1.appendStream(z2));
+
+        return stream.reduce(identity,
+                             combineToStream,
+                             combineStreams);
+    }
+
     static <T> Option<T> fromNullable(T t) {
         if (t == null) {
             return none();
@@ -421,6 +324,76 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
                                                                        () -> tOpt.fold(Ior::left,
                                                                                        () -> uOpt.fold(Ior::right,
                                                                                                        () -> null)))));
+    }
+
+    /**
+     * <pre>
+     * {@code
+     *    Option<Integer> maybe  = Option.ofNullable(null);
+     *    //None
+     *
+     *    Option<Integer> maybe = Option.ofNullable(10);
+     *    //Option[10], Some[10]
+     *
+     * }
+     * </pre>
+     *
+     * @param value
+     * @return
+     */
+    static <T> Option<T> ofNullable(final T value) {
+        if (value != null) {
+            return of(value);
+        }
+        return none();
+    }
+
+    /* (non-Javadoc)
+     * @see cyclops.data.foldable.Convertable#visit(java.util.function.Function, java.util.function.Supplier)
+     */
+    @Override
+    <R> R fold(Function<? super T, ? extends R> some,
+               Supplier<? extends R> none);
+
+    @Override
+    default <T2, R> Option<R> zip(final Iterable<? extends T2> app,
+                                  final BiFunction<? super T, ? super T2, ? extends R> fn) {
+
+        return flatMap(a -> Option.fromIterable(app)
+                                  .map(b -> fn.apply(a,
+                                                     b)));
+    }
+
+    /**
+     * Construct an Option  that contains a single value extracted from the supplied Iterable
+     * <pre>
+     * {@code
+     *   ReactiveSeq<Integer> stream =  ReactiveSeq.of(1,2,3);
+     *
+     * Option<Integer> maybe = Option.fromIterable(stream);
+     *
+     * //Option[1]
+     *
+     * }
+     * </pre>
+     *
+     * @param iterable Iterable  to extract value from
+     * @return Option populated with first value from Iterable (Option.zero if Publisher zero)
+     */
+    static <T> Option<T> fromIterable(final Iterable<T> iterable) {
+        if (iterable instanceof Option) {
+            return (Option<T>) iterable;
+        }
+        Iterator<T> it = iterable.iterator();
+        if (it.hasNext()) {
+            return Option.some(it.next());
+        }
+        return Option.none();
+
+    }
+
+    static <T> Option<T> some(T value) {
+        return new Some<>(value);
     }
 
     default <R> Option<R> attemptFlatMap(Function<? super T, ? extends Option<? extends R>> fn) {
@@ -456,6 +429,11 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
     default Trampoline<Maybe<T>> toTrampoline() {
         return Trampoline.more(() -> Trampoline.done(this.toMaybe()));
+    }
+
+    @Override
+    default Maybe<T> toMaybe() {
+        return lazy();
     }
 
     default Maybe<T> lazy() {
@@ -572,20 +550,41 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     }
 
     @Override
-    default <T2, R> Option<R> zip(final Iterable<? extends T2> app,
-                                  final BiFunction<? super T, ? super T2, ? extends R> fn) {
-
-        return flatMap(a -> Option.fromIterable(app)
-                                  .map(b -> fn.apply(a,
-                                                     b)));
-    }
-
-    @Override
     default <T2, R> Option<R> zip(final BiFunction<? super T, ? super T2, ? extends R> fn,
                                   final Publisher<? extends T2> app) {
         return flatMap(a -> Option.fromPublisher(app)
                                   .map(b -> fn.apply(a,
                                                      b)));
+
+    }
+
+    @Override
+    <R> Option<R> flatMap(Function<? super T, ? extends MonadicValue<? extends R>> mapper);
+
+    @Override
+    <R> Option<R> map(Function<? super T, ? extends R> mapper);
+
+    /**
+     * Construct a Maybe  that contains a single value extracted from the supplied reactive-streams Publisher
+     * <pre>
+     * {@code
+     *   ReactiveSeq<Integer> stream =  ReactiveSeq.of(1,2,3);
+     *
+     * Option<Integer> maybe = Option.fromPublisher(stream);
+     *
+     * //Option[1]
+     *
+     * }
+     * </pre>
+     *
+     * @param pub Publisher to extract value from
+     * @return Maybe populated with first value from Publisher (Option.zero if Publisher zero)
+     */
+    static <T> Option<T> fromPublisher(final Publisher<T> pub) {
+        return Spouts.from(pub)
+                     .take(1)
+                     .takeOne()
+                     .toOption();
 
     }
 
@@ -600,32 +599,29 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
         return Option.of(unit);
     }
 
-    @Override
-    default Maybe<T> toMaybe() {
-        return lazy();
-    }
+    /**
+     * Construct an Option which contains the provided (non-null) value Equivalent to @see {@link Option#some(Object)}
+     * <pre>
+     * {@code
+     *
+     *    Option<Integer> some = Option.of(10);
+     *    some.map(i->i*2);
+     * }
+     * </pre>
+     *
+     * @param value Value to wrap inside a Maybe
+     * @return Option containing the supplied value
+     */
+    static <T> Option<T> of(final T value) {
+        return new Some(value);
 
-    @Override
-    boolean isPresent();
+    }
 
     Option<T> recover(Supplier<? extends T> value);
 
     Option<T> recover(T value);
 
     Option<T> recoverWith(Supplier<? extends Option<T>> fn);
-
-    @Override
-    <R> Option<R> map(Function<? super T, ? extends R> mapper);
-
-    @Override
-    <R> Option<R> flatMap(Function<? super T, ? extends MonadicValue<? extends R>> mapper);
-
-    /* (non-Javadoc)
-     * @see cyclops.data.foldable.Convertable#visit(java.util.function.Function, java.util.function.Supplier)
-     */
-    @Override
-    <R> R fold(Function<? super T, ? extends R> some,
-               Supplier<? extends R> none);
 
     /*
      * (non-Javadoc)
@@ -679,6 +675,9 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     }
 
     @Override
+    boolean isPresent();
+
+    @Override
     default Option<T> peek(final Consumer<? super T> c) {
 
         return (Option<T>) MonadicValue.super.peek(c);
@@ -687,6 +686,10 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
     @Override
     default <T1> Option<T1> emptyUnit() {
         return Option.none();
+    }
+
+    static <T> Option<T> none() {
+        return None.none();
     }
 
     @Deprecated
@@ -750,9 +753,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
                     });
 
-
                 });
-
 
             });
 
@@ -804,9 +805,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
                     });
 
-
                 });
-
 
             });
 
@@ -848,9 +847,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
                     });
 
-
                 });
-
 
             });
 
@@ -886,9 +883,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
                     });
 
-
                 });
-
 
             });
 
@@ -917,9 +912,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
                     });
 
-
                 });
-
 
             });
 
@@ -939,9 +932,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
                                                             ina));
                     return b;
 
-
                 });
-
 
             });
 
@@ -957,13 +948,10 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
                 Option<R1> a = value2.apply(in);
                 return a;
 
-
             });
 
         }
 
-
     }
-
 
 }

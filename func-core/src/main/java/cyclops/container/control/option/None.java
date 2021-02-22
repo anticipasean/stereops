@@ -1,5 +1,7 @@
 package cyclops.container.control.option;
 
+import static java.util.Objects.requireNonNull;
+
 import cyclops.container.MonadicValue;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -19,11 +21,15 @@ final class None<T> implements Option<T> {
 
     private static final long serialVersionUID = 9117268970047322720L;
 
-    private static enum OptionNoneHolder {
+    /**
+     * Better at enforcing singleton use than the public static constant instance and limits type coercion to this holder getter so
+     * that warnings need not be suppressed elsewhere
+     */
+    private static enum NoneInstanceHolder {
         INSTANCE(new None<>());
         private final None<?> none;
 
-        OptionNoneHolder(None<?> none) {
+        NoneInstanceHolder(None<?> none) {
             this.none = none;
         }
 
@@ -33,28 +39,28 @@ final class None<T> implements Option<T> {
         }
     }
 
-    public static <T> Option<T> none() {
-        return OptionNoneHolder.INSTANCE.getNone();
+    static <T> None<T> none() {
+        return NoneInstanceHolder.INSTANCE.getNone();
     }
 
     private Object readResolve() {
-        return OptionNoneHolder.INSTANCE.getNone();
+        return none();
     }
 
     @Override
     public <R> Option<R> map(final Function<? super T, ? extends R> mapper) {
-        return OptionNoneHolder.INSTANCE.getNone();
+        return none();
     }
 
     @Override
     public <R> Option<R> flatMap(final Function<? super T, ? extends MonadicValue<? extends R>> mapper) {
-        return OptionNoneHolder.INSTANCE.getNone();
+        return none();
 
     }
 
     @Override
     public Option<T> filter(final Predicate<? super T> test) {
-        return OptionNoneHolder.INSTANCE.getNone();
+        return none();
     }
 
 
@@ -65,24 +71,26 @@ final class None<T> implements Option<T> {
 
     @Override
     public Option<T> recover(final Supplier<? extends T> value) {
-        return Option.of(value.get());
+        return Option.of(requireNonNull(value, () -> "value").get());
     }
 
     @Override
     public Option<T> recoverWith(Supplier<? extends Option<T>> fn) {
-        return fn.get();
+        return requireNonNull(fn,
+                              () -> "fn").get();
     }
 
 
     @Override
     public <R> R fold(final Function<? super T, ? extends R> some,
                       final Supplier<? extends R> none) {
-        return none.get();
+        return requireNonNull(none,
+                              () -> "none").get();
     }
 
     @Override
     public Optional<T> toOptional() {
-        return Optional.ofNullable(null);
+        return Optional.empty();
     }
 
     @Override
@@ -114,17 +122,18 @@ final class None<T> implements Option<T> {
 
     @Override
     public T orElseGet(final Supplier<? extends T> value) {
-        return value.get();
+        return requireNonNull(value,
+                              () -> "value").get();
     }
 
     @Override
     public <R> None<R> concatMap(final Function<? super T, ? extends Iterable<? extends R>> mapper) {
-        return OptionNoneHolder.INSTANCE.getNone();
+        return none();
     }
 
     @Override
     public <R> None<R> mergeMap(final Function<? super T, ? extends Publisher<? extends R>> mapper) {
-        return OptionNoneHolder.INSTANCE.getNone();
+        return none();
     }
 
     @Override
@@ -135,6 +144,7 @@ final class None<T> implements Option<T> {
     @Override
     public <R> R fold(Function<? super T, ? extends R> fn1,
                       Function<? super None<T>, ? extends R> fn2) {
-        return fn2.apply(this);
+        return requireNonNull(fn2,
+                              () -> "fn2").apply(none());
     }
 }
