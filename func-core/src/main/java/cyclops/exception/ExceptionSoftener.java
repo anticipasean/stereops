@@ -1,8 +1,6 @@
 package cyclops.exception;
 
-import cyclops.container.control.eager.attempt.Try.CheckedRunnable;
 import cyclops.function.checked.CheckedBiConsumer;
-import cyclops.function.checked.CheckedFunction2;
 import cyclops.function.checked.CheckedBiPredicate;
 import cyclops.function.checked.CheckedBooleanSupplier;
 import cyclops.function.checked.CheckedConsumer;
@@ -10,7 +8,9 @@ import cyclops.function.checked.CheckedDoubleConsumer;
 import cyclops.function.checked.CheckedDoubleFunction;
 import cyclops.function.checked.CheckedDoublePredicate;
 import cyclops.function.checked.CheckedDoubleSupplier;
+import cyclops.function.checked.CheckedFunction0;
 import cyclops.function.checked.CheckedFunction1;
+import cyclops.function.checked.CheckedFunction2;
 import cyclops.function.checked.CheckedIntConsumer;
 import cyclops.function.checked.CheckedIntFunction;
 import cyclops.function.checked.CheckedIntPredicate;
@@ -20,7 +20,7 @@ import cyclops.function.checked.CheckedLongFunction;
 import cyclops.function.checked.CheckedLongPredicate;
 import cyclops.function.checked.CheckedLongSupplier;
 import cyclops.function.checked.CheckedPredicate;
-import cyclops.function.checked.CheckedFunction0;
+import cyclops.function.checked.CheckedRunnable;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -692,11 +692,12 @@ public class ExceptionSoftener {
      * }
      * }
      * </pre>
-     *
-     *
+     * <p>
+     * <p>
      * Note: to trick the compiler, the calls to "uncheck" that returns a RuntimeException in the "throw*" methods of this class
      * must have RuntimeException as an explicit type parameter to "uncheck", e.g. {@code ExceptionSoftener.<RuntimeException>uncheck(e)},
      * which some IDE settings may remove when formatting the code (smccarron)
+     *
      * @param e
      * @return
      */

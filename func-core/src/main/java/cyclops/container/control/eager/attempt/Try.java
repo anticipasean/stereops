@@ -2,6 +2,7 @@ package cyclops.container.control.eager.attempt;
 
 
 import cyclops.container.Value;
+import cyclops.container.control.eager.attempt.Success.EmptySuccess;
 import cyclops.container.control.eager.either.Either;
 import cyclops.container.control.eager.ior.Ior;
 import cyclops.container.control.eager.option.Option;
@@ -17,8 +18,11 @@ import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.checked.CheckedFunction0;
+import cyclops.function.checked.CheckedFunction0.SpecificallyCheckedF0;
 import cyclops.function.checked.CheckedFunction1;
 import cyclops.function.checked.CheckedFunction2;
+import cyclops.function.checked.CheckedFunction2.SpecificallyCheckedF2;
+import cyclops.function.checked.CheckedRunnable.SpecificallyCheckedRunnable;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.function.higherkinded.DataWitness.tryType;
@@ -35,12 +39,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.val;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 /**
  * Success biased Try monad.
@@ -131,18 +132,13 @@ import org.reactivestreams.Subscription;
  * @param <X> Base Error type
  * @author johnmcclean
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFrom<X, T>, Value<T>, Unit<T>, Transformable<T>,
-                                                    Filterable<T>, Sealed2<T, X>, OrElseValue<T, Try<T, X>>,
-                                                    Higher2<tryType, X, T> {
+public interface Try<T, X extends Throwable> extends To<Try<T, X>>, RecoverableFrom<X, T>, Value<T>, Unit<T>, Transformable<T>,
+                                                     Filterable<T>, Sealed2<T, X>, OrElseValue<T, Try<T, X>>,
+                                                     Higher2<tryType, X, T> {
 
 
-    final Either<X, T> xor;
-    @lombok.With(AccessLevel.PRIVATE)
-    private final Class<? extends Throwable>[] classes;
-
-    public static <X extends Throwable, T, R> Try<R, X> tailRec(T initial,
-                                                                Function<? super T, ? extends Try<? extends Either<T, R>, X>> fn) {
+    static <X extends Throwable, T, R> Try<R, X> tailRec(T initial,
+                                                         Function<? super T, ? extends Try<? extends Either<T, R>, X>> fn) {
         Try<? extends Either<T, R>, X>[] next = new Try[1];
         next[0] = Try.success(Either.left(initial));
         boolean cont = true;
@@ -157,13 +153,24 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         return next[0].map(x -> x.orElse(null));
     }
 
-    public static <X extends Throwable, T> Higher<Higher<tryType, X>, T> widen(Try<T, X> narrow) {
+    static <X extends Throwable, T> Higher<Higher<tryType, X>, T> widen(Try<T, X> narrow) {
         return narrow;
     }
 
-    public static <T, X extends Throwable> Try<T, X> fromEither(final Either<X, T> pub) {
-        return new Try<>(pub,
-                         new Class[0]);
+
+    static <T, X extends Throwable> Try<T, X> narrowK2(final Higher2<tryType, X, T> t) {
+        return (Try<T, X>) t;
+    }
+
+    static <T, X extends Throwable> Try<T, X> narrowK(final Higher<Higher<tryType, X>, T> t) {
+        return (Try) t;
+    }
+
+    static <T, X extends Throwable> Try<T, X> fromEither(final Either<X, T> pub) {
+        return Objects.requireNonNull(pub,
+                                      () -> "pub")
+                      .fold(Try::failure,
+                            (Function<T, Try<T, X>>) Try::success);
     }
 
     /**
@@ -184,23 +191,25 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @return Try populated with first value from Publisher
      */
     @SafeVarargs
-    public static <T, X extends Throwable> Try<T, X> fromPublisher(final Publisher<T> pub,
-                                                                   final Class<X>... classes) {
-        return new Try<T, X>(LazyEither.fromPublisher(pub)
-                                       .mapLeft(t -> {
-                                           if (classes.length == 0) {
-                                               return (X) t;
-                                           }
-                                           val error = Stream.of(classes)
-                                                             .filter(c -> c.isAssignableFrom(t.getClass()))
-                                                             .findFirst();
-                                           if (error.isPresent()) {
-                                               return (X) t;
-                                           } else {
-                                               throw ExceptionSoftener.throwSoftenedException(t);
-                                           }
-                                       }),
-                             classes);
+    static <T, X extends Throwable> Try<T, X> fromPublisher(final Publisher<T> pub,
+                                                            final Class<X>... classes) {
+
+        return LazyEither.fromPublisher(pub)
+                         .mapLeft(t -> {
+                             if (classes.length == 0) {
+                                 return Try.<T, X>failure((X) t);
+                             }
+                             val error = Stream.of(classes)
+                                               .filter(c -> c.isAssignableFrom(t.getClass()))
+                                               .findFirst();
+                             if (error.isPresent()) {
+                                 return Try.<T, X>failure((X) t);
+                             } else {
+                                 throw ExceptionSoftener.throwSoftenedException(t);
+                             }
+                         })
+                         .fold(failure -> failure,
+                               (Function<T, Try<T, X>>) Try::<T, X>success);
     }
 
     /**
@@ -220,9 +229,9 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param pub Publisher to extract value from
      * @return Try populated with first value from Publisher
      */
-    public static <T> Try<T, Throwable> fromPublisher(final Publisher<T> pub) {
-        return new Try<>(LazyEither.fromPublisher(pub),
-                         new Class[0]);
+    static <T> Try<T, Throwable> fromPublisher(final Publisher<T> pub) {
+        return fromPublisher(pub,
+                             Throwable.class);
     }
 
     /**
@@ -242,14 +251,18 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param iterable Iterable to extract value from
      * @return Try populated with first value from Iterable
      */
-    public static <T, X extends Throwable> Try<T, X> fromIterable(final Iterable<T> iterable,
-                                                                  T alt) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    static <T, X extends Throwable> Try<T, X> fromIterable(final Iterable<T> iterable,
+                                                           final T alt) {
         if (iterable instanceof Try) {
             return (Try) iterable;
         }
-        return new Try<>(LazyEither.fromIterable(iterable,
-                                                 alt),
-                         new Class[0]);
+        return ReactiveSeq.fromIterable(iterable)
+                          .headOption()
+                          .fold(t -> Success.of(t,
+                                                Throwable.class),
+                                () -> Success.of(alt,
+                                                 Throwable.class));
     }
 
     /**
@@ -263,9 +276,10 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param error for Failure
      * @return new Failure with error
      */
-    public static <T, X extends Throwable> Try<T, X> failure(final X error) {
-        return new Try<>(Either.left(error),
-                         new Class[0]);
+    @SuppressWarnings("unchecked")
+    static <T, X extends Throwable> Try<T, X> failure(final X error) {
+        return Failure.of(error,
+                          new Class[]{Throwable.class});
     }
 
     /**
@@ -280,22 +294,22 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param value Successful value
      * @return new Success with value
      */
-    public static <T, X extends Throwable> Try<T, X> success(final T value) {
-        return new Try<>(Either.right(value),
-                         new Class[0]);
+    static <T, X extends Throwable> Try<T, X> success(final T value) {
+        return success(value,
+                       Throwable.class);
     }
 
     @SafeVarargs
-    public static <T, X extends Throwable> Try<T, X> success(final T value,
-                                                             final Class<? extends Throwable>... classes) {
-        return new Try<>(Either.right(value),
-                         classes);
+    static <T, X extends Throwable> Try<T, X> success(final T value,
+                                                      final Class<? extends Throwable>... classes) {
+        return Success.of(value,
+                          classes);
     }
 
     @SafeVarargs
-    public static <T extends AutoCloseable, R, X extends Throwable> Try<R, X> withResources(CheckedSupplier<T, X> rs,
-                                                                                            CheckedFunction<? super T, ? extends R, X> fn,
-                                                                                            Class<? extends X>... classes) {
+    static <T extends AutoCloseable, R, X extends Throwable> Try<R, X> withResources(CheckedFunction0<T> rs,
+                                                                                     CheckedFunction<? super T, ? extends R, X> fn,
+                                                                                     Class<? extends X>... classes) {
         try {
             T in = ExceptionSoftener.softenSupplier(() -> rs.get())
                                     .get();
@@ -315,8 +329,9 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    private static <R, X extends Throwable> Try<R, X> handleError(Throwable t,
-                                                                  Class<? extends X>[] classes) {
+    @SuppressWarnings("unchecked")
+    static <R, X extends Throwable> Try<R, X> handleError(Throwable t,
+                                                          Class<? extends X>[] classes) {
         Either<Throwable, ? extends R> x = Either.left(orThrow(Stream.of(classes)
                                                                      .filter(c -> c.isAssignableFrom(t.getClass()))
                                                                      .map(c -> t)
@@ -326,15 +341,15 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
     }
 
     @SafeVarargs
-    public static <T1 extends AutoCloseable, T2 extends AutoCloseable, R, X extends Throwable> Try<R, X> withResources(CheckedSupplier<T1, X> rs1,
-                                                                                                                       CheckedSupplier<T2, X> rs2,
-                                                                                                                       CheckedBiFunction<? super T1, ? super T2, ? extends R, X> fn,
-                                                                                                                       Class<? extends X>... classes) {
-        T1 t1 = ExceptionSoftener.softenSupplier(() -> rs1.get())
-                                 .get();
-        T2 t2 = ExceptionSoftener.softenSupplier(() -> rs2.get())
-                                 .get();
+    static <T1 extends AutoCloseable, T2 extends AutoCloseable, R, X extends Throwable> Try<R, X> withResources(SpecificallyCheckedF0<T1, X> rs1,
+                                                                                                                SpecificallyCheckedF0<T2, X> rs2,
+                                                                                                                SpecificallyCheckedF2<? super T1, ? super T2, ? extends R, X> fn,
+                                                                                                                Class<? extends X>... classes) {
         try {
+            T1 t1 = ExceptionSoftener.softenSupplier(() -> rs1.get())
+                                     .get();
+            T2 t2 = ExceptionSoftener.softenSupplier(() -> rs2.get())
+                                     .get();
             try {
                 return Try.success(fn.apply(t1,
                                             t2));
@@ -353,8 +368,8 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    public static <T extends AutoCloseable, R> Try<R, Throwable> withResources(CheckedFunction0<T> rs,
-                                                                               CheckedFunction1<? super T, ? extends R> fn) {
+    static <T extends AutoCloseable, R> Try<R, Throwable> withResources(CheckedFunction0<T> rs,
+                                                                        CheckedFunction1<? super T, ? extends R> fn) {
         try {
             T in = ExceptionSoftener.softenSupplier(rs)
                                     .get();
@@ -372,11 +387,10 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    public static <T1 extends AutoCloseable, T2 extends AutoCloseable, R> Try<R, Throwable> withResources(CheckedFunction0<T1> rs1,
-                                                                                                          CheckedFunction0<T2> rs2,
-                                                                                                          CheckedFunction2<? super T1, ? super T2, ? extends R> fn) {
+    static <T1 extends AutoCloseable, T2 extends AutoCloseable, R> Try<R, Throwable> withResources(CheckedFunction0<T1> rs1,
+                                                                                                   CheckedFunction0<T2> rs2,
+                                                                                                   CheckedFunction2<? super T1, ? super T2, ? extends R> fn) {
         try {
-
             T1 t1 = ExceptionSoftener.softenSupplier(rs1)
                                      .get();
             T2 t2 = ExceptionSoftener.softenSupplier(rs2)
@@ -400,16 +414,17 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
     /**
      * Try to execute supplied Supplier and will Catch specified Excpetions or java.lang.Exception if none specified.
      *
-     * @param cf      CheckedSupplier to recover to execute
-     * @param classes Exception types to catch (or java.lang.Exception if none specified)
+     * @param checkedSupplier CheckedSupplier to recover to execute
+     * @param classes         Exception types to catch (or java.lang.Exception if none specified)
      * @return New Try
      */
     @SafeVarargs
-    public static <T, X extends Throwable> Try<T, X> withCatch(final CheckedSupplier<T, X> cf,
-                                                               final Class<? extends X>... classes) {
-        Objects.requireNonNull(cf);
+    static <T, X extends Throwable> Try<T, X> withCatch(final SpecificallyCheckedF0<T, X> checkedSupplier,
+                                                        final Class<? extends X>... classes) {
+        Objects.requireNonNull(checkedSupplier,
+                               () -> "checkedSupplier");
         try {
-            return Try.success(cf.get());
+            return Try.success(checkedSupplier.get());
         } catch (final Throwable t) {
             if (classes.length == 0) {
                 return Try.failure((X) t);
@@ -429,40 +444,34 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
     /**
      * Try to execute supplied Runnable and will Catch specified Excpetions or java.lang.Exception if none specified.
      *
-     * @param cf      CheckedRunnable to recover to execute
-     * @param classes Exception types to catch (or java.lang.Exception if none specified)
+     * @param checkedRunnable CheckedRunnable to recover to execute
+     * @param classes         Exception types to catch (or java.lang.Exception if none specified)
      * @return New Try
      */
+    @SuppressWarnings("unchecked")
     @SafeVarargs
-    public static <X extends Throwable> Try<Void, X> runWithCatch(final CheckedRunnable<X> cf,
-                                                                  final Class<? extends X>... classes) {
-        Objects.requireNonNull(cf);
+    static <X extends Throwable> Try<EmptySuccess, X> runWithCatch(final SpecificallyCheckedRunnable<X> checkedRunnable,
+                                                                   final Class<? extends X>... classes) {
+        Objects.requireNonNull(checkedRunnable,
+                               () -> "checkedRunnable");
+        Objects.requireNonNull(classes,
+                               () -> "classes");
         try {
-            cf.run();
-            return Try.success(null);
+            checkedRunnable.run();
+            //Not permitting Void (-> null) as a valid Success value and therefore using a hollow enum
+            return Try.success(EmptySuccess.INSTANCE);
         } catch (final Throwable t) {
-
-            if (classes.length == 0) {
-                return Try.failure((X) t);
-            }
-            val error = Stream.of(classes)
-                              .filter(c -> c.isAssignableFrom(t.getClass()))
-                              .findFirst();
-            if (error.isPresent()) {
-                return Try.failure((X) t);
-            } else {
-                throw ExceptionSoftener.throwSoftenedException(t);
-            }
+            return (Try<EmptySuccess, X>) Try.<EmptySuccess, Throwable>failure(t).withExceptions(classes);
         }
 
     }
 
-    public static <T, X extends Throwable> Try<T, X> flatten(Try<? extends Try<T, X>, X> nested) {
+    static <T, X extends Throwable> Try<T, X> flatten(Try<? extends Try<T, X>, X> nested) {
         return nested.flatMap(Function.identity());
     }
 
-    private static Throwable orThrow(final Optional<Throwable> findFirst,
-                                     final Throwable t) {
+    static Throwable orThrow(final Optional<Throwable> findFirst,
+                             final Throwable t) {
         if (findFirst.isPresent()) {
             return findFirst.get();
         }
@@ -470,36 +479,19 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
 
     }
 
-    public static <T, X extends Throwable> Try<T, X> narrowK2(final Higher2<tryType, X, T> t) {
-        return (Try<T, X>) t;
-    }
 
-    public static <T, X extends Throwable> Try<T, X> narrowK(final Higher<Higher<tryType, X>, T> t) {
-        return (Try) t;
-    }
-
-    public final int arity() {
+    default int arity() {
         return 2;
     }
 
-    public Either<X, T> asEither() {
-        return xor;
-    }
+    public Either<X, T> asEither();
 
-    @SafeVarargs
-    public final Try<T, X> withExceptions(Class<? extends X>... toCatch) {
-        return withClasses(toCatch);
-    }
+    public Try<T, X> withExceptions(Class<? extends X>... toCatch);
 
-    public Trampoline<Either<X, T>> toTrampoline() {
-        return xor.toTrampoline();
-    }
+    public Trampoline<Either<X, T>> toTrampoline();
 
     @Override
-    public Try<T, X> recoverWith(Supplier<? extends Try<T, X>> supplier) {
-        return Try.fromEither(xor.recoverWith(() -> supplier.get()
-                                                            .asEither()));
-    }
+    public Try<T, X> recoverWith(Supplier<? extends Try<T, X>> supplier);
 
     /**
      * Retry a transformation if it fails. Default settings are to retry up to 7 times, with an doubling backoff period starting @
@@ -507,12 +499,7 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      *
      * @param fn Function to retry if fails
      */
-    public <R> Try<R, Throwable> retry(final Function<? super T, ? extends R> fn) {
-        return retry(fn,
-                     7,
-                     2,
-                     TimeUnit.SECONDS);
-    }
+    public <R> Try<R, Throwable> retry(final Function<? super T, ? extends R> fn);
 
     /**
      * Retry a transformation if it fails. Retries up to <b>retries</b> times, with an doubling backoff period starting @
@@ -526,237 +513,86 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
     public <R> Try<R, Throwable> retry(final Function<? super T, ? extends R> fn,
                                        final int retries,
                                        final long delay,
-                                       final TimeUnit timeUnit) {
-        Try<T, Throwable> narrow = this.mapFailure(x -> x);
-        final Function<T, Try<R, Throwable>> retry = t -> {
-            final long[] sleep = {timeUnit.toMillis(delay)};
-            Throwable exception = null;
-            for (int count = retries; count >= 0; count--) {
-                try {
-                    return Try.success(fn.apply(t));
-                } catch (final Throwable e) {
-                    exception = e;
-                    ExceptionSoftener.softenRunnable(() -> Thread.sleep(sleep[0]))
-                                     .run();
-                    sleep[0] = sleep[0] * 2;
-                }
-            }
-            return Try.failure(exception);
-
-
-        };
-        return narrow.flatMap(retry);
-    }
+                                       final TimeUnit timeUnit);
 
     @Override
-    public void subscribe(Subscriber<? super T> sub) {
+    public void subscribe(Subscriber<? super T> sub);
 
-        xor.nestedEval()
-           .subscribe(new Subscriber<Either<X, T>>() {
-               boolean onCompleteSent = false;
-
-               @Override
-               public void onSubscribe(Subscription s) {
-                   sub.onSubscribe(s);
-               }
-
-               @Override
-               public void onNext(Either<X, T> pts) {
-                   if (pts.isRight()) {
-                       T v = pts.orElse(null);
-                       if (v != null) {
-                           sub.onNext(v);
-                       }
-                   }
-                   if (pts.isLeft()) {
-                       X v = pts.swap()
-                                .orElse(null);
-                       if (v != null) {
-                           sub.onError(v);
-                       }
-                   } else if (!onCompleteSent) {
-                       sub.onComplete();
-
-                   }
-               }
-
-               @Override
-               public void onError(Throwable t) {
-                   sub.onError(t);
-               }
-
-               @Override
-               public void onComplete() {
-                   if (!onCompleteSent) {
-                       sub.onComplete();
-                       onCompleteSent = true;
-                   }
-               }
-           });
-    }
-
-    public Try<T, X> recover(Supplier<? extends T> s) {
-        return recover(t -> s.get());
-    }
+    public Try<T, X> recover(Supplier<? extends T> s);
 
     public <T2, R1, R2, R3, R> Try<R, X> forEach4(Function<? super T, ? extends Try<R1, X>> value1,
                                                   BiFunction<? super T, ? super R1, ? extends Try<R2, X>> value2,
                                                   Function3<? super T, ? super R1, ? super R2, ? extends Try<R3, X>> value3,
-                                                  Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction) {
-        return this.flatMap(in -> {
-
-            Try<R1, X> a = value1.apply(in);
-            return a.flatMap(ina -> {
-                Try<R2, X> b = value2.apply(in,
-                                            ina);
-                return b.flatMap(inb -> {
-                    Try<R3, X> c = value3.apply(in,
-                                                ina,
-                                                inb);
-                    return c.map(in2 -> yieldingFunction.apply(in,
-                                                               ina,
-                                                               inb,
-                                                               in2));
-                });
-
-            });
-
-        });
-    }
+                                                  Function4<? super T, ? super R1, ? super R2, ? super R3, ? extends R> yieldingFunction);
 
     public <T2, R1, R2, R> Try<R, X> forEach3(Function<? super T, ? extends Try<R1, X>> value1,
                                               BiFunction<? super T, ? super R1, ? extends Try<R2, X>> value2,
-                                              Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction) {
-
-        return this.flatMap(in -> {
-
-            Try<R1, X> a = value1.apply(in);
-            return a.flatMap(ina -> {
-                Try<R2, X> b = value2.apply(in,
-                                            ina);
-                return b.map(in2 -> yieldingFunction.apply(in,
-                                                           ina,
-                                                           in2));
-            });
-
-        });
-    }
+                                              Function3<? super T, ? super R1, ? super R2, ? extends R> yieldingFunction);
 
     public <R1, R> Try<R, X> forEach2(Function<? super T, ? extends Try<R1, X>> value1,
-                                      BiFunction<? super T, ? super R1, ? extends R> yieldingFunction) {
-
-        return this.flatMap(in -> {
-            Try<R1, X> b = value1.apply(in);
-            return b.map(in2 -> yieldingFunction.apply(in,
-                                                       in2));
-        });
-    }
+                                      BiFunction<? super T, ? super R1, ? extends R> yieldingFunction);
 
     @Override
-    public Try<T, Throwable> toTry() {
-        return (Try<T, Throwable>) this;
+    public Try<T, Throwable> toTry();
 
-    }
+    public Option<X> failureGet();
 
-    public Option<X> failureGet() {
-        return xor.getLeft();
-    }
+    public Either<X, T> toEither();
 
-    public Either<X, T> toEither() {
-        return xor;
-    }
+    public Ior<X, T> toIor();
 
-    public Ior<X, T> toIor() {
-        return xor.toIor();
-    }
-
-    public <R> Try<R, X> coflatMap(final Function<? super Try<T, X>, R> mapper) {
-        return mapper.andThen(r -> unit(r))
-                     .apply(this);
-    }
+    public <R> Try<R, X> coflatMap(final Function<? super Try<T, X>, R> mapper);
 
     @Override
-    public <U> Option<U> ofType(final Class<? extends U> type) {
-
+    default <U> Option<U> ofType(Class<? extends U> type) {
         return (Option<U>) Filterable.super.ofType(type);
     }
 
     @Override
-    public Option<T> filterNot(final Predicate<? super T> fn) {
-
+    default Option<T> filterNot(Predicate<? super T> fn) {
         return (Option<T>) Filterable.super.filterNot(fn);
     }
 
     @Override
-    public Option<T> notNull() {
-
+    default Option<T> notNull() {
         return (Option<T>) Filterable.super.notNull();
     }
 
-    public Either<X, T> toEitherWithError() {
-        return xor;
-    }
+    public Either<X, T> toEitherWithError();
 
     @Override
-    public <T> Try<T, X> unit(final T value) {
-        return success(value);
-    }
+    public <T> Try<T, X> unit(final T value);
 
-    public Option<T> get() {
-        return xor.get();
-    }
+    public Option<T> get();
 
     @Override
-    public T orElse(T value) {
-        return xor.orElse(value);
-    }
+    public T orElse(T value);
 
     @Override
-    public T orElseGet(Supplier<? extends T> value) {
-        return xor.orElseGet(value);
-    }
+    public T orElseGet(Supplier<? extends T> value);
 
     @Override
-    public <R> Try<R, X> map(Function<? super T, ? extends R> fn) {
-        return new Try<>(xor.flatMap(i -> safeApply(i,
-                                                    fn,
-                                                    classes)),
-                         classes);
-    }
+    public <R> Try<R, X> map(Function<? super T, ? extends R> mapper);
 
     /**
      * Perform a mapping operation that may catch the supplied Exception types The supplied Exception types are only applied
      * during this map operation
      *
-     * @param fn      mapping function
-     * @param classes exception types to catch
-     * @param <R>     return type of mapping function
+     * @param checkedFunction mapping function
+     * @param classes         exception types to catch
+     * @param <R>             return type of mapping function
      * @return Try with result or caught exception
      */
-    @SafeVarargs
-    public final <R> Try<R, X> mapOrCatch(CheckedFunction<? super T, ? extends R, X> fn,
-                                          Class<? extends X>... classes) {
-        return new Try<R, X>(xor.flatMap(i -> safeApply(i,
-                                                        fn.asFunction(),
-                                                        classes)),
-                             this.classes);
-    }
+    public <R> Try<R, X> mapOrCatch(CheckedFunction<? super T, ? extends R, X> checkedFunction,
+                                    Class<? extends X>... classes);
 
-    public <XR extends Throwable> Try<T, XR> mapFailure(Function<? super X, ? extends XR> fn) {
-        return new Try<>(xor.mapLeft(i -> fn.apply(i)),
-                         new Class[0]);
-    }
+    public <XR extends Throwable> Try<T, XR> mapFailure(Function<? super X, ? extends XR> fn);
 
     /**
      * @param fn FlatMap success value or do nothing if Failure (return this)
      * @return Try returned from FlatMap fn
      */
-    public <R> Try<R, X> flatMap(Function<? super T, ? extends Try<? extends R, X>> fn) {
-        return new Try<>(xor.flatMap(i -> safeApplyM(i,
-                                                     fn,
-                                                     classes).toEither()),
-                         classes);
-    }
+    public <R> Try<R, X> flatMap(Function<? super T, ? extends Try<? extends R, X>> fn);
 
     /**
      * Perform a flatMapping operation that may catch the supplied Exception types The supplied Exception types are only applied
@@ -767,14 +603,8 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param <R>     return type of mapping function
      * @return Try with result or caught exception
      */
-    @SafeVarargs
-    public final <R> Try<R, X> flatMapOrCatch(CheckedFunction<? super T, ? extends Try<? extends R, X>, X> fn,
-                                              Class<? extends X>... classes) {
-        return new Try<>(xor.flatMap(i -> safeApplyM(i,
-                                                     fn.asFunction(),
-                                                     classes).toEither()),
-                         classes);
-    }
+    public <R> Try<R, X> flatMapOrCatch(CheckedFunction<? super T, ? extends Try<? extends R, X>, X> fn,
+                                        Class<? extends X>... classes);
 
     /**
      * @param p Convert a Success to a Failure (with a null value for Exception) if predicate does not hold. Do nothing to a
@@ -782,24 +612,16 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @return this if Success and Predicate holds, or if Failure. New Failure if Success and Predicate fails
      */
     @Override
-    public Maybe<T> filter(Predicate<? super T> p) {
-        return xor.filter(p)
-                  .toMaybe();
-    }
+    public Maybe<T> filter(Predicate<? super T> p);
 
     public Try<T, X> filter(Predicate<? super T> test,
-                            Function<? super T, ? extends X> errorGenerator) {
-        return flatMap(e -> test.test(e) ? Try.success(e) : Try.failure(errorGenerator.apply(e)));
-    }
+                            Function<? super T, ? extends X> errorGenerator);
 
     /**
      * @param consumer Accept Exception if present (Failure)
      * @return this
      */
-    public Try<T, X> onFail(Consumer<? super X> consumer) {
-        return new Try<>(xor.peekLeft(consumer),
-                         classes);
-    }
+    public Try<T, X> onFail(Consumer<? super X> consumer);
 
     /**
      * @param t        Class type of Exception to handle
@@ -807,23 +629,13 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @return this
      */
     public Try<T, X> onFail(Class<? extends X> t,
-                            Consumer<X> consumer) {
-        return new Try<>(xor.peekLeft(error -> {
-            if (t.isAssignableFrom(error.getClass())) {
-                consumer.accept(error);
-            }
-        }),
-                         classes);
-    }
+                            Consumer<X> consumer);
 
     /**
      * @param fn Recovery function - transform from a failure to a Success.
      * @return new Try
      */
-    public Try<T, X> recover(Function<? super X, ? extends T> fn) {
-        return new Try<>(xor.mapLeftToRight(fn),
-                         classes);
-    }
+    public Try<T, X> recover(Function<? super X, ? extends T> fn);
 
     /**
      * flatMap recovery
@@ -831,21 +643,10 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @param fn Recovery FlatMap function. Map from a failure to a Success
      * @return Success from recovery function
      */
-    public Try<T, X> recoverFlatMap(Function<? super X, ? extends Try<T, X>> fn) {
-        return new Try<>(xor.flatMapLeftToRight(fn.andThen(t -> t.xor)),
-                         classes);
-    }
+    public Try<T, X> recoverFlatMap(Function<? super X, ? extends Try<T, X>> fn);
 
     public Try<T, X> recoverFlatMapFor(Class<? extends X> t,
-                                       Function<? super X, ? extends Try<T, X>> fn) {
-        return new Try<T, X>(xor.flatMapLeftToRight(x -> {
-            if (t.isAssignableFrom(x.getClass())) {
-                return fn.apply(x).xor;
-            }
-            return xor;
-        }),
-                             classes);
-    }
+                                       Function<? super X, ? extends Try<T, X>> fn);
 
     /**
      * Recover if exception is of specified type
@@ -855,211 +656,94 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
      * @return New Success if failure and types fold / otherwise this
      */
     public Try<T, X> recoverFor(Class<? extends X> t,
-                                Function<? super X, ? extends T> fn) {
-        return new Try<T, X>(xor.flatMapLeftToRight(x -> {
-            if (t.isAssignableFrom(x.getClass())) {
-                return Either.right(fn.apply(x));
-            }
-            return xor;
-        }),
-                             classes);
-    }
+                                Function<? super X, ? extends T> fn);
 
     /**
      * @return Optional present if Success, Optional empty if failure
      */
     @Override
-    public Optional<T> toOptional() {
-        return xor.toOptional();
-    }
+    public Optional<T> toOptional();
 
     /**
      * @return Stream with value if Sucess, Empty Stream if failure
      */
     @Override
-    public ReactiveSeq<T> stream() {
-        return xor.stream();
-    }
+    public ReactiveSeq<T> stream();
 
-    public Option<X> toFailedOption() {
-        return xor.swap()
-                  .toOption();
-    }
+    public Option<X> toFailedOption();
 
     /**
      * @return Stream with error if Failure, Empty Stream if success
      */
-    public Stream<X> toFailedStream() {
-        return xor.swap()
-                  .stream();
-    }
+    public Stream<X> toFailedStream();
 
     /**
      * @return true if Success / false if Failure
      */
-    public boolean isSuccess() {
-        return xor.isRight();
-    }
+    public boolean isSuccess();
 
     /**
      * @return True if Failure / false if Success
      */
-    public boolean isFailure() {
-        return !xor.isRight();
-    }
+    public boolean isFailure();
 
     /**
      * @param consumer Accept value if Success / not called on Failure
      */
     @Override
-    public void forEach(Consumer<? super T> consumer) {
-        xor.forEach(consumer);
-    }
+    public void forEach(Consumer<? super T> consumer);
 
     /**
      * @param consumer Accept value if Failure / not called on Failure
      */
-    public void forEachFailed(Consumer<? super X> consumer) {
-        xor.swap()
-           .forEach(consumer);
-    }
+    public void forEachFailed(Consumer<? super X> consumer);
 
     @Override
-    public boolean isPresent() {
-        return isSuccess();
-    }
+    public boolean isPresent();
 
     public <T2, R> Try<R, X> zip(final Try<T2, X> app,
-                                 final BiFunction<? super T, ? super T2, ? extends R> fn) {
-        return flatMap(t -> app.map(t2 -> fn.apply(t,
-                                                   t2)));
-    }
+                                 final BiFunction<? super T, ? super T2, ? extends R> fn);
 
     public <T2, R> Try<R, X> zip(final Either<X, T2> app,
-                                 final BiFunction<? super T, ? super T2, ? extends R> fn) {
-        return Try.fromEither(xor.zip(app,
-                                      fn));
-    }
+                                 final BiFunction<? super T, ? super T2, ? extends R> fn);
 
     public <T2, R> Try<R, X> zip(final Ior<X, T2> app,
-                                 final BiFunction<? super T, ? super T2, ? extends R> fn) {
-        return Try.fromEither(xor.zip(app,
-                                      fn));
-    }
+                                 final BiFunction<? super T, ? super T2, ? extends R> fn);
 
     /**
      * @param consumer Accept value if Success
      * @return this
      */
     @Override
-    public Try<T, X> peek(final Consumer<? super T> consumer) {
-        forEach(consumer);
-        return this;
-    }
+    public Try<T, X> peek(final Consumer<? super T> consumer);
 
     /**
      * @param consumer Accept Exception if Failure
      * @return this
      */
-    public Try<T, X> peekFailed(final Consumer<? super X> consumer) {
-        forEachFailed(consumer);
-        return this;
-    }
+    public Try<T, X> peekFailed(final Consumer<? super X> consumer);
 
     @Override
-    public Iterator<T> iterator() {
-
-        return stream().iterator();
-    }
+    public Iterator<T> iterator();
 
     @Override
     public <R> R fold(Function<? super T, ? extends R> fn1,
-                      Function<? super X, ? extends R> fn2) {
-        return xor.fold(fn2,
-                        fn1);
-    }
+                      Function<? super X, ? extends R> fn2);
 
     @Override
     public <R> R fold(Function<? super T, ? extends R> present,
-                      Supplier<? extends R> absent) {
-        return xor.fold(present,
-                        absent);
-    }
+                      Supplier<? extends R> absent);
 
     public Try<T, X> bipeek(Consumer<? super T> c1,
-                            Consumer<? super X> c2) {
-        return fold(t -> {
-                        c1.accept(t);
-                        return this;
-                    },
-                    t2 -> {
-                        c2.accept(t2);
-                        return this;
-                    });
+                            Consumer<? super X> c2);
 
-    }
-
-    private <R> Try<? extends R, X> safeApplyM(T in,
-                                               final Function<? super T, ? extends Try<? extends R, X>> s,
-                                               Class<? extends Throwable>[] classes) {
-        try {
-            return s.apply(in);
-        } catch (final Throwable t) {
-            return handleError(t,
-                               (Class<? extends X>[]) classes);
-
-        }
-    }
-    /*
-     * Flatten a nest Try Structure
-     * @return Lowest nest Try
-     * @see com.oath.cyclops.trycatch.Try#flatten()
-     */
-
-    private <R> Either<X, R> safeApply(T in,
-                                       final Function<? super T, ? extends R> s,
-                                       Class<? extends Throwable>[] classes) {
-        try {
-            return Either.right(s.apply(in));
-        } catch (final Throwable t) {
-            return (Either) Either.left(orThrow(Stream.of(classes)
-                                                      .filter(c -> c.isAssignableFrom(t.getClass()))
-                                                      .map(c -> t)
-                                                      .findFirst(),
-                                                t));
-
-        }
-    }
 
     @Override
-    public String mkString() {
-        return toString();
-    }
+    public String mkString();
 
     @Override
-    public String toString() {
-        return xor.fold(s -> "Failure[" + s.toString() + "]",
-                        p -> "Success[" + p.toString() + "]");
-    }
+    public String toString();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Try<?, ?> aTry = (Try<?, ?>) o;
-
-        return xor.equals(aTry.xor);
-    }
-
-    @Override
-    public int hashCode() {
-        return xor.hashCode();
-    }
 
     public interface CheckedFunction<T, R, X extends Throwable> {
 
@@ -1076,27 +760,27 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    public interface CheckedBiFunction<T1, T2, R, X extends Throwable> {
-
-        R apply(T1 t,
-                T2 t2) throws X;
-    }
-
-    public interface CheckedSupplier<T, X extends Throwable> {
-
-        T get() throws X;
-    }
-
-
-    public interface CheckedConsumer<T, X extends Throwable> {
-
-        void accept(T t) throws X;
-    }
-
-    public interface CheckedRunnable<X extends Throwable> {
-
-        void run() throws X;
-    }
+    //    public interface CheckedBiFunction<T1, T2, R, X extends Throwable> {
+    //
+    //        R apply(T1 t,
+    //                T2 t2) throws X;
+    //    }
+    //
+    //    public interface CheckedSupplier<T, X extends Throwable> {
+    //
+    //        T get() throws X;
+    //    }
+    //
+    //
+    //    public interface CheckedConsumer<T, X extends Throwable> {
+    //
+    //        void accept(T t) throws X;
+    //    }
+    //
+    //    public interface CheckedRunnable<X extends Throwable> {
+    //
+    //        void run() throws X;
+    //    }
 
 
 }
