@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;

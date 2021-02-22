@@ -1,7 +1,7 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.impl.base.HashedPatriciaTrie;
 import cyclops.container.immutable.tuple.Tuple;

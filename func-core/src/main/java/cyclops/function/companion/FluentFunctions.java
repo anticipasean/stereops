@@ -1,7 +1,7 @@
 package cyclops.function.companion;
 
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
@@ -11,11 +11,11 @@ import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Cacheable;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.checked.CheckedBiConsumer;
-import cyclops.function.checked.CheckedBiFunction;
+import cyclops.function.checked.CheckedFunction2;
 import cyclops.function.checked.CheckedConsumer;
-import cyclops.function.checked.CheckedFunction;
-import cyclops.function.checked.CheckedSupplier;
-import cyclops.function.checked.CheckedTriFunction;
+import cyclops.function.checked.CheckedFunction1;
+import cyclops.function.checked.CheckedFunction0;
+import cyclops.function.checked.CheckedFunction3;
 import cyclops.function.consumer.Consumer3;
 import cyclops.function.consumer.Consumer4;
 import cyclops.function.currying.Curry;
@@ -62,7 +62,7 @@ public class FluentFunctions {
      * @param supplier that throws CheckedExcpetion
      * @return FluentSupplier
      */
-    public static <R> FluentFunctions.FluentSupplier<R> ofChecked(final CheckedSupplier<R> supplier) {
+    public static <R> FluentFunctions.FluentSupplier<R> ofChecked(final CheckedFunction0<R> supplier) {
         return FluentFunctions.of(ExceptionSoftener.softenSupplier(supplier));
     }
 
@@ -117,7 +117,7 @@ public class FluentFunctions {
      * @param fn CheckedFunction
      * @return FluentFunction
      */
-    public static <T, R> FluentFunctions.FluentFunction<T, R> ofChecked(final CheckedFunction<T, R> fn) {
+    public static <T, R> FluentFunctions.FluentFunction<T, R> ofChecked(final CheckedFunction1<T, R> fn) {
         return FluentFunctions.of(ExceptionSoftener.softenFunction(fn));
     }
 
@@ -155,7 +155,7 @@ public class FluentFunctions {
      * @param fn CheckedBiFunction
      * @return FluentBiFunction
      */
-    public static <T1, T2, R> FluentFunctions.FluentBiFunction<T1, T2, R> ofChecked(final CheckedBiFunction<T1, T2, R> fn) {
+    public static <T1, T2, R> FluentFunctions.FluentBiFunction<T1, T2, R> ofChecked(final CheckedFunction2<T1, T2, R> fn) {
         return FluentFunctions.of(ExceptionSoftener.softenBiFunction(fn));
     }
 
@@ -192,7 +192,7 @@ public class FluentFunctions {
      * @param fn CheckedTriFunction to convert
      * @return FluentTriFunction
      */
-    public static <T1, T2, T3, R> FluentFunctions.FluentTriFunction<T1, T2, T3, R> ofChecked(final CheckedTriFunction<T1, T2, T3, R> fn) {
+    public static <T1, T2, T3, R> FluentFunctions.FluentTriFunction<T1, T2, T3, R> ofChecked(final CheckedFunction3<T1, T2, T3, R> fn) {
 
         return new FluentTriFunction<>(softenTriFunction(fn));
     }
@@ -316,7 +316,7 @@ public class FluentFunctions {
         });
     }
 
-    private static <T1, T2, T3, R> Function3<T1, T2, T3, R> softenTriFunction(final CheckedTriFunction<T1, T2, T3, R> fn) {
+    private static <T1, T2, T3, R> Function3<T1, T2, T3, R> softenTriFunction(final CheckedFunction3<T1, T2, T3, R> fn) {
         return (t1, t2, t3) -> {
             try {
                 return fn.apply(t1,

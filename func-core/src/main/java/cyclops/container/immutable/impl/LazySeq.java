@@ -1,9 +1,9 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.foldable.Foldable;
 import cyclops.container.immutable.ImmutableList;

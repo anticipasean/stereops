@@ -1,8 +1,8 @@
 package cyclops.container.immutable;
 
 import cyclops.container.relational.Contains;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.foldable.Deconstructable.Deconstructable2;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.impl.LazySeq;

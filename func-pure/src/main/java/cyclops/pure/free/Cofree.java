@@ -5,7 +5,7 @@ import cyclops.function.higherkinded.DataWitness.cofree;
 import cyclops.function.higherkinded.DataWitness.eval;
 import cyclops.function.higherkinded.Higher;
 import cyclops.function.higherkinded.Higher2;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.function.higherkinded.NaturalTransformation;
 import cyclops.pure.instances.control.EvalInstances;
 import cyclops.pure.typeclasses.comonad.Comonad;

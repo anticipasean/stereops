@@ -1,6 +1,6 @@
 package cyclops.function.partial;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.function.cacheable.Memoize;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,7 +30,7 @@ public interface PartialFunction<T, R> {
 
     default <V> PartialFunction<T, V> andThen(Function<? super R, ? extends V> f2) {
         return of((T t) -> apply(t).fold(r -> Option.some(f2.apply(r)),
-                                         none -> Option.none()));
+                                         () -> Option.none()));
     }
 
 
@@ -40,7 +40,7 @@ public interface PartialFunction<T, R> {
 
     default <V> PartialFunction<T, V> andThenUnmemoized(Function<? super R, ? extends V> f2) {
         return (T t) -> apply(t).fold(r -> Option.some(f2.apply(r)),
-                                      none -> Option.<V>none());
+                                      () -> Option.<V>none());
     }
 
 
@@ -55,7 +55,7 @@ public interface PartialFunction<T, R> {
     default <R1> PartialFunction<T, R1> flatMapFn(final Function<? super R, ? extends Function<? super T, ? extends R1>> f) {
         return of(a -> apply(a).fold(r -> Option.some(f.apply(r)
                                                        .apply(a)),
-                                     none -> Option.none()));
+                                     () -> Option.none()));
     }
 
     default Function<? super T, ? extends Option<R>> asFunction() {

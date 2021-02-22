@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 
 import java.util.NoSuchElementException;
 

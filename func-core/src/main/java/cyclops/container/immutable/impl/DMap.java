@@ -1,10 +1,10 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.control.Either;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.LazyEither3;
-import cyclops.container.control.LazyEither4;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.either.LazyEither3;
+import cyclops.container.control.lazy.either.LazyEither4;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.transformable.To;

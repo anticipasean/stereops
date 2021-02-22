@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.mutable.Mutable;
 
 public class XorAnyMValueTest extends BaseAnyMValueTest<either> {

@@ -8,8 +8,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
 import java.io.FileNotFoundException;
 import java.util.Optional;
 import java.util.stream.Collectors;

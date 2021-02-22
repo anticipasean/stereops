@@ -1,6 +1,6 @@
 package cyclops.reactive.collection.container.immutable.lazy.impl;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.combiner.Reducer;

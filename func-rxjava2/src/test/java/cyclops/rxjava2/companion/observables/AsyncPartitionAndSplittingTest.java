@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.rxjava2.companion.Observables;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.rxjava2.adapter.ObservableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;

@@ -5,7 +5,7 @@ import static cyclops.container.immutable.tuple.Tuple.tuple;
 
 import cyclops.function.higherkinded.Higher;
 import cyclops.pure.control.Constant;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.pure.control.State;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.tuple.Tuple;

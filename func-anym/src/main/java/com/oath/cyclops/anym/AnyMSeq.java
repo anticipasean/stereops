@@ -32,7 +32,7 @@ import org.reactivestreams.Subscription;
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.function.companion.Predicates;
 import cyclops.function.enhanced.Function4;
 import cyclops.function.enhanced.Function3;

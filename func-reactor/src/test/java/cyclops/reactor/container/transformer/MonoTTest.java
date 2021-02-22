@@ -6,8 +6,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.mutable.Mutable;
 import cyclops.container.printable.Printable;

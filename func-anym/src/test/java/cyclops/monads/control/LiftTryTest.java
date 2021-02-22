@@ -1,6 +1,6 @@
 package cyclops.monads.control;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 
 
 import static cyclops.monads.AnyM.success;
@@ -15,7 +15,7 @@ import cyclops.monads.function.AnyMFunction2;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 
 
 public class LiftTryTest {

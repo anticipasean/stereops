@@ -2,7 +2,7 @@ package cyclops.pure.control;
 
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.function.higherkinded.DataWitness.rws;
 import cyclops.function.higherkinded.DataWitness.supplier;
 import cyclops.function.higherkinded.Higher;

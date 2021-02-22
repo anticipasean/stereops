@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 import static cyclops.container.immutable.impl.HashMap.of;
 
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;

@@ -1,6 +1,6 @@
 package cyclops.container.immutable.impl;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.persistent.PersistentIndexed;
 import cyclops.function.enhanced.Function1;
 import cyclops.reactive.ReactiveSeq;

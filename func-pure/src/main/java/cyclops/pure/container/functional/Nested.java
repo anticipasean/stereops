@@ -1,10 +1,10 @@
 package cyclops.pure.container.functional;
 
 import cyclops.async.Future;
-import cyclops.container.control.Either;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;

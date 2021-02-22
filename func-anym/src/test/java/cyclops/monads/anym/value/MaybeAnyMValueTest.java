@@ -2,7 +2,7 @@ package cyclops.monads.anym.value;
 
 import cyclops.container.mutable.Mutable;
 import cyclops.monads.AnyM;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.monads.Witness.maybe;
 import org.junit.Before;
 import org.junit.Test;

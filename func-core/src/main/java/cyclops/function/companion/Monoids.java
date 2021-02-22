@@ -2,10 +2,10 @@ package cyclops.function.companion;
 
 
 import cyclops.async.Future;
-import cyclops.container.control.Either;
-import cyclops.container.control.Ior;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Bag;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.Chain;

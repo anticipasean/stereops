@@ -9,14 +9,13 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Range;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.Managed;
 import cyclops.reactive.companion.Spouts;
-import cyclops.rxjava2.io.FlowableManaged;
 import io.reactivex.Flowable;
 import java.util.concurrent.Executors;
 import java.util.function.Function;

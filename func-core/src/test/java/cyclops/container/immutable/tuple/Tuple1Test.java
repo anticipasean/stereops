@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Trampoline;
+import cyclops.container.control.lazy.trampoline.Trampoline;
 import org.junit.Before;
 import org.junit.Test;
 

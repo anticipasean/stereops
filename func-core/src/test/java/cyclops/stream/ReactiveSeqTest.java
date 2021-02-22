@@ -25,7 +25,7 @@ import cyclops.util.SimpleTimer;
 import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.async.Future;
 import cyclops.container.immutable.impl.Bag;
 import cyclops.container.immutable.impl.EnumerationTest.Days;

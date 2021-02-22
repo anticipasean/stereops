@@ -1,7 +1,7 @@
 package cyclops.async.queue;
 
 import cyclops.async.companion.QueueFactories;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;

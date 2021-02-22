@@ -1,11 +1,11 @@
 package cyclops.container.control.trampoline;
 
-import static cyclops.container.control.Eval.now;
-import static cyclops.container.control.Maybe.just;
+import static cyclops.container.control.lazy.eval.Eval.now;
+import static cyclops.container.control.lazy.maybe.Maybe.just;
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
-import cyclops.container.control.Eval;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
 import org.junit.Test;

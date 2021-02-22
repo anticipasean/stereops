@@ -1,5 +1,5 @@
 package cyclops.reactor.container.transformer;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.monads.AnyM;
 import cyclops.monads.AnyMs;
 import cyclops.monads.Witness;

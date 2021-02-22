@@ -1,13 +1,13 @@
 package cyclops.container.control.either;
 
-import static cyclops.container.control.Either.left;
-import static cyclops.container.control.Either.right;
+import static cyclops.container.control.eager.either.Either.left;
+import static cyclops.container.control.eager.either.Either.right;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Semigroups;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;

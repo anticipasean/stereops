@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 import cyclops.container.immutable.ImmutableQueue;
 import cyclops.container.traversable.IterableX;
 import cyclops.stream.type.Streamable;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.basetests.BaseImmutableQueueTest;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

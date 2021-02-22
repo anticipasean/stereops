@@ -1,4 +1,4 @@
-package cyclops.container.control.option;
+package cyclops.container.control.eager.option;
 
 import static java.util.Objects.requireNonNull;
 
@@ -141,10 +141,10 @@ final class None<T> implements Option<T> {
 
     }
 
-    @Override
-    public <R> R fold(Function<? super T, ? extends R> fn1,
-                      Function<? super None<T>, ? extends R> fn2) {
-        return requireNonNull(fn2,
-                              () -> "fn2").apply(none());
-    }
+//    @Override
+//    public <R> R fold(Function<? super T, ? extends R> fn1,
+//                      Function<? super None<T>, ? extends R> fn2) {
+//        return requireNonNull(fn2,
+//                              () -> "fn2").apply(none());
+//    }
 }

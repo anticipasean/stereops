@@ -2,7 +2,7 @@ package cyclops.container.control.lazy;
 
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.control.AbstractOrElseValueTest;
-import cyclops.container.control.LazyEither5;
+import cyclops.container.control.lazy.either.LazyEither5;
 
 public class LazyEither5OrElseValueTest extends AbstractOrElseValueTest {
 

@@ -2,10 +2,10 @@ package cyclops.container.immutable.impl;
 
 import static java.util.Objects.requireNonNull;
 
-import cyclops.container.control.Eval;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.ImmutableMap;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

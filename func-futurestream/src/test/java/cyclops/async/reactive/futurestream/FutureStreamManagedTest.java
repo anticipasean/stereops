@@ -9,7 +9,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.Range;
 import cyclops.container.Seq;
 import cyclops.container.immutable.tuple.Tuple;

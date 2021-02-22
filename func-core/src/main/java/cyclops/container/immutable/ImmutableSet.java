@@ -2,7 +2,7 @@ package cyclops.container.immutable;
 
 
 import cyclops.container.relational.Contains;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;

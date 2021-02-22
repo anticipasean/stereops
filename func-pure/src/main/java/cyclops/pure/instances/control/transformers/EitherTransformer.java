@@ -2,7 +2,7 @@ package cyclops.pure.instances.control.transformers;
 
 import cyclops.function.higherkinded.DataWitness.either;
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.pure.container.functional.Nested;
 import cyclops.pure.transformers.Transformer;
 import cyclops.pure.transformers.TransformerFactory;

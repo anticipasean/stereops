@@ -1,6 +1,6 @@
 package cyclops.container.persistent;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.persistent.views.MapView;
 import cyclops.reactive.ReactiveSeq;

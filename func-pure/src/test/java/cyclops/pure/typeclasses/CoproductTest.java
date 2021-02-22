@@ -1,6 +1,6 @@
 package cyclops.pure.typeclasses;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.higherkinded.DataWitness.option;
 import cyclops.function.higherkinded.DataWitness.stream;
 import cyclops.pure.container.functional.Coproduct;

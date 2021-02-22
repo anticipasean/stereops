@@ -7,9 +7,9 @@ import cyclops.pure.instances.reactive.IterableInstances;
 import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.pure.reactive.collections.mutable.SetX;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.pure.control.Reader;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.function.higherkinded.DataWitness.*;
 import com.oath.cyclops.data.ReactiveWitness.*;
 import cyclops.pure.instances.control.FutureInstances;

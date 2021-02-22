@@ -13,7 +13,7 @@ import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.pure.instances.data.VectorInstances;
 import cyclops.pure.reactive.collections.mutable.ListX;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.pure.arrow.MonoidKs;

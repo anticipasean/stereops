@@ -13,9 +13,10 @@ import cyclops.async.queue.QueueFactory;
 import cyclops.async.queue.Signal;
 import cyclops.async.queue.Topic;
 import cyclops.async.companion.QueueFactories;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.maybe.CompletableMaybe;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;
@@ -1898,7 +1899,7 @@ public class ReactiveStreamX<T> extends BaseExtendedStream<T> {
 
     @Override
     public Maybe<T> single() {
-        Maybe.CompletableMaybe<T, T> maybe = Maybe.maybe();
+        CompletableMaybe<T, T> maybe = Maybe.maybe();
         subscribe(new Subscriber<T>() {
             Object value = UNSET;
             Subscription sub;

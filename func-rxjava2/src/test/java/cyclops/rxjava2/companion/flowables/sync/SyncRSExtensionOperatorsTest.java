@@ -1,7 +1,7 @@
 package cyclops.rxjava2.companion.flowables.sync;
 
 
-import static cyclops.container.control.option.Option.some;
+import static cyclops.container.control.eager.option.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.companion.Semigroups;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;

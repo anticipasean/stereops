@@ -3,7 +3,7 @@ package cyclops.pure.instances.control.transformers;
 
 import cyclops.function.higherkinded.DataWitness.tryType;
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.pure.container.functional.Nested;
 import cyclops.pure.transformers.Transformer;
 import cyclops.pure.transformers.TransformerFactory;

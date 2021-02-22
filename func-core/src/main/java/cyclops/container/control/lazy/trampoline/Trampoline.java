@@ -1,6 +1,7 @@
-package cyclops.container.control;
+package cyclops.container.control.lazy.trampoline;
 
 import cyclops.container.Value;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

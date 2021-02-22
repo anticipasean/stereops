@@ -6,7 +6,7 @@ import static cyclops.pure.free.CharToy.done;
 import static cyclops.pure.free.CharToy.output;
 import static cyclops.pure.kinds.SupplierKind.λK;
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.function.higherkinded.DataWitness.supplier;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.pure.kinds.SupplierKind;

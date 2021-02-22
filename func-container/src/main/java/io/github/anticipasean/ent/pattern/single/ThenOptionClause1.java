@@ -1,6 +1,6 @@
 package io.github.anticipasean.ent.pattern.single;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import io.github.anticipasean.ent.pattern.Clause;
 import java.util.function.Function;

@@ -1,6 +1,6 @@
 package cyclops.container.control.trytests;
 
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

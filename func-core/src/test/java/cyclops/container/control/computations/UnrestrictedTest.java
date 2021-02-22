@@ -7,7 +7,7 @@ import static cyclops.container.control.computations.ToyLanguage.output;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.control.Unrestricted;
 import cyclops.container.control.computations.ToyLanguage.Bell;
 import cyclops.container.control.computations.ToyLanguage.Done;

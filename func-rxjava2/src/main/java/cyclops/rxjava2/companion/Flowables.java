@@ -1,6 +1,6 @@
 package cyclops.rxjava2.companion;
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.reactive.ReactiveSeq;

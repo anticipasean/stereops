@@ -9,8 +9,8 @@ import static org.mockito.Matchers.anyInt;
 
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.traversable.IterableX;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.basetests.BaseImmutableListTest;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;

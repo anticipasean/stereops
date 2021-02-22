@@ -1,16 +1,16 @@
 package cyclops.container.control.eval;
 
-import static cyclops.container.control.Eval.eval;
+import static cyclops.container.control.lazy.eval.Eval.eval;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.control.Eval;
-import cyclops.container.control.Eval.CompletableEval;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.eval.Eval.CompletableEval;
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

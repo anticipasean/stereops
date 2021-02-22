@@ -4,14 +4,16 @@ package cyclops.monads.anym.value;
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.AnyMValue2;
 import com.oath.cyclops.ReactiveConvertableSequence;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.attempt.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.container.mutable.Mutable;
 import cyclops.function.companion.Semigroups;
 import cyclops.async.Future;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.async.reactive.futurestream.LazyReact;
-import cyclops.container.control.*;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.companion.Reducers;
 import cyclops.reactive.ReactiveSeq;
@@ -68,7 +70,7 @@ public abstract class BaseAnyMValueTest<W extends WitnessType<W>> {
 
 	@Test
 	public void testFromEvalSome() {
-		assertThat(Maybe.fromEval(Eval.now(10)),equalTo(just.toMaybe()));
+		assertThat(Maybe.fromEval(Eval.now(10)), equalTo(just.toMaybe()));
 	}
 
 	@Test

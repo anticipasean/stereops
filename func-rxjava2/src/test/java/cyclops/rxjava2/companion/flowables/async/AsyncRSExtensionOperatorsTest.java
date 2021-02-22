@@ -1,7 +1,7 @@
 package cyclops.rxjava2.companion.flowables.async;
 
 
-import static cyclops.container.control.option.Option.some;
+import static cyclops.container.control.eager.option.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.monads.AnyM;
 import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.ReactiveSeq;

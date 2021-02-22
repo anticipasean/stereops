@@ -1,7 +1,7 @@
 package com.oath.cyclops.anym;
 
 import cyclops.container.filterable.Filterable;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
@@ -9,7 +9,7 @@ import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.MonadicValue;
 import cyclops.container.Value;
 import cyclops.function.companion.Predicates;

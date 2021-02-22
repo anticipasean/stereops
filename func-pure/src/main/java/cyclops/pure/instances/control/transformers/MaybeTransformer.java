@@ -2,7 +2,7 @@ package cyclops.pure.instances.control.transformers;
 
 import cyclops.function.higherkinded.DataWitness.option;
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.pure.container.functional.Nested;
 import cyclops.pure.transformers.Transformer;
 import cyclops.pure.transformers.TransformerFactory;

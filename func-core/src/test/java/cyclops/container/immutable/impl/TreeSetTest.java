@@ -7,8 +7,8 @@ import static org.junit.Assert.assertThat;
 
 import cyclops.function.companion.Comparators;
 import cyclops.function.companion.Monoids;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.basetests.BaseImmutableSortedSetTest;
 import cyclops.container.immutable.ImmutableSortedSet;
 import cyclops.container.immutable.tuple.Tuple2;

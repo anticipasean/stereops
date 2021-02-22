@@ -3,12 +3,12 @@ package cyclops.function.enhanced;
 import static java.util.Objects.requireNonNull;
 
 import cyclops.async.Future;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
-import cyclops.container.control.Ior;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;

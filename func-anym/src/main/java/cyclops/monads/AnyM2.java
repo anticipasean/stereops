@@ -2,6 +2,7 @@ package cyclops.monads;
 
 import com.oath.cyclops.anym.AnyMSeq;
 import com.oath.cyclops.anym.AnyMValue;
+import cyclops.container.control.eager.either.Either;
 import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.reactive.collection.container.IndexedSequenceX;
 import cyclops.function.companion.Lambda;
@@ -21,8 +22,7 @@ import cyclops.async.Future;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.collection.container.mutable.ListX;
-import cyclops.container.control.*;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.monads.function.AnyMFunction1;
 import cyclops.monads.function.AnyMFunction2;
 import cyclops.reactor.container.transformer.ListT;
@@ -45,7 +45,7 @@ import static cyclops.function.evaluation.Evaluation.LAZY;
  * Wrapper for Any Monad type
  *
  * There are two subsclass of AnyM - @see {@link AnyMValue} and  @see {@link AnyMSeq}.
- * AnyMValue is used to represent Monads that wrap a single value such as {@link Optional}, {@link CompletableFuture}, {@link Maybe}, {@link Eval}, {@link Either}, {@link Try}, {@link Ior}
+ * AnyMValue is used to represent Monads that wrap a single value such as {@link Optional}, {@link CompletableFuture}, {@link Maybe}, {@link cyclops.container.control.lazy.eval.Eval}, {@link cyclops.container.control.eager.either.Either}, {@link cyclops.container.control.eager.attempt.Try}, {@link cyclops.container.control.eager.ior.Ior}
  * AnyMSeq is used to represent Monads that wrap an aggregation of values such as {@link Stream}, {@link FutureStream}, {@link List}, {@link Set}, {@link Streamable}
  *
  * Use AnyM to create your monad wrapper.

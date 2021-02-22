@@ -9,7 +9,7 @@ import static org.junit.Assert.fail;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

@@ -1,7 +1,7 @@
 package cyclops.async.companion;
 
 import cyclops.async.Future;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.traversable.IterableX;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;

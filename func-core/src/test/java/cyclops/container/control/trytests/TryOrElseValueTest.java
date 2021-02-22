@@ -2,7 +2,7 @@ package cyclops.container.control.trytests;
 
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.control.AbstractOrElseValueTest;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 
 public class TryOrElseValueTest extends AbstractOrElseValueTest {
 

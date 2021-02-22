@@ -1,9 +1,9 @@
 package cyclops.container;
 
 import cyclops.async.Future;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.factory.EmptyUnit;
 import cyclops.container.factory.Unit;
 import cyclops.container.filterable.Filterable;
@@ -390,7 +390,7 @@ public interface MonadicValue<T> extends Value<T>, Unit<T>, Transformable<T>, Fi
 
             final Maybe<R> maybe = sub.toMaybe();
             return maybe.fold(in -> unit(in),
-                              __ -> emptyUnit());
+                              () -> emptyUnit());
 
         });
 

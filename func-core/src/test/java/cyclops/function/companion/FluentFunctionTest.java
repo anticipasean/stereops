@@ -10,7 +10,7 @@ import static org.junit.Assert.fail;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.function.companion.FluentFunctions.FluentSupplier;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;

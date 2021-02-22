@@ -6,7 +6,7 @@ import cyclops.container.Value;
 import cyclops.container.factory.Unit;
 import cyclops.container.foldable.Foldable;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactor.container.transformer.StreamT;

@@ -1,8 +1,8 @@
 package io.github.anticipasean.ent.pattern.pair;
 
 
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.enhanced.Function1;
 import cyclops.stream.type.Streamable;

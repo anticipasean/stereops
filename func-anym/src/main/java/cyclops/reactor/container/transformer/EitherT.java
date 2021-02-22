@@ -5,7 +5,7 @@ import cyclops.container.MonadicValue;
 import com.oath.cyclops.anym.transformers.NonEmptyTransformer;
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.monads.AnyM;
 import cyclops.monads.WitnessType;
 import cyclops.reactive.ReactiveSeq;

@@ -1,7 +1,7 @@
 package cyclops.rxjava2.container.higherkinded;
 
 
-import static cyclops.container.control.Maybe.just;
+import static cyclops.container.control.lazy.maybe.Maybe.just;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
@@ -9,8 +9,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.mutable.Mutable;
 import cyclops.container.printable.Printable;

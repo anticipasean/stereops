@@ -3,7 +3,8 @@ package cyclops.reactor.container.transformer;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.AnyMs;
@@ -14,7 +15,6 @@ import cyclops.stream.companion.Streams;
 import cyclops.container.mutable.Mutable;
 import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.pure.reactive.collections.immutable.LinkedListX;
-import cyclops.container.control.*;
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class EvalTTest implements Printable {
 	public void setUp() throws Exception {
 
 
-		just = AnyMs.liftM(Eval.now(10),Witness.optional.INSTANCE);
+		just = AnyMs.liftM(Eval.now(10), Witness.optional.INSTANCE);
 		none = EvalT.of(AnyM.ofNullable(null));
 		one = EvalT.of(AnyM.ofNullable(Eval.now(1)));
 	}

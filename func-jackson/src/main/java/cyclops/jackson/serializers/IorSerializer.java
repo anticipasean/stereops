@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Ior;
+import cyclops.container.control.eager.ior.Ior;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

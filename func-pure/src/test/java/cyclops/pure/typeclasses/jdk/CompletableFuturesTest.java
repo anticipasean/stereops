@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 import cyclops.function.higherkinded.Higher;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 

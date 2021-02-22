@@ -7,8 +7,8 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.basetests.BaseImmutableSetTest;
 import cyclops.container.immutable.ImmutableSet;
 import cyclops.container.immutable.tuple.Tuple2;

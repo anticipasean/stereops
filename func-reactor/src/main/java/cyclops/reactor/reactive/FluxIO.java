@@ -1,7 +1,7 @@
 package cyclops.reactor.reactive;
 
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.IO;
 import cyclops.reactive.Managed;

@@ -1,8 +1,8 @@
 package cyclops.exception;
 
-import cyclops.container.control.Try.CheckedRunnable;
+import cyclops.container.control.eager.attempt.Try.CheckedRunnable;
 import cyclops.function.checked.CheckedBiConsumer;
-import cyclops.function.checked.CheckedBiFunction;
+import cyclops.function.checked.CheckedFunction2;
 import cyclops.function.checked.CheckedBiPredicate;
 import cyclops.function.checked.CheckedBooleanSupplier;
 import cyclops.function.checked.CheckedConsumer;
@@ -10,7 +10,7 @@ import cyclops.function.checked.CheckedDoubleConsumer;
 import cyclops.function.checked.CheckedDoubleFunction;
 import cyclops.function.checked.CheckedDoublePredicate;
 import cyclops.function.checked.CheckedDoubleSupplier;
-import cyclops.function.checked.CheckedFunction;
+import cyclops.function.checked.CheckedFunction1;
 import cyclops.function.checked.CheckedIntConsumer;
 import cyclops.function.checked.CheckedIntFunction;
 import cyclops.function.checked.CheckedIntPredicate;
@@ -20,7 +20,7 @@ import cyclops.function.checked.CheckedLongFunction;
 import cyclops.function.checked.CheckedLongPredicate;
 import cyclops.function.checked.CheckedLongSupplier;
 import cyclops.function.checked.CheckedPredicate;
-import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.checked.CheckedFunction0;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -120,7 +120,7 @@ public class ExceptionSoftener {
      * @param s Supplier with CheckedException
      * @return Supplier that throws the same exception, but doesn't need to declare it as a checked Exception
      */
-    public static <T> Supplier<T> softenSupplier(final CheckedSupplier<T> s) {
+    public static <T> Supplier<T> softenSupplier(final CheckedFunction0<T> s) {
         return () -> {
             try {
                 return s.get();
@@ -287,7 +287,7 @@ public class ExceptionSoftener {
      * @param fn CheckedFunction to be converted to a standard Function
      * @return Function that can throw checked Exceptions
      */
-    public static <T, R> Function<T, R> softenFunction(final CheckedFunction<T, R> fn) {
+    public static <T, R> Function<T, R> softenFunction(final CheckedFunction1<T, R> fn) {
         return t -> {
             try {
                 return fn.apply(t);
@@ -395,7 +395,7 @@ public class ExceptionSoftener {
      * @param fn CheckedBiLongFunction to be converted to a standard BiFunction
      * @return BiFunction that can throw checked Exceptions
      */
-    public static <T1, T2, R> BiFunction<T1, T2, R> softenBiFunction(final CheckedBiFunction<T1, T2, R> fn) {
+    public static <T1, T2, R> BiFunction<T1, T2, R> softenBiFunction(final CheckedFunction2<T1, T2, R> fn) {
         return (t1, t2) -> {
             try {
                 return fn.apply(t1,

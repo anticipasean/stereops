@@ -6,9 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import cyclops.container.control.Try;
-import cyclops.rxjava2.io.FlowableIO;
-import cyclops.rxjava2.io.FlowableManaged;
+import cyclops.container.control.eager.attempt.Try;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

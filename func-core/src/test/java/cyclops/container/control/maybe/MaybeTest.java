@@ -1,6 +1,6 @@
 package cyclops.container.control.maybe;
 
-import static cyclops.container.control.Maybe.just;
+import static cyclops.container.control.lazy.maybe.Maybe.just;
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import cyclops.container.control.lazy.maybe.Lazy;
 import cyclops.function.combiner.Zippable;
 import cyclops.container.printable.Printable;
 import cyclops.container.persistent.PersistentSet;
@@ -17,16 +18,16 @@ import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.option.AbstractOptionTest;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
+import cyclops.container.control.eager.option.AbstractOptionTest;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.async.Future;
-import cyclops.container.control.LazyEither5;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Maybe.CompletableMaybe;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Trampoline;
-import cyclops.container.control.Try;
+import cyclops.container.control.lazy.either.LazyEither5;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.lazy.maybe.CompletableMaybe;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.trampoline.Trampoline;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
@@ -359,7 +360,7 @@ public class MaybeTest extends AbstractOptionTest implements Printable {
                                                    Maybe.just(10));
         System.out.println("Blocked ? ");
         assertThat(m.getClass(),
-                   equalTo(Maybe.Lazy.class));
+                   equalTo(Lazy.class));
     }
 
     @Test

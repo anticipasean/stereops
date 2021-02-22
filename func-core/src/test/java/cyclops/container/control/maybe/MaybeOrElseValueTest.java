@@ -2,7 +2,7 @@ package cyclops.container.control.maybe;
 
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.control.AbstractOrElseValueTest;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 
 public class MaybeOrElseValueTest extends AbstractOrElseValueTest {
 

@@ -1,7 +1,7 @@
 package cyclops.pure.typeclasses.monad;
 
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.pure.typeclasses.Pure;

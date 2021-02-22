@@ -1,15 +1,15 @@
 package cyclops.pure.instances.control;
 
-import static cyclops.container.control.Try.narrowK;
+import static cyclops.container.control.eager.attempt.Try.narrowK;
 
 import cyclops.function.higherkinded.DataWitness.tryType;
 import cyclops.function.higherkinded.Higher;
 import cyclops.pure.arrow.Cokleisli;
 import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidK;
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.function.combiner.Monoid;
 import cyclops.pure.container.functional.Active;
 import cyclops.pure.container.functional.Coproduct;

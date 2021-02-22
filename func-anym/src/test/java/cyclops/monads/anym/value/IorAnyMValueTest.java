@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.container.control.Ior;
+import cyclops.container.control.eager.ior.Ior;
 
 public class IorAnyMValueTest extends BaseAnyMValueTest<ior> {
     @Before

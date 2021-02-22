@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import java.io.IOException;
 
 final class OptionDeserializer extends StdDeserializer<Option<?>> implements ResolvableDeserializer {

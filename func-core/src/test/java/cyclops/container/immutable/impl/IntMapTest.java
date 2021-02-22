@@ -4,7 +4,7 @@ package cyclops.container.immutable.impl;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.basetests.BaseImmutableListTest;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.tuple.Tuple2;

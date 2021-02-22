@@ -15,13 +15,13 @@ import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.async.Future;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Maybe.CompletableMaybe;
-import cyclops.container.control.Trampoline;
-import cyclops.container.control.Try;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.lazy.maybe.CompletableMaybe;
+import cyclops.container.control.lazy.trampoline.Trampoline;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple3;
@@ -50,20 +50,20 @@ public class CompletableMaybeTest implements Printable {
     Maybe<Integer> nullMaybe;
     boolean lazy = true;
 
-    public static <T> Maybe.CompletableMaybe<T, T> just(T value) {
-        Maybe.CompletableMaybe<T, T> completable = Maybe.maybe();
+    public static <T> CompletableMaybe<T, T> just(T value) {
+        CompletableMaybe<T, T> completable = Maybe.maybe();
         completable.complete(value);
         return completable;
     }
 
-    public static <T> Maybe.CompletableMaybe<T, T> none() {
-        Maybe.CompletableMaybe<T, T> completable = Maybe.maybe();
+    public static <T> CompletableMaybe<T, T> none() {
+        CompletableMaybe<T, T> completable = Maybe.maybe();
         completable.completeAsNone();
         return completable;
     }
 
-    public static <T> Maybe.CompletableMaybe<T, T> nullMaybe() {
-        Maybe.CompletableMaybe<T, T> completable = Maybe.maybe();
+    public static <T> CompletableMaybe<T, T> nullMaybe() {
+        CompletableMaybe<T, T> completable = Maybe.maybe();
         completable.complete(null);
         return completable;
     }

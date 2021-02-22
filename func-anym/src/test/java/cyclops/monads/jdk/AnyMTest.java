@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.oath.cyclops.anym.AnyMSeq;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.function.combiner.Monoid;

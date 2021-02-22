@@ -3,7 +3,7 @@ package cyclops.pure.typeclasses.foldable;
 import static cyclops.container.immutable.tuple.Tuple.tuple;
 
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.pure.typeclasses.Pure;
 import cyclops.pure.typeclasses.monad.Applicative;

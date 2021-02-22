@@ -1,7 +1,7 @@
 package cyclops.container.control.future.futureOverwriteIssue;
 
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.immutable.impl.NonEmptyList;
 import cyclops.container.immutable.impl.Vector;
 

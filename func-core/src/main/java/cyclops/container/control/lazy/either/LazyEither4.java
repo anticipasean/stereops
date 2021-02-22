@@ -1,7 +1,12 @@
-package cyclops.container.control;
+package cyclops.container.control.lazy.either;
 
 import cyclops.async.Future;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.trampoline.Trampoline;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.factory.Unit;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.foldable.OrElseValue;

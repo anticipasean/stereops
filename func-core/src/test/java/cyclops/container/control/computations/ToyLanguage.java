@@ -1,7 +1,7 @@
 package cyclops.container.control.computations;
 
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.LazyEither3;
+import cyclops.container.control.lazy.either.LazyEither3;
 import cyclops.container.control.Unrestricted;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.enhanced.Function2;

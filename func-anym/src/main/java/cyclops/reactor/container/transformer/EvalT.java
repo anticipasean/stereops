@@ -5,7 +5,7 @@ import cyclops.container.MonadicValue;
 import com.oath.cyclops.anym.transformers.ValueTransformer;
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.monads.AnyM;

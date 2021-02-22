@@ -1,12 +1,12 @@
 package cyclops.pure.control;
 
-import cyclops.container.control.Either;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.higherkinded.DataWitness.state;
 import cyclops.function.higherkinded.DataWitness.supplier;
 import cyclops.function.higherkinded.Higher;
 import cyclops.function.higherkinded.Higher2;
-import cyclops.container.control.Maybe.Nothing;
+import cyclops.container.control.lazy.maybe.Nothing;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.pure.free.Free;

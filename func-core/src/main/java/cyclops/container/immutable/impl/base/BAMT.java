@@ -3,7 +3,7 @@ package cyclops.container.immutable.impl.base;
 import static cyclops.container.immutable.impl.base.BAMT.ArrayUtils.last;
 import static cyclops.container.immutable.impl.base.BAMT.Two.two;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;
 import java.util.Iterator;

@@ -2,7 +2,7 @@ package cyclops.reactor.container.transformer;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.function.companion.Semigroups;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.monads.AnyMs;
@@ -15,7 +15,7 @@ import cyclops.stream.companion.Streams;
 import cyclops.reactor.container.transformer.jdk.OptionalT;
 import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.pure.reactive.collections.immutable.LinkedListX;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.combiner.Monoid;
 import cyclops.monads.AnyM;
 import org.junit.Before;

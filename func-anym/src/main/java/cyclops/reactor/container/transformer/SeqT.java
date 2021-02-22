@@ -6,7 +6,7 @@ import cyclops.container.persistent.PersistentCollection;
 import cyclops.container.persistent.PersistentList;
 import cyclops.container.traversable.IterableX;
 import cyclops.container.traversable.Traversable;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple2;

@@ -4,7 +4,7 @@ import cyclops.function.higherkinded.DataWitness.kleisli;
 import cyclops.function.higherkinded.Higher;
 import cyclops.function.higherkinded.Higher3;
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.function.enhanced.Function1;

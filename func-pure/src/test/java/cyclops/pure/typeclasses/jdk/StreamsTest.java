@@ -2,7 +2,7 @@ package cyclops.pure.typeclasses.jdk;
 
 import cyclops.function.higherkinded.DataWitness.stream;
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.pure.instances.control.MaybeInstances;

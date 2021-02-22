@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.io.Serializable;

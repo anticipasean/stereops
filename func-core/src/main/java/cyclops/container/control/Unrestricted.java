@@ -1,5 +1,7 @@
 package cyclops.container.control;
 
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.either.LazyEither3;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;

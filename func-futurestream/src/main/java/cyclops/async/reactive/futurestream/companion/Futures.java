@@ -4,7 +4,7 @@ import cyclops.async.reactive.futurestream.pipeline.Status;
 import cyclops.async.reactive.futurestream.pipeline.collector.Blocker;
 import cyclops.async.reactive.futurestream.threading.SequentialElasticPools;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.async.Future;
 import cyclops.async.reactive.futurestream.SimpleReact;
 import cyclops.reactive.collection.container.mutable.ListX;

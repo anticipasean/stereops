@@ -1,7 +1,7 @@
 package cyclops.pattern;
 
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import java.util.function.Function;
 import java.util.function.Predicate;
 

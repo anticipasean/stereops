@@ -16,7 +16,7 @@ import cyclops.async.companion.QueueFactories;
 import cyclops.async.queue.Topic;
 import cyclops.async.queue.Queue;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;

@@ -1,7 +1,7 @@
 package cyclops.pure.typeclasses;
 
 import cyclops.function.higherkinded.DataWitness;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.function.companion.Lambda;
 import cyclops.pure.instances.control.OptionInstances;
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static cyclops.container.control.option.Option.some;
+import static cyclops.container.control.eager.option.Option.some;
 import static cyclops.function.enhanced.Function2._1;
 import static cyclops.function.enhanced.Function2._2;
 import static cyclops.function.enhanced.Function3.*;

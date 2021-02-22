@@ -1,7 +1,7 @@
 package cyclops.monads.anym.value;
 
 import cyclops.container.mutable.Mutable;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.monads.AnyM;
 import cyclops.monads.Witness.option;
 import org.junit.Before;

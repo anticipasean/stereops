@@ -1,4 +1,4 @@
-package cyclops.container.control.option;
+package cyclops.container.control.eager.option;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;

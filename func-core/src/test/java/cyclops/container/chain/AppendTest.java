@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import cyclops.container.traversable.IterableX;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Chain;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.Seq;

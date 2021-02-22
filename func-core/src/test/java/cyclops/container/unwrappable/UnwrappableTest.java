@@ -3,8 +3,8 @@ package cyclops.container.unwrappable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.control.Either;
-import cyclops.container.control.LazyEither;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.either.LazyEither;
 import org.junit.Test;
 
 public class UnwrappableTest {

@@ -1,7 +1,10 @@
-package cyclops.container.control;
+package cyclops.container.control.lazy.eval;
 
 import cyclops.async.Future;
 import cyclops.container.MonadicValue;
+import cyclops.container.control.lazy.trampoline.Trampoline;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple1;

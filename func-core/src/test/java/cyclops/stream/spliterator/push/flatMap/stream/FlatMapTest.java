@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.hasItems;
 
 import cyclops.reactive.subscriber.AsyncSubscriber;
 import cyclops.reactive.subscriber.ReactiveSubscriber;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactive.companion.Spouts;
 import java.util.Arrays;

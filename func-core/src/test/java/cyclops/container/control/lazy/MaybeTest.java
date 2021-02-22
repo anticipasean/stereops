@@ -1,6 +1,6 @@
 package cyclops.container.control.lazy;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import org.junit.Test;
 
 public class MaybeTest {

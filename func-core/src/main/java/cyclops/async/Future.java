@@ -3,11 +3,11 @@ package cyclops.async;
 
 import cyclops.async.companion.CompletableFutures;
 import cyclops.container.MonadicValue;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
-import cyclops.container.control.Ior;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;

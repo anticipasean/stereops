@@ -1,8 +1,8 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.container.immutable.impl.base.BAMT;
 import cyclops.container.immutable.tuple.Tuple;

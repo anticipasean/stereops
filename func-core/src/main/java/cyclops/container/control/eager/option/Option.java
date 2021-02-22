@@ -1,13 +1,12 @@
-package cyclops.container.control.option;
+package cyclops.container.control.eager.option;
 
 import cyclops.async.Future;
 import cyclops.container.MonadicValue;
-import cyclops.container.control.Either;
-import cyclops.container.control.Ior;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Trampoline;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.lazy.trampoline.Trampoline;
 import cyclops.container.foldable.OrElseValue;
-import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.immutable.tuple.Tuple3;
@@ -17,7 +16,7 @@ import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
 import cyclops.container.recoverable.Recoverable;
 import cyclops.container.transformable.To;
-import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.checked.CheckedFunction0;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Reducer;
 import cyclops.function.combiner.Zippable;
@@ -51,14 +50,13 @@ import org.reactivestreams.Publisher;
  * Unlike Optional, Option does not expose an unsafe `get` method. `fold` or `orElse` can be used instead.
  *
  *
- * @see cyclops.container.control.Maybe is a lazy / reactive sub-class of Option
+ * @see cyclops.container.control.lazy.maybe.Maybe is a lazy / reactive sub-class of Option
  **/
 
 //TODO: Make null values not prompt NullPointerExceptions on method chains
-public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, MonadicValue<T>, Zippable<T>, Recoverable<T>,
-                                   Sealed2<T, None<T>>, Iterable<T>, Higher<option, T>, Serializable {
+public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, MonadicValue<T>, Zippable<T>, Recoverable<T>, Iterable<T>, Higher<option, T>, Serializable {
 
-    static <T> Option<T> attempt(CheckedSupplier<T> s) {
+    static <T> Option<T> attempt(CheckedFunction0<T> s) {
         try {
             return some(s.get());
         } catch (Throwable throwable) {
@@ -164,7 +162,7 @@ public interface Option<T> extends To<Option<T>>, OrElseValue<T, Option<T>>, Mon
 
     /**
      * Sequence operation, take a Stream of Option and turn it into a Option with a Stream By constrast with {@link
-     * cyclops.container.control.Maybe#sequenceJust(Iterable)} Option#zero/ None types are result in the returned Maybe being
+     * cyclops.container.control.lazy.maybe.Maybe#sequenceJust(Iterable)} Option#zero/ None types are result in the returned Maybe being
      * Option.zero / None
      *
      *

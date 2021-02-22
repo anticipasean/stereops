@@ -13,7 +13,7 @@ import cyclops.async.queue.Queue;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;

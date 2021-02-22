@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.container.control.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.pure.reactive.AbstractIOTestBase;
 import cyclops.pure.reactive.IO;
 import java.io.IOException;

@@ -22,7 +22,7 @@ import com.oath.cyclops.anym.transformers.FoldableTransformerSeq;
 
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.ReactiveReducers;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
@@ -33,7 +33,7 @@ import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 
 import cyclops.function.companion.Reducers;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.pure.reactive.collections.mutable.ListX;
 

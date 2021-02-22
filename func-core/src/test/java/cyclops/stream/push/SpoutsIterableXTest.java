@@ -1,7 +1,7 @@
 package cyclops.stream.push;
 
 import cyclops.container.traversable.IterableX;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.basetests.AbstractIterableXTest;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.companion.Spouts;

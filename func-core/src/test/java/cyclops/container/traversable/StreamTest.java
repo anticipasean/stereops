@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Trampoline;
+import cyclops.container.control.lazy.trampoline.Trampoline;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

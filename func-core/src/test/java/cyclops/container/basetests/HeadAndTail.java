@@ -1,8 +1,8 @@
 package cyclops.container.basetests;
 
 
-import cyclops.container.control.Eval;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.cacheable.Memoize;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Iterator;

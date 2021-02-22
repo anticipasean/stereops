@@ -1,6 +1,6 @@
 package io.github.anticipasean.ent.iterator;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import io.github.anticipasean.ent.pattern.VariantMapper;
 import java.util.Iterator;
 import java.util.NoSuchElementException;

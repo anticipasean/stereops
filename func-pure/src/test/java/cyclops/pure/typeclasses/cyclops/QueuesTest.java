@@ -8,7 +8,7 @@ import com.oath.cyclops.data.ReactiveWitness;
 import com.oath.cyclops.data.ReactiveWitness.queue;
 import cyclops.function.higherkinded.Higher;
 import cyclops.pure.reactive.collections.mutable.QueueX;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.pure.arrow.MonoidKs;

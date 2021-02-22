@@ -1,7 +1,7 @@
 package cyclops.async.reactive.futurestream.exception;
 
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

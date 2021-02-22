@@ -8,8 +8,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import cyclops.async.Future;
-import cyclops.container.control.Try;
-import cyclops.function.checked.CheckedFunction;
+import cyclops.container.control.eager.attempt.Try;
+import cyclops.function.checked.CheckedFunction1;
 import cyclops.reactive.IO;
 import cyclops.reactive.companion.Spouts;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class IOCheckedTest {
     RuntimeException re = new RuntimeException();
     boolean closed = false;
     @Mock
-    CheckedFunction<Integer, String> serviceMock;
+    CheckedFunction1<Integer, String> serviceMock;
 
     @Test
     public void withCatch() {

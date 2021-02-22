@@ -4,7 +4,7 @@ package cyclops.container.control.trampoline;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.control.Trampoline;
+import cyclops.container.control.lazy.trampoline.Trampoline;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.ArrayList;
 import java.util.Arrays;

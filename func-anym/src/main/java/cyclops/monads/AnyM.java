@@ -1,6 +1,15 @@
 package cyclops.monads;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.attempt.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.either.LazyEither3;
+import cyclops.container.control.lazy.either.LazyEither4;
+import cyclops.container.control.lazy.either.LazyEither5;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Seq;
@@ -58,7 +67,6 @@ import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
 import cyclops.container.traversable.IterableX;
 import cyclops.stream.type.Streamable;
-import cyclops.container.control.*;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;
@@ -102,7 +110,7 @@ import static cyclops.function.evaluation.Evaluation.LAZY;
  * Wrapper for Any Monad type
  *
  * There are two subsclass of AnyM - @see {@link AnyMValue} and  @see {@link AnyMSeq}.
- * AnyMValue is used to represent Monads that wrap a single value such as {@link Optional}, {@link CompletableFuture}, {@link Maybe}, {@link Eval}, {@link Either}, {@link Try}, {@link Ior},
+ * AnyMValue is used to represent Monads that wrap a single value such as {@link Optional}, {@link CompletableFuture}, {@link cyclops.container.control.lazy.maybe.Maybe}, {@link cyclops.container.control.lazy.eval.Eval}, {@link cyclops.container.control.eager.either.Either}, {@link cyclops.container.control.eager.attempt.Try}, {@link cyclops.container.control.eager.ior.Ior},
  *
  * AnyMSeq is used to represent Monads that wrap an aggregation of values such as {@link Stream}, {@link FutureStream}, {@link List}, {@link Set}, {@link Streamable}
  *
@@ -904,7 +912,7 @@ public interface AnyM<W extends WitnessType<W>,T> extends Unwrappable,
 
 
     /**
-     * Create an AnyMValue instance that wraps a {@link Maybe}
+     * Create an AnyMValue instance that wraps a {@link cyclops.container.control.lazy.maybe.Maybe}
      *
      * @param maybe to wrap inside an AnyM
      * @return instance that wraps the provided Maybe

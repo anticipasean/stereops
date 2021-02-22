@@ -1,8 +1,8 @@
 package cyclops.reactive.collection.container.immutable;
 
 import cyclops.async.Future;
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Bag;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;

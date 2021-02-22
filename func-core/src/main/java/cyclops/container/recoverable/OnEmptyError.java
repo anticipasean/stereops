@@ -1,6 +1,6 @@
 package cyclops.container.recoverable;
 
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import java.util.function.Supplier;
 
 public interface OnEmptyError<T, E extends OnEmptyError<T, ?>> {

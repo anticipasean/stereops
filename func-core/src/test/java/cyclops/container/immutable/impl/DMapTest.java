@@ -1,13 +1,13 @@
 package cyclops.container.immutable.impl;
 
-import static cyclops.container.control.Either.right;
-import static cyclops.container.control.LazyEither.left;
-import static cyclops.container.control.option.Option.some;
+import static cyclops.container.control.eager.either.Either.right;
+import static cyclops.container.control.lazy.either.LazyEither.left;
+import static cyclops.container.control.eager.option.Option.some;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import cyclops.container.control.LazyEither3;
-import cyclops.container.control.LazyEither4;
+import cyclops.container.control.lazy.either.LazyEither3;
+import cyclops.container.control.lazy.either.LazyEither4;
 import java.util.Date;
 import org.junit.Test;
 

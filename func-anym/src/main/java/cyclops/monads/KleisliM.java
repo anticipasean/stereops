@@ -2,7 +2,7 @@ package cyclops.monads;
 
 
 import cyclops.container.transformable.Transformable;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 

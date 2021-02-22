@@ -1,7 +1,7 @@
 package cyclops.pure.free;
 
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.LazyEither3;
+import cyclops.container.control.lazy.either.LazyEither3;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.enhanced.Function2;
 import cyclops.pure.typeclasses.functor.Functor;

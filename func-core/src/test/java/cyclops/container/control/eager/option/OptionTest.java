@@ -1,4 +1,4 @@
-package cyclops.container.control.option;
+package cyclops.container.control.eager.option;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -13,12 +13,12 @@ import cyclops.function.companion.Monoids;
 import cyclops.function.companion.Reducers;
 import cyclops.function.companion.Semigroups;
 import cyclops.stream.companion.Streams;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.async.Future;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.Trampoline;
-import cyclops.container.control.Try;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.lazy.trampoline.Trampoline;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.NonEmptyList;
 import cyclops.container.immutable.impl.Seq;

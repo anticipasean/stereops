@@ -1,7 +1,7 @@
 package cyclops.pure.typeclasses.taglessfinal;
 
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 
 public interface StoreAlgebra<W,K,V> {
     Higher<W, Option<V>> get(K key);

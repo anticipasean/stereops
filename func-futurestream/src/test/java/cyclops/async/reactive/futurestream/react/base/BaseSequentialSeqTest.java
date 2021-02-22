@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 import com.oath.cyclops.ReactiveConvertableSequence;
 import cyclops.async.adapters.Queue;
 import com.oath.cyclops.util.SimpleTimer;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.ImmutableMap;
 import cyclops.container.Seq;
 import cyclops.container.TreeSet;

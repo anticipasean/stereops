@@ -1,6 +1,6 @@
 package cyclops.container.persistent;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import java.util.function.Supplier;
 
 public interface PersistentIndexed<T> extends PersistentCollection<T> {

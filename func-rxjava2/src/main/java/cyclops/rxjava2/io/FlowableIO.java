@@ -1,7 +1,7 @@
 package cyclops.rxjava2.io;
 
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.rxjava2.adapter.FlowableReactiveSeq;
 import cyclops.reactive.IO;

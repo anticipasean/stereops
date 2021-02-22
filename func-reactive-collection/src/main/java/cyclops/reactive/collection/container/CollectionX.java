@@ -1,6 +1,6 @@
 package cyclops.reactive.collection.container;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.factory.Unit;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;

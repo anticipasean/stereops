@@ -1,12 +1,12 @@
 package cyclops.reactive.companion;
 
 import cyclops.async.Future;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.container.traversable.IterableX;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.checked.CheckedFunction0;
 import cyclops.function.higherkinded.DataWitness.reactiveSeq;
 import cyclops.function.higherkinded.Higher;
 import cyclops.reactive.ReactiveSeq;
@@ -58,7 +58,7 @@ import org.reactivestreams.Subscription;
 public interface Spouts {
 
 
-    static <T> ReactiveSeq<T> once(CheckedSupplier<T> cs) {
+    static <T> ReactiveSeq<T> once(CheckedFunction0<T> cs) {
         return Spouts.generate(ExceptionSoftener.softenSupplier(cs))
                      .take(1l);
     }

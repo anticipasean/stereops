@@ -2,9 +2,9 @@ package cyclops.rxjava2.adapter;
 
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.rxjava2.companion.Observables;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;

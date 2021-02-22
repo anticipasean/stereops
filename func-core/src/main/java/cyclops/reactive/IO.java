@@ -1,8 +1,8 @@
 package cyclops.reactive;
 
 import cyclops.async.Future;
-import cyclops.container.control.Either;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
@@ -16,8 +16,8 @@ import cyclops.container.transformable.To;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.checked.CheckedConsumer;
-import cyclops.function.checked.CheckedFunction;
-import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.checked.CheckedFunction1;
+import cyclops.function.checked.CheckedFunction0;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.higherkinded.DataWitness.io;
 import cyclops.function.higherkinded.Higher;
@@ -78,7 +78,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
         return narrow;
     }
 
-    static <T, X extends Throwable> IO<T> withCatch(CheckedSupplier<? extends T> cf) {
+    static <T, X extends Throwable> IO<T> withCatch(CheckedFunction0<? extends T> cf) {
         return fromPublisher(Try.withCatch(() -> cf.get(),
                                            Throwable.class));
     }
@@ -138,16 +138,16 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
         return (IO<T>) ReactiveTransformable.super.peek(peek);
     }
 
-    default <R> IO<R> checkedMap(CheckedFunction<? super T, ? extends R> checkedFunction) {
-        return map(ExceptionSoftener.softenFunction(checkedFunction));
+    default <R> IO<R> checkedMap(CheckedFunction1<? super T, ? extends R> checkedFunction1) {
+        return map(ExceptionSoftener.softenFunction(checkedFunction1));
     }
 
     default <R> IO<R> map(Function<? super T, ? extends R> s) {
         return unit(stream().map(s));
     }
 
-    default <R> IO<R> checkedFlatMap(CheckedFunction<? super T, IO<? extends R>> checkedFunction) {
-        return flatMap(ExceptionSoftener.softenFunction(checkedFunction));
+    default <R> IO<R> checkedFlatMap(CheckedFunction1<? super T, IO<? extends R>> checkedFunction1) {
+        return flatMap(ExceptionSoftener.softenFunction(checkedFunction1));
     }
 
     default <R> IO<R> flatMap(Function<? super T, IO<? extends R>> s) {
@@ -159,7 +159,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
         return flatMap(i -> sync(s.apply(i)));
     }
 
-    default <R> IO<R> checkedConcatMap(CheckedFunction<? super T, Iterable<? extends R>> s) {
+    default <R> IO<R> checkedConcatMap(CheckedFunction1<? super T, Iterable<? extends R>> s) {
         return concatMap(ExceptionSoftener.softenFunction(s));
     }
 
@@ -169,8 +169,8 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
                                       t -> s.apply(t)));
     }
 
-    default <R> IO<R> checkedRetry(CheckedFunction<? super T, ? extends R> checkedFunction) {
-        return retry(ExceptionSoftener.softenFunction(checkedFunction));
+    default <R> IO<R> checkedRetry(CheckedFunction1<? super T, ? extends R> checkedFunction1) {
+        return retry(ExceptionSoftener.softenFunction(checkedFunction1));
     }
 
     @Override
@@ -178,11 +178,11 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
         return (IO<R>) ReactiveTransformable.super.retry(fn);
     }
 
-    default <R> IO<R> checkedRetry(CheckedFunction<? super T, ? extends R> checkedFunction,
+    default <R> IO<R> checkedRetry(CheckedFunction1<? super T, ? extends R> checkedFunction1,
                                    int retries,
                                    long delay,
                                    TimeUnit timeUnit) {
-        return retry(ExceptionSoftener.softenFunction(checkedFunction),
+        return retry(ExceptionSoftener.softenFunction(checkedFunction1),
                      retries,
                      delay,
                      timeUnit);
@@ -204,7 +204,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
         return m.io();
     }
 
-    default <R extends AutoCloseable> IO<R> checkedBracket(CheckedFunction<? super T, ? extends R> fn) {
+    default <R extends AutoCloseable> IO<R> checkedBracket(CheckedFunction1<? super T, ? extends R> fn) {
         return bracket(ExceptionSoftener.softenFunction(fn));
     }
 
@@ -216,8 +216,8 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
 
     }
 
-    default <R extends AutoCloseable, R1> Managed.Tupled<R, R1> checkedBracketWith(CheckedFunction<? super T, ? extends R> fn,
-                                                                                   CheckedFunction<? super R, ? extends R1> with) {
+    default <R extends AutoCloseable, R1> Managed.Tupled<R, R1> checkedBracketWith(CheckedFunction1<? super T, ? extends R> fn,
+                                                                                   CheckedFunction1<? super R, ? extends R1> with) {
         return bracketWith(ExceptionSoftener.softenFunction(fn),
                            ExceptionSoftener.softenFunction(with));
 
@@ -230,7 +230,7 @@ public interface IO<T> extends To<IO<T>>, Higher<io, T>, ReactiveTransformable<T
         return m.io();
     }
 
-    default <R> IO<R> checkedBracket(CheckedFunction<? super T, ? extends R> fn,
+    default <R> IO<R> checkedBracket(CheckedFunction1<? super T, ? extends R> fn,
                                      CheckedConsumer<R> consumer) {
         return bracket(ExceptionSoftener.softenFunction(fn),
                        ExceptionSoftener.softenConsumer(consumer));

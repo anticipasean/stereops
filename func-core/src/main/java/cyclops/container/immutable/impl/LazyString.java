@@ -1,7 +1,7 @@
 package cyclops.container.immutable.impl;
 
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.ImmutableList;
 import cyclops.function.higherkinded.DataWitness.lazyString;
 import cyclops.function.higherkinded.Higher;

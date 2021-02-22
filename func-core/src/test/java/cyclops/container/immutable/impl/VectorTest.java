@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.base.BAMT;
 import cyclops.container.basetests.BaseImmutableListTest;
 import cyclops.container.immutable.ImmutableList;

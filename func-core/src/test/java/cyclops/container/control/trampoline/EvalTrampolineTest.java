@@ -1,6 +1,6 @@
 package cyclops.container.control.trampoline;
 
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import org.junit.Test;
 
 

@@ -5,10 +5,10 @@ import cyclops.async.reactive.futurestream.pipeline.Status;
 import cyclops.container.MonadicValue;
 import cyclops.container.Value;
 import cyclops.async.reactive.futurestream.companion.Futures;
-import cyclops.container.control.Either;
-import cyclops.container.control.Eval;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.async.Future;
-import cyclops.container.control.LazyEither;
+import cyclops.container.control.lazy.either.LazyEither;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
@@ -63,11 +63,11 @@ public class Maybes {
         return array;
     }
 
-    public static <T> cyclops.container.control.Maybe<T> toMaybe(Maybe<T> future) {
-        return cyclops.container.control.Maybe.fromPublisher(future.toFlowable());
+    public static <T> cyclops.container.control.lazy.maybe.Maybe<T> toMaybe(Maybe<T> future) {
+        return cyclops.container.control.lazy.maybe.Maybe.fromPublisher(future.toFlowable());
     }
 
-    public static <T> Maybe<T> fromMaybe(cyclops.container.control.Maybe<T> future) {
+    public static <T> Maybe<T> fromMaybe(cyclops.container.control.lazy.maybe.Maybe<T> future) {
         return Single.fromPublisher(future)
                      .toMaybe();
 
@@ -88,8 +88,8 @@ public class Maybes {
 
     }
 
-    public static <T> cyclops.container.control.Maybe<T> maybe(Maybe<T> opt) {
-        return cyclops.container.control.Maybe.fromFuture(future(opt));
+    public static <T> cyclops.container.control.lazy.maybe.Maybe<T> maybe(Maybe<T> opt) {
+        return cyclops.container.control.lazy.maybe.Maybe.fromFuture(future(opt));
     }
 
     public static <T> Eval<T> eval(Maybe<T> opt) {

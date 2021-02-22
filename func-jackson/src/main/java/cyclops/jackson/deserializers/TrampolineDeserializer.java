@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
-import cyclops.container.control.Trampoline;
+import cyclops.container.control.lazy.trampoline.Trampoline;
 import java.io.IOException;
 
 final class TrampolineDeserializer extends StdDeserializer<Trampoline<?>> implements ResolvableDeserializer {

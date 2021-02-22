@@ -3,7 +3,7 @@ package cyclops.pure.typeclasses.cyclops;
 
 import cyclops.function.higherkinded.Higher;
 import cyclops.async.Future;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.enhanced.Function1;
 import cyclops.function.companion.Lambda;
 import cyclops.function.higherkinded.DataWitness.future;

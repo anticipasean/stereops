@@ -1,8 +1,8 @@
 package cyclops.container.traversable;
 
 import cyclops.async.Future;
-import cyclops.container.control.Eval;
-import cyclops.container.control.Try;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.foldable.Foldable;
 import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.container.immutable.impl.HashSet;

@@ -1,7 +1,7 @@
 package cyclops.monads.anym;
 
 import cyclops.companion.Optionals;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.monads.Witness;
 import cyclops.monads.Witness.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -31,7 +31,7 @@ import cyclops.monads.WitnessType;
 import org.junit.Test;
 
 import cyclops.monads.AnyM;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.pure.reactive.collections.mutable.QueueX;
 import cyclops.pure.reactive.collections.mutable.SetX;

@@ -1,6 +1,6 @@
 package io.github.anticipasean.ent.pattern;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple2;
 import io.github.anticipasean.ent.Ent;

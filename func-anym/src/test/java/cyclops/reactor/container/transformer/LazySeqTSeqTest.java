@@ -1,6 +1,6 @@
 package cyclops.reactor.container.transformer;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.LazySeq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.monads.Witness.list;

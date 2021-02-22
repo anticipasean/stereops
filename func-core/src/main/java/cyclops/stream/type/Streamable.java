@@ -2,8 +2,8 @@ package cyclops.stream.type;
 
 
 import cyclops.container.relational.Contains;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.factory.Unit;
 import cyclops.container.immutable.impl.HashMap;
 import cyclops.container.immutable.impl.Seq;

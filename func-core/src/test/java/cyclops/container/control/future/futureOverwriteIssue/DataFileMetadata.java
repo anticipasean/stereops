@@ -1,8 +1,8 @@
 package cyclops.container.control.future.futureOverwriteIssue;
 
 import cyclops.exception.ExceptionSoftener;
-import cyclops.container.control.Either;
-import cyclops.container.control.LazyEither;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.either.LazyEither;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import lombok.AllArgsConstructor;

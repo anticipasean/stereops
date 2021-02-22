@@ -9,7 +9,7 @@ import cyclops.async.reactive.futurestream.exception.SimpleReactFailedStageExcep
 import cyclops.async.reactive.futurestream.threading.SequentialElasticPools;
 import cyclops.async.reactive.futurestream.pipeline.stream.SimpleReactStream;
 import cyclops.container.immutable.PersistentCollection;
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.container.control.Future;
 import cyclops.container.HashMap;
 import cyclops.container.Seq;

@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactor.stream.FluxReactiveSeq;
 import java.util.function.Supplier;

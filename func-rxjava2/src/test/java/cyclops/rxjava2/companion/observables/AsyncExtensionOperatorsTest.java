@@ -1,7 +1,7 @@
 package cyclops.rxjava2.companion.observables;
 
 
-import static cyclops.container.control.option.Option.some;
+import static cyclops.container.control.eager.option.Option.some;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -19,8 +19,8 @@ import cyclops.reactive.collection.container.ReactiveConvertableSequence;
 import cyclops.stream.type.Streamable;
 import cyclops.stream.companion.Streams;
 import cyclops.rxjava2.companion.Observables;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.monads.AnyM;

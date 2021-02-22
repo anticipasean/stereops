@@ -1,8 +1,13 @@
-package cyclops.container.control;
+package cyclops.container.control.eager.attempt;
 
 
 import cyclops.container.Value;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.lazy.trampoline.Trampoline;
 import cyclops.container.factory.Unit;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.foldable.OrElseValue;
@@ -11,6 +16,9 @@ import cyclops.container.recoverable.RecoverableFrom;
 import cyclops.container.transformable.To;
 import cyclops.container.transformable.Transformable;
 import cyclops.exception.ExceptionSoftener;
+import cyclops.function.checked.CheckedFunction0;
+import cyclops.function.checked.CheckedFunction1;
+import cyclops.function.checked.CheckedFunction2;
 import cyclops.function.enhanced.Function3;
 import cyclops.function.enhanced.Function4;
 import cyclops.function.higherkinded.DataWitness.tryType;
@@ -345,8 +353,8 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    public static <T extends AutoCloseable, R> Try<R, Throwable> withResources(cyclops.function.checked.CheckedSupplier<T> rs,
-                                                                               cyclops.function.checked.CheckedFunction<? super T, ? extends R> fn) {
+    public static <T extends AutoCloseable, R> Try<R, Throwable> withResources(CheckedFunction0<T> rs,
+                                                                               CheckedFunction1<? super T, ? extends R> fn) {
         try {
             T in = ExceptionSoftener.softenSupplier(rs)
                                     .get();
@@ -364,9 +372,9 @@ public class Try<T, X extends Throwable> implements To<Try<T, X>>, RecoverableFr
         }
     }
 
-    public static <T1 extends AutoCloseable, T2 extends AutoCloseable, R> Try<R, Throwable> withResources(cyclops.function.checked.CheckedSupplier<T1> rs1,
-                                                                                                          cyclops.function.checked.CheckedSupplier<T2> rs2,
-                                                                                                          cyclops.function.checked.CheckedBiFunction<? super T1, ? super T2, ? extends R> fn) {
+    public static <T1 extends AutoCloseable, T2 extends AutoCloseable, R> Try<R, Throwable> withResources(CheckedFunction0<T1> rs1,
+                                                                                                          CheckedFunction0<T2> rs2,
+                                                                                                          CheckedFunction2<? super T1, ? super T2, ? extends R> fn) {
         try {
 
             T1 t1 = ExceptionSoftener.softenSupplier(rs1)

@@ -1,7 +1,7 @@
 package cyclops.reactive.collection.container.immutable.lazy.impl;
 
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.persistent.PersistentList;
 import cyclops.function.combiner.Reducer;

@@ -2,7 +2,7 @@ package cyclops.container.control.ior;
 
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.control.AbstractOrElseValueTest;
-import cyclops.container.control.Ior;
+import cyclops.container.control.eager.ior.Ior;
 
 public class IorOrElseValueTest extends AbstractOrElseValueTest {
 

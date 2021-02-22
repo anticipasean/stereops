@@ -1,6 +1,6 @@
 package io.github.anticipasean.ent.iterator;
 
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.stream.Stream;

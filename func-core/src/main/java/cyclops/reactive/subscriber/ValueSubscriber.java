@@ -2,9 +2,9 @@ package cyclops.reactive.subscriber;
 
 import cyclops.async.Future;
 import cyclops.container.Value;
-import cyclops.container.control.Either;
-import cyclops.container.control.Ior;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.cacheable.Memoize;
 import java.util.NoSuchElementException;

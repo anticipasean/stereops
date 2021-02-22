@@ -1,4 +1,4 @@
-package cyclops.container.control.option;
+package cyclops.container.control.eager.option;
 
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.control.AbstractOrElseValueTest;

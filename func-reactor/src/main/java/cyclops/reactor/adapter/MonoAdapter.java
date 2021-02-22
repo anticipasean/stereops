@@ -5,7 +5,7 @@ import static cyclops.reactor.container.higherkinded.ReactorWitness.mono;
 import com.oath.cyclops.anym.AnyMValue;
 import com.oath.cyclops.anym.extensability.ValueAdapter;
 import cyclops.async.Future;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.monads.AnyM;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.reactor.container.higherkinded.MonoAnyM;

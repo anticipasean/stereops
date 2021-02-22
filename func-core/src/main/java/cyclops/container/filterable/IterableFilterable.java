@@ -1,6 +1,6 @@
 package cyclops.container.filterable;
 
-import cyclops.container.control.Eval;
+import cyclops.container.control.lazy.eval.Eval;
 import cyclops.stream.companion.Streams;
 import java.util.Set;
 import java.util.stream.Collectors;

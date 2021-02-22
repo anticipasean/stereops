@@ -1,6 +1,15 @@
 package cyclops.monads;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.attempt.Try;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.either.LazyEither3;
+import cyclops.container.control.lazy.either.LazyEither4;
+import cyclops.container.control.lazy.either.LazyEither5;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.BankersQueue;
 import cyclops.container.immutable.impl.HashSet;
 import cyclops.container.immutable.impl.LazySeq;
@@ -23,7 +32,6 @@ import java.util.stream.Stream;
 
 import com.oath.cyclops.anym.internal.adapters.*;
 import cyclops.container.traversable.IterableX;
-import cyclops.container.control.*;
 import cyclops.async.Future;
 import cyclops.async.reactive.futurestream.FutureStream;
 import cyclops.reactive.ReactiveSeq;

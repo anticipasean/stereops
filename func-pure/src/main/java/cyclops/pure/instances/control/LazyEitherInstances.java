@@ -1,6 +1,6 @@
 package cyclops.pure.instances.control;
 
-import static cyclops.container.control.LazyEither.narrowK;
+import static cyclops.container.control.lazy.either.LazyEither.narrowK;
 
 import cyclops.function.higherkinded.DataWitness.either;
 import cyclops.function.higherkinded.Higher;
@@ -8,9 +8,9 @@ import cyclops.function.higherkinded.Higher2;
 import cyclops.pure.arrow.Cokleisli;
 import cyclops.pure.arrow.Kleisli;
 import cyclops.pure.arrow.MonoidK;
-import cyclops.container.control.Either;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.eager.option.Option;
 import cyclops.function.combiner.Monoid;
 import cyclops.pure.container.functional.Active;
 import cyclops.pure.container.functional.Coproduct;

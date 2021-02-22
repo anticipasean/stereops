@@ -1,6 +1,8 @@
 package cyclops.container.control;
 
 import cyclops.container.Value;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.lazy.either.LazyEither;
 import cyclops.container.foldable.OrElseValue;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.impl.NonEmptyList;

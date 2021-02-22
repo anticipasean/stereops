@@ -3,7 +3,7 @@ package cyclops.container.control.companion;
 import cyclops.async.queue.Adapter;
 import cyclops.async.queue.Queue;
 import cyclops.async.queue.Topic;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import java.util.concurrent.BlockingQueue;
 
 /**

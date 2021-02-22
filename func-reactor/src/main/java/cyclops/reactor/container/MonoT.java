@@ -3,7 +3,7 @@ package cyclops.reactor.container;
 
 import cyclops.async.Future;
 import cyclops.container.MonadicValue;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.filterable.Filterable;
 import cyclops.container.foldable.Foldable;
 import cyclops.container.immutable.tuple.Tuple;

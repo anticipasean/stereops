@@ -9,8 +9,8 @@ import static org.junit.Assert.fail;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import cyclops.container.control.option.Option;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.option.Option;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.function.companion.FluentFunctions.FluentFunction;
 import cyclops.function.companion.FluentFunctions.FluentSupplier;

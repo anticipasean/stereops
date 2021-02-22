@@ -1,6 +1,6 @@
 package cyclops.pure.control;
 
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import cyclops.container.foldable.Deconstructable.Deconstructable1;
 import cyclops.function.higherkinded.DataWitness.identity;
 import cyclops.function.higherkinded.Higher;

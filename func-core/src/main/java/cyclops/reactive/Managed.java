@@ -1,7 +1,7 @@
 package cyclops.reactive;
 
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.tuple.Tuple;
 import cyclops.container.immutable.tuple.Tuple2;
@@ -12,8 +12,8 @@ import cyclops.container.immutable.tuple.Tuple6;
 import cyclops.container.immutable.tuple.Tuple7;
 import cyclops.container.transformable.To;
 import cyclops.exception.ExceptionSoftener;
-import cyclops.function.checked.CheckedFunction;
-import cyclops.function.checked.CheckedSupplier;
+import cyclops.function.checked.CheckedFunction1;
+import cyclops.function.checked.CheckedFunction0;
 import cyclops.function.combiner.Monoid;
 import cyclops.function.combiner.Semigroup;
 import cyclops.function.enhanced.Function3;
@@ -99,7 +99,7 @@ public abstract class Managed<T> implements Higher<managed, T>, To<Managed<T>>, 
                   ExceptionSoftener.softenConsumer(c -> c.close()));
     }
 
-    public static <T extends AutoCloseable> Managed<T> checked(CheckedSupplier<? extends T> acq) {
+    public static <T extends AutoCloseable> Managed<T> checked(CheckedFunction0<? extends T> acq) {
         return of(IO.of(ExceptionSoftener.softenSupplier(acq)),
                   ExceptionSoftener.softenConsumer(c -> c.close()));
     }
@@ -235,7 +235,7 @@ public abstract class Managed<T> implements Higher<managed, T>, To<Managed<T>>, 
         return io().stream();
     }
 
-    public <R> Managed<R> checkedMap(CheckedFunction<? super T, ? extends R> mapper) {
+    public <R> Managed<R> checkedMap(CheckedFunction1<? super T, ? extends R> mapper) {
         return map(ExceptionSoftener.softenFunction(mapper));
     }
 
@@ -245,7 +245,7 @@ public abstract class Managed<T> implements Higher<managed, T>, To<Managed<T>>, 
                   });
     }
 
-    public <R> Managed<R> checkedFlatMap(CheckedFunction<? super T, Managed<R>> f) {
+    public <R> Managed<R> checkedFlatMap(CheckedFunction1<? super T, Managed<R>> f) {
         return flatMap(ExceptionSoftener.softenFunction(f));
     }
 

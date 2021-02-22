@@ -1,7 +1,7 @@
 package cyclops.function.companion;
 
 import cyclops.container.Value;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.reactive.ReactiveSeq;
 import cyclops.util.SimpleTimer;

@@ -15,8 +15,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import cyclops.container.control.Eval;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.eval.Eval;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.function.companion.Predicates;
 import cyclops.reactive.ReactiveSeq;
 import java.util.Arrays;

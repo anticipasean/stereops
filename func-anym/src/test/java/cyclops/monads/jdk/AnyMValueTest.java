@@ -2,7 +2,7 @@ package cyclops.monads.jdk;
 
 import static org.junit.Assert.assertEquals;
 
-import cyclops.container.control.Maybe;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.monads.AnyM;
 import cyclops.pure.reactive.collections.mutable.ListX;
 import cyclops.reactive.ReactiveSeq;

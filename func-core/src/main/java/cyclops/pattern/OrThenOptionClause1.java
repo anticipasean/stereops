@@ -1,7 +1,7 @@
 package cyclops.pattern;
 
-import cyclops.container.control.Either;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.either.Either;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.tuple.Tuple2;
 import java.util.function.Function;
 import java.util.function.Supplier;

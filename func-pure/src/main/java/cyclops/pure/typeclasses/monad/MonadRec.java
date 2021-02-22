@@ -2,7 +2,7 @@ package cyclops.pure.typeclasses.monad;
 
 
 import cyclops.function.higherkinded.Higher;
-import cyclops.container.control.Either;
+import cyclops.container.control.eager.either.Either;
 import java.util.function.Function;
 
 // ref http://functorial.com/stack-safety-for-free/index.pdf Stack Safety for Free

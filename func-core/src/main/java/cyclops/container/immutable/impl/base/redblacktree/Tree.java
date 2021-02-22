@@ -4,7 +4,7 @@ import static cyclops.container.immutable.impl.base.redblacktree.Node.LEFT_BLACK
 import static cyclops.container.immutable.impl.base.redblacktree.Node.RED;
 import static cyclops.container.immutable.impl.base.redblacktree.Node.RIGHT_BLACK;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.foldable.Sealed2;
 import cyclops.container.immutable.tuple.Tuple2;
 import cyclops.reactive.ReactiveSeq;

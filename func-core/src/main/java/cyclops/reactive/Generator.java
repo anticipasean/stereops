@@ -1,7 +1,7 @@
 package cyclops.reactive;
 
-import cyclops.container.control.Ior;
-import cyclops.container.control.Maybe;
+import cyclops.container.control.eager.ior.Ior;
+import cyclops.container.control.lazy.maybe.Maybe;
 import cyclops.container.immutable.impl.ConvertableSequence;
 import cyclops.function.enhanced.Function0;
 import cyclops.function.enhanced.Function1;

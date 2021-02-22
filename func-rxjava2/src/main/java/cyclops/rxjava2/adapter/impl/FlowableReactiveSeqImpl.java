@@ -1,10 +1,11 @@
 package cyclops.rxjava2.adapter.impl;
 
+import cyclops.container.control.lazy.maybe.CompletableMaybe;
 import cyclops.container.persistent.PersistentCollection;
 import cyclops.rxjava2.companion.Functions;
-import cyclops.container.control.LazyEither;
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.either.LazyEither;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.immutable.impl.Vector;
 import cyclops.container.immutable.tuple.Tuple;
@@ -985,7 +986,7 @@ public class FlowableReactiveSeqImpl<T> implements ReactiveSeq<T> {
 
     @Override
     public Maybe<T> single() {
-        Maybe.CompletableMaybe<T, T> maybe = Maybe.<T>maybe();
+        CompletableMaybe<T, T> maybe = Maybe.<T>maybe();
         flowable.subscribe(new Subscriber<T>() {
             Object value = UNSET;
             Subscription sub;

@@ -1,7 +1,7 @@
 package cyclops.function.companion;
 
-import cyclops.container.control.Maybe;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.lazy.maybe.Maybe;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.factory.Unit;
 import cyclops.function.cacheable.Memoize;
 import cyclops.function.combiner.Monoid;

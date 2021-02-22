@@ -3,7 +3,7 @@ package cyclops.pure.reactive;
 import cyclops.function.higherkinded.DataWitness.reactiveSeq;
 import cyclops.function.higherkinded.Higher;
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.pure.instances.reactive.PublisherInstances;
 import cyclops.pure.reactive.IOMonad.FromPublsher;
 import cyclops.pure.reactive.IOMonad.ToPublsher;

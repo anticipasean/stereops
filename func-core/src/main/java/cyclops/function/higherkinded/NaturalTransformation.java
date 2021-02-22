@@ -1,7 +1,7 @@
 package cyclops.function.higherkinded;
 
 import cyclops.async.Future;
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.function.higherkinded.DataWitness.future;
 import cyclops.function.higherkinded.DataWitness.option;
 import java.util.function.Function;

@@ -1,7 +1,7 @@
 package cyclops.rxjava2.container.higherkinded;
 
 
-import static cyclops.container.control.option.Option.some;
+import static cyclops.container.control.eager.option.Option.some;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.container.mutable.Mutable;
 import cyclops.container.printable.Printable;
@@ -66,24 +66,24 @@ public class MaybeTTest implements Printable {
 
     @Test
     public void testOfT() {
-        assertThat(cyclops.container.control.Maybe.of(1),
-                   equalTo(cyclops.container.control.Maybe.of(1)));
+        assertThat(cyclops.container.control.lazy.maybe.Maybe.of(1),
+                   equalTo(cyclops.container.control.lazy.maybe.Maybe.of(1)));
     }
 
 
     @Test
     public void testOfNullable() {
-        assertFalse(cyclops.container.control.Maybe.ofNullable(null)
-                                                   .isPresent());
-        assertThat(cyclops.container.control.Maybe.ofNullable(1),
-                   equalTo(cyclops.container.control.Maybe.of(1)));
+        assertFalse(cyclops.container.control.lazy.maybe.Maybe.ofNullable(null)
+                                                              .isPresent());
+        assertThat(cyclops.container.control.lazy.maybe.Maybe.ofNullable(1),
+                   equalTo(cyclops.container.control.lazy.maybe.Maybe.of(1)));
 
     }
 
     @Test
     public void testNarrow() {
-        assertThat(cyclops.container.control.Maybe.ofNullable(1),
-                   equalTo(cyclops.container.control.Maybe.narrow(cyclops.container.control.Maybe.of(1))));
+        assertThat(cyclops.container.control.lazy.maybe.Maybe.ofNullable(1),
+                   equalTo(cyclops.container.control.lazy.maybe.Maybe.narrow(cyclops.container.control.lazy.maybe.Maybe.of(1))));
     }
 
 
@@ -100,10 +100,10 @@ public class MaybeTTest implements Printable {
     @Test
     public void testFlatMap() {
 
-        assertThat(just.flatMap(i -> cyclops.container.control.Maybe.of(i + 5))
+        assertThat(just.flatMap(i -> cyclops.container.control.lazy.maybe.Maybe.of(i + 5))
                        .get(),
                    equalTo(some(15)));
-        assertThat(none.flatMap(i -> cyclops.container.control.Maybe.of(i + 5))
+        assertThat(none.flatMap(i -> cyclops.container.control.lazy.maybe.Maybe.of(i + 5))
                        .orElse(-1),
                    equalTo(-1));
     }

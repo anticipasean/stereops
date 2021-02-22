@@ -1,6 +1,6 @@
 package cyclops.pattern;
 
-import cyclops.container.control.option.Option;
+import cyclops.container.control.eager.option.Option;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;

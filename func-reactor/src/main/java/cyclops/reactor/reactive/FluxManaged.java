@@ -3,7 +3,7 @@ package cyclops.reactor.reactive;
 import static cyclops.reactor.reactive.FluxIO.just;
 
 import cyclops.async.Future;
-import cyclops.container.control.Try;
+import cyclops.container.control.eager.attempt.Try;
 import cyclops.container.immutable.impl.Seq;
 import cyclops.exception.ExceptionSoftener;
 import cyclops.function.combiner.Monoid;
